@@ -1,0 +1,40 @@
+=== FILE HISTORY DEBUG ===
+Git log output length: 138 chars
+Raw output: "ce23108 Backup_20250815_115742
+cbb9569 Backup_20250815_112305
+b81497c Updated level editor and models
+4ae1ae2 Initial Gonk project backup
+"
+
+Found 5 lines to process
+Line 1 before cleanup: "ce23108 Backup_20250815_115742"
+Line 1 after cleanup: "ce23108 Backup_20250815_115742"
+Space position in line 1: 8
+Hash: "ce23108" Message: "Backup_20250815_115742"
+Display line: "ce23108 - Backup_20250815_115742"
+Current historyItems: "ce23108 - Backup_20250815_115742"
+Line 2 before cleanup: "cbb9569 Backup_20250815_112305"
+Line 2 after cleanup: "cbb9569 Backup_20250815_112305"
+Space position in line 2: 8
+Hash: "cbb9569" Message: "Backup_20250815_112305"
+Display line: "cbb9569 - Backup_20250815_112305"
+Current historyItems: "ce23108 - Backup_20250815_115742|cbb9569 - Backup_20250815_112305"
+Line 3 before cleanup: "b81497c Updated level editor and models"
+Line 3 after cleanup: "b81497c Updated level editor and models"
+Space position in line 3: 8
+Hash: "b81497c" Message: "Updated level editor and models"
+Display line: "b81497c - Updated level editor and models"
+Current historyItems: "ce23108 - Backup_20250815_115742|cbb9569 - Backup_20250815_112305|b81497c - Updated level editor and models"
+Line 4 before cleanup: "4ae1ae2 Initial Gonk project backup"
+Line 4 after cleanup: "4ae1ae2 Initial Gonk project backup"
+Space position in line 4: 8
+Hash: "4ae1ae2" Message: "Initial Gonk project backup"
+Display line: "4ae1ae2 - Initial Gonk project backup"
+Current historyItems: "ce23108 - Backup_20250815_115742|cbb9569 - Backup_20250815_112305|b81497c - Updated level editor and models|4ae1ae2 - Initial Gonk project backup"
+Line 5 before cleanup: ""
+Line 5 after cleanup: ""
+Line 5 is empty after cleanup
+
+Final historyItems: "ce23108 - Backup_20250815_115742|cbb9569 - Backup_20250815_112305|b81497c - Updated level editor and models|4ae1ae2 - Initial Gonk project backup"
+Final length: 145 chars
+SUCCESS: ListBox populated
