@@ -2,12 +2,13 @@
 // Standalone Level Editor Application
 
 class EditorAssetManager {
-    constructor() {
+    constructor(modelSystem) {
+        this.modelSystem = modelSystem;
         this.npcSkins = [];
         this.npcIcons = new Map();
-        this.layerTypes = ['floor', 'wall', 'ceiling', 'sky', 'water', 'subfloor'];
+        this.textureLayers = ['subfloor', 'floor', 'water', 'floaters', 'decor', 'ceiling', 'sky'];
         this.layerTextures = {};
-        this.layerTypes.forEach(type => this.layerTextures[type] = []);
+        this.textureLayers.forEach(type => this.layerTextures[type] = []);
         console.log("Editor Asset Manager initialized.");
     }
 
@@ -40,7 +41,7 @@ class EditorAssetManager {
         const textureFiles = await this.fetchDirectoryListing('/data/pngs/');
         const texturePngs = textureFiles.filter(f => f.endsWith('.png'));
 
-        for (const layerType of this.layerTypes) {
+        for (const layerType of this.textureLayers) {
             this.layerTextures[layerType] = texturePngs
                 .filter(f => f.toLowerCase().startsWith(layerType))
                 .map(f => `/data/pngs/${f}`);
@@ -59,30 +60,47 @@ class EditorAssetManager {
                 img.src = skinPath;
                 img.onload = () => {
                     const skinName = skinPath.split('/').pop().replace('.png', '');
+                    let baseName = skinName;
+                     if (skinName.startsWith('bb8') || skinName.startsWith('r2d2')) {
+                        baseName = skinName.match(/^(bb8|r2d2)/)[0];
+                    } else {
+                        baseName = skinName.replace(/\d+$/, '');
+                    }
+                    let modelDef = this.modelSystem.models[baseName] || this.modelSystem.models['humanoid'];
+                    const iconUV = modelDef.iconUV || { x: 8, y: 8, size: 8 };
                     const iconCanvas = document.createElement('canvas');
                     const iconSize = 64;
                     iconCanvas.width = iconSize;
                     iconCanvas.height = iconSize;
                     const ctx = iconCanvas.getContext('2d');
                     ctx.imageSmoothingEnabled = false;
-
                     const scale = img.width / 64;
-                    const faceX = 8 * scale, faceY = 8 * scale, faceSize = 8 * scale;
+                    const faceX = iconUV.x * scale, faceY = iconUV.y * scale, faceSize = iconUV.size * scale;
+                    const hasHatLayer = modelDef === this.modelSystem.models['humanoid'];
                     const hatX = 40 * scale, hatY = 8 * scale, hatSize = 8 * scale;
 
                     ctx.drawImage(img, faceX, faceY, faceSize, faceSize, 0, 0, iconSize, iconSize);
-                    ctx.drawImage(img, hatX, hatY, hatSize, hatSize, 0, 0, iconSize, iconSize);
-                    
+                    if(hasHatLayer) ctx.drawImage(img, hatX, hatY, hatSize, hatSize, 0, 0, iconSize, iconSize);
+
+                    const canvasData = ctx.getImageData(0, 0, iconSize, iconSize).data;
+                    let isBlank = true;
+                    for (let i = 3; i < canvasData.length; i += 4) { if (canvasData[i] > 0) { isBlank = false; break; } }
+
+                    if (isBlank) {
+                        console.warn(`Generated icon for "${skinName}" is blank. Falling back to full image.`);
+                        ctx.clearRect(0, 0, iconSize, iconSize);
+                        const { width: imgWidth, height: imgHeight } = img;
+                        const ar = imgWidth / imgHeight;
+                        let dw = iconSize, dh = iconSize / ar;
+                        if (dh > iconSize) { dh = iconSize; dw = iconSize * ar; }
+                        ctx.drawImage(img, (iconSize - dw) / 2, (iconSize - dh) / 2, dw, dh);
+                    }
                     this.npcIcons.set(skinName, iconCanvas.toDataURL());
                     resolve();
                 };
-                img.onerror = () => {
-                    console.warn(`Failed to load skin image: ${skinPath}`);
-                    resolve();
-                };
+                img.onerror = () => { console.warn(`Failed to load skin image: ${skinPath}`); resolve(); };
             });
         });
-
         await Promise.all(iconPromises);
         console.log(`Generated ${this.npcIcons.size} NPC icons.`);
     }
@@ -93,8 +111,10 @@ class LevelEditor {
         this.canvas = document.getElementById('editorCanvas');
         this.ctx = this.canvas.getContext('2d');
         
-        this.assetManager = new EditorAssetManager();
+        this.modelSystem = new GonkModelSystem();
+        this.assetManager = new EditorAssetManager(this.modelSystem);
         this.ui = new EditorUI(this);
+        this.statusMsg = document.getElementById('status-message');
 
         this.gridSize = 32;
         this.zoom = 1.0;
@@ -105,8 +125,12 @@ class LevelEditor {
         this.lastMouse = { x: 0, y: 0 };
         
         this.activeBrush = null;
-        this.placedEntities = [];
 
+        this.layerOrder = ['subfloor', 'floor', 'entities', 'water', 'floaters', 'decor', 'ceiling', 'sky'];
+        this.levelData = {};
+        this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
+
+        this.preloadedImages = new Map();
         this.init();
     }
 
@@ -120,10 +144,32 @@ class LevelEditor {
         this.canvas.addEventListener('wheel', e => this.onMouseWheel(e));
 
         await this.assetManager.discoverAssets();
-        this.ui.populateNpcPalette();
-        this.ui.populateLayerPalette();
+        await this.preloadAllTextures();
+        this.ui.init();
         this.ui.populateDefaultTextureSettings();
         this.render();
+    }
+    
+    async preloadAllTextures() {
+        const allPaths = new Set();
+        Object.values(this.assetManager.layerTextures).forEach(arr => arr.forEach(path => allPaths.add(path)));
+        const promises = [];
+        allPaths.forEach(path => {
+            promises.push(new Promise(resolve => {
+                const img = new Image();
+                img.src = path;
+                img.onload = () => {
+                    this.preloadedImages.set(path, img);
+                    resolve();
+                };
+                img.onerror = () => {
+                     console.error(`Failed to preload image: ${path}`);
+                     resolve();
+                }
+            }));
+        });
+        await Promise.all(promises);
+        console.log(`Preloaded ${this.preloadedImages.size} textures.`);
     }
 
     resizeCanvas() {
@@ -137,42 +183,45 @@ class LevelEditor {
         const rect = this.canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        
         const worldX = (mouseX - this.panX) / this.zoom;
         const worldY = (mouseY - this.panY) / this.zoom;
-
         const gridX = Math.floor(worldX / this.gridSize);
         const gridY = Math.floor(worldY / this.gridSize);
-
         return { x: gridX, y: gridY };
     }
 
-    placeEntity(gridX, gridY) {
-        if (!this.activeBrush) return;
+    placeItem(gridX, gridY) {
+        if (!this.activeBrush) { this.statusMsg.textContent = "Select an item to place."; return; }
+        
+        const activeLayer = this.ui.getActiveLayer();
+        const coordKey = `${gridX},${gridY}`;
 
-        const existingEntity = this.placedEntities.find(e => e.x === gridX && e.y === gridY);
-        if (existingEntity) return;
+        if (this.activeBrush.type === 'npc' && activeLayer !== 'entities') {
+            this.statusMsg.textContent = "NPCs can only be placed on the 'Entities' layer.";
+            return;
+        }
+        if (this.activeBrush.type === 'texture' && activeLayer === 'entities') {
+            this.statusMsg.textContent = "Textures cannot be placed on the 'Entities' layer.";
+            return;
+        }
 
-        const newEntity = {
-            id: `${this.activeBrush.key}_${Date.now()}`,
+        const newItem = {
             type: this.activeBrush.type,
             key: this.activeBrush.key,
-            x: gridX,
-            y: gridY,
         };
-        this.placedEntities.push(newEntity);
+        this.levelData[activeLayer].set(coordKey, newItem);
+        this.statusMsg.textContent = `Placed ${newItem.key} on ${activeLayer} layer.`;
         this.render();
     }
 
     onMouseDown(e) {
-        if (e.button === 1) {
+        if (e.button === 1) { // Middle mouse
             this.isPanning = true;
-            this.lastMouse.x = e.clientX;
-            this.lastMouse.y = e.clientY;
+            this.lastMouse = { x: e.clientX, y: e.clientY };
             this.canvas.style.cursor = 'grabbing';
-        } else if (e.button === 0) {
+        } else if (e.button === 0) { // Left mouse
             const { x, y } = this.getGridCoordsFromEvent(e);
-            this.placeEntity(x, y);
+            this.placeItem(x, y);
         }
     }
 
@@ -182,8 +231,7 @@ class LevelEditor {
             const dy = e.clientY - this.lastMouse.y;
             this.panX += dx;
             this.panY += dy;
-            this.lastMouse.x = e.clientX;
-            this.lastMouse.y = e.clientY;
+            this.lastMouse = { x: e.clientX, y: e.clientY };
             this.render();
         }
     }
@@ -199,16 +247,12 @@ class LevelEditor {
         e.preventDefault();
         const zoomSpeed = 1.1;
         const oldZoom = this.zoom;
-        
-        if (e.deltaY < 0) this.zoom *= zoomSpeed;
-        else this.zoom /= zoomSpeed;
-        this.zoom = Math.max(0.1, Math.min(this.zoom, 10));
-
+        this.zoom *= (e.deltaY < 0 ? zoomSpeed : 1 / zoomSpeed);
+        this.zoom = Math.max(0.1, Math.min(10, this.zoom));
         const mouseX = e.clientX - this.canvas.getBoundingClientRect().left;
         const mouseY = e.clientY - this.canvas.getBoundingClientRect().top;
         this.panX = mouseX - (mouseX - this.panX) * (this.zoom / oldZoom);
         this.panY = mouseY - (mouseY - this.panY) * (this.zoom / oldZoom);
-
         this.render();
     }
 
@@ -217,43 +261,61 @@ class LevelEditor {
         this.ctx.save();
         this.ctx.translate(this.panX, this.panY);
         this.ctx.scale(this.zoom, this.zoom);
+        const gs = this.gridSize;
 
-        // Draw grid
-        const scaledGridSize = this.gridSize;
-        const startXWorld = -this.panX / this.zoom;
-        const endXWorld = (this.canvas.width - this.panX) / this.zoom;
-        const startYWorld = -this.panY / this.zoom;
-        const endYWorld = (this.canvas.height - this.panY) / this.zoom;
-
-        const startGridX = Math.floor(startXWorld / scaledGridSize);
-        const endGridX = Math.ceil(endXWorld / scaledGridSize);
-        const startGridY = Math.floor(startYWorld / scaledGridSize);
-        const endGridY = Math.ceil(endYWorld / scaledGridSize);
+        const startX = Math.floor(-this.panX / this.zoom / gs);
+        const endX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
+        const startY = Math.floor(-this.panY / this.zoom / gs);
+        const endY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
 
         this.ctx.strokeStyle = '#444';
         this.ctx.lineWidth = 1 / this.zoom;
         this.ctx.beginPath();
-        for (let x = startGridX; x <= endGridX; x++) {
-            this.ctx.moveTo(x * scaledGridSize, startGridY * scaledGridSize);
-            this.ctx.lineTo(x * scaledGridSize, endGridY * scaledGridSize);
-        }
-        for (let y = startGridY; y <= endGridY; y++) {
-            this.ctx.moveTo(startGridX * scaledGridSize, y * scaledGridSize);
-            this.ctx.lineTo(endGridX * scaledGridSize, y * scaledGridSize);
-        }
+        for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); }
+        for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); }
         this.ctx.stroke();
 
-        // Draw placed entities
-        this.placedEntities.forEach(entity => {
-            if (entity.type === 'npc') {
-                if (window[entity.key + '_icon_img']) {
-                     const img = window[entity.key + '_icon_img'];
-                     const drawSize = this.gridSize;
-                     this.ctx.drawImage(img, entity.x * this.gridSize, entity.y * this.gridSize, drawSize, drawSize);
+        const activeLayer = this.ui.getActiveLayer();
+        const itemsToDraw = this.levelData[activeLayer];
+
+        if (itemsToDraw) {
+            for (const [coordKey, item] of itemsToDraw.entries()) {
+                const [x, y] = coordKey.split(',').map(Number);
+                let imgToDraw = null;
+                if (item.type === 'npc') {
+                    imgToDraw = window[item.key + '_icon_img'];
+                } else if (item.type === 'texture') {
+                    imgToDraw = this.preloadedImages.get(item.key);
+                }
+                
+                if (imgToDraw) {
+                    this.ctx.drawImage(imgToDraw, x * gs, y * gs, gs, gs);
                 }
             }
-        });
+        }
+        
+        if (this.zoom >= 1.5 && activeLayer === 'entities') {
+            const fontSize = 12 / this.zoom;
+            this.ctx.font = `bold ${fontSize}px Arial`;
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
 
+            for (const [coordKey, item] of itemsToDraw.entries()) {
+                const [x, y] = coordKey.split(',').map(Number);
+                const labelText = item.key;
+                const textMetrics = this.ctx.measureText(labelText);
+                const padding = 2 / this.zoom;
+                const bgWidth = textMetrics.width + (padding * 2);
+                const bgHeight = fontSize + (padding * 2);
+                const labelX = (x + 0.5) * gs;
+                const labelY = (y + 0.5) * gs;
+
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText(labelText, labelX, labelY);
+            }
+        }
         this.ctx.restore();
     }
 }
@@ -262,109 +324,120 @@ class EditorUI {
     constructor(editor) {
         this.editor = editor;
         this.assetManager = editor.assetManager;
-
-        this.tabs = document.querySelectorAll('.tab-button');
-        this.content = document.querySelectorAll('.tab-content');
-        
         this.layerSelect = document.getElementById('layer-select');
-        this.layerPalette = document.getElementById('layers-palette');
-        this.npcPalette = document.getElementById('entities-palette');
-        
-        this.init();
+        this.paletteContainer = document.getElementById('palette-container');
     }
 
     init() {
-        this.tabs.forEach(tab => {
+        document.querySelectorAll('.tab-button').forEach(tab => {
             tab.addEventListener('click', () => {
-                this.tabs.forEach(t => t.classList.remove('active'));
-                this.content.forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 tab.classList.add('active');
                 document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
             });
         });
-        
-        this.layerSelect.addEventListener('change', () => this.populateLayerPalette());
+        this.layerSelect.addEventListener('change', () => {
+            this.updatePalette();
+            this.editor.render();
+        });
+        this.updatePalette(); // Initial population
     }
 
-    populateLayerPalette() {
-        const selectedLayer = this.layerSelect.value;
+    getActiveLayer() { return this.layerSelect.value; }
+
+    updatePalette() {
+        const activeLayer = this.getActiveLayer();
+        if (activeLayer === 'entities') {
+            this.populateNpcPalette();
+        } else {
+            this.populateTexturePalette();
+        }
+    }
+
+    populateTexturePalette() {
+        const selectedLayer = this.getActiveLayer();
+        this.paletteContainer.innerHTML = '';
         const textures = this.assetManager.layerTextures[selectedLayer] || [];
-        this.layerPalette.innerHTML = '';
         
-        textures.forEach(texturePath => {
+        if (textures.length === 0) {
+            this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No textures found for '${selectedLayer}' layer.</p>`;
+        }
+
+        textures.forEach(path => {
             const item = document.createElement('div');
             item.className = 'palette-item';
-            item.dataset.type = 'texture';
-            item.dataset.path = texturePath;
-            
             const img = new Image();
-            img.src = texturePath;
+            img.src = path;
             item.appendChild(img);
-            
             const label = document.createElement('span');
-            label.textContent = texturePath.split('/').pop().replace('.png', '').replace(/_/g, ' ');
+            label.textContent = path.split('/').pop().replace('.png', '').replace(/_/g, ' ');
             item.appendChild(label);
-
             item.addEventListener('click', () => {
-                this.layerPalette.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
+                this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
                 item.classList.add('active');
-                this.editor.activeBrush = { type: 'texture', key: texturePath };
+                this.editor.activeBrush = { type: 'texture', key: path };
             });
-            
-            this.layerPalette.appendChild(item);
+            this.paletteContainer.appendChild(item);
         });
     }
 
     populateDefaultTextureSettings() {
-        for (const layerType of this.assetManager.layerTypes) {
+        for (const layerType of this.assetManager.textureLayers) {
             const selectEl = document.getElementById(`default-${layerType}-select`);
             if (!selectEl) continue;
-
-            selectEl.innerHTML = ''; // Clear existing options
+            selectEl.innerHTML = '';
             const textures = this.assetManager.layerTextures[layerType] || [];
-
             const noneOption = document.createElement('option');
             noneOption.value = '';
             noneOption.textContent = 'None';
             selectEl.appendChild(noneOption);
-
-            textures.forEach(texturePath => {
+            textures.forEach(path => {
                 const option = document.createElement('option');
-                option.value = texturePath;
-                option.textContent = texturePath.split('/').pop();
+                option.value = path;
+                option.textContent = path.split('/').pop();
                 selectEl.appendChild(option);
             });
         }
     }
 
     populateNpcPalette() {
-        this.npcPalette.innerHTML = '';
+        this.paletteContainer.innerHTML = '';
+        const groupedSkins = new Map();
         this.assetManager.npcIcons.forEach((iconDataUrl, skinName) => {
-            const item = document.createElement('div');
-            item.className = 'palette-item';
-            item.dataset.type = 'npc';
-            item.dataset.id = skinName;
-            
-            const img = new Image();
-            img.src = iconDataUrl;
-            window[skinName + '_icon_img'] = img; 
-            item.appendChild(img);
-            
-            const label = document.createElement('span');
-            label.textContent = skinName;
-            item.appendChild(label);
-
-            item.addEventListener('click', () => {
-                this.npcPalette.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
-                item.classList.add('active');
-                this.editor.activeBrush = { type: 'npc', key: skinName };
-            });
-            
-            this.npcPalette.appendChild(item);
+            let baseName;
+            if (skinName.startsWith('bb8') || skinName.startsWith('r2d2')) {
+                baseName = skinName.match(/^(bb8|r2d2)/)[0];
+            } else { baseName = skinName.replace(/\d+$/, ''); }
+            if (!groupedSkins.has(baseName)) groupedSkins.set(baseName, []);
+            groupedSkins.get(baseName).push({ skinName, iconDataUrl });
         });
+        const sortedKeys = Array.from(groupedSkins.keys()).sort();
+        for (const baseName of sortedKeys) {
+            const header = document.createElement('div');
+            header.className = 'palette-header';
+            header.textContent = baseName;
+            this.paletteContainer.appendChild(header);
+            const skins = groupedSkins.get(baseName);
+            for (const { skinName, iconDataUrl } of skins) {
+                const item = document.createElement('div');
+                item.className = 'palette-item';
+                const img = new Image();
+                img.src = iconDataUrl;
+                window[skinName + '_icon_img'] = img; 
+                item.appendChild(img);
+                const label = document.createElement('span');
+                label.textContent = skinName;
+                item.appendChild(label);
+                item.addEventListener('click', () => {
+                    this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
+                    item.classList.add('active');
+                    this.editor.activeBrush = { type: 'npc', key: skinName };
+                });
+                this.paletteContainer.appendChild(item);
+            }
+        }
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    new LevelEditor();
-});
+window.addEventListener('DOMContentLoaded', () => { new LevelEditor(); });

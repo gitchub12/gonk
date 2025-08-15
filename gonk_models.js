@@ -25,14 +25,16 @@ class GonkModelSystem {
           leftLeg: { size: [4, 12, 4], position: [-2, -6, 0], pivot: [0, 0, 0], parent: 'body' }
         },
         scale: 0.0625,
-        animationSpeed: 4.0
+        animationSpeed: 4.0,
+        iconUV: { x: 8, y: 8, size: 8 }
       },
       slime: {
         parts: {
           slimeBody: { size: [16, 16, 16], position: [0, 8, 0], pivot: [0, 0, 0], parent: null }
         },
         scale: 0.0625,
-        animationSpeed: 1.5
+        animationSpeed: 1.5,
+        iconUV: { x: 0, y: 16, size: 16 }
       },
       snowgolem: {
         parts: {
@@ -43,7 +45,8 @@ class GonkModelSystem {
           leftArm: { size: [12, 2, 2], position: [-6, 5, 0], pivot: [4, 0, 0], parent: 'base' }
         },
         scale: 0.0625,
-        animationSpeed: 3.0
+        animationSpeed: 3.0,
+        iconUV: { x: 0, y: 0, size: 8 }
       },
       irongolem: {
         parts: {
@@ -56,7 +59,8 @@ class GonkModelSystem {
           leftLeg: { size: [6, 10, 6], position: [-4, -10, 0], pivot: [0, 5, 0], parent: 'body' }
         },
         scale: 0.0625,
-        animationSpeed: 2.5
+        animationSpeed: 2.5,
+        iconUV: { x: 0, y: 0, size: 10 }
       }
     };
   }

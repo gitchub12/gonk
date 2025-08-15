@@ -37,7 +37,33 @@
         .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
         .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
         .palette-item img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
-        .palette-item span { position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; }
+        
+        .palette-item span {
+            position: absolute;
+            bottom: 2px;
+            font-size: 10px;
+            background: rgba(0,0,0,0.6);
+            padding: 1px 3px;
+            border-radius: 2px;
+            left: 5%;
+            width: 90%;
+            text-align: center;
+            box-sizing: border-box;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .palette-header {
+            grid-column: 1 / -1;
+            text-align: left;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-top: 10px;
+            padding-bottom: 4px;
+            text-transform: capitalize;
+            border-bottom: 1px solid var(--border-color);
+        }
 
         #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
         #palette-controls input { flex-grow: 1; }
@@ -46,8 +72,7 @@
 <body>
     <div id="leftPanel">
         <div class="tabs">
-            <button class="tab-button active" data-tab="layers">Layers</button>
-            <button class="tab-button" data-tab="entities">Entities</button>
+            <button class="tab-button active" data-tab="layers">Editor</button>
             <button class="tab-button" data-tab="settings">Settings</button>
         </div>
 
@@ -55,68 +80,40 @@
             <div class="content-group">
                 <label for="layer-select">Active Layer:</label>
                 <select id="layer-select">
-                    <option value="floor">Floor</option>
-                    <option value="wall">Walls</option>
-                    <option value="ceiling">Ceiling</option>
-                    <option value="sky">Sky</option>
-                    <option value="water">Water</option>
-                    <option value="subfloor">Subfloor</option>
+                    <option value="subfloor">1. Subfloor</option>
+                    <option value="floor" selected>2. Floor</option>
+                    <option value="entities">3. Entities</option>
+                    <option value="water">4. Water</option>
+                    <option value="floaters">5. Floaters</option>
+                    <option value="decor">6. Decor</option>
+                    <option value="ceiling">7. Ceiling</option>
+                    <option value="sky">8. Sky</option>
                 </select>
             </div>
              <div class="content-group">
-                <h4>Texture Palette</h4>
-                <div id="palette-controls">
-                    <input type="text" id="palette-search-layers" placeholder="Search textures...">
-                    <button id="refresh-assets-layers">Refresh</button>
-                </div>
-                <div id="layers-palette" class="palette"></div>
-            </div>
-        </div>
-
-        <div id="entities-content" class="tab-content">
-             <div class="content-group">
-                <label for="entity-category-select">Category:</label>
-                <select id="entity-category-select">
-                    <option value="npcs">NPCs</option>
-                    <option value="walls">Walls/Furniture</option>
-                    <option value="items">Items</option>
-                </select>
-            </div>
-            <div class="content-group">
                 <h4>Asset Palette</h4>
-                <div id="palette-controls-entities">
-                    <input type="text" id="palette-search-entities" placeholder="Search assets...">
-                    <button id="refresh-assets-entities">Refresh</button>
+                <div id="palette-controls">
+                    <input type="text" id="palette-search" placeholder="Search assets...">
+                    <button id="palette-refresh">Refresh</button>
                 </div>
-                <div id="entities-palette" class="palette"></div>
+                <div id="palette-container" class="palette"></div>
             </div>
         </div>
 
         <div id="settings-content" class="tab-content">
             <h4>Default Layer Textures</h4>
+            <p style="font-size: 12px; opacity: 0.7;">Set a texture to automatically fill any empty space on a given layer.</p>
+            <div class="content-group">
+                <label for="default-subfloor-select">Default Subfloor:</label>
+                <select id="default-subfloor-select"></select>
+            </div>
             <div class="content-group">
                 <label for="default-floor-select">Default Floor:</label>
                 <select id="default-floor-select"></select>
             </div>
             <div class="content-group">
-                <label for="default-wall-select">Default Wall:</label>
-                <select id="default-wall-select"></select>
-            </div>
-            <div class="content-group">
-                <label for="default-ceiling-select">Default Ceiling:</label>
-                <select id="default-ceiling-select"></select>
-            </div>
-            <div class="content-group">
-                <label for="default-sky-select">Default Sky:</label>
-                <select id="default-sky-select"></select>
-            </div>
-             <div class="content-group">
                 <label for="default-water-select">Default Water:</label>
                 <select id="default-water-select"></select>
-            </div>
-             <div class="content-group">
-                <label for="default-subfloor-select">Default Subfloor:</label>
-                <select id="default-subfloor-select"></select>
             </div>
         </div>
     </div>
@@ -125,9 +122,10 @@
         <div id="statusBar">
             <span id="coords">X: 0, Y: 0</span>
             <span id="zoom">Zoom: 100%</span>
-            <span id="status-message">Editor Loaded</span>
+            <span id="status-message">Ready</span>
         </div>
     </div>
+    <script src="../gonk_models.js"></script> 
     <script src="editor.js"></script>
 </body>
 </html>
