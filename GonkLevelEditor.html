@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="file-identifier" content="GonkLevelEditor.html; BROWSERFIREFOXHIDE and filename must be in the first six physical lines of the file. DO NOT REMOVE!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gonk FPS Level Editor</title>
+    <style>
+        :root {
+            --bg-color: #282c34;
+            --panel-bg: #21252b;
+            --border-color: #444;
+            --text-color: #abb2bf;
+            --text-hover: #ffffff;
+            --accent-color: #61afef;
+            --input-bg: #1c1f24;
+        }
+        body { margin: 0; display: flex; height: 100vh; font-family: Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); }
+        #leftPanel { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; }
+        #canvasContainer { flex-grow: 1; position: relative; }
+        canvas { display: block; width: 100%; height: 100%; background-color: #000; }
+        #statusBar { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 5px; font-size: 12px; display: flex; justify-content: space-between; }
+        
+        .tabs { display: flex; border-bottom: 1px solid var(--border-color); }
+        .tab-button { flex-grow: 1; padding: 10px; background: var(--panel-bg); border: none; color: var(--text-color); cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-button:hover { background: #333842; }
+        .tab-button.active { border-bottom: 3px solid var(--accent-color); color: var(--text-hover); }
+        
+        .tab-content { display: none; padding-top: 10px; flex-grow: 1; overflow-y: auto; }
+        .tab-content.active { display: flex; flex-direction: column; }
+
+        .content-group { margin-bottom: 15px; }
+        .content-group label, .content-group h4 { display: block; margin-bottom: 5px; font-weight: bold; }
+        .content-group select, .content-group input, .content-group button { width: 100%; padding: 8px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 3px; box-sizing: border-box; }
+        
+        .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
+        .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
+        .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
+        .palette-item img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
+        .palette-item span { position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; }
+
+        #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
+        #palette-controls input { flex-grow: 1; }
+    </style>
+</head>
+<body>
+    <div id="leftPanel">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="layers">Layers</button>
+            <button class="tab-button" data-tab="entities">Entities</button>
+            <button class="tab-button" data-tab="settings">Settings</button>
+        </div>
+
+        <div id="layers-content" class="tab-content active">
+            <div class="content-group">
+                <label for="layer-select">Active Layer:</label>
+                <select id="layer-select">
+                    <option value="floor">Floor</option>
+                    <option value="wall">Walls</option>
+                    <option value="ceiling">Ceiling</option>
+                    <option value="sky">Sky</option>
+                    <option value="water">Water</option>
+                    <option value="subfloor">Subfloor</option>
+                </select>
+            </div>
+             <div class="content-group">
+                <h4>Texture Palette</h4>
+                <div id="palette-controls">
+                    <input type="text" id="palette-search-layers" placeholder="Search textures...">
+                    <button id="refresh-assets-layers">Refresh</button>
+                </div>
+                <div id="layers-palette" class="palette"></div>
+            </div>
+        </div>
+
+        <div id="entities-content" class="tab-content">
+             <div class="content-group">
+                <label for="entity-category-select">Category:</label>
+                <select id="entity-category-select">
+                    <option value="npcs">NPCs</option>
+                    <option value="walls">Walls/Furniture</option>
+                    <option value="items">Items</option>
+                </select>
+            </div>
+            <div class="content-group">
+                <h4>Asset Palette</h4>
+                <div id="palette-controls-entities">
+                    <input type="text" id="palette-search-entities" placeholder="Search assets...">
+                    <button id="refresh-assets-entities">Refresh</button>
+                </div>
+                <div id="entities-palette" class="palette"></div>
+            </div>
+        </div>
+
+        <div id="settings-content" class="tab-content">
+            <h4>Level Properties</h4>
+        </div>
+    </div>
+    <div id="canvasContainer">
+        <canvas id="editorCanvas"></canvas>
+        <div id="statusBar">
+            <span id="coords">X: 0, Y: 0</span>
+            <span id="zoom">Zoom: 100%</span>
+            <span id="status-message">Editor Loaded</span>
+        </div>
+    </div>
+    <script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Asset files we don't want to backup
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.ico
+*.wav
+*.mp3
+*.ogg
+*.m4a
+
+# Asset folders (if you have them)
+pngs/
+assets/
+images/
+sounds/
+textures/
+audio/
+
+# Other stuff to ignore
+node_modules/
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

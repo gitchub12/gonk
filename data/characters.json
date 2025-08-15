@@ -1,0 +1,87 @@
+{
+    "_comment": "BROWSERFIREFOXHIDE data/characters.json",
+    "_defaults": {
+        "skinPath": "data/skins/",
+        "humanoidWeaponOffsets": {
+            "position": { "x": -1.7, "y": -0.2, "z": -1.7 },
+            "rotation": { "x": 0.1222, "y": -3.1416, "z": 3.1416 },
+            "scale": 0.4
+        },
+        "weaponOffsetByCategory": {
+            "pistol": {
+                "position": { "x": -1.7, "y": -0.9, "z": -2.3 },
+                "rotation": { "x": 1.4835, "y": -1.4661, "z": 1.5184 },
+                "scale": 0.04
+            },
+            "melee": {
+                "position": { "x": -2.0000, "y": 3.6000, "z": -4.2000 },
+                "rotation": { "x": 2.3911, "y": 1.6057, "z": -0.9076 },
+                "scale": 0.0400
+            },
+            "rifle": {
+                "position": { "x": -1.7000, "y": -1.0000, "z": -1.9000 },
+                "rotation": { "x": 1.6057, "y": -1.4312, "z": 1.5359 },
+                "scale": 0.0400
+            },
+            "saber": {
+                "position": { "x": -1.7000, "y": 3.6000, "z": 7.9000 },
+                "rotation": { "x": -0.6458, "y": -1.5359, "z": 2.0420 },
+                "scale": 0.0300
+            },
+            "long": {
+                "position": { "x": -1.7000, "y": -0.2000, "z": -1.1000 },
+                "rotation": { "x": 1.6057, "y": -1.4312, "z": 1.5359 },
+                "scale": 0.0400
+            },
+            "unique": {
+                "position": { "x": -1.5000, "y": -5.1000, "z": -6.8000 },
+                "rotation": { "x": -1.6057, "y": 1.5533, "z": -1.5359 },
+                "scale": 0.0500
+            }
+        }
+    },
+    "stormtrooper": {
+      "name": "Stormtrooper",
+      "texture": "stormtrooper1.png",
+      "position": [-5, 0, -3]
+    },
+    "wookiee": {
+      "name": "Wookiee",
+      "texture": "wookiee1.png",
+      "position": [5, 0, -3],
+      "scaleX": 1.1,
+      "scaleY": 1.25,
+      "scaleZ": 1.1
+    },
+    "gungan": {
+      "name": "Gungan",
+      "texture": "gungan1.png",
+      "skinAliases": ["jar-jar", "jarjar"],
+      "position": [-5, 0, 3],
+      "scaleY": 1.1
+    },
+    "r2d2": {
+      "name": "R2-D2",
+      "texture": "r2d21.png",
+      "position": [5, 0, 3]
+    },
+    "bb8": {
+      "name": "BB-8",
+      "texture": "bb81.png",
+      "minecraftModel": "slime",
+      "position": [0, 0, 0]
+    },
+    "snowGolem": {
+      "name": "Snow Golem",
+      "texture": "bb81.png",
+      "skinAliases": ["bb8"],
+      "minecraftModel": "snowgolem",
+      "position": [-5, 0, 7]
+    },
+    "ironGolem": {
+      "name": "Iron Golem",
+      "texture": "irongolem1.png",
+      "minecraftModel": "irongolem",
+      "position": [5, 0, 7]
+    }
+}

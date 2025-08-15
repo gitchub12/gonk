@@ -1,0 +1,21 @@
+{
+    "_comment": "BROWSERFIREFOXHIDE data/weapons.json",
+    "_defaults": {
+        "categoryDefaults": {
+            "pistol": { "height": 2.5, "thickness": 0.8 },
+            "rifle": { "height": 4.0, "thickness": 1.2 },
+            "melee": { "height": 6.0, "thickness": 1.6 },
+            "saber": { "height": 8.0, "thickness": 0.6 }
+        }
+    },
+    "rifle_fork": {
+        "offsets": {
+            "position": { "x": -2.1, "y": -11.8, "z": -3.4 },
+            "rotation": { "x": 1.5882, "y": -1.5708, "z": 1.5533 },
+            "scale": 0.05
+        }
+    },
+    "melee_saber1": {
+        "category": "saber"
+    }
+}
