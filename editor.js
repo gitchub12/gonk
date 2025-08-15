@@ -5,14 +5,9 @@ class EditorAssetManager {
     constructor() {
         this.npcSkins = [];
         this.npcIcons = new Map();
-        this.layerTextures = {
-            floor: [],
-            wall: [],
-            ceiling: [],
-            sky: [],
-            water: [],
-            subfloor: []
-        };
+        this.layerTypes = ['floor', 'wall', 'ceiling', 'sky', 'water', 'subfloor'];
+        this.layerTextures = {};
+        this.layerTypes.forEach(type => this.layerTextures[type] = []);
         console.log("Editor Asset Manager initialized.");
     }
 
@@ -37,19 +32,17 @@ class EditorAssetManager {
     async discoverAssets() {
         console.log("Discovering assets...");
         
-        // Discover NPC skins
         const skinFiles = await this.fetchDirectoryListing('/data/skins/');
         this.npcSkins = skinFiles.filter(f => f.endsWith('.png')).map(f => `/data/skins/${f}`);
         console.log(`Found ${this.npcSkins.length} NPC skins.`);
         await this.generateNpcIcons();
         
-        // Discover Layer Textures
         const textureFiles = await this.fetchDirectoryListing('/data/pngs/');
         const texturePngs = textureFiles.filter(f => f.endsWith('.png'));
 
-        for (const layerType in this.layerTextures) {
+        for (const layerType of this.layerTypes) {
             this.layerTextures[layerType] = texturePngs
-                .filter(f => f.toLowerCase().startsWith(layerType + '_'))
+                .filter(f => f.toLowerCase().startsWith(layerType))
                 .map(f => `/data/pngs/${f}`);
         }
         console.log("Found layer textures:", this.layerTextures);
@@ -129,6 +122,7 @@ class LevelEditor {
         await this.assetManager.discoverAssets();
         this.ui.populateNpcPalette();
         this.ui.populateLayerPalette();
+        this.ui.populateDefaultTextureSettings();
         this.render();
     }
 
@@ -319,6 +313,28 @@ class EditorUI {
             
             this.layerPalette.appendChild(item);
         });
+    }
+
+    populateDefaultTextureSettings() {
+        for (const layerType of this.assetManager.layerTypes) {
+            const selectEl = document.getElementById(`default-${layerType}-select`);
+            if (!selectEl) continue;
+
+            selectEl.innerHTML = ''; // Clear existing options
+            const textures = this.assetManager.layerTextures[layerType] || [];
+
+            const noneOption = document.createElement('option');
+            noneOption.value = '';
+            noneOption.textContent = 'None';
+            selectEl.appendChild(noneOption);
+
+            textures.forEach(texturePath => {
+                const option = document.createElement('option');
+                option.value = texturePath;
+                option.textContent = texturePath.split('/').pop();
+                selectEl.appendChild(option);
+            });
+        }
     }
 
     populateNpcPalette() {
