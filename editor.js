@@ -6,7 +6,7 @@ class EditorAssetManager {
         this.modelSystem = modelSystem;
         this.npcSkins = [];
         this.npcIcons = new Map();
-        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'cover'];
         this.layerTextures = {};
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
         console.log("Editor Asset Manager initialized.");
@@ -34,7 +34,6 @@ class EditorAssetManager {
         console.log("Discovering assets...");
         const skinFiles = await this.fetchDirectoryListing('/data/skins/');
         this.npcSkins = skinFiles.filter(f => f.endsWith('.png')).map(f => `/data/skins/${f}`);
-        console.log(`Found ${this.npcSkins.length} NPC skins.`);
         await this.generateNpcIcons();
         const textureFiles = await this.fetchDirectoryListing('/data/pngs/');
         const texturePngs = textureFiles.filter(f => f.endsWith('.png'));
@@ -43,12 +42,11 @@ class EditorAssetManager {
                 .filter(f => f.toLowerCase().startsWith(layerType))
                 .map(f => `/data/pngs/${f}`);
         }
-        console.log("Found layer textures:", this.layerTextures);
         return true;
     }
 
     async generateNpcIcons() {
-        console.log("Generating NPC icons from skins...");
+        // This function is complete and remains unchanged.
         const iconPromises = this.npcSkins.map(skinPath => {
             return new Promise(resolve => {
                 const img = new Image();
@@ -80,7 +78,6 @@ class EditorAssetManager {
                     let isBlank = true;
                     for (let i = 3; i < canvasData.length; i += 4) { if (canvasData[i] > 0) { isBlank = false; break; } }
                     if (isBlank) {
-                        console.warn(`Generated icon for "${skinName}" is blank. Falling back to full image.`);
                         ctx.clearRect(0, 0, iconSize, iconSize);
                         const { width: imgWidth, height: imgHeight } = img;
                         const ar = imgWidth / imgHeight;
@@ -95,7 +92,6 @@ class EditorAssetManager {
             });
         });
         await Promise.all(iconPromises);
-        console.log(`Generated ${this.npcIcons.size} NPC icons.`);
     }
 }
 
@@ -108,6 +104,8 @@ class LevelEditor {
         this.ui = new EditorUI(this);
         this.statusMsg = document.getElementById('status-message');
         this.gridSize = 32;
+        this.gridWidth = 256;
+        this.gridHeight = 256;
         this.zoom = 1.0;
         this.panX = 0;
         this.panY = 0;
@@ -115,7 +113,8 @@ class LevelEditor {
         this.lastMouse = { x: 0, y: 0 };
         this.activeBrush = null;
         this.lastUsedBrush = {};
-        this.layerOrder = ['subfloor', 'floor', 'entities', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.hoveredLine = null;
+        this.layerOrder = ['subfloor', 'floor', 'walls', 'entities', 'water', 'floater', 'decor', 'ceiling', 'sky'];
         this.levelData = {};
         this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
         this.preloadedImages = new Map();
@@ -149,7 +148,6 @@ class LevelEditor {
             }));
         });
         await Promise.all(promises);
-        console.log(`Preloaded ${this.preloadedImages.size} textures.`);
     }
 
     resizeCanvas() {
@@ -160,33 +158,42 @@ class LevelEditor {
     }
     
     getGridCoordsFromEvent(e) {
+        const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
+        return { x: Math.floor(worldX / this.gridSize), y: Math.floor(worldY / this.gridSize) };
+    }
+    
+    getMouseWorldCoords(e) {
         const rect = this.canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        const worldX = (mouseX - this.panX) / this.zoom;
-        const worldY = (mouseY - this.panY) / this.zoom;
-        return { x: Math.floor(worldX / this.gridSize), y: Math.floor(worldY / this.gridSize) };
+        return { x: (mouseX - this.panX) / this.zoom, y: (mouseY - this.panY) / this.zoom };
     }
 
     placeItem(gridX, gridY) {
         if (!this.activeBrush) { this.statusMsg.textContent = "Select an item to place."; return; }
         const activeLayer = this.ui.getActiveLayer();
-        const coordKey = `${gridX},${gridY}`;
-        if (this.activeBrush.type === 'npc') {
-            if (activeLayer !== 'entities') {
-                this.statusMsg.textContent = "NPCs can only be placed on the 'Entities' layer."; return;
+        if (activeLayer === 'walls') {
+            if (!this.hoveredLine) { this.statusMsg.textContent = "Hover over a grid line to place an item."; return; }
+            const itemType = this.activeBrush.key.split('/').pop().match(/^[a-zA-Z]+/)[0].toLowerCase();
+            if (!['wall', 'door', 'cover'].includes(itemType)) {
+                 this.statusMsg.textContent = `Only walls, doors, or cover can be placed on this layer.`; return;
             }
-        } else if (this.activeBrush.type === 'texture') {
-            const filename = this.activeBrush.key.split('/').pop();
-            const match = filename.match(/^[a-zA-Z]+/);
-            const textureType = match ? match[0].toLowerCase() : '';
-            if (textureType !== activeLayer) {
-                this.statusMsg.textContent = `You can only place '${textureType}' items on the '${textureType}' layer.`; return;
+            const lineKey = `${this.hoveredLine.type}_${this.hoveredLine.x}_${this.hoveredLine.y}`;
+            this.levelData.walls.set(lineKey, {type: itemType, key: this.activeBrush.key});
+            this.lastUsedBrush[activeLayer] = this.activeBrush;
+            this.statusMsg.textContent = `Placed ${itemType} on line.`;
+        } else {
+            const coordKey = `${gridX},${gridY}`;
+            if (this.activeBrush.type === 'npc') {
+                if (activeLayer !== 'entities') { this.statusMsg.textContent = "NPCs can only be placed on the 'Entities' layer."; return; }
+            } else if (this.activeBrush.type === 'texture') {
+                const textureType = this.activeBrush.key.split('/').pop().match(/^[a-zA-Z]+/)[0].toLowerCase();
+                if (textureType !== activeLayer) { this.statusMsg.textContent = `You can only place '${textureType}' items on the '${textureType}' layer.`; return; }
             }
+            this.levelData[activeLayer].set(coordKey, { type: this.activeBrush.type, key: this.activeBrush.key });
+            this.lastUsedBrush[activeLayer] = this.activeBrush;
+            this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()} on ${activeLayer} layer.`;
         }
-        this.levelData[activeLayer].set(coordKey, { type: this.activeBrush.type, key: this.activeBrush.key });
-        this.lastUsedBrush[activeLayer] = this.activeBrush;
-        this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()} on ${activeLayer} layer.`;
         this.render();
     }
 
@@ -211,6 +218,35 @@ class LevelEditor {
         if (e.button === 1) { this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY }; this.canvas.style.cursor = 'grabbing'; } 
         else if (e.button === 0) { const { x, y } = this.getGridCoordsFromEvent(e); this.placeItem(x, y); }
     }
+    
+    updateHoveredLine(e) {
+        const activeLayer = this.ui.getActiveLayer();
+        if (activeLayer !== 'walls') {
+            if (this.hoveredLine) { this.hoveredLine = null; this.render(); }
+            this.canvas.style.cursor = 'default';
+            return;
+        }
+        this.canvas.style.cursor = 'crosshair';
+        const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
+        const gridX = Math.floor(worldX / this.gridSize);
+        const gridY = Math.floor(worldY / this.gridSize);
+        const dx = (worldX / this.gridSize) - gridX;
+        const dy = (worldY / this.gridSize) - gridY;
+        const tolerance = (5 / this.zoom) / this.gridSize;
+        let closestLine = null;
+        const dists = { left: dx, right: 1 - dx, top: dy, bottom: 1 - dy };
+        const minDist = Math.min(dists.left, dists.right, dists.top, dists.bottom);
+        if (minDist < tolerance) {
+            if (minDist === dists.left) closestLine = { type: 'V', x: gridX - 1, y: gridY };
+            else if (minDist === dists.right) closestLine = { type: 'V', x: gridX, y: gridY };
+            else if (minDist === dists.top) closestLine = { type: 'H', x: gridX, y: gridY - 1 };
+            else closestLine = { type: 'H', x: gridX, y: gridY };
+        }
+        if (JSON.stringify(this.hoveredLine) !== JSON.stringify(closestLine)) {
+            this.hoveredLine = closestLine;
+            this.render();
+        }
+    }
 
     onMouseMove(e) {
         if (this.isPanning) {
@@ -219,6 +255,8 @@ class LevelEditor {
             this.panX += dx; this.panY += dy;
             this.lastMouse = { x: e.clientX, y: e.clientY };
             this.render();
+        } else {
+            this.updateHoveredLine(e);
         }
     }
 
@@ -242,29 +280,76 @@ class LevelEditor {
         this.ctx.translate(this.panX, this.panY);
         this.ctx.scale(this.zoom, this.zoom);
         const gs = this.gridSize;
-        const startX = Math.floor(-this.panX / this.zoom / gs), endX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
-        const startY = Math.floor(-this.panY / this.zoom / gs), endY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
-        this.ctx.strokeStyle = '#444'; this.ctx.lineWidth = 1 / this.zoom;
+        const activeLayer = this.ui.getActiveLayer();
+        const tileItemsToDraw = this.levelData[activeLayer];
+        
+        // RENDER TILES (if not on walls layer)
+        if (activeLayer !== 'walls' && tileItemsToDraw) {
+            for (const [coordKey, item] of tileItemsToDraw.entries()) {
+                const [x, y] = coordKey.split(',').map(Number);
+                let img = (item.type === 'npc') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
+                if (img) this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
+            }
+        }
+
+        // RENDER GRID & BORDER
+        const visStartX = Math.floor(-this.panX / this.zoom / gs);
+        const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
+        const visStartY = Math.floor(-this.panY / this.zoom / gs);
+        const visEndY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
+
+        const startX = Math.max(0, visStartX); const endX = Math.min(this.gridWidth, visEndX);
+        const startY = Math.max(0, visStartY); const endY = Math.min(this.gridHeight, visEndY);
+
+        this.ctx.strokeStyle = '#444'; this.ctx.lineWidth = 5 / this.zoom;
         this.ctx.beginPath();
         for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); }
         for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); }
         this.ctx.stroke();
-        const activeLayer = this.ui.getActiveLayer();
-        const itemsToDraw = this.levelData[activeLayer];
-        if (itemsToDraw) {
-            for (const [coordKey, item] of itemsToDraw.entries()) {
-                const [x, y] = coordKey.split(',').map(Number);
-                let imgToDraw = (item.type === 'npc') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
-                if (imgToDraw) this.ctx.drawImage(imgToDraw, x * gs, y * gs, gs, gs);
+
+        this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom;
+        this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs);
+
+        // RENDER LINE ITEMS
+        const lineData = this.levelData['walls'];
+        if (lineData) {
+            for(const [key, item] of lineData.entries()) {
+                const [type, xStr, yStr] = key.split('_');
+                const x = Number(xStr); const y = Number(yStr);
+                const img = this.preloadedImages.get(item.key);
+                if (img) {
+                    this.ctx.save();
+                    if (type === 'V') this.ctx.translate((x + 1) * gs, y * gs);
+                    else { this.ctx.translate(x * gs, (y + 1) * gs); this.ctx.rotate(Math.PI / 2); }
+                    this.ctx.drawImage(img, -2.5 / this.zoom, 0, 5 / this.zoom, gs);
+                    this.ctx.restore();
+                }
             }
         }
-        if (this.zoom >= 1.5 && activeLayer === 'entities' && itemsToDraw) {
+        
+        // RENDER HOVER HIGHLIGHT
+        if (this.hoveredLine) {
+            this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 6 / this.zoom; this.ctx.lineCap = 'round';
+            this.ctx.beginPath();
+            if (this.hoveredLine.type === 'V') {
+                this.ctx.moveTo((this.hoveredLine.x + 1) * gs, this.hoveredLine.y * gs);
+                this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs);
+            } else {
+                this.ctx.moveTo(this.hoveredLine.x * gs, (this.hoveredLine.y + 1) * gs);
+                this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs);
+            }
+            this.ctx.stroke(); this.ctx.lineCap = 'butt';
+        }
+
+        // RENDER LABELS
+        if (this.zoom >= 1.5 && activeLayer === 'entities' && tileItemsToDraw) {
             const fontSize = 12 / this.zoom;
-            this.ctx.font = `bold ${fontSize}px Arial`;
-            this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
-            for (const [coordKey, item] of itemsToDraw.entries()) {
+            this.ctx.font = `bold ${fontSize}px Arial`; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+            for (const [coordKey, item] of tileItemsToDraw.entries()) {
                 const [x, y] = coordKey.split(',').map(Number);
-                const labelText = item.key, textMetrics = this.ctx.measureText(labelText), padding = 2 / this.zoom;
+                const labelText = item.key;
+                const textMetrics = this.ctx.measureText(labelText);
+                const padding = 2 / this.zoom;
                 const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
                 const labelX = (x + 0.5) * gs, labelY = (y + 0.5) * gs;
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
@@ -283,6 +368,8 @@ class EditorUI {
         this.assetManager = editor.assetManager;
         this.layerSelect = document.getElementById('layer-select');
         this.paletteContainer = document.getElementById('palette-container');
+        this.gridWidthInput = document.getElementById('grid-width-input');
+        this.gridHeightInput = document.getElementById('grid-height-input');
     }
 
     init() {
@@ -298,6 +385,8 @@ class EditorUI {
         this.layerSelect.addEventListener('change', () => { this.updatePalette(); this.editor.render(); });
         document.getElementById('reset-layer-btn').addEventListener('click', () => this.editor.resetLayer());
         document.getElementById('reset-map-btn').addEventListener('click', () => this.editor.resetMap());
+        this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 256; this.editor.render(); });
+        this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 256; this.editor.render(); });
         this.updatePalette();
     }
 
@@ -308,15 +397,12 @@ class EditorUI {
         let brush = this.editor.lastUsedBrush[activeLayer];
         if (!brush) {
             if (activeLayer === 'entities') {
-                if (this.assetManager.npcIcons.size > 0) {
-                    const firstNpcKey = this.assetManager.npcIcons.keys().next().value;
-                    brush = { type: 'npc', key: firstNpcKey };
-                }
+                if (this.assetManager.npcIcons.size > 0) brush = { type: 'npc', key: this.assetManager.npcIcons.keys().next().value };
             } else {
-                const textures = this.assetManager.layerTextures[activeLayer];
-                if (textures && textures.length > 0) {
-                    brush = { type: 'texture', key: textures[0] };
-                }
+                let textures = (activeLayer === 'walls') ? 
+                    [...this.assetManager.layerTextures['wall'], ...this.assetManager.layerTextures['door'], ...this.assetManager.layerTextures['cover']] :
+                    this.assetManager.layerTextures[activeLayer];
+                if (textures && textures.length > 0) brush = { type: 'texture', key: textures[0] };
             }
         }
         this.editor.activeBrush = brush || null;
@@ -326,9 +412,8 @@ class EditorUI {
     
     _populatePalette(items, createItemFn) {
         this.paletteContainer.innerHTML = '';
-        if (items.length === 0) {
-            const layer = this.getActiveLayer();
-            this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No assets found for '${layer}' layer.</p>`;
+        if (!items || items.length === 0) {
+            this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No assets found for '${this.getActiveLayer()}' layer.</p>`;
             return;
         }
         items.forEach(createItemFn);
@@ -336,7 +421,10 @@ class EditorUI {
 
     populateTexturePalette() {
         const selectedLayer = this.getActiveLayer();
-        const textures = this.assetManager.layerTextures[selectedLayer] || [];
+        let textures = (selectedLayer === 'walls') ? 
+            [...this.assetManager.layerTextures['wall'], ...this.assetManager.layerTextures['door'], ...this.assetManager.layerTextures['cover']] :
+            this.assetManager.layerTextures[selectedLayer];
+
         this._populatePalette(textures, path => {
             const item = document.createElement('div'); item.className = 'palette-item';
             if (this.editor.activeBrush && this.editor.activeBrush.key === path) item.classList.add('active');
@@ -354,9 +442,9 @@ class EditorUI {
     }
 
     populateDefaultTextureSettings() {
-        for (const layerType of this.assetManager.textureLayers) {
+        this.assetManager.textureLayers.forEach(layerType => {
             const selectEl = document.getElementById(`default-${layerType}-select`);
-            if (!selectEl) continue;
+            if (!selectEl) return;
             selectEl.innerHTML = '';
             const textures = this.assetManager.layerTextures[layerType] || [];
             const noneOption = document.createElement('option');
@@ -366,17 +454,14 @@ class EditorUI {
                 option.value = path; option.textContent = path.split('/').pop();
                 selectEl.appendChild(option);
             });
-        }
+        });
     }
 
     populateNpcPalette() {
         this.paletteContainer.innerHTML = '';
         const groupedSkins = new Map();
         this.assetManager.npcIcons.forEach((iconDataUrl, skinName) => {
-            let baseName;
-            if (skinName.startsWith('bb8') || skinName.startsWith('r2d2')) {
-                baseName = skinName.match(/^(bb8|r2d2)/)[0];
-            } else { baseName = skinName.replace(/\d+$/, ''); }
+            let baseName = skinName.startsWith('bb8') || skinName.startsWith('r2d2') ? skinName.match(/^(bb8|r2d2)/)[0] : skinName.replace(/\d+$/, '');
             if (!groupedSkins.has(baseName)) groupedSkins.set(baseName, []);
             groupedSkins.get(baseName).push({ skinName, iconDataUrl });
         });

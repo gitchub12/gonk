@@ -18,7 +18,7 @@
         body { margin: 0; display: flex; height: 100vh; font-family: Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); }
         #leftPanel { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; }
         #canvasContainer { flex-grow: 1; position: relative; }
-        canvas { display: block; width: 100%; height: 100%; background-color: #000; }
+        canvas { display: block; width: 100%; height: 100%; background-color: #000; cursor: default; }
         #statusBar { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 5px; font-size: 12px; display: flex; justify-content: space-between; }
         
         .tabs { display: flex; border-bottom: 1px solid var(--border-color); }
@@ -73,12 +73,13 @@
                     <select id="layer-select">
                         <option value="subfloor">1. Subfloor</option>
                         <option value="floor" selected>2. Floor</option>
-                        <option value="entities">3. Entities</option>
-                        <option value="water">4. Water</option>
-                        <option value="floater">5. Floater</option>
-                        <option value="decor">6. Decor</option>
-                        <option value="ceiling">7. Ceiling</option>
-                        <option value="sky">8. Sky</option>
+                        <option value="walls">3. Walls &amp; Doors</option>
+                        <option value="entities">4. Entities</option>
+                        <option value="water">5. Water</option>
+                        <option value="floater">6. Floater</option>
+                        <option value="decor">7. Decor</option>
+                        <option value="ceiling">8. Ceiling</option>
+                        <option value="sky">9. Sky</option>
                     </select>
                 </div>
                  <div class="content-group">
@@ -97,6 +98,13 @@
         </div>
 
         <div id="settings-content" class="tab-content">
+            <div class="content-group">
+                <h4>Map Dimensions</h4>
+                <label for="grid-width-input">Map Width (tiles):</label>
+                <input type="number" id="grid-width-input" value="256" min="16" max="1024" step="16">
+                <label for="grid-height-input" style="margin-top: 10px;">Map Height (tiles):</label>
+                <input type="number" id="grid-height-input" value="256" min="16" max="1024" step="16">
+            </div>
             <div class="content-group">
                 <h4>Default Layer Textures</h4>
                 <p style="font-size: 12px; opacity: 0.7;">Set a texture to automatically fill any empty space on a given layer.</p>
