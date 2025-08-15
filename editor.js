@@ -114,6 +114,7 @@ class LevelEditor {
         this.isPanning = false;
         this.lastMouse = { x: 0, y: 0 };
         this.activeBrush = null;
+        this.lastUsedBrush = {};
         this.layerOrder = ['subfloor', 'floor', 'entities', 'water', 'floater', 'decor', 'ceiling', 'sky'];
         this.levelData = {};
         this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
@@ -176,12 +177,15 @@ class LevelEditor {
                 this.statusMsg.textContent = "NPCs can only be placed on the 'Entities' layer."; return;
             }
         } else if (this.activeBrush.type === 'texture') {
-            const textureType = this.activeBrush.key.split('/').pop().split('_')[0].split('.')[0];
+            const filename = this.activeBrush.key.split('/').pop();
+            const match = filename.match(/^[a-zA-Z]+/);
+            const textureType = match ? match[0].toLowerCase() : '';
             if (textureType !== activeLayer) {
                 this.statusMsg.textContent = `You can only place '${textureType}' items on the '${textureType}' layer.`; return;
             }
         }
         this.levelData[activeLayer].set(coordKey, { type: this.activeBrush.type, key: this.activeBrush.key });
+        this.lastUsedBrush[activeLayer] = this.activeBrush;
         this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()} on ${activeLayer} layer.`;
         this.render();
     }
@@ -301,19 +305,41 @@ class EditorUI {
 
     updatePalette() {
         const activeLayer = this.getActiveLayer();
-        this.editor.activeBrush = null; // Clear brush on layer change
+        let brush = this.editor.lastUsedBrush[activeLayer];
+        if (!brush) {
+            if (activeLayer === 'entities') {
+                if (this.assetManager.npcIcons.size > 0) {
+                    const firstNpcKey = this.assetManager.npcIcons.keys().next().value;
+                    brush = { type: 'npc', key: firstNpcKey };
+                }
+            } else {
+                const textures = this.assetManager.layerTextures[activeLayer];
+                if (textures && textures.length > 0) {
+                    brush = { type: 'texture', key: textures[0] };
+                }
+            }
+        }
+        this.editor.activeBrush = brush || null;
         if (activeLayer === 'entities') this.populateNpcPalette();
         else this.populateTexturePalette();
+    }
+    
+    _populatePalette(items, createItemFn) {
+        this.paletteContainer.innerHTML = '';
+        if (items.length === 0) {
+            const layer = this.getActiveLayer();
+            this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No assets found for '${layer}' layer.</p>`;
+            return;
+        }
+        items.forEach(createItemFn);
     }
 
     populateTexturePalette() {
         const selectedLayer = this.getActiveLayer();
-        this.paletteContainer.innerHTML = '';
         const textures = this.assetManager.layerTextures[selectedLayer] || [];
-        if (textures.length === 0) this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No textures found for '${selectedLayer}' layer.</p>`;
-        textures.forEach(path => {
-            const item = document.createElement('div');
-            item.className = 'palette-item';
+        this._populatePalette(textures, path => {
+            const item = document.createElement('div'); item.className = 'palette-item';
+            if (this.editor.activeBrush && this.editor.activeBrush.key === path) item.classList.add('active');
             const img = new Image(); img.src = path; item.appendChild(img);
             const label = document.createElement('span');
             label.textContent = path.split('/').pop().replace('.png', '').replace(/_/g, ' ');
@@ -361,8 +387,8 @@ class EditorUI {
             this.paletteContainer.appendChild(header);
             const skins = groupedSkins.get(baseName);
             for (const { skinName, iconDataUrl } of skins) {
-                const item = document.createElement('div');
-                item.className = 'palette-item';
+                const item = document.createElement('div'); item.className = 'palette-item';
+                if (this.editor.activeBrush && this.editor.activeBrush.key === skinName) item.classList.add('active');
                 const img = new Image(); img.src = iconDataUrl; window[skinName + '_icon_img'] = img; item.appendChild(img);
                 const label = document.createElement('span'); label.textContent = skinName; item.appendChild(label);
                 item.addEventListener('click', () => {
