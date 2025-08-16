@@ -1,7 +1,13 @@
-# Session Narrative  new2
+Summary: Corrected IronGolem UV textures, visuals
+# Session Narrative 
 BROWSERFIREFOXHIDE session_narrative.md AI: DO NOT DELETE this line which contains critical file data and browser instructions!
 
-**Timestamp:** Friday, August 15, 2025 at 9:51:14 AM CDT
+Friday, 8/15/25 9:51AM
+User identified two issues with the level editor's "Entities" tab: incorrect icon generation and visual layering
+## Implementation: Added data-driven 'iconUV' property to each model definition to specify location of face for icon generation, added layering process showing levels in order
+
+Friday, 8/15/25 9:42AM
+...
 
 ## Previous User Request (Timestamp: Friday, August 15, 2025 at 8:28:42 AM CDT)
 The user identified two issues with the level editor's "Entities" tab: incorrect icon generation for non-humanoid models (e.g., Iron Golem) and a lack of visual grouping in the asset palette.
