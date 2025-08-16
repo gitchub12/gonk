@@ -117,8 +117,8 @@ class LevelEditor {
         this.ui = new EditorUI(this);
         this.statusMsg = document.getElementById('status-message');
         this.gridSize = 32;
-        this.gridWidth = 128;
-        this.gridHeight = 128;
+        this.gridWidth = 64;
+        this.gridHeight = 64;
         this.zoom = 1.0;
         this.panX = 0;
         this.panY = 0;
@@ -287,22 +287,39 @@ class LevelEditor {
             this.canvas.style.cursor = 'default';
             return;
         }
+        
         this.canvas.style.cursor = 'crosshair';
         const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
         const gridX = Math.floor(worldX / this.gridSize);
         const gridY = Math.floor(worldY / this.gridSize);
-        const dx = (worldX / this.gridSize) - gridX;
-        const dy = (worldY / this.gridSize) - gridY;
-        const tolerance = (5 / this.zoom) / this.gridSize;
+        const dx = (worldX / this.gridSize) - gridX; // fractional part, 0 to 1
+        const dy = (worldY / this.gridSize) - gridY; // fractional part, 0 to 1
+        
+        const deadzone = 0.05; // 5% of cell size
         let closestLine = null;
-        const dists = { left: dx, right: 1 - dx, top: dy, bottom: 1 - dy };
-        const minDist = Math.min(dists.left, dists.right, dists.top, dists.bottom);
-        if (minDist < tolerance) {
-            if (minDist === dists.left) closestLine = { type: 'V', x: gridX - 1, y: gridY };
-            else if (minDist === dists.right) closestLine = { type: 'V', x: gridX, y: gridY };
-            else if (minDist === dists.top) closestLine = { type: 'H', x: gridX, y: gridY - 1 };
-            else closestLine = { type: 'H', x: gridX, y: gridY };
+
+        const isNearV = dx < deadzone || dx > (1 - deadzone);
+        const isNearH = dy < deadzone || dy > (1 - deadzone);
+
+        // If near an intersection, it's a deadzone, so no line is selected.
+        if (isNearV && isNearH) {
+            closestLine = null;
+        } else {
+            const dists = [
+                { edge: 'top',    dist: dy,      line: { type: 'H', x: gridX, y: gridY - 1 } },
+                { edge: 'bottom', dist: 1 - dy,  line: { type: 'H', x: gridX, y: gridY } },
+                { edge: 'left',   dist: dx,      line: { type: 'V', x: gridX - 1, y: gridY } },
+                { edge: 'right',  dist: 1 - dx,  line: { type: 'V', x: gridX, y: gridY } }
+            ];
+            
+            dists.sort((a, b) => a.dist - b.dist);
+            
+            const tolerance = 0.1; // Snap if within 10% of the cell size to an edge
+            if (dists[0].dist < tolerance) {
+                closestLine = dists[0].line;
+            }
         }
+
         if (JSON.stringify(this.hoveredLine) !== JSON.stringify(closestLine)) {
             this.hoveredLine = closestLine;
             this.render();
@@ -376,17 +393,26 @@ class LevelEditor {
                     }
                 }
             } else {
-                if (items) for (const [coordKey, item] of items.entries()) {
+                 if (items) for (const [coordKey, item] of items.entries()) {
                     const [x, y] = coordKey.split(',').map(Number);
                     let img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
-                    if (img) this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
+                    if (img) {
+                        if (layerName === 'npcs') {
+                            const iconSize = gs * 0.75;
+                            const xPos = (x * gs) + (gs - iconSize) / 2; // Centered horizontally
+                            const yPos = (y * gs) + (gs - iconSize);   // Aligned to bottom
+                            this.ctx.drawImage(img, xPos, yPos, iconSize, iconSize);
+                        } else {
+                            this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
+                        }
+                    }
                 }
             }
         }
         
         this.ctx.setLineDash([]);
         this.ctx.lineWidth = 1 / this.zoom;
-        this.ctx.strokeStyle = 'rgba(200, 200, 200, 0.3)';
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.setLineDash([4 / this.zoom, 4 / this.zoom]);
         const visStartX = Math.floor(-this.panX / this.zoom / gs);
         const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
@@ -426,7 +452,8 @@ class LevelEditor {
                     const textMetrics = this.ctx.measureText(labelText);
                     const padding = 2 / this.zoom;
                     const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
-                    const labelX = (x + 0.5) * gs, labelY = (y + 0.5) * gs;
+                    const labelX = (x + 0.5) * gs;
+                    const labelY = (y + 1) * gs + (bgHeight / 2) + (4 / this.zoom);
                     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
                     this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
                     this.ctx.fillStyle = 'white';
@@ -464,8 +491,8 @@ class EditorUI {
         this.layerSelect.addEventListener('change', () => { this.updatePalette(); this.editor.render(); });
         document.getElementById('reset-layer-btn').addEventListener('click', () => this.editor.resetLayer());
         document.getElementById('reset-map-btn').addEventListener('click', () => this.editor.resetMap());
-        this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 128; this.editor.render(); });
-        this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 128; this.editor.render(); });
+        this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 64; this.editor.render(); });
+        this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 64; this.editor.render(); });
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
             select.addEventListener('change', (e) => {
                 this.editor.defaultTextures[layer] = e.target.value;
@@ -578,7 +605,7 @@ class EditorUI {
         const npcGroups = { 'Droids': [], 'Aliens': [], 'Stormies': [] };
         const groupMap = { 'wookiee': 'Aliens', 'gungan': 'Aliens', 'stormtrooper': 'Stormies' };
         this.assetManager.npcIcons.forEach((iconDataUrl, skinName) => {
-            const baseName = skinName.replace(/\d+$/, '');
+            const baseName = skinName.match(/^(bb8|r2d2)/) ? skinName.match(/^(bb8|r2d2)/)[0] : skinName.replace(/\d+$/, '');
             const group = groupMap[baseName] || 'Droids';
             npcGroups[group].push({ skinName, iconDataUrl });
         });
