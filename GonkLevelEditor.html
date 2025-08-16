@@ -58,9 +58,18 @@
         #layer-actions {
             position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; gap: 10px;
         }
-        #layer-actions button {
-            flex-grow: 1;
+        #layer-actions button { flex-grow: 1; }
+        
+        #toolbox {
+            position: absolute; top: 10px; left: 10px; background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 5px; display: flex; flex-direction: column; padding: 5px; gap: 5px;
         }
+        #toolbox button {
+            width: 40px; height: 40px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        #toolbox button:hover { background-color: #333842; }
+        #toolbox button.active { border-color: var(--accent-color); background-color: #333842;}
+        #toolbox button img { width: 24px; height: 24px; }
+
     </style>
 </head>
 <body>
@@ -79,14 +88,15 @@
                         <option value="floor" selected>2. Floor</option>
                         <option value="npcs">3. NPCs</option>
                         <option value="assets">4. Assets</option>
-                        <option value="walls">5. Walls & Doors</option>
-                        <option value="tapestry">6. Tapestry</option>
-                        <option value="dangler">7. Dangler</option>
-                        <option value="water">8. Water</option>
-                        <option value="floater">9. Floater</option>
-                        <option value="decor">10. Decor</option>
-                        <option value="ceiling">11. Ceiling</option>
-                        <option value="sky">12. Sky</option>
+                        <option value="spawns">5. Spawns</option>
+                        <option value="walls">6. Walls & Doors</option>
+                        <option value="tapestry">7. Tapestry</option>
+                        <option value="dangler">8. Dangler</option>
+                        <option value="water">9. Water</option>
+                        <option value="floater">10. Floater</option>
+                        <option value="decor">11. Decor</option>
+                        <option value="ceiling">12. Ceiling</option>
+                        <option value="sky">13. Sky</option>
                     </select>
                 </div>
                  <div class="content-group">
@@ -149,6 +159,12 @@
     </div>
     <div id="canvasContainer">
         <canvas id="editorCanvas"></canvas>
+        <div id="toolbox">
+            <button id="tool-paint" title="Paint (B)" class="active">???</button>
+            <button id="tool-rotate" title="Rotate (R)">??</button>
+            <button id="tool-spawn" title="Place Spawn (P)">??</button>
+            <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
+        </div>
         <div id="statusBar">
             <span id="coords">X: 0, Y: 0</span>
             <span id="zoom">Zoom: 100%</span>

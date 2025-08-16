@@ -7,7 +7,7 @@ class EditorAssetManager {
         this.npcSkins = [];
         this.npcIcons = new Map();
         this.furnitureJsons = new Map();
-        this.assetIcons = new Map(); // For furniture, etc.
+        this.assetIcons = new Map(); 
         this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'cover', 'tapestry', 'dangler'];
         this.layerTextures = {};
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
@@ -44,7 +44,6 @@ class EditorAssetManager {
         furnitureFiles.filter(f => f.endsWith('.json')).forEach(file => {
             const name = file.replace('.json', '');
             this.furnitureJsons.set(name, `/data/furniture/models/${file}`);
-            // For now, generate a placeholder icon for assets
             this.assetIcons.set(name, this.createPlaceholderIcon(name));
         });
         return true;
@@ -125,10 +124,12 @@ class LevelEditor {
         this.isPanning = false;
         this.isPainting = false;
         this.lastPlacedCoord = '';
+        this.activeTool = 'paint'; // 'paint', 'erase', 'rotate', 'spawn'
         this.activeBrush = null;
         this.lastUsedBrush = {};
         this.hoveredLine = null;
-        this.layerOrder = ['subfloor', 'floor', 'npcs', 'assets', 'walls', 'tapestry', 'dangler', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.layerOrder = ['subfloor', 'floor', 'npcs', 'assets', 'spawns', 'walls', 'tapestry', 'dangler', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.lineLayers = ['walls', 'tapestry'];
         this.levelData = {};
         this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
         this.defaultTextures = {};
@@ -143,15 +144,15 @@ class LevelEditor {
         this.canvas.addEventListener('mousemove', e => this.onMouseMove(e));
         this.canvas.addEventListener('mouseup', e => this.onMouseUp(e));
         this.canvas.addEventListener('wheel', e => this.onMouseWheel(e));
-        this.canvas.addEventListener('contextmenu', e => this.onRightClick(e));
+        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
         await this.assetManager.discoverAssets();
         await this.preloadAllTextures();
         this.ui.init();
-        this.render(); // Initial render after defaults are set
+        this.render();
     }
     
     async preloadAllTextures() {
-        const allPaths = new Set();
+        const allPaths = new Set(['/data/pngs/hologonk.png']);
         Object.values(this.assetManager.layerTextures).forEach(arr => arr.forEach(path => allPaths.add(path)));
         const promises = [];
         allPaths.forEach(path => {
@@ -184,16 +185,9 @@ class LevelEditor {
         return { x: (mouseX - this.panX) / this.zoom, y: (mouseY - this.panY) / this.zoom };
     }
     
-    onRightClick(e) {
-        e.preventDefault();
-        const { x, y } = this.getGridCoordsFromEvent(e);
-        this.eraseItem(x, y);
-    }
-
     eraseItem(gridX, gridY) {
         const activeLayer = this.ui.getActiveLayer();
-        const lineLayers = ['walls', 'tapestry', 'dangler'];
-        if (lineLayers.includes(activeLayer)) {
+        if (this.lineLayers.includes(activeLayer)) {
             if (!this.hoveredLine) return;
             const lineKey = `${this.hoveredLine.type}_${this.hoveredLine.x}_${this.hoveredLine.y}`;
             if (this.levelData[activeLayer].has(lineKey)) {
@@ -215,23 +209,21 @@ class LevelEditor {
         if (!this.activeBrush) return;
         const activeLayer = this.ui.getActiveLayer();
         let currentCoord = `${gridX},${gridY}`;
-        const lineLayers = ['walls', 'tapestry', 'dangler'];
         
-        if (lineLayers.includes(activeLayer)) {
+        if (this.lineLayers.includes(activeLayer)) {
             if (!this.hoveredLine) return;
             currentCoord = `${this.hoveredLine.type}_${this.hoveredLine.x}_${this.hoveredLine.y}`;
             if (this.isPainting && this.lastPlacedCoord === currentCoord) return;
             
             const itemType = this.activeBrush.key.split('/').pop().match(/^[a-zA-Z]+/)[0].toLowerCase();
-            const allowedTypes = { walls: ['wall', 'door', 'cover'], tapestry: ['tapestry'], dangler: ['dangler'] };
+            const allowedTypes = { walls: ['wall', 'door', 'cover'], tapestry: ['tapestry'] };
             if (!allowedTypes[activeLayer].includes(itemType)) return;
 
             this.levelData[activeLayer].set(currentCoord, {type: this.activeBrush.type, key: this.activeBrush.key});
         } 
         else {
             if (this.isPainting && this.lastPlacedCoord === currentCoord) return;
-            const maxOnePerTile = ['npcs', 'assets'];
-            if (maxOnePerTile.includes(activeLayer) && this.levelData[activeLayer].has(currentCoord)) return;
+            if (['npcs', 'assets', 'spawns'].includes(activeLayer) && this.levelData[activeLayer].has(currentCoord)) return;
 
             if (this.activeBrush.type === 'npc' && activeLayer !== 'npcs') return;
             if (this.activeBrush.type === 'asset' && activeLayer !== 'assets') return;
@@ -239,13 +231,39 @@ class LevelEditor {
                 const textureType = this.activeBrush.key.split('/').pop().match(/^[a-zA-Z]+/)[0].toLowerCase();
                 if (textureType !== activeLayer) return;
             }
-            this.levelData[activeLayer].set(currentCoord, { type: this.activeBrush.type, key: this.activeBrush.key });
+            this.levelData[activeLayer].set(currentCoord, { type: this.activeBrush.type, key: this.activeBrush.key, rotation: 0 });
         }
         
         this.lastPlacedCoord = currentCoord;
         this.lastUsedBrush[activeLayer] = this.activeBrush;
         this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()}`;
         this.render();
+    }
+    
+    placeSpawn(gridX, gridY) {
+        if (this.ui.getActiveLayer() !== 'spawns') return;
+        const coordKey = `${gridX},${gridY}`;
+        const spawnLayer = this.levelData['spawns'];
+        if (spawnLayer.has(coordKey) || spawnLayer.size >= 9) return;
+        
+        spawnLayer.set(coordKey, {
+            number: spawnLayer.size + 1,
+            rotation: 0
+        });
+        this.render();
+        this.statusMsg.textContent = `Placed spawn point #${spawnLayer.size}.`;
+    }
+
+    rotateItem(gridX, gridY) {
+        const activeLayer = this.ui.getActiveLayer();
+        if (this.lineLayers.includes(activeLayer)) return;
+        const coordKey = `${gridX},${gridY}`;
+        const item = this.levelData[activeLayer].get(coordKey);
+        if (item) {
+            item.rotation = (item.rotation + 1) % 4;
+            this.render();
+            this.statusMsg.textContent = `Rotated item at ${coordKey}.`;
+        }
     }
 
     resetLayer() {
@@ -266,24 +284,38 @@ class LevelEditor {
     }
 
     onMouseDown(e) {
-        if (e.button === 1) { this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY }; } 
-        else if (e.button === 0) { 
+        if (e.button === 1) { // Middle mouse for panning
+             this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY };
+             return;
+        }
+        const { x, y } = this.getGridCoordsFromEvent(e);
+        
+        if (e.button === 2) { // Right mouse for erase
+            this.eraseItem(x, y);
+            return;
+        }
+        
+        if (e.button === 0) { // Left mouse for active tool
             this.isPainting = true;
             this.lastPlacedCoord = '';
-            const { x, y } = this.getGridCoordsFromEvent(e);
-            this.placeItem(x, y); 
+            
+            switch(this.activeTool) {
+                case 'paint': this.placeItem(x, y); break;
+                case 'erase': this.eraseItem(x, y); break;
+                case 'rotate': this.rotateItem(x, y); break;
+                case 'spawn': this.placeSpawn(x, y); break;
+            }
         }
     }
 
     onMouseUp(e) { 
-        if (e.button === 1) { this.isPanning = false; }
-        if (e.button === 0) { this.isPainting = false; }
+        if (e.button === 1) this.isPanning = false;
+        if (e.button === 0) this.isPainting = false;
     }
     
     updateHoveredLine(e) {
         const activeLayer = this.ui.getActiveLayer();
-        const lineLayers = ['walls', 'tapestry', 'dangler'];
-        if (!lineLayers.includes(activeLayer)) {
+        if (!this.lineLayers.includes(activeLayer)) {
             if (this.hoveredLine) { this.hoveredLine = null; this.render(); }
             this.canvas.style.cursor = 'default';
             return;
@@ -293,34 +325,25 @@ class LevelEditor {
         const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
         const gridX = Math.floor(worldX / this.gridSize);
         const gridY = Math.floor(worldY / this.gridSize);
-        const dx = (worldX / this.gridSize) - gridX; // fractional part, 0 to 1
-        const dy = (worldY / this.gridSize) - gridY; // fractional part, 0 to 1
-        
-        const deadzone = 0.05; // 5% of cell size
+        const fracX = worldX / this.gridSize - gridX;
+        const fracY = worldY / this.gridSize - gridY;
+    
+        const tolerance = 0.15; // 15% of cell size
         let closestLine = null;
-
-        const isNearV = dx < deadzone || dx > (1 - deadzone);
-        const isNearH = dy < deadzone || dy > (1 - deadzone);
-
-        // If near an intersection, it's a deadzone, so no line is selected.
-        if (isNearV && isNearH) {
-            closestLine = null;
-        } else {
-            const dists = [
-                { edge: 'top',    dist: dy,      line: { type: 'H', x: gridX, y: gridY - 1 } },
-                { edge: 'bottom', dist: 1 - dy,  line: { type: 'H', x: gridX, y: gridY } },
-                { edge: 'left',   dist: dx,      line: { type: 'V', x: gridX - 1, y: gridY } },
-                { edge: 'right',  dist: 1 - dx,  line: { type: 'V', x: gridX, y: gridY } }
-            ];
-            
-            dists.sort((a, b) => a.dist - b.dist);
-            
-            const tolerance = 0.1; // Snap if within 10% of the cell size to an edge
-            if (dists[0].dist < tolerance) {
-                closestLine = dists[0].line;
-            }
+    
+        const dists = [
+            { dist: fracY,           line: { type: 'H', x: gridX, y: gridY - 1 } },
+            { dist: 1 - fracY,       line: { type: 'H', x: gridX, y: gridY } },
+            { dist: fracX,           line: { type: 'V', x: gridX - 1, y: gridY } },
+            { dist: 1 - fracX,       line: { type: 'V', x: gridX, y: gridY } }
+        ];
+    
+        dists.sort((a, b) => a.dist - b.dist);
+    
+        if (dists[0].dist < tolerance) {
+            closestLine = dists[0].line;
         }
-
+    
         if (JSON.stringify(this.hoveredLine) !== JSON.stringify(closestLine)) {
             this.hoveredLine = closestLine;
             this.render();
@@ -328,6 +351,9 @@ class LevelEditor {
     }
 
     onMouseMove(e) {
+        const { x, y } = this.getGridCoordsFromEvent(e);
+        document.getElementById('coords').textContent = `X: ${x}, Y: ${y}`;
+
         if (this.isPanning) {
             const dx = e.clientX - this.lastMouse.x;
             const dy = e.clientY - this.lastMouse.y;
@@ -340,10 +366,10 @@ class LevelEditor {
         this.updateHoveredLine(e);
 
         if(this.isPainting) {
-            const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
-            const gridX = Math.floor(worldX / this.gridSize);
-            const gridY = Math.floor(worldY / this.gridSize);
-            this.placeItem(gridX, gridY);
+            switch(this.activeTool) {
+                case 'paint': this.placeItem(x, y); break;
+                case 'erase': this.eraseItem(x, y); break;
+            }
         }
     }
 
@@ -356,6 +382,7 @@ class LevelEditor {
         const mouseY = e.clientY - this.canvas.getBoundingClientRect().top;
         this.panX = mouseX - (mouseX - this.panX) * (this.zoom / oldZoom);
         this.panY = mouseY - (mouseY - this.panY) * (this.zoom / oldZoom);
+        document.getElementById('zoom').textContent = `Zoom: ${Math.round(this.zoom * 100)}%`;
         this.render();
     }
 
@@ -383,15 +410,18 @@ class LevelEditor {
             if (defaultTexturePath) {
                 const img = this.preloadedImages.get(defaultTexturePath);
                 if (img) {
-                    for (let y = startY; y < endY; y++) {
-                        for (let x = startX; x < endX; x++) {
-                            this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
-                        }
-                    }
+                    for (let y = startY; y < endY; y++) for (let x = startX; x < endX; x++) this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
+                }
+            }
+            if (layerName === 'floor' || layerName === 'subfloor') {
+                this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                for (const [coordKey] of items.entries()) {
+                    const [x, y] = coordKey.split(',').map(Number);
+                    this.ctx.fillRect(x * gs, y * gs, gs, gs);
                 }
             }
 
-            if (['walls', 'tapestry', 'dangler'].includes(layerName)) {
+            if (this.lineLayers.includes(layerName)) {
                 if (items) for(const [key, item] of items.entries()) {
                     const [type, xStr, yStr] = key.split('_');
                     const x = Number(xStr); const y = Number(yStr);
@@ -405,34 +435,62 @@ class LevelEditor {
                         this.ctx.restore();
                     }
                 }
-            } else {
+            } else { // Tile-based layers
                  if (items) for (const [coordKey, item] of items.entries()) {
                     const [x, y] = coordKey.split(',').map(Number);
-                    let img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
+                    let img = null;
+                    if (layerName === 'spawns') img = this.preloadedImages.get('/data/pngs/hologonk.png');
+                    else img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
+                    
+                    if (layerName === 'water' && i <= activeLayerIndex) { this.ctx.globalAlpha = 0.3; }
+                    
                     if (img) {
+                        this.ctx.save();
+                        this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
+                        if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
+                        this.ctx.translate(-(x * gs + gs / 2), -(y * gs + gs / 2));
+                        
                         if (layerName === 'npcs') {
                             const iconSize = gs * 0.75;
-                            const xPos = (x * gs) + (gs - iconSize) / 2; // Centered horizontally
-                            const yPos = (y * gs) + (gs - iconSize);   // Aligned to bottom
+                            const xPos = (x * gs) + (gs - iconSize) / 2;
+                            const yPos = (y * gs) + (gs - iconSize);
                             this.ctx.drawImage(img, xPos, yPos, iconSize, iconSize);
                         } else {
                             this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
                         }
+                        this.ctx.restore();
                     }
+
+                    if (layerName === 'spawns') {
+                        this.ctx.save();
+                        this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
+                        // Draw number
+                        const fontSize = gs * 0.5;
+                        this.ctx.font = `bold ${fontSize}px Arial`;
+                        this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+                        this.ctx.shadowColor = 'black'; this.ctx.shadowBlur = 4;
+                        this.ctx.fillText(item.number, 0, 0);
+
+                        // Draw facing arrow
+                        this.ctx.rotate(item.rotation * Math.PI / 2);
+                        this.ctx.strokeStyle = 'white'; this.ctx.lineWidth = 3 / this.zoom;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
+                        this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3);
+                        this.ctx.stroke();
+                        this.ctx.restore();
+                    }
+                    if (layerName === 'water') this.ctx.globalAlpha = 1.0;
                 }
             }
         }
         
-        this.ctx.setLineDash([]);
-        this.ctx.lineWidth = 1 / this.zoom;
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        this.ctx.setLineDash([4 / this.zoom, 4 / this.zoom]);
-
+        this.ctx.lineWidth = 1 / this.zoom; this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.beginPath();
         for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); }
         for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); }
         this.ctx.stroke();
-        this.ctx.setLineDash([]);
+        
         this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom;
         this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs);
         
@@ -449,79 +507,55 @@ class LevelEditor {
             this.ctx.stroke(); this.ctx.lineCap = 'butt';
         }
 
-        if (this.zoom >= 1.5 && (activeLayerName === 'npcs' || activeLayerName === 'assets')) {
-            const itemsToDraw = this.levelData[activeLayerName];
-            if (itemsToDraw) {
-                const fontSize = 12 / this.zoom;
-                this.ctx.font = `bold ${fontSize}px Arial`; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
-                for (const [coordKey, item] of itemsToDraw.entries()) {
-                    const [x, y] = coordKey.split(',').map(Number);
-                    const labelText = item.key;
-                    const textMetrics = this.ctx.measureText(labelText);
-                    const padding = 2 / this.zoom;
-                    const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
-                    const labelX = (x + 0.5) * gs;
-                    const labelY = (y + 1) * gs + (bgHeight / 2) + (4 / this.zoom);
-                    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                    this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
-                    this.ctx.fillStyle = 'white';
-                    this.ctx.fillText(labelText, labelX, labelY);
+        if (this.zoom >= 1.5) {
+            ['npcs', 'assets'].forEach(layerName => {
+                const items = this.levelData[layerName];
+                if (items) {
+                    const fontSize = 12 / this.zoom;
+                    this.ctx.font = `bold ${fontSize}px Arial`; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+                    for (const [coordKey, item] of items.entries()) {
+                        const [x, y] = coordKey.split(',').map(Number);
+                        const labelText = item.key;
+                        const textMetrics = this.ctx.measureText(labelText);
+                        const padding = 2 / this.zoom;
+                        const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
+                        const labelX = (x + 0.5) * gs;
+                        const labelY = (y + 1) * gs + (bgHeight / 2) + (4 / this.zoom);
+                        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                        this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
+                        this.ctx.fillStyle = 'white';
+                        this.ctx.fillText(labelText, labelX, labelY);
+                    }
                 }
-            }
+            });
         }
         this.ctx.restore();
     }
 
     saveLevel() {
-        const levelObject = {
-            settings: {
-                width: this.gridWidth,
-                height: this.gridHeight,
-                defaults: this.defaultTextures
-            },
-            layers: {}
-        };
-
+        const levelObject = { settings: { width: this.gridWidth, height: this.gridHeight, defaults: this.defaultTextures }, layers: {} };
         for (const layerName of this.layerOrder) {
             const layerMap = this.levelData[layerName];
             if (layerMap.size > 0) {
-                levelObject.layers[layerName] = Array.from(layerMap.entries()).map(([pos, item]) => ({
-                    pos: pos,
-                    key: item.key
-                }));
+                levelObject.layers[layerName] = Array.from(layerMap.entries());
             }
         }
-
         const jsonString = JSON.stringify(levelObject, null, 4);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'level_data.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        this.statusMsg.textContent = 'Level saved successfully!';
+        const a = document.createElement('a'); a.href = url; a.download = 'level_data.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url); this.statusMsg.textContent = 'Level saved successfully!';
     }
 
     loadLevel() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json,application/json';
+        const input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
         input.onchange = e => {
-            const file = e.target.files[0];
-            if (!file) return;
-
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = event => {
-                try {
-                    const parsedData = JSON.parse(event.target.result);
-                    this.applyLoadedData(parsedData);
-                } catch (err) {
-                    console.error("Error parsing level data:", err);
-                    this.statusMsg.textContent = 'Error: Failed to parse level file.';
-                }
+                try { this.applyLoadedData(JSON.parse(event.target.result)); }
+                catch (err) { console.error("Error parsing level data:", err); this.statusMsg.textContent = 'Error: Failed to parse level file.'; }
             };
             reader.readAsText(file);
         };
@@ -529,29 +563,13 @@ class LevelEditor {
     }
 
     applyLoadedData(data) {
-        // Apply settings
-        this.gridWidth = data.settings?.width || 64;
-        this.gridHeight = data.settings?.height || 64;
-        this.defaultTextures = data.settings?.defaults || {};
-        this.ui.updateSettingsUI();
-
-        // Apply layer data
+        this.gridWidth = data.settings?.width || 64; this.gridHeight = data.settings?.height || 64;
+        this.defaultTextures = data.settings?.defaults || {}; this.ui.updateSettingsUI();
         this.layerOrder.forEach(layer => this.levelData[layer].clear());
         const loadedLayers = data.layers || {};
         for (const layerName in loadedLayers) {
             if (this.levelData.hasOwnProperty(layerName)) {
-                const itemsArray = loadedLayers[layerName];
-                let itemType = 'texture';
-                if (layerName === 'npcs') itemType = 'npc';
-                else if (layerName === 'assets') itemType = 'asset';
-                
-                const newMap = new Map();
-                if (Array.isArray(itemsArray)) {
-                    itemsArray.forEach(item => {
-                        newMap.set(item.pos, { type: itemType, key: item.key });
-                    });
-                }
-                this.levelData[layerName] = newMap;
+                this.levelData[layerName] = new Map(loadedLayers[layerName]);
             }
         }
         this.statusMsg.textContent = 'Level loaded successfully!';
@@ -572,6 +590,12 @@ class EditorUI {
             const el = document.getElementById(`default-${id}-select`);
             if(el) this.defaultTextureSelects[id] = el;
         });
+        this.toolButtons = {
+            paint: document.getElementById('tool-paint'),
+            erase: document.getElementById('tool-erase'),
+            rotate: document.getElementById('tool-rotate'),
+            spawn: document.getElementById('tool-spawn'),
+        };
     }
 
     init() {
@@ -590,12 +614,23 @@ class EditorUI {
         this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 64; this.editor.render(); });
         this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 64; this.editor.render(); });
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
-            select.addEventListener('change', (e) => {
-                this.editor.defaultTextures[layer] = e.target.value;
-                this.editor.render();
-            });
+            select.addEventListener('change', (e) => { this.editor.defaultTextures[layer] = e.target.value; this.editor.render(); });
         }
+        
+        Object.entries(this.toolButtons).forEach(([toolName, button]) => {
+            button.addEventListener('click', () => this.setActiveTool(toolName));
+        });
+
         this.populateDefaultTextureSettings();
+        this.updatePalette();
+    }
+    
+    setActiveTool(toolName) {
+        this.editor.activeTool = toolName;
+        Object.values(this.toolButtons).forEach(btn => btn.classList.remove('active'));
+        this.toolButtons[toolName].classList.add('active');
+        const cursors = { paint: 'crosshair', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer' };
+        this.editor.canvas.style.cursor = cursors[toolName] || 'default';
         this.updatePalette();
     }
 
@@ -603,24 +638,14 @@ class EditorUI {
 
     updatePalette() {
         const activeLayer = this.getActiveLayer();
-        let brush = this.editor.lastUsedBrush[activeLayer];
-        if (!brush) {
-            let firstItem, type;
-            const lineLayers = ['walls', 'tapestry', 'dangler'];
-            if (activeLayer === 'npcs') {
-                if (this.assetManager.npcIcons.size > 0) { firstItem = this.assetManager.npcIcons.keys().next().value; type = 'npc'; }
-            } else if (activeLayer === 'assets') {
-                if (this.assetManager.furnitureJsons.size > 0) { firstItem = this.assetManager.furnitureJsons.keys().next().value; type = 'asset'; }
-            } else {
-                let textures = lineLayers.includes(activeLayer) ? 
-                    this.assetManager.layerTextures[activeLayer] : this.assetManager.layerTextures[activeLayer];
-                if (activeLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door'],...this.assetManager.layerTextures['cover']];
+        const activeTool = this.editor.activeTool;
+        
+        const showPalette = activeTool === 'paint' && !['spawns'].includes(activeLayer);
+        document.getElementById('palette-container').style.display = showPalette ? 'grid' : 'none';
+        document.getElementById('palette-controls').style.display = showPalette ? 'flex' : 'none';
 
-                if (textures && textures.length > 0) { firstItem = textures[0]; type = 'texture'; }
-            }
-            if(firstItem) brush = { type: type, key: firstItem };
-        }
-        this.editor.activeBrush = brush || null;
+        if (!showPalette) return;
+
         if (activeLayer === 'npcs') this.populateNpcPalette();
         else if (activeLayer === 'assets') this.populateAssetPalette();
         else this.populateTexturePalette();
@@ -637,11 +662,8 @@ class EditorUI {
 
     populateTexturePalette() {
         const selectedLayer = this.getActiveLayer();
-        const lineLayers = ['walls', 'tapestry', 'dangler'];
-        let textures = lineLayers.includes(selectedLayer) ? 
-            this.assetManager.layerTextures[selectedLayer] :
-            this.assetManager.layerTextures[selectedLayer];
-        if (selectedLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door'],...this.assetManager.layerTextures['cover']];
+        let textures = this.editor.assetManager.layerTextures[selectedLayer];
+        if (selectedLayer === 'walls') textures = [...this.editor.assetManager.layerTextures['wall'],...this.editor.assetManager.layerTextures['door'],...this.editor.assetManager.layerTextures['cover']];
 
         this._populatePalette(textures, path => {
             const item = document.createElement('div'); item.className = 'palette-item';
@@ -692,7 +714,7 @@ class EditorUI {
                 if (floorTextures.includes(defaultFloorTexture)) {
                     select.value = defaultFloorTexture;
                     this.editor.defaultTextures['floor'] = defaultFloorTexture;
-                } else if (floorTextures.length > 0) { // Fallback to first texture
+                } else if (floorTextures.length > 0) {
                     select.value = floorTextures[0];
                     this.editor.defaultTextures['floor'] = floorTextures[0];
                 }
