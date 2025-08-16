@@ -1,4 +1,4 @@
-// BROWSERFIREFOXHIDE editor/editor.js
+// BROWSERFIREFOXHIDE editor.js
 // Standalone Level Editor Application
 
 class EditorAssetManager {
@@ -147,6 +147,7 @@ class LevelEditor {
         await this.assetManager.discoverAssets();
         await this.preloadAllTextures();
         this.ui.init();
+        this.render(); // Initial render after defaults are set
     }
     
     async preloadAllTextures() {
@@ -367,17 +368,29 @@ class LevelEditor {
         const activeLayerName = this.ui.getActiveLayer();
         const activeLayerIndex = this.layerOrder.indexOf(activeLayerName);
 
+        const visStartX = Math.floor(-this.panX / this.zoom / gs);
+        const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
+        const visStartY = Math.floor(-this.panY / this.zoom / gs);
+        const visEndY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
+        const startX = Math.max(0, visStartX); const endX = Math.min(this.gridWidth, visEndX);
+        const startY = Math.max(0, visStartY); const endY = Math.min(this.gridHeight, visEndY);
+
         for (let i = 0; i <= activeLayerIndex; i++) {
             const layerName = this.layerOrder[i];
             const items = this.levelData[layerName];
+            
             const defaultTexturePath = this.defaultTextures[layerName];
             if (defaultTexturePath) {
                 const img = this.preloadedImages.get(defaultTexturePath);
                 if (img) {
-                    this.ctx.fillStyle = this.ctx.createPattern(img, 'repeat');
-                    this.ctx.fillRect(0, 0, this.gridWidth * gs, this.gridHeight * gs);
+                    for (let y = startY; y < endY; y++) {
+                        for (let x = startX; x < endX; x++) {
+                            this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
+                        }
+                    }
                 }
             }
+
             if (['walls', 'tapestry', 'dangler'].includes(layerName)) {
                 if (items) for(const [key, item] of items.entries()) {
                     const [type, xStr, yStr] = key.split('_');
@@ -414,12 +427,7 @@ class LevelEditor {
         this.ctx.lineWidth = 1 / this.zoom;
         this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.setLineDash([4 / this.zoom, 4 / this.zoom]);
-        const visStartX = Math.floor(-this.panX / this.zoom / gs);
-        const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
-        const visStartY = Math.floor(-this.panY / this.zoom / gs);
-        const visEndY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
-        const startX = Math.max(0, visStartX); const endX = Math.min(this.gridWidth, visEndX);
-        const startY = Math.max(0, visStartY); const endY = Math.min(this.gridHeight, visEndY);
+
         this.ctx.beginPath();
         for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); }
         for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); }
@@ -463,6 +471,92 @@ class LevelEditor {
         }
         this.ctx.restore();
     }
+
+    saveLevel() {
+        const levelObject = {
+            settings: {
+                width: this.gridWidth,
+                height: this.gridHeight,
+                defaults: this.defaultTextures
+            },
+            layers: {}
+        };
+
+        for (const layerName of this.layerOrder) {
+            const layerMap = this.levelData[layerName];
+            if (layerMap.size > 0) {
+                levelObject.layers[layerName] = Array.from(layerMap.entries()).map(([pos, item]) => ({
+                    pos: pos,
+                    key: item.key
+                }));
+            }
+        }
+
+        const jsonString = JSON.stringify(levelObject, null, 4);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'level_data.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        this.statusMsg.textContent = 'Level saved successfully!';
+    }
+
+    loadLevel() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json,application/json';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    const parsedData = JSON.parse(event.target.result);
+                    this.applyLoadedData(parsedData);
+                } catch (err) {
+                    console.error("Error parsing level data:", err);
+                    this.statusMsg.textContent = 'Error: Failed to parse level file.';
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    applyLoadedData(data) {
+        // Apply settings
+        this.gridWidth = data.settings?.width || 64;
+        this.gridHeight = data.settings?.height || 64;
+        this.defaultTextures = data.settings?.defaults || {};
+        this.ui.updateSettingsUI();
+
+        // Apply layer data
+        this.layerOrder.forEach(layer => this.levelData[layer].clear());
+        const loadedLayers = data.layers || {};
+        for (const layerName in loadedLayers) {
+            if (this.levelData.hasOwnProperty(layerName)) {
+                const itemsArray = loadedLayers[layerName];
+                let itemType = 'texture';
+                if (layerName === 'npcs') itemType = 'npc';
+                else if (layerName === 'assets') itemType = 'asset';
+                
+                const newMap = new Map();
+                if (Array.isArray(itemsArray)) {
+                    itemsArray.forEach(item => {
+                        newMap.set(item.pos, { type: itemType, key: item.key });
+                    });
+                }
+                this.levelData[layerName] = newMap;
+            }
+        }
+        this.statusMsg.textContent = 'Level loaded successfully!';
+        this.render();
+    }
 }
 
 class EditorUI {
@@ -489,6 +583,8 @@ class EditorUI {
             });
         });
         this.layerSelect.addEventListener('change', () => { this.updatePalette(); this.editor.render(); });
+        document.getElementById('save-level-btn').addEventListener('click', () => this.editor.saveLevel());
+        document.getElementById('load-level-btn').addEventListener('click', () => this.editor.loadLevel());
         document.getElementById('reset-layer-btn').addEventListener('click', () => this.editor.resetLayer());
         document.getElementById('reset-map-btn').addEventListener('click', () => this.editor.resetMap());
         this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 64; this.editor.render(); });
@@ -590,13 +686,25 @@ class EditorUI {
                 option.value = path; option.textContent = path.split('/').pop();
                 select.appendChild(option);
             });
-            if(layer === 'floor') {
-                const floor1 = this.assetManager.layerTextures['floor']?.[0];
-                if(floor1) {
-                    select.value = floor1;
-                    this.editor.defaultTextures['floor'] = floor1;
+            if (layer === 'floor') {
+                const defaultFloorTexture = '/data/pngs/floor_1.png';
+                const floorTextures = this.assetManager.layerTextures['floor'] || [];
+                if (floorTextures.includes(defaultFloorTexture)) {
+                    select.value = defaultFloorTexture;
+                    this.editor.defaultTextures['floor'] = defaultFloorTexture;
+                } else if (floorTextures.length > 0) { // Fallback to first texture
+                    select.value = floorTextures[0];
+                    this.editor.defaultTextures['floor'] = floorTextures[0];
                 }
             }
+        }
+    }
+
+    updateSettingsUI() {
+        this.gridWidthInput.value = this.editor.gridWidth;
+        this.gridHeightInput.value = this.editor.gridHeight;
+        for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
+            select.value = this.editor.defaultTextures[layer] || '';
         }
     }
 
