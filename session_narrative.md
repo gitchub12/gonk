@@ -1,5 +1,36 @@
-Summary: Updated editor's asset discovery to support new subdirectory structure.
+Summary: Replaced layer dropdown with icon toolbar, fixed wall bug again.
 BROWSERFIREFOXHIDE session_narrative.md AI: DO NOT DELETE this header line which contains critical file data and browser instructions!
+Saturday, August 16, 2025 at 7:38:31 PM CDT
+The user requested a major UI overhaul for the level editor, a new control scheme for layer selection, and a fix for a persistent bug.
+
+- **UI Overhaul:**
+  - The text-based layer selection dropdown was removed from the left panel.
+  - A new, icon-based vertical toolbar for layer selection was added to the main canvas area. This toolbar is dynamically generated, using the first available texture from each layer's asset folder as the icon for its button.
+  - The toolbox icons for paint, rotate, and spawn tools were updated to use specific image files provided by the user.
+
+- **New Controls:**
+  - Users can now cycle through the available layers by holding **Ctrl** and using the **mouse wheel**.
+
+- **Bug Fixes:**
+  - The persistent bug causing horizontal walls to be placed one segment to the left has been addressed. The `updateHoveredLine` function was completely rewritten to use a more robust detection method. It now calculates the absolute closest horizontal or vertical grid line to the cursor, rather than relying on which grid cell the cursor is in, which prevents floating-point and boundary condition errors.
+
+- **File Changes:**
+  - **`GonkLevelEditor.html`**: Rewritten to remove the old layer dropdown, add the container for the new icon-based layer toolbar, and update the toolbox buttons to use `<img>` tags.
+  - **`editor.js`**: Rewritten to implement the dynamic creation and management of the new layer toolbar, add the `Ctrl+Scroll` layer switching logic, and replace the wall-hovering logic with the improved algorithm.
+
+---
+Summary: Fixed editor 404 error by making furniture loading data-driven.
+Saturday, August 16, 2025 at 4:21:10 PM CDT
+The user provided a console log showing a 404 "File not found" error when the level editor tried to access `/data/furniture/models/`.
+
+- **Problem:** The editor had a hardcoded path to the furniture models directory, which was incorrect and did not match the user's file structure. This approach is brittle and violates the project's data-driven principles.
+- **Solution:** Instead of simply correcting the hardcoded path, the asset discovery logic in `editor.js` was modified to be truly data-driven. It now fetches `/data/furniture.json`, reads the `_config.modelPath` from the manifest, and uses that path to discover the furniture model files. This ensures the editor and the game remain synchronized.
+
+- **File Changes:**
+  - **`editor.js`**: Updated the `EditorAssetManager.discoverAssets` method to implement the new data-driven loading logic for furniture models.
+
+---
+Summary: Updated editor's asset discovery to support new subdirectory structure.
 Saturday, August 16, 2025 at 4:06:18 PM CDT
 The user has reorganized all PNG texture assets from a single `data/pngs/` folder into type-specific subdirectories (e.g., `data/pngs/floor/`, `data/pngs/wall/`).
 
@@ -71,6 +102,6 @@ The user provided a screenshot and noted two new issues in the level editor:
 2.  **New Feature:** Entities placed on the 2D canvas need text labels displaying their name. These labels should only appear at high zoom levels and feature a semi-transparent background fitted to the text.
 
 ## Implementation Plan
-- **`editor/editor.js`:**
-    - **Palette Fix:** In `EditorUI.populateNpcPalette`, the regular expression for determining an asset's base name will be modified. I will add specific logic to correctly handle known cases like "bb8" and "r2d2", preventing them from being incorrectly shortened while still properly grouping other assets like "gungan1" and "gungan2".
+- **`editor.js`:**
+    - **Palette Fix:** In `EditorUI.populateNpcPalette`, the regular expression for determining an asset's base name will be modified. I will add specific logic to correctly handle known cases like "bb8" and "r2d2", preventing them from being shortened while still properly grouping other assets like "gungan1" and "gungan2".
     - **Canvas Labels:** In `LevelEditor.render`, I will add a new drawing routine that executes only when `this.zoom` is above a certain threshold (e.g., 1.5). This routine will iterate through all placed entities and, for each one, draw its name (`entity.key`) below its icon. The text will be rendered with a fitted, semi-transparent background. The font size will be scaled inversely with the zoom level to ensure the labels remain readable and consistently sized on screen.

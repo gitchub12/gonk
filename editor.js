@@ -28,24 +28,41 @@ class EditorAssetManager {
     }
 
     async discoverAssets() {
+        // Discover NPC Skins
         const skinFiles = await this.fetchDirectoryListing('/data/skins/');
         this.npcSkins = skinFiles.filter(f => f.endsWith('.png')).map(f => `/data/skins/${f}`);
         await this.generateNpcIcons();
         
-        const textureFiles = await this.fetchDirectoryListing('/data/pngs/');
-        const texturePngs = textureFiles.filter(f => f.endsWith('.png'));
+        // Discover Layer Textures from subdirectories
         for (const layerType of this.textureLayers) {
-            this.layerTextures[layerType] = texturePngs
-                .filter(f => f.toLowerCase().startsWith(layerType))
-                .map(f => `/data/pngs/${f}`);
+            const path = `/data/pngs/${layerType}/`;
+            try {
+                const textureFiles = await this.fetchDirectoryListing(path);
+                this.layerTextures[layerType] = textureFiles
+                    .filter(f => f.endsWith('.png'))
+                    .map(f => `${path}${f}`);
+            } catch (e) {
+                console.warn(`Could not discover assets in directory: ${path}`);
+                this.layerTextures[layerType] = [];
+            }
         }
         
-        const furnitureFiles = await this.fetchDirectoryListing('/data/furniture/models/');
-        furnitureFiles.filter(f => f.endsWith('.json')).forEach(file => {
-            const name = file.replace('.json', '');
-            this.furnitureJsons.set(name, `/data/furniture/models/${file}`);
-            this.assetIcons.set(name, this.createPlaceholderIcon(name));
-        });
+        // Discover Furniture from its manifest
+        try {
+            const furnitureManifestResponse = await fetch('/data/furniture.json');
+            const furnitureManifest = await furnitureManifestResponse.json();
+            const modelPath = furnitureManifest._config.modelPath;
+
+            const furnitureFiles = await this.fetchDirectoryListing(`/${modelPath}`);
+            furnitureFiles.filter(f => f.endsWith('.json')).forEach(file => {
+                const name = file.replace('.json', '');
+                this.furnitureJsons.set(name, `/${modelPath}${file}`);
+                this.assetIcons.set(name, this.createPlaceholderIcon(name));
+            });
+        } catch (e) {
+            console.error("Failed to discover furniture assets:", e);
+        }
+
         return true;
     }
 
@@ -124,16 +141,21 @@ class LevelEditor {
         this.isPanning = false;
         this.isPainting = false;
         this.lastPlacedCoord = '';
-        this.activeTool = 'paint'; // 'paint', 'erase', 'rotate', 'spawn'
+        this.activeTool = 'paint';
         this.activeBrush = null;
         this.lastUsedBrush = {};
         this.hoveredLine = null;
         this.layerOrder = ['subfloor', 'floor', 'npcs', 'assets', 'spawns', 'walls', 'tapestry', 'dangler', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.activeLayerName = 'floor';
         this.lineLayers = ['walls', 'tapestry'];
         this.levelData = {};
         this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
         this.defaultTextures = {};
         this.preloadedImages = new Map();
+        
+        this.currentLevel = 1;
+        this.isLevelDirty = false;
+
         this.init();
     }
 
@@ -148,11 +170,12 @@ class LevelEditor {
         await this.assetManager.discoverAssets();
         await this.preloadAllTextures();
         this.ui.init();
+        this.loadLevel(this.currentLevel, true);
         this.render();
     }
     
     async preloadAllTextures() {
-        const allPaths = new Set(['/data/pngs/hologonk.png']);
+        const allPaths = new Set(['/data/pngs/hologonk.png', '/data/pngs/icons for UI/crate.png']);
         Object.values(this.assetManager.layerTextures).forEach(arr => arr.forEach(path => allPaths.add(path)));
         const promises = [];
         allPaths.forEach(path => {
@@ -165,6 +188,8 @@ class LevelEditor {
         });
         await Promise.all(promises);
     }
+    
+    setDirty() { this.isLevelDirty = true; }
 
     resizeCanvas() {
         const container = document.getElementById('canvasContainer');
@@ -186,28 +211,32 @@ class LevelEditor {
     }
     
     eraseItem(gridX, gridY) {
-        const activeLayer = this.ui.getActiveLayer();
+        const activeLayer = this.activeLayerName;
+        let itemErased = false;
         if (this.lineLayers.includes(activeLayer)) {
             if (!this.hoveredLine) return;
             const lineKey = `${this.hoveredLine.type}_${this.hoveredLine.x}_${this.hoveredLine.y}`;
             if (this.levelData[activeLayer].has(lineKey)) {
                 this.levelData[activeLayer].delete(lineKey);
-                this.statusMsg.textContent = `Erased item from ${activeLayer}.`;
-                this.render();
+                itemErased = true;
             }
         } else {
             const coordKey = `${gridX},${gridY}`;
             if (this.levelData[activeLayer].has(coordKey)) {
                 this.levelData[activeLayer].delete(coordKey);
-                this.statusMsg.textContent = `Erased item from ${coordKey} on ${activeLayer}.`;
-                this.render();
+                itemErased = true;
             }
+        }
+        if (itemErased) {
+            this.setDirty();
+            this.statusMsg.textContent = `Erased item from ${activeLayer}.`;
+            this.render();
         }
     }
 
     placeItem(gridX, gridY) {
         if (!this.activeBrush) return;
-        const activeLayer = this.ui.getActiveLayer();
+        const activeLayer = this.activeLayerName;
         let currentCoord = `${gridX},${gridY}`;
         
         if (this.lineLayers.includes(activeLayer)) {
@@ -228,12 +257,13 @@ class LevelEditor {
             if (this.activeBrush.type === 'npc' && activeLayer !== 'npcs') return;
             if (this.activeBrush.type === 'asset' && activeLayer !== 'assets') return;
             if (this.activeBrush.type === 'texture') {
-                const textureType = this.activeBrush.key.split('/').pop().match(/^[a-zA-Z]+/)[0].toLowerCase();
-                if (textureType !== activeLayer) return;
+                const textureLayer = this.activeBrush.key.split('/')[3];
+                if (textureLayer !== activeLayer) return;
             }
             this.levelData[activeLayer].set(currentCoord, { type: this.activeBrush.type, key: this.activeBrush.key, rotation: 0 });
         }
         
+        this.setDirty();
         this.lastPlacedCoord = currentCoord;
         this.lastUsedBrush[activeLayer] = this.activeBrush;
         this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()}`;
@@ -241,35 +271,36 @@ class LevelEditor {
     }
     
     placeSpawn(gridX, gridY) {
-        if (this.ui.getActiveLayer() !== 'spawns') return;
+        if (this.activeLayerName !== 'spawns') return;
         const coordKey = `${gridX},${gridY}`;
         const spawnLayer = this.levelData['spawns'];
         if (spawnLayer.has(coordKey) || spawnLayer.size >= 9) return;
         
-        spawnLayer.set(coordKey, {
-            number: spawnLayer.size + 1,
-            rotation: 0
-        });
+        spawnLayer.set(coordKey, { number: spawnLayer.size + 1, rotation: 0 });
+        this.setDirty();
         this.render();
         this.statusMsg.textContent = `Placed spawn point #${spawnLayer.size}.`;
     }
 
     rotateItem(gridX, gridY) {
-        const activeLayer = this.ui.getActiveLayer();
+        const activeLayer = this.activeLayerName;
         if (this.lineLayers.includes(activeLayer)) return;
         const coordKey = `${gridX},${gridY}`;
         const item = this.levelData[activeLayer].get(coordKey);
         if (item) {
             item.rotation = (item.rotation + 1) % 4;
+            this.setDirty();
             this.render();
             this.statusMsg.textContent = `Rotated item at ${coordKey}.`;
         }
     }
 
     resetLayer() {
-        const activeLayer = this.ui.getActiveLayer();
+        const activeLayer = this.activeLayerName;
+        if (this.levelData[activeLayer].size === 0) return;
         if (window.confirm(`Are you sure you want to clear all items from the '${activeLayer}' layer?`)) {
             this.levelData[activeLayer].clear();
+            this.setDirty();
             this.render();
             this.statusMsg.textContent = `Layer '${activeLayer}' has been cleared.`;
         }
@@ -278,27 +309,19 @@ class LevelEditor {
     resetMap() {
         if (window.confirm('Are you sure you want to clear the entire map? This cannot be undone.')) {
             this.layerOrder.forEach(layer => this.levelData[layer].clear());
+            this.setDirty();
             this.render();
             this.statusMsg.textContent = 'Entire map has been cleared.';
         }
     }
 
     onMouseDown(e) {
-        if (e.button === 1) { // Middle mouse for panning
-             this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY };
-             return;
-        }
+        if (e.button === 1) { this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY }; return; }
         const { x, y } = this.getGridCoordsFromEvent(e);
-        
-        if (e.button === 2) { // Right mouse for erase
-            this.eraseItem(x, y);
-            return;
-        }
-        
-        if (e.button === 0) { // Left mouse for active tool
+        if (e.button === 2) { this.eraseItem(x, y); return; }
+        if (e.button === 0) {
             this.isPainting = true;
             this.lastPlacedCoord = '';
-            
             switch(this.activeTool) {
                 case 'paint': this.placeItem(x, y); break;
                 case 'erase': this.eraseItem(x, y); break;
@@ -314,38 +337,40 @@ class LevelEditor {
     }
     
     updateHoveredLine(e) {
-        const activeLayer = this.ui.getActiveLayer();
-        if (!this.lineLayers.includes(activeLayer)) {
+        if (!this.lineLayers.includes(this.activeLayerName)) {
             if (this.hoveredLine) { this.hoveredLine = null; this.render(); }
-            this.canvas.style.cursor = 'default';
             return;
         }
-        
-        this.canvas.style.cursor = 'crosshair';
         const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
-        const gridX = Math.floor(worldX / this.gridSize);
-        const gridY = Math.floor(worldY / this.gridSize);
-        const fracX = worldX / this.gridSize - gridX;
-        const fracY = worldY / this.gridSize - gridY;
-    
-        const tolerance = 0.15; // 15% of cell size
-        let closestLine = null;
-    
+        const gs = this.gridSize;
+        const tolerance = 0.25;
+
+        const gridX = Math.floor(worldX / gs);
+        const gridY = Math.floor(worldY / gs);
+        const fracX = worldX / gs - gridX;
+        const fracY = worldY / gs - gridY;
+
         const dists = [
-            { dist: fracY,           line: { type: 'H', x: gridX, y: gridY - 1 } },
-            { dist: 1 - fracY,       line: { type: 'H', x: gridX, y: gridY } },
-            { dist: fracX,           line: { type: 'V', x: gridX - 1, y: gridY } },
-            { dist: 1 - fracX,       line: { type: 'V', x: gridX, y: gridY } }
+            { type: 'H', dist: fracY,           line: { type: 'H', x: gridX, y: gridY - 1 } },
+            { type: 'H', dist: 1 - fracY,       line: { type: 'H', x: gridX, y: gridY } },
+            { type: 'V', dist: fracX,           line: { type: 'V', x: gridX - 1, y: gridY } },
+            { type: 'V', dist: 1 - fracX,       line: { type: 'V', x: gridX, y: gridY } }
         ];
-    
-        dists.sort((a, b) => a.dist - b.dist);
-    
-        if (dists[0].dist < tolerance) {
-            closestLine = dists[0].line;
+
+        const closestH = dists.filter(d => d.type === 'H').sort((a,b) => a.dist - b.dist)[0];
+        const closestV = dists.filter(d => d.type === 'V').sort((a,b) => a.dist - b.dist)[0];
+        
+        let newHoveredLine = null;
+        if (closestH.dist < tolerance && closestV.dist < tolerance) {
+            newHoveredLine = null; // In dead zone
+        } else if (closestH.dist < tolerance && closestH.dist < closestV.dist) {
+            newHoveredLine = closestH.line;
+        } else if (closestV.dist < tolerance && closestV.dist < closestH.dist) {
+            newHoveredLine = closestV.line;
         }
-    
-        if (JSON.stringify(this.hoveredLine) !== JSON.stringify(closestLine)) {
-            this.hoveredLine = closestLine;
+
+        if (JSON.stringify(this.hoveredLine) !== JSON.stringify(newHoveredLine)) {
+            this.hoveredLine = newHoveredLine;
             this.render();
         }
     }
@@ -353,7 +378,6 @@ class LevelEditor {
     onMouseMove(e) {
         const { x, y } = this.getGridCoordsFromEvent(e);
         document.getElementById('coords').textContent = `X: ${x}, Y: ${y}`;
-
         if (this.isPanning) {
             const dx = e.clientX - this.lastMouse.x;
             const dy = e.clientY - this.lastMouse.y;
@@ -362,9 +386,7 @@ class LevelEditor {
             this.render();
             return;
         } 
-        
         this.updateHoveredLine(e);
-
         if(this.isPainting) {
             switch(this.activeTool) {
                 case 'paint': this.placeItem(x, y); break;
@@ -375,6 +397,13 @@ class LevelEditor {
 
     onMouseWheel(e) {
         e.preventDefault();
+        if (e.ctrlKey) {
+            const currentIndex = this.layerOrder.indexOf(this.activeLayerName);
+            let nextIndex = currentIndex + (e.deltaY > 0 ? -1 : 1);
+            nextIndex = (nextIndex + this.layerOrder.length) % this.layerOrder.length;
+            this.ui.setActiveLayer(this.layerOrder[nextIndex]);
+            return;
+        }
         const zoomSpeed = 1.1; const oldZoom = this.zoom;
         this.zoom *= (e.deltaY < 0 ? zoomSpeed : 1 / zoomSpeed);
         this.zoom = Math.max(0.1, Math.min(10, this.zoom));
@@ -392,9 +421,7 @@ class LevelEditor {
         this.ctx.translate(this.panX, this.panY);
         this.ctx.scale(this.zoom, this.zoom);
         const gs = this.gridSize;
-        const activeLayerName = this.ui.getActiveLayer();
-        const activeLayerIndex = this.layerOrder.indexOf(activeLayerName);
-
+        const activeLayerIndex = this.layerOrder.indexOf(this.activeLayerName);
         const visStartX = Math.floor(-this.panX / this.zoom / gs);
         const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
         const visStartY = Math.floor(-this.panY / this.zoom / gs);
@@ -405,95 +432,76 @@ class LevelEditor {
         for (let i = 0; i <= activeLayerIndex; i++) {
             const layerName = this.layerOrder[i];
             const items = this.levelData[layerName];
-            
             const defaultTexturePath = this.defaultTextures[layerName];
             if (defaultTexturePath) {
                 const img = this.preloadedImages.get(defaultTexturePath);
-                if (img) {
-                    for (let y = startY; y < endY; y++) for (let x = startX; x < endX; x++) this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
-                }
+                if (img) for (let y = startY; y < endY; y++) for (let x = startX; x < endX; x++) this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
             }
-            if (layerName === 'floor' || layerName === 'subfloor') {
-                this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
-                for (const [coordKey] of items.entries()) {
+            if (items) {
+                 for (const [coordKey, item] of items.entries()) {
+                    if (this.lineLayers.includes(layerName)) continue;
                     const [x, y] = coordKey.split(',').map(Number);
-                    this.ctx.fillRect(x * gs, y * gs, gs, gs);
-                }
+                    if(x < startX || x > endX || y < startY || y > endY) continue;
+                     if (layerName === 'floor' || layerName === 'subfloor') {
+                        const img = this.preloadedImages.get(item.key);
+                        if(img) {
+                             this.ctx.drawImage(img, x*gs, y*gs, gs, gs);
+                             this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                             this.ctx.fillRect(x * gs, y * gs, gs, gs);
+                        }
+                    }
+                 }
             }
-
             if (this.lineLayers.includes(layerName)) {
                 if (items) for(const [key, item] of items.entries()) {
-                    const [type, xStr, yStr] = key.split('_');
-                    const x = Number(xStr); const y = Number(yStr);
+                    const [type, xStr, yStr] = key.split('_'); const x = Number(xStr); const y = Number(yStr);
                     const img = this.preloadedImages.get(item.key);
                     if (img) {
                         this.ctx.save();
                         if (type === 'V') this.ctx.translate((x + 1) * gs, y * gs);
                         else { this.ctx.translate(x * gs, (y + 1) * gs); this.ctx.rotate(Math.PI / 2); }
-                        const width = gs * 0.1;
-                        this.ctx.drawImage(img, -width / 2, 0, width, gs);
+                        this.ctx.drawImage(img, - (gs*0.05), 0, gs*0.1, gs);
                         this.ctx.restore();
                     }
                 }
-            } else { // Tile-based layers
-                 if (items) for (const [coordKey, item] of items.entries()) {
-                    const [x, y] = coordKey.split(',').map(Number);
-                    let img = null;
-                    if (layerName === 'spawns') img = this.preloadedImages.get('/data/pngs/hologonk.png');
-                    else img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
-                    
-                    if (layerName === 'water' && i <= activeLayerIndex) { this.ctx.globalAlpha = 0.3; }
-                    
-                    if (img) {
-                        this.ctx.save();
-                        this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
-                        if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
-                        this.ctx.translate(-(x * gs + gs / 2), -(y * gs + gs / 2));
-                        
-                        if (layerName === 'npcs') {
-                            const iconSize = gs * 0.75;
-                            const xPos = (x * gs) + (gs - iconSize) / 2;
-                            const yPos = (y * gs) + (gs - iconSize);
-                            this.ctx.drawImage(img, xPos, yPos, iconSize, iconSize);
-                        } else {
-                            this.ctx.drawImage(img, x * gs, y * gs, gs, gs);
-                        }
-                        this.ctx.restore();
-                    }
-
-                    if (layerName === 'spawns') {
-                        this.ctx.save();
-                        this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
-                        // Draw number
-                        const fontSize = gs * 0.5;
-                        this.ctx.font = `bold ${fontSize}px Arial`;
-                        this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
-                        this.ctx.shadowColor = 'black'; this.ctx.shadowBlur = 4;
-                        this.ctx.fillText(item.number, 0, 0);
-
-                        // Draw facing arrow
-                        this.ctx.rotate(item.rotation * Math.PI / 2);
-                        this.ctx.strokeStyle = 'white'; this.ctx.lineWidth = 3 / this.zoom;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
-                        this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3);
-                        this.ctx.stroke();
-                        this.ctx.restore();
-                    }
-                    if (layerName === 'water') this.ctx.globalAlpha = 1.0;
+            } else if (items) for (const [coordKey, item] of items.entries()) {
+                const [x, y] = coordKey.split(',').map(Number);
+                if(layerName === 'floor' || layerName === 'subfloor') continue;
+                let img = null;
+                if (layerName === 'spawns') img = this.preloadedImages.get('/data/pngs/hologonk.png');
+                else img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
+                if (layerName === 'water' && i <= activeLayerIndex) this.ctx.globalAlpha = 0.3;
+                if (img) {
+                    this.ctx.save();
+                    this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
+                    if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
+                    if (layerName === 'npcs') this.ctx.drawImage(img, -(gs*0.375), -(gs*0.125), gs * 0.75, gs * 0.75);
+                    else this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
+                    this.ctx.restore();
                 }
+                if (layerName === 'spawns') {
+                    this.ctx.save();
+                    this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
+                    this.ctx.font = `bold ${gs * 0.5}px Arial`; this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+                    this.ctx.shadowColor = 'black'; this.ctx.shadowBlur = 4;
+                    this.ctx.fillText(item.number, 0, 0);
+                    this.ctx.rotate(item.rotation * Math.PI / 2);
+                    this.ctx.strokeStyle = 'white'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.shadowBlur = 0;
+                    this.ctx.beginPath(); this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
+                    this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3);
+                    this.ctx.stroke();
+                    this.ctx.restore();
+                }
+                if (layerName === 'water') this.ctx.globalAlpha = 1.0;
             }
         }
-        
         this.ctx.lineWidth = 1 / this.zoom; this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.beginPath();
         for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); }
         for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); }
         this.ctx.stroke();
-        
         this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom;
         this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs);
-        
         if (this.hoveredLine) {
             this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 6 / this.zoom; this.ctx.lineCap = 'round';
             this.ctx.beginPath();
@@ -506,60 +514,69 @@ class LevelEditor {
             }
             this.ctx.stroke(); this.ctx.lineCap = 'butt';
         }
-
-        if (this.zoom >= 1.5) {
-            ['npcs', 'assets'].forEach(layerName => {
-                const items = this.levelData[layerName];
-                if (items) {
-                    const fontSize = 12 / this.zoom;
-                    this.ctx.font = `bold ${fontSize}px Arial`; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
-                    for (const [coordKey, item] of items.entries()) {
-                        const [x, y] = coordKey.split(',').map(Number);
-                        const labelText = item.key;
-                        const textMetrics = this.ctx.measureText(labelText);
-                        const padding = 2 / this.zoom;
-                        const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
-                        const labelX = (x + 0.5) * gs;
-                        const labelY = (y + 1) * gs + (bgHeight / 2) + (4 / this.zoom);
-                        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                        this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
-                        this.ctx.fillStyle = 'white';
-                        this.ctx.fillText(labelText, labelX, labelY);
-                    }
-                }
-            });
-        }
+        if (this.zoom >= 1.5) ['npcs', 'assets'].forEach(layerName => {
+            const items = this.levelData[layerName];
+            if (items) for (const [coordKey, item] of items.entries()) {
+                const [x, y] = coordKey.split(',').map(Number);
+                const labelText = item.key;
+                const fontSize = 12 / this.zoom;
+                this.ctx.font = `bold ${fontSize}px Arial`; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+                const textMetrics = this.ctx.measureText(labelText);
+                const padding = 2 / this.zoom;
+                const bgWidth = textMetrics.width + (padding * 2), bgHeight = fontSize + (padding * 2);
+                const labelX = (x + 0.5) * gs;
+                const labelY = (y + 1) * gs + (bgHeight / 2) + (4 / this.zoom);
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                this.ctx.fillRect(labelX - bgWidth / 2, labelY - bgHeight / 2, bgWidth, bgHeight);
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText(labelText, labelX, labelY);
+            }
+        });
         this.ctx.restore();
     }
-
-    saveLevel() {
+    
+    async saveLevel() {
         const levelObject = { settings: { width: this.gridWidth, height: this.gridHeight, defaults: this.defaultTextures }, layers: {} };
         for (const layerName of this.layerOrder) {
             const layerMap = this.levelData[layerName];
-            if (layerMap.size > 0) {
-                levelObject.layers[layerName] = Array.from(layerMap.entries());
-            }
+            if (layerMap.size > 0) levelObject.layers[layerName] = Array.from(layerMap.entries());
         }
-        const jsonString = JSON.stringify(levelObject, null, 4);
+        const jsonString = JSON.stringify(levelObject, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = 'level_data.json';
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `level_${this.currentLevel}.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        URL.revokeObjectURL(url); this.statusMsg.textContent = 'Level saved successfully!';
+        URL.revokeObjectURL(a.href);
+        this.isLevelDirty = false;
+        this.statusMsg.textContent = `Level ${this.currentLevel} saved successfully!`;
     }
 
-    loadLevel() {
-        const input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
-        input.onchange = e => {
-            const file = e.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = event => {
-                try { this.applyLoadedData(JSON.parse(event.target.result)); }
-                catch (err) { console.error("Error parsing level data:", err); this.statusMsg.textContent = 'Error: Failed to parse level file.'; }
-            };
-            reader.readAsText(file);
-        };
-        input.click();
+    async loadLevel(levelNum, isInitialLoad = false) {
+        if (!isInitialLoad && this.isLevelDirty) {
+            if (!confirm('You have unsaved changes. Are you sure you want to load a new level and discard them?')) return;
+        }
+        const path = `/data/levels/level_${levelNum}.json`;
+        try {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error('Level not found');
+            const data = await response.json();
+            this.applyLoadedData(data);
+            this.statusMsg.textContent = `Level ${levelNum} loaded successfully!`;
+        } catch (err) {
+            const createNew = confirm(`Level ${levelNum} not found. Would you like to create a new level?`);
+            if (createNew) {
+                this.layerOrder.forEach(layer => this.levelData[layer].clear());
+                this.statusMsg.textContent = `Started new Level ${levelNum}.`;
+            } else {
+                this.ui.levelNumberInput.value = this.currentLevel; // Revert input if they cancel
+                return;
+            }
+        }
+        this.currentLevel = levelNum;
+        this.isLevelDirty = false;
+        this.ui.updateUIForNewLevel();
+        this.render();
     }
 
     applyLoadedData(data) {
@@ -568,12 +585,8 @@ class LevelEditor {
         this.layerOrder.forEach(layer => this.levelData[layer].clear());
         const loadedLayers = data.layers || {};
         for (const layerName in loadedLayers) {
-            if (this.levelData.hasOwnProperty(layerName)) {
-                this.levelData[layerName] = new Map(loadedLayers[layerName]);
-            }
+            if (this.levelData.hasOwnProperty(layerName)) this.levelData[layerName] = new Map(loadedLayers[layerName]);
         }
-        this.statusMsg.textContent = 'Level loaded successfully!';
-        this.render();
     }
 }
 
@@ -581,11 +594,14 @@ class EditorUI {
     constructor(editor) {
         this.editor = editor;
         this.assetManager = editor.assetManager;
-        this.layerSelect = document.getElementById('layer-select');
+        this.layerSelector = document.getElementById('layer-selector');
         this.paletteContainer = document.getElementById('palette-container');
         this.gridWidthInput = document.getElementById('grid-width-input');
         this.gridHeightInput = document.getElementById('grid-height-input');
+        this.levelNumberInput = document.getElementById('level-number-input');
+        this.levelDisplay = document.getElementById('level-display');
         this.defaultTextureSelects = {};
+        this.layerButtons = {};
         ['subfloor', 'floor', 'water', 'floater', 'ceiling', 'sky'].forEach(id => {
             const el = document.getElementById(`default-${id}-select`);
             if(el) this.defaultTextureSelects[id] = el;
@@ -599,32 +615,58 @@ class EditorUI {
     }
 
     init() {
-        document.querySelectorAll('.tab-button').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab-button, .tab-content').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
-            });
-        });
-        this.layerSelect.addEventListener('change', () => { this.updatePalette(); this.editor.render(); });
+        document.querySelectorAll('.tab-button').forEach(tab => tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab-button, .tab-content').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active'); document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+        }));
+        this.createLayerSelector();
+        document.getElementById('load-level-btn').addEventListener('click', () => this.editor.loadLevel(parseInt(this.levelNumberInput.value) || 1));
         document.getElementById('save-level-btn').addEventListener('click', () => this.editor.saveLevel());
-        document.getElementById('load-level-btn').addEventListener('click', () => this.editor.loadLevel());
         document.getElementById('reset-layer-btn').addEventListener('click', () => this.editor.resetLayer());
         document.getElementById('reset-map-btn').addEventListener('click', () => this.editor.resetMap());
-        this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 64; this.editor.render(); });
-        this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 64; this.editor.render(); });
+        this.gridWidthInput.addEventListener('change', (e) => { this.editor.gridWidth = parseInt(e.target.value) || 64; this.editor.setDirty(); this.editor.render(); });
+        this.gridHeightInput.addEventListener('change', (e) => { this.editor.gridHeight = parseInt(e.target.value) || 64; this.editor.setDirty(); this.editor.render(); });
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
-            select.addEventListener('change', (e) => { this.editor.defaultTextures[layer] = e.target.value; this.editor.render(); });
+            select.addEventListener('change', (e) => { this.editor.defaultTextures[layer] = e.target.value; this.editor.setDirty(); this.editor.render(); });
         }
-        
-        Object.entries(this.toolButtons).forEach(([toolName, button]) => {
-            button.addEventListener('click', () => this.setActiveTool(toolName));
-        });
-
+        Object.entries(this.toolButtons).forEach(([toolName, button]) => button.addEventListener('click', () => this.setActiveTool(toolName)));
         this.populateDefaultTextureSettings();
-        this.updatePalette();
+        this.setActiveLayer(this.editor.activeLayerName);
     }
     
+    createLayerSelector() {
+        this.layerSelector.innerHTML = '';
+        this.editor.layerOrder.forEach(layerName => {
+            const button = document.createElement('button');
+            button.dataset.layer = layerName;
+            button.title = layerName.charAt(0).toUpperCase() + layerName.slice(1);
+            let iconSrc = null;
+            switch(layerName) {
+                case 'npcs': if (this.assetManager.npcIcons.size > 0) iconSrc = this.assetManager.npcIcons.values().next().value; break;
+                case 'assets': iconSrc = '/data/pngs/icons for UI/crate.png'; break;
+                case 'spawns': iconSrc = '/data/pngs/icons for UI/hologonk.png'; break;
+                default:
+                    const textures = this.assetManager.layerTextures[layerName] || [];
+                    if (textures.length > 0) iconSrc = textures[0];
+            }
+            if (iconSrc) {
+                const img = document.createElement('img'); img.src = iconSrc; img.className = 'layer-icon';
+                button.appendChild(img);
+            } else button.textContent = layerName.charAt(0).toUpperCase();
+            button.addEventListener('click', () => this.setActiveLayer(layerName));
+            this.layerSelector.appendChild(button);
+            this.layerButtons[layerName] = button;
+        });
+    }
+
+    setActiveLayer(layerName) {
+        this.editor.activeLayerName = layerName;
+        Object.values(this.layerButtons).forEach(btn => btn.classList.remove('active'));
+        this.layerButtons[layerName].classList.add('active');
+        this.updatePalette();
+        this.editor.render();
+    }
+
     setActiveTool(toolName) {
         this.editor.activeTool = toolName;
         Object.values(this.toolButtons).forEach(btn => btn.classList.remove('active'));
@@ -634,18 +676,19 @@ class EditorUI {
         this.updatePalette();
     }
 
-    getActiveLayer() { return this.layerSelect.value; }
+    updateUIForNewLevel() {
+        this.levelNumberInput.value = this.editor.currentLevel;
+        this.levelDisplay.textContent = `Level: ${this.editor.currentLevel}`;
+    }
 
     updatePalette() {
-        const activeLayer = this.getActiveLayer();
+        const activeLayer = this.editor.activeLayerName;
         const activeTool = this.editor.activeTool;
-        
         const showPalette = activeTool === 'paint' && !['spawns'].includes(activeLayer);
-        document.getElementById('palette-container').style.display = showPalette ? 'grid' : 'none';
+        document.querySelector('.content-group h4').style.display = showPalette ? 'block' : 'none';
+        this.paletteContainer.style.display = showPalette ? 'grid' : 'none';
         document.getElementById('palette-controls').style.display = showPalette ? 'flex' : 'none';
-
         if (!showPalette) return;
-
         if (activeLayer === 'npcs') this.populateNpcPalette();
         else if (activeLayer === 'assets') this.populateAssetPalette();
         else this.populateTexturePalette();
@@ -653,25 +696,19 @@ class EditorUI {
     
     _populatePalette(items, createItemFn) {
         this.paletteContainer.innerHTML = '';
-        if (!items || items.length === 0) {
-            this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No assets found for '${this.getActiveLayer()}' layer.</p>`;
-            return;
-        }
+        if (!items || items.length === 0) { this.paletteContainer.innerHTML = `<p style="font-size:12px; opacity: 0.7;">No assets found for '${this.editor.activeLayerName}' layer.</p>`; return; }
         items.forEach(createItemFn);
     }
 
     populateTexturePalette() {
-        const selectedLayer = this.getActiveLayer();
-        let textures = this.editor.assetManager.layerTextures[selectedLayer];
-        if (selectedLayer === 'walls') textures = [...this.editor.assetManager.layerTextures['wall'],...this.editor.assetManager.layerTextures['door'],...this.editor.assetManager.layerTextures['cover']];
-
+        const selectedLayer = this.editor.activeLayerName;
+        let textures = this.assetManager.layerTextures[selectedLayer];
+        if (selectedLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door'],...this.assetManager.layerTextures['cover']];
         this._populatePalette(textures, path => {
             const item = document.createElement('div'); item.className = 'palette-item';
             if (this.editor.activeBrush && this.editor.activeBrush.key === path) item.classList.add('active');
             const img = new Image(); img.src = path; item.appendChild(img);
-            const label = document.createElement('span');
-            label.textContent = path.split('/').pop().replace('.png', '').replace(/_/g, ' ');
-            item.appendChild(label);
+            const label = document.createElement('span'); label.textContent = path.split('/').pop().replace('.png', '').replace(/_/g, ' '); item.appendChild(label);
             item.addEventListener('click', () => {
                 this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
                 item.classList.add('active');
@@ -701,22 +738,19 @@ class EditorUI {
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
             select.innerHTML = '';
             const textures = this.assetManager.layerTextures[layer] || [];
-            const noneOption = document.createElement('option');
-            noneOption.value = ''; noneOption.textContent = 'None'; select.appendChild(noneOption);
+            const noneOption = document.createElement('option'); noneOption.value = ''; noneOption.textContent = 'None'; select.appendChild(noneOption);
             textures.forEach(path => {
-                const option = document.createElement('option');
-                option.value = path; option.textContent = path.split('/').pop();
+                const option = document.createElement('option'); option.value = path; option.textContent = path.split('/').pop();
                 select.appendChild(option);
             });
             if (layer === 'floor') {
-                const defaultFloorTexture = '/data/pngs/floor_1.png';
-                const floorTextures = this.assetManager.layerTextures['floor'] || [];
-                if (floorTextures.includes(defaultFloorTexture)) {
+                const defaultFloorTexture = '/data/pngs/floor/floor_1.png';
+                if (textures.includes(defaultFloorTexture)) {
                     select.value = defaultFloorTexture;
                     this.editor.defaultTextures['floor'] = defaultFloorTexture;
-                } else if (floorTextures.length > 0) {
-                    select.value = floorTextures[0];
-                    this.editor.defaultTextures['floor'] = floorTextures[0];
+                } else if (textures.length > 0) {
+                    select.value = textures[0];
+                    this.editor.defaultTextures['floor'] = textures[0];
                 }
             }
         }
@@ -725,9 +759,7 @@ class EditorUI {
     updateSettingsUI() {
         this.gridWidthInput.value = this.editor.gridWidth;
         this.gridHeightInput.value = this.editor.gridHeight;
-        for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
-            select.value = this.editor.defaultTextures[layer] || '';
-        }
+        for(const [layer, select] of Object.entries(this.defaultTextureSelects)) select.value = this.editor.defaultTextures[layer] || '';
     }
 
     populateNpcPalette() {
@@ -739,11 +771,9 @@ class EditorUI {
             const group = groupMap[baseName] || 'Droids';
             npcGroups[group].push({ skinName, iconDataUrl });
         });
-        
         for (const groupName in npcGroups) {
             if(npcGroups[groupName].length === 0) continue;
-            const header = document.createElement('div');
-            header.className = 'palette-header'; header.textContent = groupName;
+            const header = document.createElement('div'); header.className = 'palette-header'; header.textContent = groupName;
             this.paletteContainer.appendChild(header);
             for (const { skinName, iconDataUrl } of npcGroups[groupName]) {
                 const item = document.createElement('div'); item.className = 'palette-item';

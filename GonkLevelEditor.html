@@ -29,47 +29,41 @@
         .tab-content { display: none; padding-top: 10px; flex-grow: 1; overflow-y: auto; position: relative; }
         .tab-content.active { display: flex; flex-direction: column; }
 
-        .content-group { margin-bottom: 15px; }
-        .content-group h4 { margin-top: 10px; margin-bottom: 10px; font-weight: bold; }
-        .content-group-main { flex-grow: 1; overflow-y: auto; padding-bottom: 60px; /* Space for sticky footer */ }
+        .content-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
+        .content-group:last-child { border-bottom: none; }
+        .content-group h4 { margin-top: 0; margin-bottom: 10px; font-weight: bold; }
+        .content-group-main { flex-grow: 1; overflow-y: auto; padding-bottom: 60px; }
         .content-group label, .content-group select, .content-group input, .content-group button { width: 100%; padding: 8px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 3px; box-sizing: border-box; }
         .content-group label { display: block; margin-bottom: 5px; }
 
-        .horizontal-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .horizontal-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
         .horizontal-group label { width: auto; flex-shrink: 0; margin-bottom: 0; }
-        .horizontal-group > select, .horizontal-group > input { flex-grow: 1; margin-left: 10px; width: auto; }
+        .horizontal-group > select, .horizontal-group > input { flex-grow: 1; width: auto; }
+        .horizontal-group button { flex-grow: 1; }
 
         .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
         .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
         .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
         .palette-item img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
         
-        .palette-item span {
-            position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; left: 5%; width: 90%; text-align: center; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-
-        .palette-header {
-            grid-column: 1 / -1; text-align: left; font-weight: bold; color: var(--accent-color); margin-top: 10px; padding-bottom: 4px; text-transform: capitalize; border-bottom: 1px solid var(--border-color);
-        }
-
+        .palette-item span { position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; left: 5%; width: 90%; text-align: center; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .palette-header { grid-column: 1 / -1; text-align: left; font-weight: bold; color: var(--accent-color); margin-top: 10px; padding-bottom: 4px; text-transform: capitalize; border-bottom: 1px solid var(--border-color); }
         #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
         #palette-controls input { flex-grow: 1; }
-
-        #layer-actions {
-            position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; gap: 10px;
-        }
+        #layer-actions { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; gap: 10px; }
         #layer-actions button { flex-grow: 1; }
         
-        #toolbox {
-            position: absolute; top: 10px; left: 10px; background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 5px; display: flex; flex-direction: column; padding: 5px; gap: 5px;
-        }
-        #toolbox button {
-            width: 40px; height: 40px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        #toolbox button:hover { background-color: #333842; }
-        #toolbox button.active { border-color: var(--accent-color); background-color: #333842;}
-        #toolbox button img { width: 24px; height: 24px; }
+        .floating-toolbar { position: absolute; background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 5px; display: flex; padding: 5px; gap: 5px; }
+        .floating-toolbar button { width: 40px; height: 40px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; overflow:hidden; }
+        .floating-toolbar button:hover { background-color: #333842; }
+        .floating-toolbar button.active { border-color: var(--accent-color); background-color: #333842;}
+        .floating-toolbar button img { width: 24px; height: 24px; image-rendering: pixelated; }
+        .floating-toolbar button .layer-icon { max-width: 32px; max-height: 32px; }
 
+        #toolbox { top: 10px; left: 10px; flex-direction: column; }
+        #layer-selector { top: 10px; left: 65px; flex-direction: row; flex-wrap: wrap; width: calc(100% - 80px); }
+        
+        #level-display { position: absolute; top: 10px; right: 10px; background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -81,24 +75,16 @@
 
         <div id="editor-content" class="tab-content active">
             <div class="content-group-main">
-                <div class="content-group horizontal-group">
-                    <label for="layer-select">Active Layer (View up to):</label>
-                    <select id="layer-select">
-                        <option value="subfloor">1. Subfloor</option>
-                        <option value="floor" selected>2. Floor</option>
-                        <option value="npcs">3. NPCs</option>
-                        <option value="assets">4. Assets</option>
-                        <option value="spawns">5. Spawns</option>
-                        <option value="walls">6. Walls & Doors</option>
-                        <option value="tapestry">7. Tapestry</option>
-                        <option value="dangler">8. Dangler</option>
-                        <option value="water">9. Water</option>
-                        <option value="floater">10. Floater</option>
-                        <option value="decor">11. Decor</option>
-                        <option value="ceiling">12. Ceiling</option>
-                        <option value="sky">13. Sky</option>
-                    </select>
+                <div class="content-group">
+                    <h4>Level Management</h4>
+                    <div class="horizontal-group">
+                        <label for="level-number-input">Level #:</label>
+                        <input type="number" id="level-number-input" value="1" min="1">
+                    </div>
+                    <button id="load-level-btn">Load Level</button>
+                    <button id="save-level-btn" style="margin-top: 5px;">Save Current Level</button>
                 </div>
+
                  <div class="content-group">
                     <h4>Asset Palette</h4>
                     <div id="palette-controls">
@@ -109,8 +95,6 @@
                 </div>
             </div>
             <div id="layer-actions">
-                <button id="save-level-btn">Save Level</button>
-                <button id="load-level-btn">Load Level</button>
                 <button id="reset-layer-btn">Reset Layer</button>
                 <button id="reset-map-btn">Reset Map</button>
             </div>
@@ -159,12 +143,15 @@
     </div>
     <div id="canvasContainer">
         <canvas id="editorCanvas"></canvas>
-        <div id="toolbox">
-            <button id="tool-paint" title="Paint (B)" class="active">???</button>
-            <button id="tool-rotate" title="Rotate (R)">??</button>
-            <button id="tool-spawn" title="Place Spawn (P)">??</button>
+        <div id="toolbox" class="floating-toolbar">
+            <button id="tool-paint" title="Paint (B)" class="active"><img src="/data/pngs/icons for UI/paintbrush.png" alt="P"></button>
+            <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="R"></button>
+            <button id="tool-spawn" title="Place Spawn (P)"><img src="/data/pngs/icons for UI/gonkicon.png" alt="S"></button>
             <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
         </div>
+        <div id="layer-selector" class="floating-toolbar">
+            </div>
+        <div id="level-display">Level: 1</div>
         <div id="statusBar">
             <span id="coords">X: 0, Y: 0</span>
             <span id="zoom">Zoom: 100%</span>
