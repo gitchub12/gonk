@@ -8,7 +8,7 @@ class EditorAssetManager {
         this.npcIcons = new Map();
         this.furnitureJsons = new Map();
         this.assetIcons = new Map(); 
-        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'cover', 'tapestry', 'dangler'];
+        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'cover', 'tapestry', 'dangler', 'spawn'];
         this.layerTextures = {};
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
     }
@@ -128,7 +128,7 @@ class LevelEditor {
     }
     
     async preloadAllTextures() {
-        const allPaths = new Set(['/data/pngs/hologonk.png', '/data/pngs/icons for UI/crate.png']);
+        const allPaths = new Set(['/data/pngs/icons for UI/crate.png']);
         Object.values(this.assetManager.layerTextures).forEach(arr => arr.forEach(path => allPaths.add(path)));
         const promises = [...allPaths].map(path => new Promise(resolve => {
             const img = new Image();
@@ -232,9 +232,9 @@ class LevelEditor {
         if (this.activeLayerName !== 'spawns') return;
         const coordKey = `${gridX},${gridY}`;
         const spawnLayer = this.levelData['spawns'];
-        if (spawnLayer.has(coordKey) || spawnLayer.size >= 9) return;
+        if (spawnLayer.has(coordKey)) return; // Don't limit to 9 anymore
         this.modifyState(() => {
-            spawnLayer.set(coordKey, { number: spawnLayer.size + 1, rotation: 0 });
+            spawnLayer.set(coordKey, { number: spawnLayer.size + 1, rotation: 0, key: '/data/pngs/spawn/hologonk_1.png' });
             this.statusMsg.textContent = `Placed spawn point #${spawnLayer.size}.`;
         });
     }
@@ -277,7 +277,7 @@ class LevelEditor {
     }
 
     onMouseDown(e) {
-        if (e.target.closest('#leftPanel, .floating-toolbar')) return;
+        if (e.target.closest('#leftPanel, .floating-toolbar, .top-right-ui')) return;
         this.ui.hideContextMenu();
         if (e.button === 1) { this.isPanning = true; this.lastMouse = { x: e.clientX, y: e.clientY }; return; }
         const { x, y } = this.getGridCoordsFromEvent(e);
@@ -285,7 +285,10 @@ class LevelEditor {
         if (e.button === 0) {
             this.isPainting = true;
             switch(this.activeTool) {
-                case 'paint': this.placeItem(x, y); break;
+                case 'paint': 
+                    if (this.activeLayerName === 'spawns') this.placeSpawn(x, y);
+                    else this.placeItem(x, y); 
+                    break;
                 case 'erase': this.eraseItem(x, y); break;
                 case 'rotate': this.rotateItem(x, y); break;
                 case 'spawn': this.placeSpawn(x, y); break;
@@ -337,7 +340,10 @@ class LevelEditor {
         } 
         this.updateHoveredLine(e);
         if(this.isPainting) switch(this.activeTool) {
-            case 'paint': this.placeItem(x, y); break;
+            case 'paint':
+                if (this.activeLayerName === 'spawns') this.placeSpawn(x, y);
+                else this.placeItem(x, y);
+                break;
             case 'erase': this.eraseItem(x, y); break;
         }
     }
@@ -401,24 +407,24 @@ class LevelEditor {
                 const [x, y] = coordKey.split(',').map(Number);
                 if(layerName === 'floor' || layerName === 'subfloor') continue;
                 let img = null;
-                if (layerName === 'spawns') img = this.preloadedImages.get('/data/pngs/hologonk.png');
+                if (layerName === 'spawns') img = this.preloadedImages.get(item.key);
                 else img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
                 if (layerName === 'water' && i <= activeLayerIndex) this.ctx.globalAlpha = 0.3;
                 if (img) {
                     this.ctx.save(); this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
                     if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
-                    if (layerName === 'npcs') this.ctx.drawImage(img, -(gs*0.375), -(gs*0.125), gs * 0.75, gs * 0.75); else this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
-                    this.ctx.restore();
-                }
-                if (layerName === 'spawns') {
-                    this.ctx.save(); this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
-                    this.ctx.font = `bold ${gs * 0.5}px Arial`; this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
-                    this.ctx.shadowColor = 'black'; this.ctx.shadowBlur = 4;
-                    this.ctx.fillText(item.number, 0, 0);
-                    this.ctx.rotate(item.rotation * Math.PI / 2);
-                    this.ctx.strokeStyle = 'white'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.shadowBlur = 0;
-                    this.ctx.beginPath(); this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
-                    this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3); this.ctx.stroke();
+                    if (layerName === 'npcs') this.ctx.drawImage(img, -(gs*0.375), -(gs*0.125), gs * 0.75, gs * 0.75); 
+                    else if (layerName === 'spawns') {
+                        this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
+                        this.ctx.font = `bold ${gs * 0.5}px Arial`; this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
+                        this.ctx.shadowColor = 'black'; this.ctx.shadowBlur = 4;
+                        const spawnNumber = Array.from(this.levelData['spawns'].keys()).indexOf(coordKey) + 1;
+                        this.ctx.fillText(spawnNumber, 0, 0);
+                        this.ctx.strokeStyle = 'white'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.shadowBlur = 0;
+                        this.ctx.beginPath(); this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
+                        this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3); this.ctx.stroke();
+                    }
+                    else this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
                     this.ctx.restore();
                 }
                 if (layerName === 'water') this.ctx.globalAlpha = 1.0;
@@ -507,8 +513,20 @@ class EditorUI {
         document.getElementById('save-level-btn').addEventListener('click', () => this.editor.saveLevel());
         document.getElementById('reset-layer-btn').addEventListener('click', () => this.editor.resetLayer());
         document.getElementById('reset-map-btn').addEventListener('click', () => this.editor.resetMap());
-        document.getElementById('play-button').addEventListener('click', () => {
-            localStorage.setItem('gonk_level_to_play', JSON.stringify({settings: this.editor.settings, layers: Object.fromEntries(Object.entries(this.editor.levelData).map(([k,v])=>[k, [...v]]))}));
+        document.getElementById('playtest-button').addEventListener('click', () => {
+            if (this.editor.levelData['spawns'].size === 0) {
+                alert('Cannot play level: No spawn point has been placed.');
+                return;
+            }
+            const levelObject = {
+                settings: { width: this.editor.gridWidth, height: this.editor.gridHeight, defaults: this.editor.defaultTextures },
+                layers: {}
+            };
+            for (const layerName of this.editor.layerOrder) {
+                const layerMap = this.editor.levelData[layerName];
+                if (layerMap.size > 0) levelObject.layers[layerName] = Array.from(layerMap.entries());
+            }
+            localStorage.setItem('gonk_level_to_play', JSON.stringify(levelObject));
             window.open('index.html?play=true', '_blank');
         });
         this.gridWidthInput.addEventListener('change', () => { this.editor.gridWidth = parseInt(this.gridWidthInput.value) || 64; this.editor.modifyState(()=>{});});
@@ -550,7 +568,7 @@ class EditorUI {
         if (!iconSrc) {
             switch(layerName) {
                 case 'assets': iconSrc = '/data/pngs/icons for UI/crate.png'; break;
-                case 'spawns': iconSrc = '/data/pngs/icons for UI/hologonk.png'; break;
+                case 'spawns': iconSrc = '/data/pngs/spawn/hologonk_1.png'; break;
                 default:
                     const textures = this.assetManager.layerTextures[layerName] || [];
                     if (textures.length > 0) iconSrc = textures[0];
@@ -573,17 +591,20 @@ class EditorUI {
         if (buttons) {
             let targetButton = buttons[0];
             if(subGroup && buttons.length > 1) targetButton = buttons.find(b => b.title === subGroup) || buttons[0];
-            targetButton.classList.add('active');
+            if (targetButton) targetButton.classList.add('active');
         }
-        this.updatePalette(subGroup); this.editor.render();
+        this.setActiveTool(layerName === 'spawns' ? 'spawn' : 'paint');
+        this.updatePalette(subGroup); 
+        this.editor.render();
     }
 
     setActiveTool(toolName) {
         this.editor.activeTool = toolName;
         Object.values(this.toolButtons).forEach(btn => btn.classList.remove('active'));
-        this.toolButtons[toolName].classList.add('active');
+        if (this.toolButtons[toolName]) this.toolButtons[toolName].classList.add('active');
         const cursors = { paint: 'crosshair', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer' };
         this.editor.canvas.style.cursor = cursors[toolName] || 'default';
+        if (toolName === 'spawn') this.editor.activeLayerName = 'spawns';
         this.updatePalette();
     }
     
@@ -596,11 +617,18 @@ class EditorUI {
 
     updatePalette(subGroup = null) {
         const activeLayer = this.editor.activeLayerName; const activeTool = this.editor.activeTool;
-        const showPalette = activeTool === 'paint' && !['spawns'].includes(activeLayer);
+        const showPalette = activeTool === 'paint';
         document.querySelector('.content-group h4').style.display = showPalette ? 'block' : 'none';
         this.paletteContainer.style.display = showPalette ? 'grid' : 'none';
         document.getElementById('palette-controls').style.display = showPalette ? 'flex' : 'none';
         if (!showPalette) { this.editor.activeBrush = null; return; }
+
+        if (activeLayer === 'spawns') {
+            this.paletteContainer.innerHTML = '';
+            this.editor.activeBrush = { type: 'spawn', key: '/data/pngs/spawn/hologonk_1.png' };
+            return;
+        }
+
         if (activeLayer === 'npcs') this.populateNpcPalette();
         else if (activeLayer === 'assets') this.populateAssetPalette();
         else this.populateTexturePalette();

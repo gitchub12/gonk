@@ -33,8 +33,11 @@ class LevelPlayer {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         
-        const ambient = new THREE.AmbientLight(0x404040, 2);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.7);
         this.scene.add(ambient);
+        const sun = new THREE.DirectionalLight(0xffffff, 0.5);
+        sun.position.set(50, 50, 50);
+        this.scene.add(sun);
 
         this.raycaster = new THREE.Raycaster();
         this.clock = new THREE.Clock();
@@ -43,9 +46,12 @@ class LevelPlayer {
         this.levelObjects = { walls: [], doors: [], interactables: [] };
         this.interactionPrompt = document.getElementById('interaction-prompt');
 
+        this.characterDefs = null;
+        this.furnitureLoader = new FurnitureLoader();
+        
         document.querySelectorAll('.player-hud').forEach(el => el.style.display = 'block');
         this.setupControls();
-        this.loadLevelFromStorage();
+        this.loadLevel();
         this.animate();
     }
 
@@ -56,58 +62,136 @@ class LevelPlayer {
         document.body.addEventListener('click', () => document.body.requestPointerLock());
     }
 
-    async loadLevelFromStorage() {
+    async loadLevel() {
         const levelDataString = localStorage.getItem('gonk_level_to_play');
         if (!levelDataString) {
-            alert("No level found to play. Please launch from the editor's 'Play' button.");
+            alert("No level found to play. Launch from the editor's PLAY button.");
             return;
         }
         const levelData = JSON.parse(levelDataString);
+
+        // Fetch manifests
+        const [charResponse, furnitureResponse] = await Promise.all([
+            fetch('data/characters.json'),
+            fetch('data/furniture.json')
+        ]);
+        this.characterDefs = await charResponse.json();
+        const furnitureManifest = await furnitureResponse.json();
+
+        // Discover and load all required assets
         const texturePaths = new Set();
-        for (const layerName in levelData.layers) {
-            levelData.layers[layerName].forEach(([pos, item]) => {
-                if (item.key) texturePaths.add(item.key);
-            });
+        const npcSkins = new Set();
+        const furnitureModels = new Set();
+
+        if (levelData.layers) {
+            for (const layerName in levelData.layers) {
+                for (const [, item] of levelData.layers[layerName]) {
+                    if (item.key && item.key.endsWith('.png')) texturePaths.add(item.key);
+                    if (layerName === 'npcs') npcSkins.add(item.key);
+                    if (layerName === 'assets') furnitureModels.add(item.key);
+                }
+            }
         }
+        
+        // Load textures
         const texturePromises = [...texturePaths].map(path => assetManager.loadTexture(path, path));
-        await Promise.all(texturePromises);
-        this.buildLevel(levelData, assetManager.textures);
+        const npcSkinPromises = [...npcSkins].map(skin => assetManager.loadTexture(skin, `data/skins/${skin}`));
+        await Promise.all([...texturePromises, ...npcSkinPromises]);
+
+        // Load furniture models
+        const furnitureModelPromises = [...furnitureModels].map(modelKey => {
+            const modelDef = furnitureManifest.models[modelKey];
+            if(modelDef) return this.furnitureLoader.loadModel(modelKey, modelDef);
+        });
+        await Promise.all(furnitureModelPromises);
+
+        this.buildLevel(levelData);
     }
 
-    buildLevel(levelData, textureMap) {
+    buildLevel(levelData) {
         const gs = 1, wallHeight = 2.5;
-        const spawn = levelData.layers.spawns?.[0];
-        if (spawn) {
-            const [posStr] = spawn; const [x, y] = posStr.split(',').map(Number);
+
+        // Set player spawn
+        const spawnLayer = levelData.layers.spawns || [];
+        if (spawnLayer.length > 0) {
+            const [posStr, item] = spawnLayer[0];
+            const [x, y] = posStr.split(',').map(Number);
             this.player.position.set(x * gs + gs / 2, wallHeight / 2, y * gs + gs / 2);
+            this.player.rotation.y = (item.rotation || 0) * -Math.PI / 2;
         }
-        ['floor', 'ceiling'].forEach(layerName => {
-            (levelData.layers[layerName] || []).forEach(([pos, item]) => {
-                const [x, y] = pos.split(',').map(Number);
-                const mat = new THREE.MeshLambertMaterial({ map: textureMap[item.key] });
-                const geom = new THREE.PlaneGeometry(gs, gs);
-                const mesh = new THREE.Mesh(geom, mat);
-                mesh.position.set(x * gs + gs / 2, layerName === 'floor' ? 0 : wallHeight, y * gs + gs / 2);
-                mesh.rotation.x = -Math.PI / 2;
-                this.scene.add(mesh);
-            });
-        });
-        (levelData.layers.walls || []).forEach(([pos, item]) => {
-            const [type, xStr, yStr] = pos.split('_');
-            const x = Number(xStr); const y = Number(yStr);
-            const isDoor = item.key.includes('/door/');
-            const mat = new THREE.MeshLambertMaterial({ map: textureMap[item.key] });
-            const geom = new THREE.BoxGeometry(type === 'H' ? gs : 0.1, wallHeight, type === 'V' ? gs : 0.1);
-            const mesh = new THREE.Mesh(geom, mat);
-            mesh.position.set((type === 'H' ? x * gs + gs/2 : (x + 1) * gs), wallHeight / 2, (type === 'V' ? y * gs + gs/2 : (y + 1) * gs));
-            if (isDoor) {
-                mesh.isDoor = true; mesh.isOpen = false; mesh.userData = item.properties || {};
-                this.levelObjects.doors.push(mesh); this.levelObjects.interactables.push(mesh);
-            } else {
-                this.levelObjects.walls.push(mesh);
+
+        if (!levelData.layers) return;
+
+        for (const layerName in levelData.layers) {
+            const items = levelData.layers[layerName];
+            for (const [key, item] of items) {
+                const texture = item.key ? assetManager.getTexture(item.key) : null;
+                const material = texture ? new THREE.MeshLambertMaterial({ map: texture }) : new THREE.MeshLambertMaterial({ color: 0xff00ff });
+
+                if (['floor', 'subfloor', 'ceiling'].includes(layerName)) {
+                    const geom = new THREE.PlaneGeometry(gs, gs);
+                    const mesh = new THREE.Mesh(geom, material);
+                    const yPos = layerName === 'floor' ? 0 : (layerName === 'ceiling' ? wallHeight : -0.01);
+                    mesh.position.set(key.split(',').map(Number)[0] * gs + gs / 2, yPos, key.split(',').map(Number)[1] * gs + gs / 2);
+                    mesh.rotation.x = -Math.PI / 2;
+                    this.scene.add(mesh);
+                } else if (layerName === 'walls') {
+                    const [type, xStr, yStr] = key.split('_');
+                    const x = Number(xStr); const y = Number(yStr);
+                    const isDoor = item.key.includes('/door/');
+                    const geom = new THREE.BoxGeometry(type === 'H' ? gs : 0.1, wallHeight, type === 'V' ? gs : 0.1);
+                    const mesh = new THREE.Mesh(geom, material);
+                    mesh.position.set((type === 'H' ? x * gs + gs/2 : (x + 1) * gs), wallHeight / 2, (type === 'V' ? y * gs + gs/2 : (y + 1) * gs));
+                    if (isDoor) {
+                        mesh.isDoor = true; mesh.isOpen = false; mesh.userData = item.properties || {};
+                        this.levelObjects.doors.push(mesh); this.levelObjects.interactables.push(mesh);
+                    } else {
+                        this.levelObjects.walls.push(mesh);
+                    }
+                    this.scene.add(mesh);
+                } else if (layerName === 'water') {
+                    const geom = new THREE.PlaneGeometry(gs, gs);
+                    const waterMat = new THREE.MeshStandardMaterial({
+                        map: texture,
+                        color: 0x6699ff,
+                        transparent: true,
+                        opacity: 0.7,
+                        roughness: 0.1,
+                        metalness: 0.2
+                    });
+                    const mesh = new THREE.Mesh(geom, waterMat);
+                    const [x, z] = key.split(',').map(Number);
+                    mesh.position.set(x * gs + gs / 2, 0.4, z * gs + gs / 2);
+                    mesh.rotation.x = -Math.PI / 2;
+                    this.scene.add(mesh);
+                } else if (layerName === 'npcs') {
+                    const [x, z] = key.split(',').map(Number);
+                    const skinName = item.key;
+                    let charDef = Object.values(this.characterDefs).find(def => def.texture === skinName);
+                    if (!charDef) charDef = { minecraftModel: 'humanoid' };
+
+                    const char = window.createGonkMesh(
+                        charDef.minecraftModel || 'humanoid',
+                        { skinTexture: skinName },
+                        new THREE.Vector3(x * gs + gs / 2, 0, z * gs + gs / 2),
+                        skinName
+                    );
+                    if (char) {
+                        char.group.rotation.y = (item.rotation || 0) * -Math.PI / 2;
+                        this.scene.add(char.group);
+                    }
+                } else if (layerName === 'assets') {
+                    const [x, z] = key.split(',').map(Number);
+                    const instanceDef = {
+                        model: item.key,
+                        position: [x * gs + gs / 2, 0, z * gs + gs / 2],
+                        rotation: [0, (item.rotation || 0) * -90, 0]
+                    };
+                    const instance = this.furnitureLoader.createInstance(instanceDef);
+                    if (instance) this.scene.add(instance);
+                }
             }
-            this.scene.add(mesh);
-        });
+        }
     }
     
     onKey(e, isDown) {
@@ -138,11 +222,11 @@ class LevelPlayer {
     }
 
     update(deltaTime) {
-        const moveDirection = new THREE.Vector3(this.moveState.left - this.moveState.right, 0, this.moveState.forward - this.moveState.backward);
+        const moveDirection = new THREE.Vector3(this.moveState.right - this.moveState.left, 0, this.moveState.backward - this.moveState.forward);
         moveDirection.normalize().applyEuler(this.player.rotation).multiplyScalar(this.playerSpeed * deltaTime);
         this.player.position.add(moveDirection);
         this.levelObjects.doors.forEach(door => {
-            const targetY = door.isOpen ? 2.5 * 1.5 : 2.5 / 2;
+            const targetY = door.isOpen ? door.position.y + 2.5 : wallHeight / 2;
             door.position.y += (targetY - door.position.y) * 0.1;
         });
         this.raycaster.setFromCamera({x:0, y:0}, this.camera);

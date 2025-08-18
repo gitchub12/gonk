@@ -14,6 +14,8 @@
             --text-hover: #ffffff;
             --accent-color: #61afef;
             --input-bg: #1c1f24;
+            --play-btn-bg: #28a745;
+            --play-btn-hover: #218838;
         }
         body { margin: 0; display: flex; height: 100vh; font-family: Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); }
         #leftPanel { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; }
@@ -65,7 +67,10 @@
         #layer-selector button img { width: 32px; height: 32px; margin-top: 2px; }
         #layer-selector button .layer-label { font-size: 10px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
         
-        #level-display { position: absolute; top: 10px; right: 10px; background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; z-index: 20; }
+        .top-right-ui { position: absolute; top: 10px; right: 10px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; }
+        #playtest-button { padding: 12px 24px; font-size: 1.2em; font-weight: bold; background-color: var(--play-btn-bg); border: 1px solid #1e7e34; color: white; cursor: pointer; border-radius: 5px; text-shadow: 1px 1px 2px black; }
+        #playtest-button:hover { background-color: var(--play-btn-hover); }
 
         #context-menu {
             display: none; position: absolute; background-color: var(--panel-bg); border: 1px solid var(--accent-color);
@@ -160,7 +165,10 @@
             <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
         </div>
         <div id="layer-selector" class="floating-toolbar"></div>
-        <div id="level-display">Level: 1</div>
+        <div class="top-right-ui">
+            <div id="level-display">Level: 1</div>
+            <button id="playtest-button">PLAY</button>
+        </div>
         <div id="statusBar">
             <span id="coords">X: 0, Y: 0</span>
             <span id="zoom">Zoom: 100%</span>
