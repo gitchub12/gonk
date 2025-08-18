@@ -1,33 +1,8 @@
 // BROWSERFIREFOXHIDE main.js
-// Main game logic with master manifest loading and data-driven defaults.
+// Main Game Logic - Supports Character Viewer and Level Player modes.
 
-let scene, camera, renderer, player;
-let characters = new Map();
-let characterDefs = {};
-let selectedCharacter = null;
-let selectedCharacterName = '';
-let aimTarget = null;
-
-let textureLoader = new THREE.TextureLoader();
-let clock = new THREE.Clock();
-
-const moveSpeed = 5;
-const rotationSpeed = 0.002;
-let moveState = { forward: 0, back: 0, left: 0, right: 0 };
-let isMouseDown = false;
-let prevMouseX = 0, prevMouseY = 0;
-
-let animationStates = ['idle', 'walk', 'run', 'shoot', 'aim'];
-let animationIndex = 0;
-let currentWeaponIndex = 0;
-let weaponList = [];
-let isGameHud = false;
-let availableSkins = {};
-let currentSkinIndex = {};
-
-let furnitureInstances = [];
-let selectedFurnitureIndex = -1;
-
+// --- Asset Manager (Shared) ---
+const textureLoader = new THREE.TextureLoader();
 const assetManager = {
     textures: {},
     getTexture: function(name) { return this.textures[name]; },
@@ -45,493 +20,284 @@ const assetManager = {
 };
 window.assetManager = assetManager;
 
-async function init() {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    document.body.appendChild(renderer.domElement);
+// --- Level Player Logic ---
+class LevelPlayer {
+    constructor() {
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x111111);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.player = new THREE.Group();
+        this.player.add(this.camera);
+        this.scene.add(this.player);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+        
+        const ambient = new THREE.AmbientLight(0x404040, 2);
+        this.scene.add(ambient);
 
-    player = new THREE.Group();
-    player.position.set(0, 1.6, 10);
-    player.add(camera);
-    scene.add(player);
+        this.raycaster = new THREE.Raycaster();
+        this.clock = new THREE.Clock();
+        this.moveState = { forward: 0, backward: 0, left: 0, right: 0 };
+        this.playerSpeed = 8;
+        this.levelObjects = { walls: [], doors: [], interactables: [] };
+        this.interactionPrompt = document.getElementById('interaction-prompt');
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 10, 5);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
+        document.querySelectorAll('.player-hud').forEach(el => el.style.display = 'block');
+        this.setupControls();
+        this.loadLevelFromStorage();
+        this.animate();
+    }
 
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x888888 }));
-    floor.rotation.x = -Math.PI / 2;
-    floor.receiveShadow = true;
-    scene.add(floor);
-    scene.add(new THREE.GridHelper(100, 100));
+    setupControls() {
+        document.addEventListener('keydown', e => this.onKey(e, true));
+        document.addEventListener('keyup', e => this.onKey(e, false));
+        document.addEventListener('mousemove', e => this.onMouseMove(e));
+        document.body.addEventListener('click', () => document.body.requestPointerLock());
+    }
 
-    await loadGameAssets();
-    setupUI();
-    animate();
-}
-
-async function loadFurniture() {
-    const furnitureLoader = new FurnitureLoader();
-    furnitureInstances = await furnitureLoader.loadFromManifest('data/furniture.json');
-    furnitureInstances.forEach(instance => {
-        scene.add(instance);
-    });
-}
-
-async function loadGameAssets() {
-    await loadFurniture();
-    
-    try {
-        const response = await fetch('data/characters.json');
-        characterDefs = await response.json();
-        const defaults = characterDefs._defaults || {};
-
-        await discoverAllSkins(defaults.skinPath || 'data/skins/');
-
-        for (const charKey in characterDefs) {
-            if (charKey.startsWith('_')) continue;
-
-            const def = characterDefs[charKey];
-            const textureFile = def.texture || def.skinTexture;
-            const texturePath = (defaults.skinPath || 'data/skins/') + textureFile;
-
-            await assetManager.loadTexture(textureFile, texturePath);
-
-            const gonkConfig = {
-                skinTexture: textureFile,
-                scaleX: def.scaleX,
-                scaleY: def.scaleY,
-                scaleZ: def.scaleZ
-            };
-
-            const modelType = def.minecraftModel || 'humanoid';
-            const char = window.createGonkMesh(modelType, gonkConfig, new THREE.Vector3(...def.position), charKey);
-
-            if (char) {
-                const modelDefaults = (modelType === 'humanoid') ? defaults.humanoidWeaponOffsets : null;
-                if (modelDefaults) {
-                    char.weaponOffsets.position.set(modelDefaults.position.x, modelDefaults.position.y, modelDefaults.position.z);
-                    char.weaponOffsets.rotation.set(modelDefaults.rotation.x, modelDefaults.rotation.y, modelDefaults.rotation.z);
-                    char.weaponOffsets.scale = modelDefaults.scale;
-                }
-                if (def.defaultWeaponOffsets) {
-                    const offsets = def.defaultWeaponOffsets;
-                    char.weaponOffsets.position.set(offsets.position.x, offsets.position.y, offsets.position.z);
-                    char.weaponOffsets.rotation.set(offsets.rotation.x, offsets.rotation.y, offsets.rotation.z);
-                    char.weaponOffsets.scale = offsets.scale;
-                }
-
-                scene.add(char.group);
-                characters.set(charKey, char);
-                console.log(`${charKey} loaded.`);
-            }
+    async loadLevelFromStorage() {
+        const levelDataString = localStorage.getItem('gonk_level_to_play');
+        if (!levelDataString) {
+            alert("No level found to play. Please launch from the editor's 'Play' button.");
+            return;
         }
-    } catch (e) {
-        console.error("Failed to load master character manifest:", e);
-    }
-
-    if (characters.size > 0) {
-        selectCharacter(Object.keys(characterDefs).find(k => !k.startsWith('_')));
-    }
-    await initWeapons();
-}
-
-async function discoverAllSkins(skinPath) {
-    availableSkins = {};
-    currentSkinIndex = {};
-
-    let allSkinFiles = [];
-    try {
-        const response = await fetch(skinPath);
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        allSkinFiles = Array.from(doc.querySelectorAll('a'))
-            .filter(link => link.href.endsWith('.png'))
-            .map(link => link.textContent)
-            .sort();
-    } catch (e) {
-        console.error(`Could not discover skins from path: ${skinPath}.`, e);
-        return;
-    }
-
-    for (const charKey in characterDefs) {
-        if (charKey.startsWith('_')) continue;
-        const def = characterDefs[charKey];
-        availableSkins[charKey] = [];
-        currentSkinIndex[charKey] = 0;
-        const searchNames = [charKey.toLowerCase(), ...(def.skinAliases || [])];
-        const charSkins = allSkinFiles.filter(fileName => {
-            const lowerFileName = fileName.toLowerCase();
-            return searchNames.some(searchName => lowerFileName.startsWith(searchName));
-        });
-
-        if (charSkins.length > 0) {
-             availableSkins[charKey] = charSkins;
-            for(const skinFile of charSkins) {
-                await assetManager.loadTexture(skinFile, skinPath + skinFile);
-            }
-        } else {
-            if (def.texture) {
-                availableSkins[charKey] = [def.texture];
-            }
-        }
-
-        const defaultTexture = def.texture || def.skinTexture;
-        const defaultIndex = availableSkins[charKey].indexOf(defaultTexture);
-        if (defaultIndex !== -1) {
-            currentSkinIndex[charKey] = defaultIndex;
-        }
-    }
-}
-
-async function initWeapons() {
-    let weaponOverrides = {};
-    let categoryDefaults = {};
-
-    try {
-        const response = await fetch('data/weapons.json');
-        const manifest = await response.json();
-        weaponOverrides = manifest;
-        categoryDefaults = manifest._defaults?.categoryDefaults || {};
-    } catch (e) {
-        console.log("No weapon override manifest found or failed to load. Using dynamic discovery only.");
-    }
-
-    try {
-        const response = await fetch('data/weapons/');
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const links = Array.from(doc.querySelectorAll('a'));
-
-        const weaponPromises = links
-            .filter(link => link.href.endsWith('.png'))
-            .map(async link => {
-                const file = link.textContent;
-                const name = file.replace('.png', '');
-                const category = name.split('_')[0];
-                let config = {
-                    name,
-                    file,
-                    category,
-                    ...(categoryDefaults[category] || {})
-                };
-                if (weaponOverrides[name]) {
-                    config = { ...config, ...weaponOverrides[name] };
-                }
-                const path = `data/weapons/${config.file}`;
-                await window.weaponIcons.createWeaponFromPNG(name + '_smooth', path, { ...config, mode: 'smooth' });
-                weaponList.push(name + '_smooth');
+        const levelData = JSON.parse(levelDataString);
+        const texturePaths = new Set();
+        for (const layerName in levelData.layers) {
+            levelData.layers[layerName].forEach(([pos, item]) => {
+                if (item.key) texturePaths.add(item.key);
             });
-        await Promise.all(weaponPromises);
-    } catch (e) {
-        console.error("Could not dynamically discover weapons. The server may not support directory listing.", e);
+        }
+        const texturePromises = [...texturePaths].map(path => assetManager.loadTexture(path, path));
+        await Promise.all(texturePromises);
+        this.buildLevel(levelData, assetManager.textures);
     }
 
-    console.log(`Loaded ${weaponList.length} weapon variants dynamically.`);
-    updateWeaponDisplay();
-}
-
-function selectCharacter(name) {
-    if (!characters.has(name) || !name) return;
-    selectedCharacterName = name;
-    selectedCharacter = characters.get(name);
-    document.getElementById('charState').textContent = name;
-    aimTarget = null;
-    applyCharacterWeaponDefaults();
-    updateAimDisplay();
-    updateWeaponDisplay();
-    updateSkinDisplay();
-}
-
-function updateSkinDisplay() {
-    const skinStateEl = document.getElementById('skinState');
-    if (skinStateEl && selectedCharacterName) {
-        const skins = availableSkins[selectedCharacterName] || [];
-        const currentIndex = currentSkinIndex[selectedCharacterName] || 0;
-        const currentSkin = skins[currentIndex] || 'default';
-
-        const displayName = currentSkin.replace('.png', '');
-        skinStateEl.textContent = `${displayName} (${currentIndex + 1}/${skins.length})`;
+    buildLevel(levelData, textureMap) {
+        const gs = 1, wallHeight = 2.5;
+        const spawn = levelData.layers.spawns?.[0];
+        if (spawn) {
+            const [posStr] = spawn; const [x, y] = posStr.split(',').map(Number);
+            this.player.position.set(x * gs + gs / 2, wallHeight / 2, y * gs + gs / 2);
+        }
+        ['floor', 'ceiling'].forEach(layerName => {
+            (levelData.layers[layerName] || []).forEach(([pos, item]) => {
+                const [x, y] = pos.split(',').map(Number);
+                const mat = new THREE.MeshLambertMaterial({ map: textureMap[item.key] });
+                const geom = new THREE.PlaneGeometry(gs, gs);
+                const mesh = new THREE.Mesh(geom, mat);
+                mesh.position.set(x * gs + gs / 2, layerName === 'floor' ? 0 : wallHeight, y * gs + gs / 2);
+                mesh.rotation.x = -Math.PI / 2;
+                this.scene.add(mesh);
+            });
+        });
+        (levelData.layers.walls || []).forEach(([pos, item]) => {
+            const [type, xStr, yStr] = pos.split('_');
+            const x = Number(xStr); const y = Number(yStr);
+            const isDoor = item.key.includes('/door/');
+            const mat = new THREE.MeshLambertMaterial({ map: textureMap[item.key] });
+            const geom = new THREE.BoxGeometry(type === 'H' ? gs : 0.1, wallHeight, type === 'V' ? gs : 0.1);
+            const mesh = new THREE.Mesh(geom, mat);
+            mesh.position.set((type === 'H' ? x * gs + gs/2 : (x + 1) * gs), wallHeight / 2, (type === 'V' ? y * gs + gs/2 : (y + 1) * gs));
+            if (isDoor) {
+                mesh.isDoor = true; mesh.isOpen = false; mesh.userData = item.properties || {};
+                this.levelObjects.doors.push(mesh); this.levelObjects.interactables.push(mesh);
+            } else {
+                this.levelObjects.walls.push(mesh);
+            }
+            this.scene.add(mesh);
+        });
     }
-}
-
-function cycleFurniture() {
-    if (furnitureInstances.length === 0) return;
-    selectedFurnitureIndex = (selectedFurnitureIndex + 1) % furnitureInstances.length;
-    const targetFurniture = furnitureInstances[selectedFurnitureIndex];
     
-    const offset = new THREE.Vector3(0, 5, 10);
-    const targetPosition = targetFurniture.position.clone().add(offset);
-    player.position.copy(targetPosition);
-
-    const lookAtPosition = targetFurniture.position.clone();
-    player.lookAt(lookAtPosition);
-    camera.rotation.x = -0.4;
-}
-
-function toggleHUD() {
-    isGameHud = !isGameHud;
-    const testingElements = document.querySelectorAll('.testing-hud');
-    const gameElements = document.querySelectorAll('.game-hud');
-    testingElements.forEach(el => el.style.display = isGameHud ? 'none' : 'block');
-    gameElements.forEach(el => el.style.display = isGameHud ? 'block' : 'none');
-    if (isGameHud) updateGameHudInfo();
-}
-
-function updateGameHudInfo() {
-    const weaponEl = document.getElementById('gameHudWeapon');
-    const ammoEl = document.getElementById('gameHudAmmo');
-
-    if (weaponEl) {
-        const weaponName = selectedCharacter?.weapon ? 
-            weaponList[currentWeaponIndex].replace(/_/g, ' ').toUpperCase() : 'NO WEAPON';
-        weaponEl.textContent = weaponName;
+    onKey(e, isDown) {
+        const state = isDown ? 1 : 0;
+        switch(e.code) {
+            case 'KeyW': this.moveState.forward = state; break;
+            case 'KeyS': this.moveState.backward = state; break;
+            case 'KeyA': this.moveState.left = state; break;
+            case 'KeyD': this.moveState.right = state; break;
+            case 'Space': if(isDown) this.interact(); break;
+        }
     }
-    if (ammoEl) ammoEl.textContent = '31 / 200';
-}
 
-function setupUI() {
-    document.addEventListener('keydown', e => onKey(e, true));
-    document.addEventListener('keyup', e => onKey(e, false));
-    document.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('resize', onWindowResize);
-
-    ['posX', 'posY', 'posZ', 'rotX', 'rotY', 'rotZ', 'scale'].forEach(id => {
-        document.getElementById(id).addEventListener('input', updateWeaponFromEditor);
-    });
-
-    document.getElementById('snapshotBtn').addEventListener('click', () => {
-        if (!selectedCharacter) return;
-        const offsets = selectedCharacter.weaponOffsets;
-        console.log(`--- WEAPON OFFSET SNAPSHOT FOR ${selectedCharacterName} ---`);
-        console.log(`Position: { x: ${offsets.position.x.toFixed(4)}, y: ${offsets.position.y.toFixed(4)}, z: ${offsets.position.z.toFixed(4)} }`);
-        console.log(`Rotation (rad): { x: ${offsets.rotation.x.toFixed(4)}, y: ${offsets.rotation.y.toFixed(4)}, z: ${offsets.rotation.z.toFixed(4)} }`);
-        console.log(`Scale: ${offsets.scale.toFixed(4)}`);
-    });
-
-    document.getElementById('resetWeaponBtn').addEventListener('click', resetWeaponEditor);
-    document.getElementById('resetCharBtn').addEventListener('click', () => {
-        if (!selectedCharacter) return;
-        selectedCharacter.group.rotation.set(0, 0, 0);
-        window.setGonkAnimation(selectedCharacter, 'idle');
-        animationIndex = 0;
-        updateAnimationDisplay();
-    });
-
-    document.getElementById('aimBtn_0').addEventListener('click', () => setAimTarget('camera'));
-    const charKeys = Object.keys(characterDefs).filter(k => !k.startsWith('_'));
-    charKeys.forEach((charKey, i) => {
-        const btn = document.getElementById(`aimBtn_${i + 1}`);
-        if(btn) btn.addEventListener('click', () => setAimTarget(charKey));
-    });
-    document.getElementById('aimBtn_clear').addEventListener('click', () => setAimTarget(null));
-}
-
-function setAimTarget(targetName) {
-    if (selectedCharacterName === targetName) { aimTarget = null; } 
-    else { aimTarget = targetName; }
-    if (aimTarget && selectedCharacter && !selectedCharacter.modelDef.parts.slimeBody) {
-        animationIndex = animationStates.indexOf('aim');
-        window.setGonkAnimation(selectedCharacter, 'aim');
-        updateAnimationDisplay();
+    onMouseMove(e) {
+        if (document.pointerLockElement !== document.body) return;
+        this.player.rotation.y -= (e.movementX || 0) * 0.002;
+        this.camera.rotation.x -= (e.movementY || 0) * 0.002;
+        this.camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.camera.rotation.x));
     }
-    updateAimDisplay();
+
+    interact() {
+        this.raycaster.setFromCamera({x:0, y:0}, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.levelObjects.interactables);
+        if (intersects.length > 0 && intersects[0].distance < 2) {
+            const obj = intersects[0].object;
+            if (obj.isDoor) obj.isOpen = !obj.isOpen;
+        }
+    }
+
+    update(deltaTime) {
+        const moveDirection = new THREE.Vector3(this.moveState.left - this.moveState.right, 0, this.moveState.forward - this.moveState.backward);
+        moveDirection.normalize().applyEuler(this.player.rotation).multiplyScalar(this.playerSpeed * deltaTime);
+        this.player.position.add(moveDirection);
+        this.levelObjects.doors.forEach(door => {
+            const targetY = door.isOpen ? 2.5 * 1.5 : 2.5 / 2;
+            door.position.y += (targetY - door.position.y) * 0.1;
+        });
+        this.raycaster.setFromCamera({x:0, y:0}, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.levelObjects.interactables);
+        this.interactionPrompt.style.display = (intersects.length > 0 && intersects[0].distance < 2) ? 'block' : 'none';
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        this.update(this.clock.getDelta());
+        this.renderer.render(this.scene, this.camera);
+    }
 }
 
-function updateWeaponFromEditor() {
-    if (!selectedCharacter || selectedCharacter.modelDef.parts.slimeBody) return;
-    const offsets = selectedCharacter.weaponOffsets;
-    offsets.position.x = parseFloat(document.getElementById('posX').value);
-    offsets.position.y = parseFloat(document.getElementById('posY').value);
-    offsets.position.z = parseFloat(document.getElementById('posZ').value);
-    offsets.rotation.x = THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotX').value));
-    offsets.rotation.y = THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotY').value));
-    offsets.rotation.z = THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotZ').value));
-    offsets.scale = parseFloat(document.getElementById('scale').value);
-    applyWeaponOffsets();
-    updateEditorDisplay();
+// --- Character Viewer Logic ---
+class CharacterViewer {
+    constructor() {
+        this.scene = null; this.camera = null; this.renderer = null; this.player = null;
+        this.characters = new Map(); this.characterDefs = {};
+        this.selectedCharacter = null; this.selectedCharacterName = '';
+        this.aimTarget = null;
+        this.clock = new THREE.Clock();
+        this.moveSpeed = 5; this.rotationSpeed = 0.002;
+        this.moveState = { forward: 0, back: 0, left: 0, right: 0 };
+        this.isMouseDown = false; this.prevMouseX = 0; this.prevMouseY = 0;
+        this.animationStates = ['idle', 'walk', 'run', 'shoot', 'aim'];
+        this.animationIndex = 0;
+        this.currentWeaponIndex = 0; this.weaponList = [];
+        this.furnitureInstances = []; this.selectedFurnitureIndex = -1;
+
+        document.querySelectorAll('.viewer-hud').forEach(el => el.style.display = 'block');
+        this.init();
+    }
+    
+    async init() {
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x87CEEB);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+        this.player = new THREE.Group();
+        this.player.position.set(0, 1.6, 10);
+        this.player.add(this.camera);
+        this.scene.add(this.player);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        this.scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 5);
+        this.scene.add(directionalLight);
+
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x888888 }));
+        floor.rotation.x = -Math.PI / 2;
+        this.scene.add(floor);
+        this.scene.add(new THREE.GridHelper(100, 100));
+
+        await this.loadGameAssets();
+        this.setupUI();
+        this.animate();
+    }
+
+    async loadGameAssets() {
+        const furnitureLoader = new FurnitureLoader();
+        this.furnitureInstances = await furnitureLoader.loadFromManifest('data/furniture.json');
+        this.furnitureInstances.forEach(instance => this.scene.add(instance));
+
+        const response = await fetch('data/characters.json');
+        this.characterDefs = await response.json();
+        const characterPromises = Object.keys(this.characterDefs).filter(k => !k.startsWith('_')).map(async charKey => {
+            const def = this.characterDefs[charKey];
+            const textureFile = def.texture || def.skinTexture;
+            await assetManager.loadTexture(textureFile, `data/skins/${textureFile}`);
+            const char = window.createGonkMesh(def.minecraftModel || 'humanoid', { skinTexture: textureFile }, new THREE.Vector3(...def.position), charKey);
+            if (char) {
+                this.scene.add(char.group);
+                this.characters.set(charKey, char);
+            }
+        });
+        await Promise.all(characterPromises);
+        if (this.characters.size > 0) this.selectCharacter(this.characters.keys().next().value);
+    }
+    
+    setupUI() {
+        document.addEventListener('keydown', e => this.onKey(e, true));
+        document.addEventListener('keyup', e => this.onKey(e, false));
+        document.addEventListener('mousedown', e => this.onMouseDown(e));
+        document.addEventListener('mouseup', () => this.isMouseDown = false);
+        document.addEventListener('mousemove', e => this.onMouseMove(e));
+        document.getElementById('snapshotBtn').addEventListener('click', () => console.log(this.selectedCharacter.weaponOffsets));
+        document.getElementById('aimBtn_clear').addEventListener('click', () => this.setAimTarget(null));
+        Object.keys(this.characterDefs).filter(k => !k.startsWith('_')).forEach((charKey, i) => {
+            const btn = document.getElementById(`aimBtn_${i + 1}`);
+            if(btn) btn.addEventListener('click', () => this.setAimTarget(charKey));
+        });
+    }
+
+    selectCharacter(name) {
+        if (!this.characters.has(name) || !name) return;
+        this.selectedCharacterName = name;
+        this.selectedCharacter = this.characters.get(name);
+        document.getElementById('charState').textContent = name;
+    }
+
+    setAimTarget(targetName) {
+        this.aimTarget = (this.selectedCharacterName === targetName) ? null : targetName;
+        document.getElementById('aimState').textContent = this.aimTarget || 'None';
+    }
+
+    onKey(e, isDown) {
+        const state = isDown ? 1 : 0;
+        switch(e.code) {
+            case 'KeyW': this.moveState.forward = state; break; case 'KeyS': this.moveState.back = state; break;
+            case 'KeyA': this.moveState.left = state; break; case 'KeyD': this.moveState.right = state; break;
+        }
+        if(isDown) {
+            const charKeys = [...this.characters.keys()];
+            switch(e.code) {
+                case 'Space': this.animationIndex = (this.animationIndex + 1) % this.animationStates.length; if(this.selectedCharacter) window.setGonkAnimation(this.selectedCharacter, this.animationStates[this.animationIndex]); document.getElementById('animState').textContent = this.animationStates[this.animationIndex]; break;
+                case 'KeyR': this.player.position.set(0, 1.6, 10); this.player.rotation.set(0,0,0); this.camera.rotation.set(0,0,0); break;
+                case `Digit${charKeys.indexOf('stormtrooper')+1}`: this.selectCharacter('stormtrooper'); break;
+                case `Digit${charKeys.indexOf('wookiee')+1}`: this.selectCharacter('wookiee'); break;
+                case `Digit${charKeys.indexOf('gungan')+1}`: this.selectCharacter('gungan'); break;
+                // Add other character selections if needed
+            }
+        }
+    }
+
+    onMouseDown(e) { if (!e.target.closest('.ui-panel')) { this.isMouseDown = true; this.prevMouseX = e.clientX; this.prevMouseY = e.clientY; }}
+    onMouseMove(e) {
+        if (!this.isMouseDown) return;
+        const deltaX = e.clientX - this.prevMouseX; const deltaY = e.clientY - this.prevMouseY;
+        this.player.rotation.y -= deltaX * this.rotationSpeed;
+        this.camera.rotation.x -= deltaY * this.rotationSpeed;
+        this.camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.camera.rotation.x));
+        this.prevMouseX = e.clientX; this.prevMouseY = e.clientY;
+    }
+    
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        const deltaTime = this.clock.getDelta();
+        const moveDirection = new THREE.Vector3(this.moveState.right - this.moveState.left, 0, this.moveState.back - this.moveState.forward);
+        moveDirection.normalize().applyEuler(this.player.rotation).multiplyScalar(this.moveSpeed * deltaTime);
+        this.player.position.add(moveDirection);
+        this.characters.forEach(char => window.updateGonkAnimation(char, {deltaTime}));
+        this.renderer.render(this.scene, this.camera);
+    }
 }
 
-function applyWeaponOffsets() {
-    if (!selectedCharacter?.weapon) return;
-    const { baseOffset, baseRotation } = selectedCharacter.weapon.userData;
-    selectedCharacter.weapon.position.copy(baseOffset).add(selectedCharacter.weaponOffsets.position);
-    selectedCharacter.weapon.rotation.copy(baseRotation).reorder('YXZ');
-    selectedCharacter.weapon.rotation.x += selectedCharacter.weaponOffsets.rotation.x;
-    selectedCharacter.weapon.rotation.y += selectedCharacter.weaponOffsets.rotation.y;
-    selectedCharacter.weapon.rotation.z += selectedCharacter.weaponOffsets.rotation.z;
-    selectedCharacter.weapon.scale.setScalar(selectedCharacter.weaponOffsets.scale);
-}
-
-function updateEditorDisplay() {
-    if (!selectedCharacter) return;
-    const { position, rotation, scale } = selectedCharacter.weaponOffsets;
-    document.getElementById('posX_val').textContent = position.x.toFixed(2);
-    document.getElementById('posY_val').textContent = position.y.toFixed(2);
-    document.getElementById('posZ_val').textContent = position.z.toFixed(2);
-    document.getElementById('rotX_val').textContent = THREE.MathUtils.radToDeg(rotation.x).toFixed(1);
-    document.getElementById('rotY_val').textContent = THREE.MathUtils.radToDeg(rotation.y).toFixed(1);
-    document.getElementById('rotZ_val').textContent = THREE.MathUtils.radToDeg(rotation.z).toFixed(1);
-    document.getElementById('scale_val').textContent = scale.toFixed(2);
-}
-
-function updateEditorFromCharacter() {
-    if (!selectedCharacter) return;
-    const { position, rotation, scale } = selectedCharacter.weaponOffsets;
-    document.getElementById('posX').value = position.x;
-    document.getElementById('posY').value = position.y;
-    document.getElementById('posZ').value = position.z;
-    document.getElementById('rotX').value = THREE.MathUtils.radToDeg(rotation.x);
-    document.getElementById('rotY').value = THREE.MathUtils.radToDeg(rotation.y);
-    document.getElementById('rotZ').value = THREE.MathUtils.radToDeg(rotation.z);
-    document.getElementById('scale').value = scale;
-    updateEditorDisplay();
-}
-
-function applyCharacterWeaponDefaults() {
-    if (!selectedCharacter) return;
-    const charDef = characterDefs[selectedCharacterName];
-    const modelType = charDef.minecraftModel || 'humanoid';
-    const weaponName = weaponList[currentWeaponIndex];
-    const weaponTemplate = window.weaponIcons.loadedWeapons.get(weaponName);
-    const weaponConfig = weaponTemplate?.userData.config;
-    const weaponCategory = weaponConfig?.category;
-    let dataToApply = null;
-    if (weaponConfig?.offsets) dataToApply = weaponConfig.offsets;
-    else if (charDef.weaponOffsetByCategory?.[weaponCategory]) dataToApply = charDef.weaponOffsetByCategory[weaponCategory];
-    else if (characterDefs._defaults.weaponOffsetByCategory?.[weaponCategory]) dataToApply = characterDefs._defaults.weaponOffsetByCategory[weaponCategory];
-    else if (modelType === 'humanoid' && characterDefs._defaults.humanoidWeaponOffsets) dataToApply = characterDefs._defaults.humanoidWeaponOffsets;
-    if (dataToApply) {
-        selectedCharacter.weaponOffsets.position.set(dataToApply.position.x, dataToApply.position.y, dataToApply.position.z);
-        selectedCharacter.weaponOffsets.rotation.set(dataToApply.rotation.x, dataToApply.rotation.y, dataToApply.rotation.z);
-        selectedCharacter.weaponOffsets.scale = dataToApply.scale;
+// --- Startup Router ---
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('play') === 'true') {
+        new LevelPlayer();
     } else {
-        selectedCharacter.weaponOffsets.position.set(0,0,0);
-        selectedCharacter.weaponOffsets.rotation.set(0,0,0);
-        selectedCharacter.weaponOffsets.scale = 1.0;
+        new CharacterViewer();
     }
-    updateEditorFromCharacter();
-    applyWeaponOffsets();
-}
-
-function resetWeaponEditor() { applyCharacterWeaponDefaults(); }
-
-function attachCurrentWeapon() {
-    if (!selectedCharacter || weaponList.length === 0 ) return;
-    if (selectedCharacter.modelDef.parts.slimeBody) {
-        if(selectedCharacter.weapon) window.weaponIcons.removeWeapon(selectedCharacter);
-        updateWeaponDisplay();
-        return;
-    }
-    applyCharacterWeaponDefaults();
-    window.weaponIcons.attachToCharacter(selectedCharacter, weaponList[currentWeaponIndex]);
-    applyWeaponOffsets();
-    updateWeaponDisplay();
-}
-
-function updateAnimationDisplay() { document.getElementById('animState').textContent = animationStates[animationIndex]; }
-function updateWeaponDisplay() { const el = document.getElementById('weaponState'); el.textContent = selectedCharacter?.weapon ? weaponList[currentWeaponIndex].replace(/_/g, ' ') : 'none'; }
-function updateAimDisplay() { const el = document.getElementById('aimState'); const targetDef = characterDefs[aimTarget]; el.textContent = targetDef ? targetDef.name : (aimTarget || 'None'); }
-function onWindowResize() { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
-
-function onKey(event, isDown) {
-    const state = isDown ? 1 : 0;
-    switch (event.code) {
-        case 'KeyW': moveState.forward = state; break;
-        case 'KeyS': moveState.back = state; break;
-        case 'KeyA': moveState.left = state; break;
-        case 'KeyD': moveState.right = state; break;
-    }
-
-    if (isDown) {
-        const charKeys = Object.keys(characterDefs).filter(k => !k.startsWith('_'));
-        switch (event.code) {
-            case 'KeyY': cycleFurniture(); break;
-            case 'KeyH': toggleHUD(); break;
-            case 'Space':
-                animationIndex = (animationIndex + 1) % animationStates.length;
-                if (selectedCharacter) {
-                    if (selectedCharacter.modelDef.parts.slimeBody && (animationStates[animationIndex] === 'aim' || animationStates[animationIndex] === 'shoot')) animationIndex = 0;
-                    window.setGonkAnimation(selectedCharacter, animationStates[animationIndex]);
-                    if (animationStates[animationIndex] !== 'aim') { aimTarget = null; updateAimDisplay(); }
-                }
-                updateAnimationDisplay();
-                break;
-            case 'KeyQ':
-                if (weaponList.length > 0) {
-                    currentWeaponIndex = (currentWeaponIndex + 1) % weaponList.length;
-                    attachCurrentWeapon();
-                    if (isGameHud) updateGameHudInfo();
-                }
-                break;
-            case 'KeyE':
-                if (selectedCharacter && !selectedCharacter.modelDef.parts.slimeBody) {
-                    if (selectedCharacter.weapon) window.weaponIcons.removeWeapon(selectedCharacter);
-                    else attachCurrentWeapon();
-                    if (isGameHud) updateGameHudInfo();
-                }
-                break;
-            case 'KeyT': break;
-            case 'KeyR': player.position.set(0, 1.6, 10); player.rotation.set(0,0,0); camera.rotation.set(0,0,0); break;
-            case 'Digit1': selectCharacter(charKeys[0]); break;
-            case 'Digit2': selectCharacter(charKeys[1]); break;
-            case 'Digit3': selectCharacter(charKeys[2]); break;
-            case 'Digit4': selectCharacter(charKeys[3]); break;
-            case 'Digit5': selectCharacter(charKeys[4]); break;
-            case 'Digit6': selectCharacter(charKeys[5]); break;
-            case 'Digit7': selectCharacter(charKeys[6]); break;
-        }
-    }
-}
-
-function onMouseDown(event) { if (event.target.closest('.ui-panel')) return; isMouseDown = true; prevMouseX = event.clientX; prevMouseY = event.clientY; }
-function onMouseUp(event) { isMouseDown = false; }
-function onMouseMove(event) {
-    if (!isMouseDown) return;
-    const deltaX = event.clientX - prevMouseX;
-    const deltaY = event.clientY - prevMouseY;
-    player.rotation.y -= deltaX * rotationSpeed;
-    camera.rotation.x -= deltaY * rotationSpeed;
-    camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
-    prevMouseX = event.clientX;
-    prevMouseY = event.clientY;
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    const deltaTime = clock.getDelta();
-    const moveDirection = new THREE.Vector3(moveState.right - moveState.left, 0, moveState.back - moveState.forward);
-    moveDirection.normalize().applyEuler(player.rotation).multiplyScalar(moveSpeed * deltaTime);
-    player.position.add(moveDirection);
-    let targetWorldPos = null;
-    if (aimTarget) {
-        if (aimTarget === 'camera') camera.getWorldPosition(targetWorldPos = new THREE.Vector3());
-        else if (characters.has(aimTarget)) {
-            const aimPart = characters.get(aimTarget).parts.head || characters.get(aimTarget).parts.slimeBody;
-            if (aimPart) aimPart.getWorldPosition(targetWorldPos = new THREE.Vector3());
-        }
-    }
-    characters.forEach((char) => {
-        let options = { deltaTime };
-        if (char === selectedCharacter) {
-            options.isPlayer = true;
-            if (targetWorldPos && !selectedCharacter.modelDef.parts.slimeBody) options.target = targetWorldPos;
-        }
-        window.updateGonkAnimation(char, options);
-    });
-    renderer.render(scene, camera);
-}
-
-window.onload = init;
+});
