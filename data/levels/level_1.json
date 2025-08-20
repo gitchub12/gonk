@@ -1,77 +1,1794 @@
 {
-    "_comment": "BROWSERFIREFOXHIDE data/levels/level_1.json",
-    "settings": {
-        "width": 64,
-        "height": 64,
-        "defaults": {}
-    },
-    "layers": {
-        "subfloor": [],
-        "floor": [
-            [ "10,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "11,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "12,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "10,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "11,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "12,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "10,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "11,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "12,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "15,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "16,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "17,10", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "15,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "16,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "17,11", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "15,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "16,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ],
-            [ "17,12", { "type": "texture", "key": "/data/pngs/floor/floor_1.png", "rotation": 0 } ]
-        ],
-        "spawns": [
-            [ "11,11", { "number": 1, "rotation": 0 } ]
-        ],
-        "walls": [
-            [ "V_9_10", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_9_11", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_9_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_10_9", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_11_9", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_12_9", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_10_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_11_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_12_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_12_10", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_12_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_12_11", { "type": "texture", "key": "/data/pngs/door/door_1.png" } ],
-            [ "H_15_9", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_16_9", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_17_9", { "type": "texture", "key": "/data/pngs/door/door_2.png", "properties": {"isLevelExit": true, "targetLevel": 2}} ],
-            [ "V_17_10", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_17_11", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "V_17_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_15_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_16_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ],
-            [ "H_17_12", { "type": "texture", "key": "/data/pngs/wall/wall_1.png" } ]
-        ],
-        "ceiling": [
-            [ "10,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "11,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "12,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "10,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "11,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "12,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "10,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "11,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "12,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "15,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "16,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "17,10", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "15,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "16,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "17,11", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "15,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "16,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ],
-            [ "17,12", { "type": "texture", "key": "/data/pngs/ceiling/ceiling_1.png", "rotation": 0 } ]
-        ]
-    }
+  "settings": {
+    "width": 64,
+    "height": 64,
+    "defaults": {}
+  },
+  "layers": {
+    "floor": [
+      [
+        "10,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_1.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "12,10",
+        {
+          "type": "npc",
+          "key": "gungan1",
+          "rotation": 0
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "11,11",
+        {
+          "number": 1,
+          "rotation": 0
+        }
+      ]
+    ],
+    "walls": [
+      [
+        "V_9_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_9_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_9_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_10_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_11_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_12_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_10_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_11_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_12_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_12_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_12_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_12_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/door_1.png"
+        }
+      ],
+      [
+        "H_15_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_16_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_17_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/door_2.png",
+          "properties": {
+            "isLevelExit": true,
+            "targetLevel": 2
+          }
+        }
+      ],
+      [
+        "V_17_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_17_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_17_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_15_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_16_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "H_17_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ]
+    ],
+    "tapestry": [
+      [
+        "V_17_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/tapestry/tapestry_1.png"
+        }
+      ]
+    ],
+    "water": [
+      [
+        "12,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "floater": [
+      [
+        "16,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "decor": [
+      [
+        "17,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/decor/decor_1.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "ceiling": [
+      [
+        "10,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/ceiling/ceiling_2.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "sky": [
+      [
+        "19,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "20,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "20,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "7,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "6,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "5,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "5,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "5,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "6,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "6,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "6,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "7,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "20,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "20,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "24,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "25,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "25,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "26,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "25,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "24,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "24,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "24,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "23,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "24,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "20,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "21,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "22,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/sky/sky_9d.png",
+          "rotation": 0
+        }
+      ]
+    ]
+  }
 }

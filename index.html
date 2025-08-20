@@ -4,79 +4,67 @@
     <meta charset="UTF-8">
     <meta name="file-identifier" content="index.html; BROWSERFIREFOXHIDE and filename must be in the first six physical lines of the file. DO NOT REMOVE!">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gonk Viewer / Player</title>
+    <title>Gonk</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background-color: #111; color: #eee; }
+        body { margin: 0; overflow: hidden; background: #000; cursor: crosshair; }
         canvas { display: block; }
-
-        /* General UI Panel Style */
-        .ui-panel { position: absolute; color: #FFC500; background-color: rgba(20, 20, 30, 0.75); padding: 10px; border-radius: 5px; border: 1px solid rgba(255, 197, 0, 0.4); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); font-size: 14px; user-select: none; }
-        .ui-panel h4 { margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid rgba(255, 197, 0, 0.3); padding-bottom: 5px; color: #fff; }
-        .ui-panel label { display: block; margin: 8px 0; font-weight: bold;}
-        .ui-panel input[type="range"] { width: 100%; -webkit-appearance: none; background: #555; height: 3px; margin-top: 5px;}
-        .ui-panel input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #FFC500; cursor: pointer; border-radius: 50%;}
-        .ui-panel button { width: auto; padding: 8px 12px; margin-top: 5px; background-color: rgba(255, 197, 0, 0.2); border: 1px solid rgba(255, 197, 0, 0.5); color: #FFC500; border-radius: 3px; font-weight: bold; cursor: pointer; }
-        .ui-panel button:hover { background-color: rgba(255, 197, 0, 0.4); }
-
-        /* Character Viewer Specific UI */
-        .viewer-hud { display: none; } /* Hidden by default */
-        #infoPanel { left: 10px; top: 10px; width: 220px; }
-        #editorPanel { right: 10px; top: 10px; width: 250px; }
-        #aimPanel { bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; }
-        #aimPanel button { min-width: 40px; }
-
-        /* Game Player Specific UI */
-        .player-hud { display: none; } /* Hidden by default */
-        #crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: white; border-radius: 50%; pointer-events: none; border: 1px solid black; }
-        #interaction-prompt { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 5px; color: white; }
-
+        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; display: flex; justify-content: center; align-items: center; z-index: 1000; }
     </style>
 </head>
 <body>
-    <div id="infoPanel" class="ui-panel viewer-hud">
-        <h4>Controls</h4>
-        <b>Y:</b> Cycle Furniture<br>
-        <b>WASD:</b> Move camera<br>
-        <b>Mouse Drag:</b> Look around<br>
-        <b>Space:</b> Cycle animations<br>
-        <b>Q:</b> Switch weapons<br>
-        <b>E:</b> Toggle weapon<br>
-        <b>R:</b> Reset camera<br>
-        <b>1-7:</b> Select character<br>
-        <hr>
-        <b>Character:</b> <span id="charState">...</span><br>
-        <b>Animation:</b> <span id="animState">idle</span><br>
-        <b>Weapon:</b> <span id="weaponState">none</span><br>
-        <b>Aiming At:</b> <span id="aimState">None</span>
+    <div id="loadingScreen">
+        <p id="loadingStatus">Initializing...</p>
     </div>
-    <div id="editorPanel" class="ui-panel viewer-hud">
-        <h4>Weapon Position Editor</h4>
-        <label>X-Offset: <span id="posX_val">0.00</span></label><input type="range" id="posX" min="-10" max="10" value="0" step="0.1">
-        <label>Y-Offset (Up/Down): <span id="posY_val">0.00</span></label><input type="range" id="posY" min="-20" max="20" value="0" step="0.1">
-        <label>Z-Offset (In/Out): <span id="posZ_val">0.00</span></label><input type="range" id="posZ" min="-10" max="10" value="0" step="0.1">
-        <hr>
-        <label>Pitch: <span id="rotX_val">0.0</span></label><input type="range" id="rotX" min="-180" max="180" value="0" step="1">
-        <label>Yaw: <span id="rotY_val">0.0</span></label><input type="range" id="rotY" min="-180" max="180" value="0" step="1">
-        <label>Roll: <span id="rotZ_val">0.0</span></label><input type="range" id="rotZ" min="-180" max="180" value="0" step="1">
-        <hr>
-        <label>Scale: <span id="scale_val">1.00</span></label><input type="range" id="scale" min="0.02" max="3.0" value="0.05" step="0.01">
-        <button id="snapshotBtn">Snapshot to Console</button>
-    </div>
-    <div id="aimPanel" class="ui-panel viewer-hud">
-        <h4>Aim Target</h4>
-        <button id="aimBtn_0">Cam</button>
-        <button id="aimBtn_1">1</button><button id="aimBtn_2">2</button><button id="aimBtn_3">3</button><button id="aimBtn_4">4</button>
-        <button id="aimBtn_5">5</button><button id="aimBtn_6">6</button><button id="aimBtn_7">7</button>
-        <button id="aimBtn_clear">X</button>
-    </div>
-
-    <div id="crosshair" class="player-hud"></div>
-    <div id="interaction-prompt" class="player-hud">Press [SPACE] to Open</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="gonk_models.js"></script>
-    <script src="weapon_icons.js"></script>
-    <script src="furniture_loader.js"></script>
-    <script src="main.js"></script>
+    
+    <script>
+        class ScriptLoader {
+            constructor() {
+                this.scriptsToLoad = [
+                    // Core files from the new structure
+                    { path: 'main.js', name: 'Main Engine' },
+                    { path: 'character_config.js', name: 'Character Config' },
+                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
+                    { path: 'environment_and_physics.js', name: 'Environment & Physics' },
+                    { path: 'player_gear.js', name: 'Player Gear' },
+                    { path: 'audio_system.js', name: 'Audio System' },
+                    { path: 'gonk_models.js', name: 'Gonk Models' },
+                    { path: 'weapon_icons.js', name: 'Weapon Icons' }
+                ];
+            }
+
+            async loadGame() {
+                const loadingStatus = document.getElementById('loadingStatus');
+                for (const script of this.scriptsToLoad) {
+                    if (loadingStatus) loadingStatus.textContent = `Loading ${script.name}...`;
+                    try {
+                        await this.loadScript(script.path);
+                    } catch (error) {
+                        if (loadingStatus) loadingStatus.textContent = `CRITICAL ERROR loading ${script.name}.`;
+                        return;
+                    }
+                }
+                if (typeof initGame === 'function') {
+                    initGame();
+                }
+            }
+
+            loadScript(path) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = path;
+                    script.async = false;
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error(`Failed to load script: ${path}`));
+                    document.head.appendChild(script);
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = new ScriptLoader();
+            loader.loadGame();
+        });
+    </script>
 </body>
 </html>
