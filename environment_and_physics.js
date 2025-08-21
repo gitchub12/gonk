@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// New consolidated file for level management, rendering, and physics.
+// This is the complete, unabbreviated file.
 
 // === LEVEL RENDERER ===
 class LevelRenderer {
@@ -10,8 +10,13 @@ class LevelRenderer {
 
     buildLevelFromData(levelData) {
         const layers = levelData.layers || {};
+        
+        if (layers.subfloor) this.createGeometry(layers.subfloor, -0.01, -Math.PI / 2);
         if (layers.floor) this.createGeometry(layers.floor, 0, -Math.PI / 2);
+        if (layers.water) this.createGeometry(layers.water, 0.2, -Math.PI / 2);
         if (layers.ceiling) this.createGeometry(layers.ceiling, this.wallHeight, Math.PI / 2);
+        if (layers.sky) this.createGeometry(layers.sky, this.wallHeight + 0.01, Math.PI / 2);
+
         if (layers.walls) this.createWalls(layers.walls);
         if (layers.npcs) this.createNPCs(layers.npcs);
 
@@ -20,6 +25,8 @@ class LevelRenderer {
             const [x, z] = posStr.split(',').map(Number);
             game.camera.position.set(x * this.gridSize + this.gridSize/2, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, z * this.gridSize + this.gridSize/2);
             if (inputHandler) inputHandler.yaw = (item.rotation || 0) * -Math.PI / 2;
+        } else {
+             game.camera.position.set(0, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, 0);
         }
     }
 
@@ -63,10 +70,18 @@ class LevelRenderer {
     createNPCs(items) {
         for (const [pos, item] of items) {
             const [x, z] = pos.split(',').map(Number);
-            const config = CHARACTER_CONFIG[item.key.replace(/\d+$/, '')] || {};
+            const characterId = item.key.replace(/\d+$/, '');
+            const config = CHARACTER_CONFIG[characterId];
+            if (!config) {
+                console.warn(`No character config found for '${characterId}'`);
+                continue;
+            }
+            
+            const skinTexture = config.skinTexture.replace('.png','');
+
             const char = window.createGonkMesh(
                 config.minecraftModel || 'humanoid',
-                { skinTexture: item.key + '.png' },
+                { skinTexture: skinTexture },
                 new THREE.Vector3(x * this.gridSize + this.gridSize/2, 0, z * this.gridSize + this.gridSize/2),
                 item.key
             );
@@ -82,11 +97,13 @@ class LevelRenderer {
         const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x111111 }));
         floor.rotation.x = -Math.PI / 2;
         game.scene.add(floor);
-        game.scene.add(new THREE.GridHelper(100, 100));
+        const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444);
+        gridHelper.position.y = 0.01;
+        game.scene.add(gridHelper);
     }
 }
 
-// === LEVEL MANAGER ===
+// === LEVEL MANAGER & DOOR ===
 class Door {
     constructor(mesh, config = {}) {
         this.mesh = mesh;
@@ -98,10 +115,7 @@ class Door {
     
     open() {
         if (this.isOpen) return;
-        if (this.isLevelTransition) {
-            levelManager.loadLevel(this.targetLevel);
-            return;
-        }
+        if (this.isLevelTransition) { levelManager.loadLevel(this.targetLevel); return; }
         this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.isOpen = true;
         setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME);

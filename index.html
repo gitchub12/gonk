@@ -45,8 +45,11 @@
                         return;
                     }
                 }
+                // Call initGame directly once all scripts are loaded
                 if (typeof initGame === 'function') {
                     initGame();
+                } else {
+                    console.error('initGame function not found!');
                 }
             }
 
@@ -61,6 +64,30 @@
                 });
             }
         }
+        
+        // GAME LOOP FUNCTIONS - MOVED HERE TO GUARANTEE EXECUTION ORDER
+        async function initGame() {
+            console.log('--- GAME INITIALIZING ---');
+            await assetManager.loadAll();
+            game.init();
+            audioSystem.init(game.camera);
+            await levelManager.loadLevel(1); // Default to level 1, but will be overwritten by playtest data from localStorage
+            document.getElementById('loadingScreen').style.display = 'none';
+            startGameLoop();
+        }
+
+        function startGameLoop() {
+            function gameLoop() {
+                requestAnimationFrame(gameLoop);
+                if (!game.isInitialized) return;
+                game.update(performance.now());
+                physics.updateMovement(game.deltaTime, inputHandler.keys, game.camera, false);
+                game.render();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the loading process
         document.addEventListener('DOMContentLoaded', () => {
             const loader = new ScriptLoader();
             loader.loadGame();

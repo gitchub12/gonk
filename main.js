@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE main.js
-// This file is the new heart of the game, containing the engine, game loop, input, and constants.
+// This file now only DEFINES and INSTANTIATES the core classes. The game loop has been moved to index.html.
 
 // === GAME GLOBAL CONSTANTS ===
 const GAME_GLOBAL_CONSTANTS = {
@@ -130,27 +130,6 @@ class Game {
   }
 }
 
-// === MAIN GAME LOOP ===
-async function initGame() {
-    console.log('--- GAME INITIALIZING ---');
-    await assetManager.loadAll();
-    game.init();
-    audioSystem.init(game.camera);
-    await levelManager.loadLevel(1); // Default to level 1, but will be overwritten by playtest data
-    document.getElementById('loadingScreen').style.display = 'none';
-    startGameLoop();
-}
-
-function startGameLoop() {
-    function gameLoop() {
-        requestAnimationFrame(gameLoop);
-        if (!game.isInitialized) return;
-        game.update(performance.now());
-        physics.updateMovement(game.deltaTime, inputHandler.keys, game.camera, false);
-        game.render();
-    }
-    requestAnimationFrame(gameLoop);
-}
 
 // === INSTANTIATION ===
 window.game = new Game();
