@@ -9,7 +9,7 @@ const GAME_GLOBAL_CONSTANTS = {
     COLLISION_RADIUS: 0.4
   },
   MOVEMENT: {
-    SPEED: 0.04,
+    SPEED: 0.028,
     FRICTION: 0.85,
     BOB_SPEED: 8,
     BOB_AMOUNT: 0.02
@@ -94,6 +94,14 @@ class Game {
         maxAmmo: GAME_GLOBAL_CONSTANTS.WEAPONS.PAMPHLET_MAX_AMMO,
         gameOver: false 
     };
+    this.hudGonkIcon = {
+        basePath: 'data/pngs/hologonk/hologonk_',
+        totalFrames: 40,
+        currentFrame: 1,
+        animTimer: 0,
+        animSpeed: 0.05, // Time in seconds between frames
+        needsUpdate: true
+    };
   }
 
   init() {
@@ -139,7 +147,9 @@ class Game {
       const healthFill = document.querySelector('.health-fill');
       const healthLabel = document.querySelector('.health-label');
       const ammoDisplay = document.getElementById('gameHudAmmo');
-
+      const gonkImage = document.getElementById('gonkImage');
+      
+      // Health and Ammo
       if (healthFill && healthLabel) {
           const healthPercent = Math.max(0, (this.state.health / GAME_GLOBAL_CONSTANTS.PLAYER.MAX_HEALTH) * 100);
           healthFill.style.width = `${healthPercent}%`;
@@ -147,6 +157,32 @@ class Game {
       }
       if (ammoDisplay) {
           ammoDisplay.textContent = `${this.state.ammo} / ${this.state.maxAmmo}`;
+      }
+
+      // Animated Icon
+      const icon = this.hudGonkIcon;
+      icon.animTimer += this.deltaTime;
+
+      if (icon.animTimer >= icon.animSpeed) {
+          let frameChanged = false;
+          if (inputHandler.keys['KeyW']) {
+              icon.currentFrame++;
+              if (icon.currentFrame > icon.totalFrames) icon.currentFrame = 1;
+              frameChanged = true;
+          } else if (inputHandler.keys['KeyS']) {
+              icon.currentFrame--;
+              if (icon.currentFrame < 1) icon.currentFrame = icon.totalFrames;
+              frameChanged = true;
+          }
+          if (frameChanged) {
+              icon.animTimer = 0;
+              icon.needsUpdate = true;
+          }
+      }
+
+      if (icon.needsUpdate && gonkImage) {
+          gonkImage.src = `${icon.basePath}${icon.currentFrame}.png`;
+          icon.needsUpdate = false;
       }
   }
 

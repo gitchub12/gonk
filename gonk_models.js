@@ -115,7 +115,7 @@ class GonkModelSystem {
     const modelDef = this.models[modelType];
     const skinTexture = window.assetManager.getTexture(config.skinTexture);
     if (!modelDef || !skinTexture) {
-      Logger.error(`Failed to create Gonk mesh for ${characterType}`);
+      Logger.error(`Failed to create Gonk mesh for ${characterType} with skin ${config.skinTexture}`);
       return null;
     }
     const skinFormat = this.detectSkinFormat(skinTexture);
@@ -148,12 +148,28 @@ class GonkModelSystem {
       if (partDef.parent && character.parts[partDef.parent]) character.parts[partDef.parent].add(partGroup);
       else character.group.add(partGroup);
     }
-    character.group.scale.setScalar(modelDef.scale);
-    let groundOffset = 0;
-    if (modelType === 'slime') groundOffset = (modelDef.parts.slimeBody.size[1] / 2) * scaleY * modelDef.scale;
-    else if (modelType === 'snowgolem') groundOffset = (modelDef.parts.base.size[1] / 2 + 10) * scaleY * modelDef.scale;
-    else groundOffset = 18 * scaleY * modelDef.scale;
+    
+    // Scale Correction
+    const masterModelScale = 0.45; // Scales a 2m model to fit in a ~1m world
+    character.group.scale.setScalar(modelDef.scale * masterModelScale);
+    
+    // Ground Offset Calculation
+    let totalHeight = 0;
+    let bottomY = 0;
+    if (modelType === 'humanoid') {
+        totalHeight = (modelDef.parts.head.size[1] + modelDef.parts.body.size[1] + modelDef.parts.leftLeg.size[1]);
+        bottomY = modelDef.parts.leftLeg.position[1] - (modelDef.parts.leftLeg.size[1] / 2);
+    } else if (modelType === 'slime') {
+        totalHeight = modelDef.parts.slimeBody.size[1];
+        bottomY = modelDef.parts.slimeBody.position[1] - (modelDef.parts.slimeBody.size[1] / 2);
+    } else { // Fallback for golems etc.
+        totalHeight = 32; // Approx pixel height
+        bottomY = -12; // Approx leg bottom
+    }
+
+    const groundOffset = -bottomY * scaleY * modelDef.scale * masterModelScale;
     character.group.position.copy(position).y += groundOffset;
+
     return character;
   }
 

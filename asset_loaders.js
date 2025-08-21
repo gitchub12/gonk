@@ -1,67 +1,106 @@
 // BROWSERFIREFOXHIDE asset_loaders.js
-// This is the complete, unabbreviated file.
+// This file has been rewritten for dynamic asset discovery.
 
-// === RAW ASSET LOADER ===
+// === DYNAMIC ASSET LOADER ===
 class AssetManager {
   constructor() {
     this.textures = {};
     this.materials = {};
-    this.assetDefs = {
-      textures: {
-        // Ceilings
-        'ceiling_1': 'data/pngs/ceiling/ceiling_1.png',
-        'ceiling_2': 'data/pngs/ceiling/ceiling_2.png',
-        'ceiling_4': 'data/pngs/ceiling/ceiling_4.png',
-        'ceiling_5': 'data/pngs/ceiling/ceiling_5.png',
-        'ceiling_6': 'data/pngs/ceiling/ceiling_6.png',
-        // Doors
-        'door_1': 'data/pngs/door/door_1.png',
-        'door_2': 'data/pngs/door/door_2.png',
-        // Floors
-        'floor_1': 'data/pngs/floor/floor_1.png',
-        'floor_2': 'data/pngs/floor/floor_2.png',
-        'floor_3': 'data/pngs/floor/floor_3.png',
-        'floor_4': 'data/pngs/floor/floor_4.png',
-        // Walls
-        'wall_1': 'data/pngs/wall/wall_1.png',
-        'wall_2': 'data/pngs/wall/wall_2.png',
-        'wall_3': 'data/pngs/wall/wall_3.png',
-        'wall_4': 'data/pngs/wall/wall_4.png',
-        // Pamphlets
-        'pamphlet1': 'data/weapons/pamphlets/pamphlet1.png',
-        'pamphlet2': 'data/weapons/pamphlets/pamphlet2.png',
-        'pamphlet3': 'data/weapons/pamphlets/pamphlet3.png',
-        // Special Textures
-        'tapestry_1': 'data/pngs/tapestry/tapestry_1.png',
-        'water_1': 'data/pngs/water/water_1.png',
-        'sky_1': 'data/pngs/sky/sky_1.png',
-        'decor_1': 'data/pngs/decor/decor_1.png',
-        'floater_1': 'data/pngs/floater/floater_1.png',
-        'dangler_1': 'data/pngs/dangler/dangler_1.png'
-      }
+    this.sounds = {};
+    this.pamphletTextureNames = [];
+
+    this.textureCategories = [
+        'ceiling', 'dangler', 'decor', 'door', 'floater', 'floor', 
+        'hologonk', 'sky', 'subfloor', 'tapestry', 'wall', 'water'
+    ];
+    this.soundDefs = {
+        'dooropen': 'data/sounds/dooropen.wav',
+        'dooropen2': 'data/sounds/dooropen2.wav'
     };
-    this.pamphletTextureNames = ['pamphlet1', 'pamphlet2', 'pamphlet3'];
+  }
+
+  async fetchDirectoryListing(path) {
+      try {
+          const response = await fetch(path);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          return Array.from(doc.querySelectorAll('a'))
+              .map(a => a.getAttribute('href'))
+              .filter(href => href.endsWith('.png'));
+      } catch (e) {
+          console.error(`Failed to fetch or parse directory listing for "${path}":`, e);
+          return [];
+      }
+  }
+
+  async discoverAndLoadAssets() {
+      const loader = new THREE.TextureLoader();
+      let promises = [];
+
+      for (const category of this.textureCategories) {
+          const path = `data/pngs/${category}/`;
+          const files = await this.fetchDirectoryListing(path);
+          for (const file of files) {
+              const name = file.replace(/\.png$/, '');
+              const fullPath = path + file;
+              if (this.textures[name]) continue;
+              promises.push(this.loadTextureWithPromise(loader, name, fullPath));
+          }
+      }
+      
+      const pamphletPath = 'data/weapons/pamphlets/';
+      const pamphletFiles = await this.fetchDirectoryListing(pamphletPath);
+      for (const file of pamphletFiles) {
+          const name = file.replace(/\.png$/, '');
+          const fullPath = pamphletPath + file;
+           if (this.textures[name]) continue;
+           this.pamphletTextureNames.push(name);
+           promises.push(this.loadTextureWithPromise(loader, name, fullPath));
+      }
+      
+      await Promise.all(promises);
+  }
+
+  loadTextureWithPromise(loader, name, path) {
+      return new Promise((resolve) => {
+          loader.load(path,
+              (texture) => { 
+                  texture.magFilter = THREE.NearestFilter;
+                  texture.minFilter = THREE.NearestFilter;
+                  this.textures[name] = texture; 
+                  resolve(); 
+              },
+              undefined,
+              (error) => { console.warn(`Could not load texture '${name}' from path '${path}'`, error); this.textures[name] = null; resolve(); }
+          );
+      });
+  }
+  
+  async loadSounds() {
+      const audioLoader = new THREE.AudioLoader();
+      const promises = [];
+      for (const [name, path] of Object.entries(this.soundDefs)) {
+          promises.push(new Promise((resolve) => {
+              audioLoader.load(path, (buffer) => {
+                  this.sounds[name] = buffer;
+                  resolve();
+              }, undefined, () => {
+                  console.warn(`Could not load sound '${name}' from path '${path}'`);
+                  resolve()
+              });
+          }));
+      }
+      await Promise.all(promises);
   }
 
   async loadAll() {
-    await this.loadDefinedTextures();
+    await this.discoverAndLoadAssets();
     await this.loadCharacterSkins();
+    await this.loadSounds();
     this.createMaterials();
-  }
-  
-  async loadDefinedTextures() {
-    const loader = new THREE.TextureLoader();
-    const promises = [];
-    for (const [name, path] of Object.entries(this.assetDefs.textures)) {
-      promises.push( new Promise((resolve) => {
-          loader.load(path, 
-            (texture) => { this.textures[name] = texture; resolve() },
-            undefined, 
-            (error) => { console.warn(`Could not load texture '${name}' from path '${path}'`, error); this.textures[name] = null; resolve() }
-          );
-      }));
-    }
-    await Promise.all(promises);
+    console.log(`Asset loading complete. ${Object.keys(this.textures).length} textures and ${Object.keys(this.sounds).length} sounds loaded.`);
   }
 
   async loadCharacterSkins() {
@@ -77,24 +116,20 @@ class AssetManager {
 
           if (this.textures[textureName]) continue;
 
-          promises.push(new Promise((resolve) => {
-              loader.load(fullPath,
-                  (texture) => { this.textures[textureName] = texture; resolve(); },
-                  undefined,
-                  (error) => { console.warn(`Could not load character skin '${textureName}' from path '${fullPath}'`, error); this.textures[textureName] = null; resolve(); }
-              );
-          }));
+          promises.push(this.loadTextureWithPromise(loader, textureName, fullPath));
       }
       await Promise.all(promises);
   }
 
-  async loadTexture(name, path) {
+  async loadTexture(name, path) { // For on-demand loading like furniture
     if (this.textures[name]) return this.textures[name];
     
     const loader = new THREE.TextureLoader();
     return new Promise((resolve) => {
         loader.load(path, 
             (texture) => { 
+                texture.magFilter = THREE.NearestFilter;
+                texture.minFilter = THREE.NearestFilter;
                 this.textures[name] = texture; 
                 this.materials[name] = new THREE.MeshStandardMaterial({ map: texture });
                 resolve(texture); 
@@ -140,6 +175,7 @@ class AssetManager {
 }
 
 // === FURNITURE LOADER ===
+// ... (code unchanged from previous correct version)
 class FurnitureLoader {
     constructor() {
         this.config = {};
@@ -313,8 +349,6 @@ class FurnitureLoader {
         return instance;
     }
 }
-
-
 // === INSTANTIATION ===
 window.assetManager = new AssetManager();
 window.furnitureLoader = new FurnitureLoader();

@@ -58,7 +58,11 @@ class LevelRenderer {
             const planeGeo = new THREE.PlaneGeometry(this.gridSize, this.gridSize);
             const mesh = new THREE.Mesh(planeGeo, material);
             mesh.position.set(x * this.gridSize + this.gridSize / 2, y, z * this.gridSize + this.gridSize / 2);
-            mesh.rotation.x = rotationX;
+            
+            // Apply rotations
+            mesh.rotation.y = (item.rotation || 0) * -Math.PI / 2; // Yaw from editor
+            mesh.rotation.x = rotationX; // Pitch for floor/ceiling
+            
             mesh.receiveShadow = !isTransparent;
             game.scene.add(mesh);
         }
@@ -84,7 +88,7 @@ class LevelRenderer {
             mesh.position.set(posX, this.wallHeight / 2, posZ);
             mesh.castShadow = true; mesh.receiveShadow = true;
             game.scene.add(mesh);
-            if (isDoor) game.entities.doors.push(new Door(mesh, item.properties));
+            if (isDoor) game.entities.doors.push(new Door(mesh, item));
         }
     }
     
@@ -94,6 +98,9 @@ class LevelRenderer {
             const x = Number(xStr); const z = Number(zStr);
             const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
             const material = assetManager.getMaterial(materialName).clone();
+            
+            material.map.wrapS = THREE.RepeatWrapping;
+            material.map.repeat.x = -1; // Flip texture horizontally
             material.side = THREE.DoubleSide;
             material.transparent = true;
             material.alphaTest = 0.1;
@@ -160,16 +167,25 @@ class LevelRenderer {
 
 // === LEVEL MANAGER & DOOR ===
 class Door {
-    constructor(mesh, config = {}) {
+    constructor(mesh, itemData = {}) {
+        const config = itemData.properties || {};
         this.mesh = mesh;
+        this.textureKey = itemData.key || '';
         this.isOpen = false;
-        this.isLevelTransition = config?.isLevelExit || false;
-        this.targetLevel = config?.targetLevel || null;
+        this.isLevelTransition = config.isLevelExit || false;
+        this.targetLevel = config.targetLevel || null;
         this.originalY = mesh.position.y;
     }
     
     open() {
         if (this.isOpen) return;
+
+        if (this.textureKey.includes('door_2.png')) {
+            audioSystem.playSound('dooropen2');
+        } else {
+            audioSystem.playSound('dooropen');
+        }
+
         if (this.isLevelTransition && this.targetLevel) { 
             levelManager.loadLevel(this.targetLevel); 
             return; 

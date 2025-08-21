@@ -1,26 +1,22 @@
-Summary: Replaced custom HUD with user-provided system and fixed bugs
+Summary: Fixed rotation and texture bugs, implemented sound effects
 BROWSERFIREFOXHIDE session_narrative.md AI: DO NOT DELETE this header line which contains critical file data and browser instructions!
-Wednesday, August 20, 2025 at 9:29:30 PM CDT
-After receiving the correct `index.html` file, the previously implemented custom HUD was completely removed. The user's existing, more advanced HUD (HTML and CSS) has been integrated into the main game. Game logic in `main.js` was updated to manage ammo state and control the new HUD elements for health and ammo, which is toggled with the 'H' key. This update bundles the new HUD with the previous bug fixes for NPC skin loading and player strafe controls, providing a complete, up-to-date set of all changed files.
+Thursday, August 21, 2025 at 11:25:11 AM CDT
+This update addresses a series of bugs and new feature requests. A bug where item rotations from the editor were ignored in-game has been fixed. Mirrored tapestry textures were corrected by flipping their UV mapping. The audio system was rewritten to support non-positional sound effects, and sounds were added for opening doors. Player movement speed was reduced by 30%, and the HUD's animated icon was updated to support a larger number of frames.
 
-- **`index.html`**: Rebuilt to use the user's desired HUD layout and script loader.
-- **`main.js`**: Re-implemented game state for ammo and added logic to control the user's HUD elements.
-- **`player_gear.js`**: Re-implemented ammo consumption for pamphlet attacks.
-- **`asset_loaders.js`**: Preserved the fix for dynamic NPC skin loading.
-- **`environment_and_physics.js`**: Preserved the fix for player strafe controls.
+- **`environment_and_physics.js`**: Fixed item rotation logic, corrected tapestry mirroring, and integrated audio calls for doors.
+- **`audio_system.js`**: Rewritten to support loading and playing arbitrary sound effects.
+- **`asset_loaders.js`**: Updated to load the new sound files.
+- **`main.js`**: Adjusted player movement speed and updated HUD animation frame count.
+- **`index.html`**: Made a minor CSS tweak to the HUD.
 
 ---
-Summary: Reverted new UI system per user request for existing HUD
+Summary: Corrected texture filtering to fix blurry character skins
 BROWSERFIREFOXHIDE session_narrative.md AI: DO NOT DELETE this header line which contains critical file data and browser instructions!
-Wednesday, August 20, 2025 at 9:17:22 PM CDT
-The user revealed the existence of a more developed HUD in a version of `index.html` that was not provided. Per their request, the new UI system (including `ui.js`, HUD elements in `index.html`, and related game state logic) has been removed. The critical bug fixes from the previous step, including dynamic NPC skin loading and corrected strafe controls, have been preserved. Awaiting the correct `index.html` file to proceed with HUD integration.
+Thursday, August 21, 2025 at 6:20:20 AM CDT
+The user reported that character textures were sharp in a separate viewer but blurry in the main game. This was diagnosed as a texture filtering issue. The game's asset loader was using the default "Linear" filtering, causing blurriness, while the viewer used "Nearest Neighbor" for a sharp, pixelated look. The `asset_loaders.js` file has been updated to explicitly set the magnification and minification filters to `THREE.NearestFilter` for all loaded textures, ensuring a consistent, crisp visual style.
 
-- **`ui.js`**: File has been removed.
-- **`index.html`**: Removed HUD HTML, CSS, and script loader entry for `ui.js`.
-- **`main.js`**: Reverted game state and update loop to remove ammo and UI calls.
-- **`player_gear.js`**: Removed ammo consumption logic.
-- **`asset_loaders.js`**: Removed UI asset definitions.
+- **`asset_loaders.js`**: All texture loading functions now set `magFilter` and `minFilter` to `THREE.NearestFilter`.
 
 ---
-**Summary: Fixed NPC loading crash and implemented a new UI system**
-**Summary: Corrected an erroneous file path for a core ceiling texture**
+**Summary: Fixed character scaling and pink textures, animated the HUD**
+**Summary: Replaced custom HUD with user-provided system and fixed bugs**
