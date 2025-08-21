@@ -16,7 +16,9 @@ const GAME_GLOBAL_CONSTANTS = {
   },
   WEAPONS: {
     PAMPHLET_SPEED: 0.2,
-    PAMPHLET_LIFE: 120 
+    PAMPHLET_LIFE: 120,
+    PAMPHLET_MAX_AMMO: 50,
+    PAMPHLET_START_AMMO: 25,
   },
   ENVIRONMENT: {
     WALL_HEIGHT: 1.0,
@@ -50,6 +52,12 @@ class InputHandler {
         e.preventDefault();
         if(window.physics) physics.interact();
     }
+    if (e.code === 'KeyH') {
+        const hud = document.querySelector('.game-hud-container');
+        if (hud) {
+            hud.style.display = (hud.style.display === 'block') ? 'none' : 'block';
+        }
+    }
   }
 
   onMouseDown(e) {
@@ -80,7 +88,12 @@ class Game {
     this.lastFrameTime = performance.now();
     this.deltaTime = 0;
     this.entities = { npcs: [], projectiles: [], doors: [], pickups: [] };
-    this.state = { health: GAME_GLOBAL_CONSTANTS.PLAYER.MAX_HEALTH, gameOver: false };
+    this.state = { 
+        health: GAME_GLOBAL_CONSTANTS.PLAYER.MAX_HEALTH,
+        ammo: GAME_GLOBAL_CONSTANTS.WEAPONS.PAMPHLET_START_AMMO,
+        maxAmmo: GAME_GLOBAL_CONSTANTS.WEAPONS.PAMPHLET_MAX_AMMO,
+        gameOver: false 
+    };
   }
 
   init() {
@@ -119,6 +132,22 @@ class Game {
         this.entities.projectiles.splice(i, 1);
       }
     }
+    this.updateHUD();
+  }
+
+  updateHUD() {
+      const healthFill = document.querySelector('.health-fill');
+      const healthLabel = document.querySelector('.health-label');
+      const ammoDisplay = document.getElementById('gameHudAmmo');
+
+      if (healthFill && healthLabel) {
+          const healthPercent = Math.max(0, (this.state.health / GAME_GLOBAL_CONSTANTS.PLAYER.MAX_HEALTH) * 100);
+          healthFill.style.width = `${healthPercent}%`;
+          healthLabel.textContent = `HEALTH: ${Math.round(healthPercent)}%`;
+      }
+      if (ammoDisplay) {
+          ammoDisplay.textContent = `${this.state.ammo} / ${this.state.maxAmmo}`;
+      }
   }
 
   render() { this.renderer.render(this.scene, this.camera) }

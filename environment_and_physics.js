@@ -11,35 +11,55 @@ class LevelRenderer {
     buildLevelFromData(levelData) {
         const layers = levelData.layers || {};
         
-        if (layers.subfloor) this.createGeometry(layers.subfloor, -0.01, -Math.PI / 2);
-        if (layers.floor) this.createGeometry(layers.floor, 0, -Math.PI / 2);
-        if (layers.water) this.createGeometry(layers.water, 0.2, -Math.PI / 2);
-        if (layers.ceiling) this.createGeometry(layers.ceiling, this.wallHeight, Math.PI / 2);
-        if (layers.sky) this.createGeometry(layers.sky, this.wallHeight + 0.01, Math.PI / 2);
+        // Base Layers
+        if (layers.subfloor) this.createGeometry(layers.subfloor, -0.01, -Math.PI / 2, false, 'subfloor');
+        if (layers.floor) this.createGeometry(layers.floor, 0, -Math.PI / 2, false, 'floor');
+        if (layers.water) this.createGeometry(layers.water, 0.2, -Math.PI / 2, true, 'water');
+        if (layers.ceiling) this.createGeometry(layers.ceiling, this.wallHeight, Math.PI / 2, false, 'ceiling');
+        if (layers.sky) this.createGeometry(layers.sky, this.wallHeight + 0.01, Math.PI / 2, false, 'sky');
+        
+        // Detail Layers
+        if (layers.decor) this.createGeometry(layers.decor, 0.01, -Math.PI / 2, true, 'decor');
+        if (layers.floater) this.createGeometry(layers.floater, 0.4, -Math.PI / 2, true, 'floater');
+        if (layers.dangler) this.createGeometry(layers.dangler, this.wallHeight - 0.01, Math.PI / 2, true, 'dangler');
 
+        // Structural Layers
         if (layers.walls) this.createWalls(layers.walls);
+        if (layers.tapestry) this.createTapestries(layers.tapestry);
+
+        // Entity Layers
         if (layers.npcs) this.createNPCs(layers.npcs);
 
+        // Player Spawn
         if (layers.spawns && layers.spawns.length > 0) {
             const [posStr, item] = layers.spawns[0];
             const [x, z] = posStr.split(',').map(Number);
             game.camera.position.set(x * this.gridSize + this.gridSize/2, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, z * this.gridSize + this.gridSize/2);
             if (inputHandler) inputHandler.yaw = (item.rotation || 0) * -Math.PI / 2;
         } else {
-             game.camera.position.set(0, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, 0);
+             game.camera.position.set(this.gridSize/2, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, this.gridSize/2);
         }
     }
 
-    createGeometry(items, y, rotationX) {
+    createGeometry(items, y, rotationX, isTransparent, layerName = '') {
         for (const [pos, item] of items) {
             const [x, z] = pos.split(',').map(Number);
-            const materialName = item.key.split('/').pop().replace('.png', '');
-            let material = assetManager.getMaterial(materialName);
+            const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
+            let material = assetManager.getMaterial(materialName).clone();
+            
+            if (isTransparent) {
+                material.transparent = true;
+                material.alphaTest = 0.1;
+            }
+            if (layerName === 'water') {
+                material.opacity = 0.7;
+            }
+
             const planeGeo = new THREE.PlaneGeometry(this.gridSize, this.gridSize);
             const mesh = new THREE.Mesh(planeGeo, material);
             mesh.position.set(x * this.gridSize + this.gridSize / 2, y, z * this.gridSize + this.gridSize / 2);
             mesh.rotation.x = rotationX;
-            mesh.receiveShadow = true;
+            mesh.receiveShadow = !isTransparent;
             game.scene.add(mesh);
         }
     }
@@ -48,7 +68,8 @@ class LevelRenderer {
         for (const [key, item] of items) {
             const [type, xStr, zStr] = key.split('_');
             const x = Number(xStr); const z = Number(zStr);
-            const material = assetManager.getMaterial(item.key.split('/').pop().replace('.png', ''));
+            const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
+            const material = assetManager.getMaterial(materialName);
             const isDoor = item.key.includes('/door/');
             const wallGeo = new THREE.BoxGeometry(type === 'H' ? this.gridSize : 0.1, this.wallHeight, type === 'V' ? this.gridSize : 0.1);
             const mesh = new THREE.Mesh(wallGeo, material);
@@ -56,7 +77,7 @@ class LevelRenderer {
             if (type === 'H') {
                 posX = x * this.gridSize + this.gridSize / 2;
                 posZ = (z + 1) * this.gridSize;
-            } else {
+            } else { // V
                 posX = (x + 1) * this.gridSize;
                 posZ = z * this.gridSize + this.gridSize / 2;
             }
@@ -66,6 +87,40 @@ class LevelRenderer {
             if (isDoor) game.entities.doors.push(new Door(mesh, item.properties));
         }
     }
+    
+    createTapestries(items) {
+        for (const [key, item] of items) {
+            const [type, xStr, zStr] = key.split('_');
+            const x = Number(xStr); const z = Number(zStr);
+            const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
+            const material = assetManager.getMaterial(materialName).clone();
+            material.side = THREE.DoubleSide;
+            material.transparent = true;
+            material.alphaTest = 0.1;
+
+            const tapestryGeo = new THREE.PlaneGeometry(this.gridSize, this.wallHeight);
+            const mesh = new THREE.Mesh(tapestryGeo, material);
+            
+            let posX, posZ, rotY;
+            const offset = 0.06; // a little off the wall
+
+            if (type === 'H') {
+                posX = x * this.gridSize + this.gridSize / 2;
+                posZ = (z + 1) * this.gridSize - offset;
+                rotY = 0;
+            } else { // V
+                posX = (x + 1) * this.gridSize - offset;
+                posZ = z * this.gridSize + this.gridSize / 2;
+                rotY = Math.PI / 2;
+            }
+
+            mesh.position.set(posX, this.wallHeight / 2, posZ);
+            mesh.rotation.y = rotY;
+            mesh.castShadow = true;
+            game.scene.add(mesh);
+        }
+    }
+
 
     createNPCs(items) {
         for (const [pos, item] of items) {
@@ -77,11 +132,11 @@ class LevelRenderer {
                 continue;
             }
             
-            const skinTexture = config.skinTexture.replace('.png','');
+            const skinTextureName = config.skinTexture.replace(/\.[^/.]+$/, "");
 
             const char = window.createGonkMesh(
                 config.minecraftModel || 'humanoid',
-                { skinTexture: skinTexture },
+                { skinTexture: skinTextureName },
                 new THREE.Vector3(x * this.gridSize + this.gridSize/2, 0, z * this.gridSize + this.gridSize/2),
                 item.key
             );
@@ -115,7 +170,10 @@ class Door {
     
     open() {
         if (this.isOpen) return;
-        if (this.isLevelTransition) { levelManager.loadLevel(this.targetLevel); return; }
+        if (this.isLevelTransition && this.targetLevel) { 
+            levelManager.loadLevel(this.targetLevel); 
+            return; 
+        }
         this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.isOpen = true;
         setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME);
@@ -143,6 +201,13 @@ class LevelManager {
                 levelData = await response.json();
             }
             levelRenderer.buildLevelFromData(levelData);
+
+            // Load furniture
+            const furnitureObjects = await furnitureLoader.loadFromManifest('data/furniture.json');
+            for (const furniture of furnitureObjects) {
+                game.scene.add(furniture);
+            }
+
         } catch (error) {
             console.error(`Failed to load or build level ${levelId}:`, error);
             levelRenderer.createFallbackFloor();
@@ -162,8 +227,8 @@ class PhysicsSystem {
 
     if (keys['KeyW']) acceleration.add(forward);
     if (keys['KeyS']) acceleration.sub(forward);
-    if (keys['KeyA']) acceleration.sub(right);
-    if (keys['KeyD']) acceleration.add(right);
+    if (keys['KeyA']) acceleration.add(right);
+    if (keys['KeyD']) acceleration.sub(right);
     
     if (acceleration.length() > 0) {
       acceleration.normalize().multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED);

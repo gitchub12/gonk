@@ -13,6 +13,7 @@ class AssetManager {
         'ceiling_2': 'data/pngs/ceiling/ceiling_2.png',
         'ceiling_4': 'data/pngs/ceiling/ceiling_4.png',
         'ceiling_5': 'data/pngs/ceiling/ceiling_5.png',
+        'ceiling_6': 'data/pngs/ceiling/ceiling_6.png',
         // Doors
         'door_1': 'data/pngs/door/door_1.png',
         'door_2': 'data/pngs/door/door_2.png',
@@ -30,17 +31,25 @@ class AssetManager {
         'pamphlet1': 'data/weapons/pamphlets/pamphlet1.png',
         'pamphlet2': 'data/weapons/pamphlets/pamphlet2.png',
         'pamphlet3': 'data/weapons/pamphlets/pamphlet3.png',
+        // Special Textures
+        'tapestry_1': 'data/pngs/tapestry/tapestry_1.png',
+        'water_1': 'data/pngs/water/water_1.png',
+        'sky_1': 'data/pngs/sky/sky_1.png',
+        'decor_1': 'data/pngs/decor/decor_1.png',
+        'floater_1': 'data/pngs/floater/floater_1.png',
+        'dangler_1': 'data/pngs/dangler/dangler_1.png'
       }
     };
     this.pamphletTextureNames = ['pamphlet1', 'pamphlet2', 'pamphlet3'];
   }
 
   async loadAll() {
-    await this.loadTextures();
+    await this.loadDefinedTextures();
+    await this.loadCharacterSkins();
     this.createMaterials();
   }
   
-  async loadTextures() {
+  async loadDefinedTextures() {
     const loader = new THREE.TextureLoader();
     const promises = [];
     for (const [name, path] of Object.entries(this.assetDefs.textures)) {
@@ -48,11 +57,56 @@ class AssetManager {
           loader.load(path, 
             (texture) => { this.textures[name] = texture; resolve() },
             undefined, 
-            (error) => { console.warn(`Could not load texture '${name}'`, error); this.textures[name] = null; resolve() }
+            (error) => { console.warn(`Could not load texture '${name}' from path '${path}'`, error); this.textures[name] = null; resolve() }
           );
       }));
     }
     await Promise.all(promises);
+  }
+
+  async loadCharacterSkins() {
+      const loader = new THREE.TextureLoader();
+      const promises = [];
+      const skinPath = 'data/skins/';
+
+      for (const charKey in CHARACTER_CONFIG) {
+          const char = CHARACTER_CONFIG[charKey];
+          const textureFile = char.skinTexture;
+          const textureName = textureFile.replace(/\.[^/.]+$/, "");
+          const fullPath = skinPath + textureFile;
+
+          if (this.textures[textureName]) continue;
+
+          promises.push(new Promise((resolve) => {
+              loader.load(fullPath,
+                  (texture) => { this.textures[textureName] = texture; resolve(); },
+                  undefined,
+                  (error) => { console.warn(`Could not load character skin '${textureName}' from path '${fullPath}'`, error); this.textures[textureName] = null; resolve(); }
+              );
+          }));
+      }
+      await Promise.all(promises);
+  }
+
+  async loadTexture(name, path) {
+    if (this.textures[name]) return this.textures[name];
+    
+    const loader = new THREE.TextureLoader();
+    return new Promise((resolve) => {
+        loader.load(path, 
+            (texture) => { 
+                this.textures[name] = texture; 
+                this.materials[name] = new THREE.MeshStandardMaterial({ map: texture });
+                resolve(texture); 
+            },
+            undefined, 
+            (error) => { 
+                console.warn(`Could not load texture '${name}' from path '${path}'`, error); 
+                this.textures[name] = null;
+                resolve(null);
+            }
+        );
+    });
   }
   
   createMaterials() {
@@ -65,12 +119,16 @@ class AssetManager {
   
   getMaterial(name) { 
     if (!this.materials[name]) {
-        return new THREE.MeshStandardMaterial({ color: 0xff00ff });
+        console.warn(`Material '${name}' not found. Using fallback.`);
+        return new THREE.MeshStandardMaterial({ color: 0xff00ff }); // Magenta fallback
     }
     return this.materials[name];
   }
 
   getTexture(name) {
+    if (!this.textures[name]) {
+         console.warn(`Texture '${name}' not found.`);
+    }
     return this.textures[name] || null;
   }
   

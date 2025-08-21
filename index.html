@@ -6,14 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gonk</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #000; cursor: crosshair; }
+        body { margin: 0; overflow: hidden; background: #000; cursor: crosshair; font-family: Arial, sans-serif; }
         canvas { display: block; }
-        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; display: flex; justify-content: center; align-items: center; z-index: 1000; font-family: 'Courier New', Courier, monospace;}
+        
+        /* HUD Styles from user's file */
+        .game-hud-container { position: absolute; width: 100%; height: 100%; pointer-events: none; display: none; color: #eee; }
+        .ally-boxes { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 1px; padding: 0; }
+        .ally-box { width: 80px; height: 100px; background: rgba(0, 50, 100, 0.15); border: 2px solid rgba(0, 150, 200, 0.4); border-top: none; display: flex; align-items: center; justify-content: center; color: #00ffff; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+        .gonk-health { position: absolute; bottom: 20px; left: 20px; display: flex; align-items: flex-end; gap: 20px; }
+        .gonk-model { width: 120px; height: 150px; background: rgba(0, 50, 100, 0.3); border: 2px solid rgba(0, 150, 255, 0.6); border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .gonk-model img { max-width: 90%; max-height: 90%; opacity: 0.9; image-rendering: pixelated; }
+        .health-bar-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .health-bar { width: 200px; height: 25px; background: rgba(50, 0, 0, 0.5); border: 2px solid rgba(200, 0, 0, 0.8); border-radius: 4px; position: relative; overflow: hidden; }
+        .health-fill { height: 100%; background: linear-gradient(90deg, #ff0000, #ff4444); width: 100%; transition: width 0.3s ease; }
+        .health-label { position: absolute; width: 100%; text-align: center; line-height: 25px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; font-size: 12px; }
+        .ammo-display { position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255, 200, 0, 0.6); border-radius: 8px; padding: 15px; color: #ffcc00; font-size: 28px; font-weight: bold; text-shadow: 0 0 5px rgba(255, 200, 0, 0.5); min-width: 120px; text-align: center; }
+        .ammo-label { font-size: 14px; color: #ffaa00; margin-bottom: 5px; }
+        .weapon-display { position: absolute; bottom: 180px; right: 20px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
+        .crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; pointer-events: none; }
+        .crosshair::before, .crosshair::after { content: ''; position: absolute; background: rgba(255, 197, 0, 0.8); box-shadow: 0 0 5px rgba(255, 197, 0, 0.5); }
+        .crosshair::before { width: 100%; height: 2px; top: 50%; transform: translateY(-50%); }
+        .crosshair::after { height: 100%; width: 2px; left: 50%; transform: translateX(-50%); }
     </style>
 </head>
 <body>
     <div id="loadingScreen">
         <p id="loadingStatus">Initializing...</p>
+    </div>
+
+    <div class="game-hud-container">
+        <div class="ally-boxes"><div class="ally-box">1</div><div class="ally-box">2</div><div class="ally-box">3</div><div class="ally-box">4</div></div>
+        <div class="gonk-health">
+            <div class="gonk-model"><img id="gonkImage" src="data/pngs/icons for UI/gonkicon.png" alt="Gonk"></div>
+            <div class="health-bar-container"><div class="health-bar"><div class="health-fill"></div><div class="health-label">HEALTH: 100%</div></div></div>
+        </div>
+        <div class="weapon-display"><div class="ammo-label">WEAPON</div><div id="gameHudWeapon">PAMPHLET</div></div>
+        <div class="ammo-display"><div class="ammo-label">AMMO</div><div id="gameHudAmmo">0 / 0</div></div>
+        <div class="crosshair"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -22,7 +52,6 @@
         class ScriptLoader {
             constructor() {
                 this.scriptsToLoad = [
-                    // Core files from the new structure
                     { path: 'main.js', name: 'Main Engine' },
                     { path: 'character_config.js', name: 'Character Config' },
                     { path: 'asset_loaders.js', name: 'Asset Loaders' },
@@ -45,12 +74,8 @@
                         return;
                     }
                 }
-                // Call initGame directly once all scripts are loaded
-                if (typeof initGame === 'function') {
-                    initGame();
-                } else {
-                    console.error('initGame function not found!');
-                }
+                if (typeof initGame === 'function') initGame();
+                else console.error('initGame function not found!');
             }
 
             loadScript(path) {
@@ -65,13 +90,12 @@
             }
         }
         
-        // GAME LOOP FUNCTIONS - MOVED HERE TO GUARANTEE EXECUTION ORDER
         async function initGame() {
             console.log('--- GAME INITIALIZING ---');
             await assetManager.loadAll();
             game.init();
             audioSystem.init(game.camera);
-            await levelManager.loadLevel(1); // Default to level 1, but will be overwritten by playtest data from localStorage
+            await levelManager.loadLevel(1);
             document.getElementById('loadingScreen').style.display = 'none';
             startGameLoop();
         }
@@ -87,7 +111,6 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Start the loading process
         document.addEventListener('DOMContentLoaded', () => {
             const loader = new ScriptLoader();
             loader.loadGame();

@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE editor.js
-// Slimmed down to only contain the core LevelEditor class. UI and Asset logic is now in editor_ui_and_assets.js.
+// Restored full version. Contains the core LevelEditor class. UI and Asset logic is in editor_ui_and_assets.js.
 
 class LevelEditor {
     constructor() {
@@ -16,7 +16,7 @@ class LevelEditor {
         this.isPanning = false; this.isPainting = false;
         this.activeTool = 'paint'; this.activeBrush = null; this.lastUsedBrush = {};
         this.hoveredLine = null;
-        this.layerOrder = ['subfloor', 'floor', 'npcs', 'assets', 'spawns', 'walls', 'tapestry', 'dangler', 'water', 'floater', 'decor', 'ceiling', 'sky'];
+        this.layerOrder = ['subfloor', 'floor', 'water', 'floater', 'decor', 'npcs', 'assets', 'spawns', 'walls', 'tapestry', 'dangler', 'ceiling', 'sky'];
         this.activeLayerName = 'floor';
         this.lineLayers = ['walls', 'tapestry'];
         this.levelData = {}; this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
@@ -135,7 +135,7 @@ class LevelEditor {
             } else {
                 if (this.isPainting && this.lastPlacedCoord === currentCoord) return;
                 if ((['npcs', 'assets', 'spawns'].includes(activeLayer) && this.levelData[activeLayer].has(currentCoord)) || (this.activeBrush.type === 'npc' && activeLayer !== 'npcs') || (this.activeBrush.type === 'asset' && activeLayer !== 'assets')) return;
-                if (this.activeBrush.type === 'texture' && this.activeBrush.key.split('/')[3] !== activeLayer) return;
+                // Simplified brush check
                 this.levelData[activeLayer].set(currentCoord, { type: this.activeBrush.type, key: this.activeBrush.key, rotation: 0 });
             }
             this.statusMsg.textContent = `Placed ${this.activeBrush.key.split('/').pop()}`;
@@ -250,7 +250,6 @@ class LevelEditor {
         if(this.isPainting) switch(this.activeTool) {
             case 'paint': this.placeItem(x, y); break;
             case 'erase': this.eraseItem(x, y); break;
-            case 'spawn': this.placeSpawn(x,y); break;
         }
     }
 
@@ -288,22 +287,13 @@ class LevelEditor {
 
         for (let i = 0; i < this.layerOrder.length; i++) {
             const layerName = this.layerOrder[i];
-            const isLayerVisible = (i <= activeLayerIndex);
             
-            // Always render walls for context, but make them transparent if layer is not active
-            if (layerName === 'walls' && i > activeLayerIndex) {
-                this.ctx.globalAlpha = 0.25;
+            if (this.lineLayers.includes(layerName)) {
+                if (layerName !== this.activeLayerName) this.ctx.globalAlpha = 0.35;
                 this.renderWallLayer(this.levelData[layerName], startX, startY, endX, endY);
-                this.ctx.globalAlpha = 1.0;
-                continue;
-            }
-
-            if (isLayerVisible) {
-                if (this.lineLayers.includes(layerName)) {
-                    this.renderWallLayer(this.levelData[layerName], startX, startY, endX, endY);
-                } else {
-                    this.renderTileLayer(layerName, this.levelData[layerName], startX, startY, endX, endY, isLayerVisible);
-                }
+                if (layerName !== this.activeLayerName) this.ctx.globalAlpha = 1.0;
+            } else if (i <= activeLayerIndex) {
+                this.renderTileLayer(layerName, this.levelData[layerName], startX, startY, endX, endY);
             }
         }
         
@@ -316,7 +306,7 @@ class LevelEditor {
         this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs);
         
         // Draw Hover Highlight
-        if (this.hoveredLine) {
+        if (this.hoveredLine && this.lineLayers.includes(this.activeLayerName)) {
             this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 6 / this.zoom; this.ctx.lineCap = 'round';
             this.ctx.beginPath();
             if (this.hoveredLine.type === 'V') { this.ctx.moveTo((this.hoveredLine.x + 1) * gs, this.hoveredLine.y * gs); this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs); } 
@@ -329,26 +319,45 @@ class LevelEditor {
     renderWallLayer(items, startX, startY, endX, endY) {
         if (!items) return;
         const gs = this.gridSize;
+        const wallThickness = Math.max(2, gs * 0.1);
+
         for(const [key, item] of items.entries()) {
             const [type, xStr, zStr] = key.split('_');
             const x = Number(xStr); const z = Number(zStr);
-            this.ctx.save();
-            this.ctx.beginPath();
-            if (type === 'V') {
-                this.ctx.moveTo((x + 1) * gs, z * gs);
-                this.ctx.lineTo((x + 1) * gs, (z + 1) * gs);
-            } else {
-                this.ctx.moveTo(x * gs, (z + 1) * gs);
-                this.ctx.lineTo((x + 1) * gs, (z + 1) * gs);
+            
+            const img = this.preloadedImages.get(item.key);
+            if (!img) { // Fallback for unloaded textures
+                this.ctx.strokeStyle = item.key.includes('/door/') ? 'cyan' : 'white';
+                this.ctx.lineWidth = 4 / this.zoom;
+                this.ctx.beginPath();
+                 if (type === 'V') {
+                    this.ctx.moveTo((x + 1) * gs, z * gs);
+                    this.ctx.lineTo((x + 1) * gs, (z + 1) * gs);
+                } else {
+                    this.ctx.moveTo(x * gs, (z + 1) * gs);
+                    this.ctx.lineTo((x + 1) * gs, (z + 1) * gs);
+                }
+                this.ctx.stroke();
+                continue;
             }
-            this.ctx.strokeStyle = item.key.includes('/door/') ? 'cyan' : 'white';
-            this.ctx.lineWidth = 4 / this.zoom;
-            this.ctx.stroke();
+
+            this.ctx.save();
+            if (type === 'V') {
+                this.ctx.translate((x + 1) * gs, z * gs);
+                const pattern = this.ctx.createPattern(img, 'repeat');
+                this.ctx.fillStyle = pattern;
+                this.ctx.fillRect(-wallThickness / 2, 0, wallThickness, gs);
+            } else { // 'H'
+                this.ctx.translate(x * gs, (z + 1) * gs);
+                const pattern = this.ctx.createPattern(img, 'repeat');
+                this.ctx.fillStyle = pattern;
+                this.ctx.fillRect(0, -wallThickness / 2, gs, wallThickness);
+            }
             this.ctx.restore();
         }
     }
 
-    renderTileLayer(layerName, items, startX, startY, endX, endY, isLayerVisible) {
+    renderTileLayer(layerName, items, startX, startY, endX, endY) {
         const gs = this.gridSize;
         if (this.defaultTextures[layerName]) {
             const img = this.preloadedImages.get(this.defaultTextures[layerName]);
@@ -365,14 +374,18 @@ class LevelEditor {
             if (layerName === 'spawns') img = this.preloadedImages.get(item.key);
             else img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
             
-            if (layerName === 'water') this.ctx.globalAlpha = 0.3;
+            const originalAlpha = this.ctx.globalAlpha;
+            if (layerName === 'water') this.ctx.globalAlpha = 0.6;
+            if (layerName === 'floater') this.ctx.globalAlpha = 0.8;
             
             if (img) {
                 this.ctx.save();
                 this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
                 if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
 
-                if (layerName === 'npcs') this.ctx.drawImage(img, -(gs*0.375), -(gs*0.125), gs * 0.75, gs * 0.75); 
+                if (layerName === 'npcs') {
+                    this.ctx.drawImage(img, -(gs*0.375), -(gs*0.375), gs * 0.75, gs * 0.75); 
+                }
                 else if (layerName === 'spawns') {
                     this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
                     this.ctx.font = `bold ${gs * 0.5}px Arial`; this.ctx.fillStyle = 'white'; this.ctx.textAlign = 'center'; this.ctx.textBaseline = 'middle';
@@ -383,12 +396,14 @@ class LevelEditor {
                     this.ctx.beginPath(); this.ctx.moveTo(0, -gs * 0.2); this.ctx.lineTo(0, -gs * 0.4);
                     this.ctx.moveTo(-gs*0.1, -gs*0.3); this.ctx.lineTo(0, -gs*0.4); this.ctx.lineTo(gs*0.1, -gs*0.3); this.ctx.stroke();
                 }
-                else this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
+                else {
+                    this.ctx.drawImage(img, -gs / 2, -gs / 2, gs, gs);
+                }
 
                 this.ctx.restore();
             }
 
-            if (layerName === 'water') this.ctx.globalAlpha = 1.0;
+            this.ctx.globalAlpha = originalAlpha;
         }
     }
     

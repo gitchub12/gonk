@@ -42,7 +42,10 @@ class Projectile {
 
 class PlayerWeaponSystem {
     handlePamphletAttack() {
-        if (!game || !game.camera) return;
+        if (!game || !game.camera || game.state.ammo <= 0) return;
+
+        game.state.ammo--; // Consume ammo
+
         const startPos = game.camera.position.clone();
         const direction = new THREE.Vector3();
         game.camera.getWorldDirection(direction);
