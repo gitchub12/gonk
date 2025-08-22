@@ -28,25 +28,35 @@ class EditorAssetManager {
     }
 
     async discoverAssets() {
+        // Discover NPC Skins
         const skinFiles = await this.fetchDirectoryListing('/data/skins/');
         this.npcSkins = skinFiles.filter(f => f.endsWith('.png')).map(f => `/data/skins/${f}`);
         await this.generateNpcIcons();
+
+        // Discover Textures
         for (const layerType of this.textureLayers) {
             const path = `/data/pngs/${layerType}/`;
             const textureFiles = await this.fetchDirectoryListing(path);
             this.layerTextures[layerType] = textureFiles.filter(f => f.endsWith('.png')).map(f => `${path}${f}`);
         }
+        
+        // Discover Furniture/Assets
         try {
             const furnitureManifestResponse = await fetch('/data/furniture.json');
             const furnitureManifest = await furnitureManifestResponse.json();
             const modelPath = furnitureManifest._config.modelPath;
-            const furnitureFiles = await this.fetchDirectoryListing(`/${modelPath}`);
-            furnitureFiles.filter(f => f.endsWith('.json')).forEach(file => {
-                const name = file.replace('.json', '');
-                this.furnitureJsons.set(name, `/${modelPath}${file}`);
-                this.assetIcons.set(name, this.createPlaceholderIcon(name));
-            });
-        } catch (e) { console.error("Failed to discover furniture assets:", e); }
+
+            // Instead of fetching directory, read from the manifest's "models" object
+            for (const modelKey in furnitureManifest.models) {
+                const modelDef = furnitureManifest.models[modelKey];
+                const fileName = modelDef.file;
+                this.furnitureJsons.set(modelKey, `/${modelPath}${fileName}`);
+                this.assetIcons.set(modelKey, this.createPlaceholderIcon(modelKey));
+            }
+        } catch (e) { 
+            console.error("Failed to discover furniture assets from manifest:", e); 
+        }
+        
         return true;
     }
 

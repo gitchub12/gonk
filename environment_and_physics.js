@@ -57,14 +57,15 @@ class LevelRenderer {
 
             const planeGeo = new THREE.PlaneGeometry(this.gridSize, this.gridSize);
             const mesh = new THREE.Mesh(planeGeo, material);
-            mesh.position.set(x * this.gridSize + this.gridSize / 2, y, z * this.gridSize + this.gridSize / 2);
-            
-            // Apply rotations
-            mesh.rotation.y = (item.rotation || 0) * -Math.PI / 2; // Yaw from editor
             mesh.rotation.x = rotationX; // Pitch for floor/ceiling
+
+            const group = new THREE.Group();
+            group.position.set(x * this.gridSize + this.gridSize / 2, y, z * this.gridSize + this.gridSize / 2);
+            group.rotation.y = (item.rotation || 0) * -Math.PI / 2; // Yaw from editor
             
-            mesh.receiveShadow = !isTransparent;
-            game.scene.add(mesh);
+            group.add(mesh);
+            group.receiveShadow = !isTransparent;
+            game.scene.add(group);
         }
     }
 
@@ -132,15 +133,16 @@ class LevelRenderer {
     createNPCs(items) {
         for (const [pos, item] of items) {
             const [x, z] = pos.split(',').map(Number);
+            // Use the item key for the skin, but the derived ID for stats/model type
+            const skinTextureName = item.key; 
             const characterId = item.key.replace(/\d+$/, '');
+            
             const config = CHARACTER_CONFIG[characterId];
             if (!config) {
                 console.warn(`No character config found for '${characterId}'`);
                 continue;
             }
             
-            const skinTextureName = config.skinTexture.replace(/\.[^/.]+$/, "");
-
             const char = window.createGonkMesh(
                 config.minecraftModel || 'humanoid',
                 { skinTexture: skinTextureName },
