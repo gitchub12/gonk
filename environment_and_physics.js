@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// Rewritten to support transparency, default textures, and multi-sized tiles.
+// Rewritten to use a performant, correctly pivoted BoxGeometry for vector walls.
 
 class LevelRenderer {
     constructor() {
@@ -16,13 +16,11 @@ class LevelRenderer {
             const defaultInfo = settings.defaults[layerName];
             const layerItems = layers[layerName] ? new Map(layers[layerName]) : new Map();
 
-            // Apply default textures first
             if (defaultInfo && defaultInfo.key) {
                 const defaultSize = defaultInfo.size || 1;
                 for (let z = 0; z < settings.height; z += defaultSize) {
                     for (let x = 0; x < settings.width; x += defaultSize) {
                         const coordKey = `${x},${z}`;
-                        // Only place default if no specific tile exists at this origin
                         if (!layerItems.has(coordKey)) {
                              this.createTile(x, z, { key: defaultInfo.key, size: defaultSize, rotation: 0 }, y, rotationX, isSpecial, layerName);
                         }
@@ -30,7 +28,6 @@ class LevelRenderer {
                 }
             }
             
-            // Render specific tiles from the layer, overriding defaults
             for (const [pos, item] of layerItems.entries()) {
                 const [x, z] = pos.split(',').map(Number);
                 this.createTile(x, z, item, y, rotationX, isSpecial, layerName);
@@ -98,21 +95,26 @@ class LevelRenderer {
             let mesh;
 
             if (key.startsWith('VEC_')) {
-                const [x1, z1, x2, z2] = item.points;
-                const dx = (x2 - x1) * this.gridSize;
-                const dz = (z2 - z1) * this.gridSize;
-                const length = Math.sqrt(dx*dx + dz*dz);
-                const angle = Math.atan2(dx, dz);
+                const [x1_grid, y1_grid, x2_grid, y2_grid] = item.points;
+
+                const dx_world = (x2_grid - x1_grid) * this.gridSize;
+                const dz_world = (y2_grid - y1_grid) * this.gridSize;
+                
+                const length = Math.sqrt(dx_world * dx_world + dz_world * dz_world);
+                const angle = Math.atan2(dz_world, dx_world);
 
                 const wallGeo = new THREE.BoxGeometry(length, this.wallHeight, 0.1);
+                wallGeo.translate(length / 2, 0, 0);
+                
                 mesh = new THREE.Mesh(wallGeo, material);
 
                 mesh.position.set(
-                    (x1 + x2) / 2 * this.gridSize,
+                    x1_grid * this.gridSize,
                     this.wallHeight / 2,
-                    (z1 + z2) / 2 * this.gridSize
+                    y1_grid * this.gridSize
                 );
-                mesh.rotation.y = -angle + Math.PI / 2;
+                mesh.rotation.y = angle;
+
             } else {
                 const [type, xStr, zStr] = key.split('_');
                 const x = Number(xStr); const z = Number(zStr);

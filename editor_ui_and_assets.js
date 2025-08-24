@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE editor_ui_and_assets.js
-// Rewritten to add bucket fill tool and ensure robust initialization.
+// Rewritten to remove reference to non-existent 'cover' asset directory.
 
 class EditorAssetManager {
     constructor(modelSystem) {
@@ -8,7 +8,7 @@ class EditorAssetManager {
         this.npcIcons = new Map();
         this.furnitureJsons = new Map();
         this.assetIcons = new Map(); 
-        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'cover', 'tapestry', 'dangler', 'spawn'];
+        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'tapestry', 'dangler', 'spawn'];
         this.layerTextures = {};
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
     }
@@ -135,35 +135,27 @@ class EditorUI {
             }
             const levelObject = this.editor.getLevelDataObject();
             localStorage.setItem('gonk_level_to_play', JSON.stringify(levelObject));
-            window.open('index.html', 'GonkPlayWindow');
+            window.open('../index.html', 'GonkPlayWindow');
         });
 
         this.gridWidthInput.addEventListener('change', () => { this.editor.gridWidth = parseInt(this.gridWidthInput.value) || 64; this.editor.modifyState(()=>{});});
         this.gridHeightInput.addEventListener('change', () => { this.editor.gridHeight = parseInt(this.gridHeightInput.value) || 64; this.editor.modifyState(()=>{});});
         
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
-            select.addEventListener('change', () => {
-                const sizeSelect = document.getElementById(`default-${layer}-size`);
+            const sizeSelect = document.getElementById(`default-${layer}-size`);
+            const updateDefaultTexture = () => {
                 this.editor.defaultTextures[layer] = {
                     key: select.value,
                     size: parseInt(sizeSelect.value) || 1
                 };
                 this.editor.modifyState(()=>{});
-            });
-            const sizeSelect = document.getElementById(`default-${layer}-size`);
-             if (sizeSelect) {
-                sizeSelect.addEventListener('change', () => {
-                    this.editor.defaultTextures[layer] = {
-                        key: select.value,
-                        size: parseInt(sizeSelect.value) || 1
-                    };
-                    this.editor.modifyState(()=>{});
-                });
-            }
+                this.editor.render();
+            };
+            select.addEventListener('change', updateDefaultTexture);
+            if (sizeSelect) sizeSelect.addEventListener('change', updateDefaultTexture);
         }
         
         Object.entries(this.toolButtons).forEach(([toolName, button]) => {
-            // Null-check to prevent crash if an element is missing
             if (button) button.addEventListener('click', () => this.setActiveTool(toolName));
         });
 
@@ -201,6 +193,7 @@ class EditorUI {
             switch(layerName) {
                 case 'assets': iconSrc = '/data/pngs/icons for UI/crate.png'; break;
                 case 'spawns': iconSrc = '/data/pngs/spawn/hologonk_1.png'; break;
+                case 'walls': iconSrc = '/data/pngs/icons for UI/wallsicon.png'; break;
                 default:
                     const textures = this.assetManager.layerTextures[layerName] || [];
                     if (textures.length > 0) iconSrc = textures[0];
@@ -221,8 +214,7 @@ class EditorUI {
         document.querySelectorAll('#layer-selector button').forEach(btn => btn.classList.remove('active'));
         const buttons = this.layerButtons[layerName];
         if (buttons) {
-            let targetButton = buttons[0];
-            if(subGroup && buttons.length > 1) targetButton = buttons.find(b => b.title === subGroup) || buttons[0];
+            let targetButton = buttons.find(b => b.title.toLowerCase() === (subGroup || layerName).toLowerCase()) || buttons[0];
             if (targetButton) targetButton.classList.add('active');
         }
         this.setActiveTool(layerName === 'spawns' ? 'spawn' : 'paint');
@@ -239,8 +231,6 @@ class EditorUI {
         this.updatePalette();
     }
     
-    getLayerButtonOrder() { return Array.from(document.querySelectorAll('#layer-selector button')); }
-
     updateUIForNewLevel() {
         this.levelNumberInput.value = this.editor.currentLevel;
         this.levelDisplay.textContent = `Level: ${this.editor.currentLevel}`;
@@ -258,10 +248,8 @@ class EditorUI {
         else if (activeLayer === 'assets') this.populateAssetPalette();
         else this.populateTexturePalette();
         
-        const defaultBrushItem = Array.from(this.paletteContainer.querySelectorAll('.palette-item')).find(item => item.querySelector('span').textContent.endsWith('_1'));
-        if(defaultBrushItem) { defaultBrushItem.click(); }
-        else if (this.paletteContainer.querySelector('.palette-item')) { this.paletteContainer.querySelector('.palette-item').click(); }
-        else { this.editor.activeBrush = null; }
+        const firstItem = this.paletteContainer.querySelector('.palette-item');
+        if (firstItem) { firstItem.click(); } else { this.editor.activeBrush = null; }
 
         if(subGroup) { const header = document.getElementById(`palette-header-${subGroup}`); if(header) header.scrollIntoView({behavior: "smooth", block: "start"}); }
     }
@@ -292,7 +280,7 @@ class EditorUI {
 
     populateTexturePalette() {
         const selectedLayer = this.editor.activeLayerName; let textures = this.assetManager.layerTextures[selectedLayer];
-        if (selectedLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door'],...this.assetManager.layerTextures['cover']];
+        if (selectedLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door']];
         this._populatePalette(textures, path => {
             const item = document.createElement('div'); item.className = 'palette-item';
             const img = new Image(); img.src = path; item.appendChild(img);
@@ -302,32 +290,14 @@ class EditorUI {
         });
     }
 
-    populateAssetPalette() {
-        this._populatePalette(Array.from(this.assetManager.assetIcons.entries()), ([name, iconUrl]) => {
-            const item = document.createElement('div'); item.className = 'palette-item';
-            const img = new Image(); img.src = iconUrl; item.appendChild(img);
-            const label = document.createElement('span'); label.textContent = name; item.appendChild(label);
-            item.addEventListener('click', () => { this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active')); item.classList.add('active'); this.editor.activeBrush = { type: 'asset', key: name }; });
-            this.paletteContainer.appendChild(item);
-        });
-    }
+    populateAssetPalette() { this._populatePalette(Array.from(this.assetManager.assetIcons.entries()), ([name, iconUrl]) => { const item = document.createElement('div'); item.className = 'palette-item'; const img = new Image(); img.src = iconUrl; item.appendChild(img); const label = document.createElement('span'); label.textContent = name; item.appendChild(label); item.addEventListener('click', () => { this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active')); item.classList.add('active'); this.editor.activeBrush = { type: 'asset', key: name }; }); this.paletteContainer.appendChild(item); }); }
 
     populateDefaultTextureSettings() {
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
             select.innerHTML = ''; const textures = this.assetManager.layerTextures[layer] || [];
             const noneOption = document.createElement('option'); noneOption.value = ''; noneOption.textContent = 'None'; select.appendChild(noneOption);
             textures.forEach(path => { const option = document.createElement('option'); option.value = path; option.textContent = path.split('/').pop(); select.appendChild(option); });
-            if (layer === 'floor') {
-                const defaultFloorTexture = '/data/pngs/floor/floor_1.png';
-                if (textures.includes(defaultFloorTexture)) { 
-                    select.value = defaultFloorTexture; 
-                    this.editor.defaultTextures['floor'] = { key: defaultFloorTexture, size: 1};
-                }
-                else if (textures.length > 0) { 
-                    select.value = textures[0]; 
-                    this.editor.defaultTextures['floor'] = { key: textures[0], size: 1};
-                }
-            }
+            if (this.editor.defaultTextures[layer]) { select.value = this.editor.defaultTextures[layer].key; }
         }
     }
 
@@ -342,28 +312,5 @@ class EditorUI {
         }
     }
 
-    populateNpcPalette() {
-        this.paletteContainer.innerHTML = '';
-        const npcGroups = { 'Aliens': [], 'Droids': [], 'Stormies': [] };
-        const groupMap = { 'wookiee': 'Aliens', 'gungan': 'Aliens', 'stormtrooper': 'Stormies' };
-        this.assetManager.npcIcons.forEach((iconDataUrl, skinName) => {
-            const baseName = skinName.match(/^(bb8|r2d2)/) ? skinName.match(/^(bb8|r2d2)/)[0] : skinName.replace(/\d+$/, '');
-            const group = groupMap[baseName] || 'Droids';
-            npcGroups[group].push({ skinName, iconDataUrl });
-        });
-        for (const groupName in npcGroups) {
-            if(npcGroups[groupName].length === 0) continue;
-            const header = document.createElement('div'); header.className = 'palette-header'; header.textContent = groupName; header.id = `palette-header-${groupName}`; this.paletteContainer.appendChild(header);
-            for (const { skinName, iconDataUrl } of npcGroups[groupName]) {
-                const item = document.createElement('div'); item.className = 'palette-item';
-                const img = new Image(); img.src = iconDataUrl; window[skinName + '_icon_img'] = img; item.appendChild(img);
-                const label = document.createElement('span'); label.textContent = skinName; item.appendChild(label);
-                item.addEventListener('click', () => {
-                    this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
-                    item.classList.add('active'); this.editor.activeBrush = { type: 'npc', key: skinName };
-                });
-                this.paletteContainer.appendChild(item);
-            }
-        }
-    }
+    populateNpcPalette() { this.paletteContainer.innerHTML = ''; const npcGroups = { 'Aliens': [], 'Droids': [], 'Stormies': [] }; const groupMap = { 'wookiee': 'Aliens', 'gungan': 'Aliens', 'stormtrooper': 'Stormies' }; this.assetManager.npcIcons.forEach((iconDataUrl, skinName) => { const baseName = skinName.match(/^(bb8|r2d2)/) ? skinName.match(/^(bb8|r2d2)/)[0] : skinName.replace(/\d+$/, ''); const group = groupMap[baseName] || 'Droids'; npcGroups[group].push({ skinName, iconDataUrl }); }); for (const groupName in npcGroups) { if(npcGroups[groupName].length === 0) continue; const header = document.createElement('div'); header.className = 'palette-header'; header.textContent = groupName; header.id = `palette-header-${groupName}`; this.paletteContainer.appendChild(header); for (const { skinName, iconDataUrl } of npcGroups[groupName]) { const item = document.createElement('div'); item.className = 'palette-item'; const img = new Image(); img.src = iconDataUrl; window[skinName + '_icon_img'] = img; item.appendChild(img); const label = document.createElement('span'); label.textContent = skinName; item.appendChild(label); item.addEventListener('click', () => { this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active')); item.classList.add('active'); this.editor.activeBrush = { type: 'npc', key: skinName }; }); this.paletteContainer.appendChild(item); } } }
 }

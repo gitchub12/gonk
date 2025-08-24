@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE editor.js
-// Rewritten to add bucket-fill, wall visibility lines, and multi-tile placement.
+// Rewritten to add right-click cancellation for vector wall drawing.
 
 class LevelEditor {
     constructor() {
@@ -181,10 +181,24 @@ class LevelEditor {
         if (e.target.closest('#leftPanel, .floating-toolbar, .top-right-ui')) return;
         this.ui.hideContextMenu();
         this.lastMouse = { x: e.clientX, y: e.clientY };
+        
         if (e.button === 1) { this.isPanning = true; return; }
+
         const { x: gridX, y: gridY } = this.getGridCoordsFromEvent(e);
         const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
-        if (e.button === 2) { this.ui.showContextMenu(e, gridX, gridY); return; }
+        
+        if (e.button === 2) {
+            if (this.vectorWallStart) {
+                e.preventDefault();
+                this.vectorWallStart = null;
+                this.statusMsg.textContent = 'Vector wall drawing cancelled.';
+                this.render();
+                return;
+            }
+            this.ui.showContextMenu(e, gridX, gridY);
+            return;
+        }
+
         if (e.button === 0) {
             this.isPainting = true;
             switch(this.activeTool) {
@@ -238,36 +252,39 @@ class LevelEditor {
         this.render();
     }
 
-    render() { this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); this.ctx.save(); this.ctx.translate(this.panX, this.panY); this.ctx.scale(this.zoom, this.zoom); const gs = this.gridSize; const activeLayerIndex = this.layerOrder.indexOf(this.activeLayerName); const visStartX = Math.floor(-this.panX / this.zoom / gs); const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs); const visStartY = Math.floor(-this.panY / this.zoom / gs); const visEndY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs); const startX = Math.max(0, visStartX); const endX = Math.min(this.gridWidth, visEndX); const startY = Math.max(0, visStartY); const endY = Math.min(this.gridHeight, visEndY); for (let i = 0; i < this.layerOrder.length; i++) { const layerName = this.layerOrder[i]; const isLineLayer = this.lineLayers.includes(layerName); const isTransparent = i > activeLayerIndex && layerName !== 'walls'; if (isTransparent) this.ctx.globalAlpha = 0.35; if (isLineLayer) this.renderWallLayer(this.levelData[layerName]); else this.renderTileLayer(layerName, this.levelData[layerName], startX, startY, endX, endY); if (isTransparent) this.ctx.globalAlpha = 1.0; } this.drawGridAndBorders(startX, startY, endX, endY); this.drawHoverAndVectorUI(visStartX, visStartY, visEndX, visEndY); this.ctx.restore(); }
-    drawGridAndBorders(startX, startY, endX, endY) { const gs = this.gridSize; this.ctx.lineWidth = 1 / this.zoom; this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; this.ctx.beginPath(); for (let x = startX; x <= endX; x++) { this.ctx.moveTo(x * gs, startY * gs); this.ctx.lineTo(x * gs, endY * gs); } for (let y = startY; y <= endY; y++) { this.ctx.moveTo(startX * gs, y * gs); this.ctx.lineTo(endX * gs, y * gs); } this.ctx.stroke(); this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs); }
-    drawHoverAndVectorUI(visStartX, visStartY, visEndX, visEndY) { const gs = this.gridSize; if (this.hoveredLine && this.wallDrawMode === 'grid' && this.lineLayers.includes(this.activeLayerName)) { this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 6 / this.zoom; this.ctx.lineCap = 'round'; this.ctx.beginPath(); if (this.hoveredLine.type === 'V') { this.ctx.moveTo((this.hoveredLine.x + 1) * gs, this.hoveredLine.y * gs); this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs); } else { this.ctx.moveTo(this.hoveredLine.x * gs, (this.hoveredLine.y + 1) * gs); this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs); } this.ctx.stroke(); this.ctx.lineCap = 'butt'; } if (this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'vector') { this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; const vertRadius = 4 / this.zoom; for (let y = visStartY; y <= visEndY; y++) { for (let x = visStartX; x <= visEndX; x++) { this.ctx.beginPath(); this.ctx.arc(x * gs, y * gs, vertRadius, 0, Math.PI * 2); this.ctx.fill(); } } if (this.vectorWallStart) { const mousePos = this.getVertexCoordsFromEvent({clientX: this.lastMouse.x, clientY: this.lastMouse.y}); this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 4 / this.zoom; this.ctx.setLineDash([5 / this.zoom, 5 / this.zoom]); this.ctx.beginPath(); this.ctx.moveTo(this.vectorWallStart.x * gs, this.vectorWallStart.y * gs); this.ctx.lineTo(mousePos.x * gs, mousePos.y * gs); this.ctx.stroke(); this.ctx.setLineDash([]); } } }
+    render() { this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); this.ctx.save(); this.ctx.translate(this.panX, this.panY); this.ctx.scale(this.zoom, this.zoom); const activeLayerIndex = this.layerOrder.indexOf(this.activeLayerName); for (let i = 0; i < this.layerOrder.length; i++) { const layerName = this.layerOrder[i]; const isLineLayer = this.lineLayers.includes(layerName); const isTransparent = i > activeLayerIndex && layerName !== 'walls'; if (isTransparent) this.ctx.globalAlpha = 0.35; if (isLineLayer) this.renderWallLayer(this.levelData[layerName]); else this.renderTileLayer(layerName, this.levelData[layerName]); if (isTransparent) this.ctx.globalAlpha = 1.0; } this.drawGridAndBorders(); this.drawHoverAndVectorUI(); this.ctx.restore(); }
+    drawGridAndBorders() { const gs = this.gridSize; this.ctx.lineWidth = 1 / this.zoom; this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; this.ctx.beginPath(); for (let x = 0; x <= this.gridWidth; x++) { this.ctx.moveTo(x * gs, 0); this.ctx.lineTo(x * gs, this.gridHeight * gs); } for (let y = 0; y <= this.gridHeight; y++) { this.ctx.moveTo(0, y * gs); this.ctx.lineTo(this.gridWidth * gs, y * gs); } this.ctx.stroke(); this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs); }
+    
+    drawHoverAndVectorUI() {
+        const gs = this.gridSize;
+        if (this.hoveredLine && this.wallDrawMode === 'grid' && this.lineLayers.includes(this.activeLayerName)) { this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 6 / this.zoom; this.ctx.lineCap = 'round'; this.ctx.beginPath(); if (this.hoveredLine.type === 'V') { this.ctx.moveTo((this.hoveredLine.x + 1) * gs, this.hoveredLine.y * gs); this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs); } else { this.ctx.moveTo(this.hoveredLine.x * gs, (this.hoveredLine.y + 1) * gs); this.ctx.lineTo((this.hoveredLine.x + 1) * gs, (this.hoveredLine.y + 1) * gs); } this.ctx.stroke(); this.ctx.lineCap = 'butt'; }
+        
+        if (this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'vector') {
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+            const pixelSize = 2 / this.zoom;
+            for (let y = 0; y <= this.gridHeight; y++) {
+                for (let x = 0; x <= this.gridWidth; x++) {
+                    this.ctx.fillRect(x * gs - pixelSize / 2, y * gs - pixelSize / 2, pixelSize, pixelSize);
+                }
+            }
+            if (this.vectorWallStart) { const mousePos = this.getVertexCoordsFromEvent({clientX: this.lastMouse.x, clientY: this.lastMouse.y}); this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 4 / this.zoom; this.ctx.setLineDash([5 / this.zoom, 5 / this.zoom]); this.ctx.beginPath(); this.ctx.moveTo(this.vectorWallStart.x * gs, this.vectorWallStart.y * gs); this.ctx.lineTo(mousePos.x * gs, mousePos.y * gs); this.ctx.stroke(); this.ctx.setLineDash([]); }
+        }
+    }
+
     renderWallLayer(items) { if (!items) return; const gs = this.gridSize; const wallThickness = Math.max(2, gs * 0.1); for(const [key, item] of items.entries()) { if (key.startsWith('VEC_')) this.renderVectorWall(item); else this.renderGridWall(key, item, gs, wallThickness); } }
     
     renderGridWall(key, item, gs, wallThickness) {
         const [type, xStr, zStr] = key.split('_'); const x = Number(xStr); const z = Number(zStr);
         const img = this.preloadedImages.get(item.key);
         this.ctx.save();
-        if (img) {
-            const pattern = this.ctx.createPattern(img, 'repeat');
-            this.ctx.fillStyle = pattern;
-            if (type === 'V') { this.ctx.translate((x + 1) * gs, z * gs); this.ctx.fillRect(-wallThickness / 2, 0, wallThickness, gs); } 
-            else { this.ctx.translate(x * gs, (z + 1) * gs); this.ctx.fillRect(0, -wallThickness / 2, gs, wallThickness); }
-        } else {
-            this.ctx.strokeStyle = '#FFF'; this.ctx.lineWidth = 2 / this.zoom;
-            this.ctx.beginPath();
-            if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } 
-            else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); }
-            this.ctx.stroke();
-        }
+        if (img) { const pattern = this.ctx.createPattern(img, 'repeat'); this.ctx.fillStyle = pattern; if (type === 'V') { this.ctx.translate((x + 1) * gs, z * gs); this.ctx.fillRect(-wallThickness / 2, 0, wallThickness, gs); } else { this.ctx.translate(x * gs, (z + 1) * gs); this.ctx.fillRect(0, -wallThickness / 2, gs, wallThickness); }
+        } else { this.ctx.strokeStyle = '#FFF'; this.ctx.lineWidth = 2 / this.zoom; this.ctx.beginPath(); if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } this.ctx.stroke(); }
         this.ctx.restore();
-        
-        // Draw visibility line
         const isDoor = item.key.includes('/door/');
         this.ctx.strokeStyle = isDoor ? 'rgba(0, 150, 255, 0.9)' : 'rgba(255, 0, 0, 0.8)';
         this.ctx.lineWidth = 1 / this.zoom;
         this.ctx.beginPath();
-        if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } 
-        else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); }
+        if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); }
         this.ctx.stroke();
     }
 
@@ -280,10 +297,8 @@ class LevelEditor {
         const angle = Math.atan2(dy, dx);
         this.ctx.save();
         this.ctx.translate(x1, y1); this.ctx.rotate(angle);
-        if (img) { this.ctx.fillStyle = this.ctx.createPattern(img, 'repeat'); } 
-        else { this.ctx.fillStyle = '#FFF'; }
+        if (img) { this.ctx.fillStyle = this.ctx.createPattern(img, 'repeat'); } else { this.ctx.fillStyle = '#FFF'; }
         this.ctx.fillRect(0, -wallThickness / 2, length, wallThickness);
-        // Draw visibility line
         const isDoor = item.key.includes('/door/');
         this.ctx.strokeStyle = isDoor ? 'rgba(0, 150, 255, 0.9)' : 'rgba(255, 0, 0, 0.8)';
         this.ctx.lineWidth = 1 / this.zoom;
@@ -291,16 +306,27 @@ class LevelEditor {
         this.ctx.restore();
     }
     
-    renderTileLayer(layerName, items, startX, startY, endX, endY) {
+    renderTileLayer(layerName, items) {
         const gs = this.gridSize;
+        const visStartX = Math.floor(-this.panX / this.zoom / gs);
+        const visEndX = Math.ceil((this.canvas.width - this.panX) / this.zoom / gs);
+        const visStartY = Math.floor(-this.panY / this.zoom / gs);
+        const visEndY = Math.ceil((this.canvas.height - this.panY) / this.zoom / gs);
+        const startX = Math.max(0, visStartX); const endX = Math.min(this.gridWidth, visEndX);
+        const startY = Math.max(0, visStartY); const endY = Math.min(this.gridHeight, visEndY);
+
         const defaultTexInfo = this.defaultTextures[layerName];
         if (defaultTexInfo && defaultTexInfo.key) {
             const img = this.preloadedImages.get(defaultTexInfo.key);
             if (img) {
                 const size = defaultTexInfo.size || 1;
-                for (let y = startY; y < endY; y += size) {
-                    for (let x = startX; x < endX; x += size) {
-                        if (!items.has(`${x},${y}`)) this.ctx.drawImage(img, x * gs, y * gs, gs * size, gs * size);
+                const patternStartX = Math.floor(startX / size) * size;
+                const patternStartY = Math.floor(startY / size) * size;
+                for (let y = patternStartY; y < endY; y += size) {
+                    for (let x = patternStartX; x < endX; x += size) {
+                        if (!items.has(`${x},${y}`)) {
+                           this.ctx.drawImage(img, x * gs, y * gs, gs * size, gs * size);
+                        }
                     }
                 }
             }
@@ -309,7 +335,7 @@ class LevelEditor {
         for (const [coordKey, item] of items.entries()) {
             const [x, y] = coordKey.split(',').map(Number);
             const size = item.size || 1;
-            if(x + size <= startX || x > endX || y + size <= startY || y > endY) continue;
+            if(x + size <= startX || x >= endX || y + size <= startY || y >= endY) continue;
             let img = (item.type === 'npc' || item.type === 'asset') ? window[item.key + '_icon_img'] : this.preloadedImages.get(item.key);
             const originalAlpha = this.ctx.globalAlpha;
             if (layerName === 'water') this.ctx.globalAlpha *= 0.6;
@@ -326,69 +352,11 @@ class LevelEditor {
         }
     }
 
-    hasWallBetween(x1, y1, x2, y2) {
-        const walls = this.levelData['walls']; if (!walls) return false;
-        // Grid walls check
-        if (x1 !== x2) { // Horizontal move
-            const wallX = Math.min(x1, x2);
-            if (walls.has(`V_${wallX}_${y1}`)) return true;
-        } else { // Vertical move
-            const wallY = Math.min(y1, y2);
-            if (walls.has(`H_${x1}_${wallY}`)) return true;
-        }
-        // Vector walls check
-        const cx1 = (x1 + 0.5) * this.gridSize, cy1 = (y1 + 0.5) * this.gridSize;
-        const cx2 = (x2 + 0.5) * this.gridSize, cy2 = (y2 + 0.5) * this.gridSize;
-        for (const [key, wall] of walls.entries()) {
-            if (!key.startsWith('VEC_')) continue;
-            const [wx1, wy1, wx2, wy2] = wall.points.map(p => p * this.gridSize);
-            if (this.lineSegmentsIntersect(cx1, cy1, cx2, cy2, wx1, wy1, wx2, wy2)) return true;
-        }
-        return false;
-    }
-
-    bucketFill(startX, startY) {
-        if (!this.activeBrush || !this.tileLayers.includes(this.activeLayerName)) return;
-        const layer = this.levelData[this.activeLayerName];
-        if (layer.has(`${startX},${startY}`)) return; // Clicked on existing tile
-
-        this.modifyState(() => {
-            const q = [[startX, startY]];
-            const visited = new Set([`${startX},${startY}`]);
-            let count = 0;
-            while (q.length > 0) {
-                const [x, y] = q.shift();
-                layer.set(`${x},${y}`, { type: this.activeBrush.type, key: this.activeBrush.key, rotation: 0 });
-                count++;
-                const neighbors = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]];
-                for (const [nx, ny] of neighbors) {
-                    const key = `${nx},${ny}`;
-                    if (nx < 0 || nx >= this.gridWidth || ny < 0 || ny >= this.gridHeight || visited.has(key) || layer.has(key)) continue;
-                    if (!this.hasWallBetween(x, y, nx, ny)) {
-                        visited.add(key); q.push([nx, ny]);
-                    }
-                }
-            }
-            this.statusMsg.textContent = `Fill completed. ${count} tiles placed.`;
-        });
-    }
-    
-    lineSegmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4) {
-        const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-        if (den === 0) return false;
-        const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
-        const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
-        return t > 0 && t < 1 && u > 0 && u < 1;
-    }
-
+    hasWallBetween(x1, y1, x2, y2) { const walls = this.levelData['walls']; if (!walls) return false; if (x1 !== x2) { const wallX = Math.min(x1, x2); if (walls.has(`V_${wallX}_${y1}`)) return true; } else { const wallY = Math.min(y1, y2); if (walls.has(`H_${x1}_${wallY}`)) return true; } const cx1 = (x1 + 0.5) * this.gridSize, cy1 = (y1 + 0.5) * this.gridSize; const cx2 = (x2 + 0.5) * this.gridSize, cy2 = (y2 + 0.5) * this.gridSize; for (const [key, wall] of walls.entries()) { if (!key.startsWith('VEC_')) continue; const [wx1, wy1, wx2, wy2] = wall.points.map(p => p * this.gridSize); if (this.lineSegmentsIntersect(cx1, cy1, cx2, cy2, wx1, wy1, wx2, wy2)) return true; } return false; }
+    bucketFill(startX, startY) { if (!this.activeBrush || !this.tileLayers.includes(this.activeLayerName)) return; const layer = this.levelData[this.activeLayerName]; if (layer.has(`${startX},${startY}`)) return; this.modifyState(() => { const q = [[startX, startY]]; const visited = new Set([`${startX},${startY}`]); let count = 0; while (q.length > 0) { const [x, y] = q.shift(); layer.set(`${x},${y}`, { type: this.activeBrush.type, key: this.activeBrush.key, rotation: 0 }); count++; const neighbors = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]; for (const [nx, ny] of neighbors) { const key = `${nx},${ny}`; if (nx < 0 || nx >= this.gridWidth || ny < 0 || ny >= this.gridHeight || visited.has(key) || layer.has(key)) continue; if (!this.hasWallBetween(x, y, nx, ny)) { visited.add(key); q.push([nx, ny]); } } } this.statusMsg.textContent = `Fill completed. ${count} tiles placed.`; }); }
+    lineSegmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4) { const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4); if (den === 0) return false; const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den; const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den; return t > 0 && t < 1 && u > 0 && u < 1; }
     pointToSegmentDistance(px, py, x1, y1, x2, y2) { const l2 = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1); if (l2 === 0) return Math.sqrt((px-x1)*(px-x1) + (py-y1)*(py-y1)); let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2; t = Math.max(0, Math.min(1, t)); const projX = x1 + t * (x2 - x1); const projY = y1 + t * (y2 - y1); return Math.sqrt((px-projX)*(px-projX) + (py-projY)*(py-projY)); }
-    
-    getLevelDataObject() {
-        const levelObject = { settings: { width: this.gridWidth, height: this.gridHeight, defaults: this.defaultTextures }, layers: {} };
-        for (const layerName of this.layerOrder) { const layerMap = this.levelData[layerName]; if (layerMap.size > 0) levelObject.layers[layerName] = Array.from(layerMap.entries()); }
-        return levelObject;
-    }
-
+    getLevelDataObject() { const levelObject = { settings: { width: this.gridWidth, height: this.gridHeight, defaults: this.defaultTextures }, layers: {} }; for (const layerName of this.layerOrder) { const layerMap = this.levelData[layerName]; if (layerMap.size > 0) levelObject.layers[layerName] = Array.from(layerMap.entries()); } return levelObject; }
     async saveLevel() { const jsonString = JSON.stringify(this.getLevelDataObject(), null, 2); const blob = new Blob([jsonString], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `level_${this.currentLevel}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href); this.isLevelDirty = false; this.history = [this.cloneLevelData(this.levelData)]; this.historyIndex = 0; this.statusMsg.textContent = `Level ${this.currentLevel} saved.`; }
     async loadLevel(levelNum, isInitialLoad = false) { if (!isInitialLoad && this.isLevelDirty && !confirm('Discard unsaved changes?')) return; const path = `/data/levels/level_${levelNum}.json`; try { const response = await fetch(path); if (!response.ok) throw new Error('Level not found'); const data = await response.json(); this.applyLoadedData(data); this.statusMsg.textContent = `Level ${levelNum} loaded.`; } catch (err) { if (isInitialLoad || confirm(`Level ${levelNum} not found. Create new level?`)) { this.layerOrder.forEach(layer => this.levelData[layer].clear()); this.statusMsg.textContent = `Started new Level ${levelNum}.`; } else { this.ui.levelNumberInput.value = this.currentLevel; return; } } this.currentLevel = levelNum; this.isLevelDirty = false; this.history = [this.cloneLevelData(this.levelData)]; this.historyIndex = 0; this.ui.updateUIForNewLevel(); this.render(); }
     applyLoadedData(data) { this.gridWidth = data.settings?.width || 64; this.gridHeight = data.settings?.height || 64; this.defaultTextures = data.settings?.defaults || {}; this.ui.updateSettingsUI(); this.layerOrder.forEach(layer => this.levelData[layer].clear()); const loadedLayers = data.layers || {}; for (const layerName in loadedLayers) if (this.levelData.hasOwnProperty(layerName)) this.levelData[layerName] = new Map(loadedLayers[layerName]); }
