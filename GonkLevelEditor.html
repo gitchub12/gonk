@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="file-identifier" content="GonkLevelEditor.html; BROWSERFIREFOXHIDE and filename must be in the first six physical lines of the file. DO NOT REMOVE!">
+    <meta name="file-identifier" content="BROWSERFIREFOXHIDE GonkLevelEditor.html; this must be in the first three physical lines of the file. DO NOT REMOVE!">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gonk FPS Level Editor</title>
     <style>
@@ -132,26 +132,32 @@
                 <div class="horizontal-group">
                     <label for="default-subfloor-select">Subfloor:</label>
                     <select id="default-subfloor-select"></select>
+                    <select class="default-size-select" id="default-subfloor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floor-select">Floor:</label>
                     <select id="default-floor-select"></select>
+                    <select class="default-size-select" id="default-floor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-water-select">Water:</label>
                     <select id="default-water-select"></select>
+                     <select class="default-size-select" id="default-water-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floater-select">Floater:</label>
                     <select id="default-floater-select"></select>
+                    <select class="default-size-select" id="default-floater-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-ceiling-select">Ceiling:</label>
                     <select id="default-ceiling-select"></select>
+                    <select class="default-size-select" id="default-ceiling-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                      <label for="default-sky-select">Sky:</label>
                     <select id="default-sky-select"></select>
+                    <select class="default-size-select" id="default-sky-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
             </div>
         </div>
@@ -163,6 +169,8 @@
             <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="R"></button>
             <button id="tool-spawn" title="Place Spawn (P)"><img src="/data/pngs/icons for UI/gonkicon.png" alt="S"></button>
             <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
+            <button id="tool-wall-mode" title="Switch Wall Mode (M)"><img src="/data/pngs/icons for UI/gridicon.png" alt="M"></button>
+            <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="T"></button>
         </div>
         <div id="layer-selector" class="floating-toolbar"></div>
         <div class="top-right-ui">
