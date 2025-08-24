@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE editor_ui_and_assets.js
-// New file containing the UI and Asset Management systems for the Level Editor.
+// Rewritten to add bucket fill tool and ensure robust initialization.
 
 class EditorAssetManager {
     constructor(modelSystem) {
@@ -46,7 +46,6 @@ class EditorAssetManager {
             const furnitureManifest = await furnitureManifestResponse.json();
             const modelPath = furnitureManifest._config.modelPath;
 
-            // Instead of fetching directory, read from the manifest's "models" object
             for (const modelKey in furnitureManifest.models) {
                 const modelDef = furnitureManifest.models[modelKey];
                 const fileName = modelDef.file;
@@ -110,7 +109,13 @@ class EditorUI {
         ['subfloor', 'floor', 'water', 'floater', 'ceiling', 'sky'].forEach(id => {
             const el = document.getElementById(`default-${id}-select`); if(el) this.defaultTextureSelects[id] = el;
         });
-        this.toolButtons = { paint: document.getElementById('tool-paint'), erase: document.getElementById('tool-erase'), rotate: document.getElementById('tool-rotate'), spawn: document.getElementById('tool-spawn')};
+        this.toolButtons = { 
+            paint: document.getElementById('tool-paint'), 
+            erase: document.getElementById('tool-erase'), 
+            rotate: document.getElementById('tool-rotate'), 
+            spawn: document.getElementById('tool-spawn'),
+            fill: document.getElementById('tool-fill') 
+        };
     }
 
     init() {
@@ -128,23 +133,40 @@ class EditorUI {
                 alert('Cannot play level: No spawn point has been placed.');
                 return;
             }
-            const levelObject = {
-                settings: { width: this.editor.gridWidth, height: this.editor.gridHeight, defaults: this.editor.defaultTextures },
-                layers: {}
-            };
-            for (const layerName of this.editor.layerOrder) {
-                const layerMap = this.editor.levelData[layerName];
-                if (layerMap.size > 0) levelObject.layers[layerName] = Array.from(layerMap.entries());
-            }
+            const levelObject = this.editor.getLevelDataObject();
             localStorage.setItem('gonk_level_to_play', JSON.stringify(levelObject));
             window.open('index.html', 'GonkPlayWindow');
         });
+
         this.gridWidthInput.addEventListener('change', () => { this.editor.gridWidth = parseInt(this.gridWidthInput.value) || 64; this.editor.modifyState(()=>{});});
         this.gridHeightInput.addEventListener('change', () => { this.editor.gridHeight = parseInt(this.gridHeightInput.value) || 64; this.editor.modifyState(()=>{});});
+        
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
-            select.addEventListener('change', () => { this.editor.defaultTextures[layer] = select.value; this.editor.modifyState(()=>{}); });
+            select.addEventListener('change', () => {
+                const sizeSelect = document.getElementById(`default-${layer}-size`);
+                this.editor.defaultTextures[layer] = {
+                    key: select.value,
+                    size: parseInt(sizeSelect.value) || 1
+                };
+                this.editor.modifyState(()=>{});
+            });
+            const sizeSelect = document.getElementById(`default-${layer}-size`);
+             if (sizeSelect) {
+                sizeSelect.addEventListener('change', () => {
+                    this.editor.defaultTextures[layer] = {
+                        key: select.value,
+                        size: parseInt(sizeSelect.value) || 1
+                    };
+                    this.editor.modifyState(()=>{});
+                });
+            }
         }
-        Object.entries(this.toolButtons).forEach(([toolName, button]) => button.addEventListener('click', () => this.setActiveTool(toolName)));
+        
+        Object.entries(this.toolButtons).forEach(([toolName, button]) => {
+            // Null-check to prevent crash if an element is missing
+            if (button) button.addEventListener('click', () => this.setActiveTool(toolName));
+        });
+
         this.populateDefaultTextureSettings(); this.setActiveLayer(this.editor.activeLayerName);
     }
     
@@ -210,9 +232,9 @@ class EditorUI {
 
     setActiveTool(toolName) {
         this.editor.activeTool = toolName;
-        Object.values(this.toolButtons).forEach(btn => btn.classList.remove('active'));
+        Object.values(this.toolButtons).forEach(btn => { if(btn) btn.classList.remove('active'); });
         if (this.toolButtons[toolName]) this.toolButtons[toolName].classList.add('active');
-        const cursors = { paint: 'crosshair', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer' };
+        const cursors = { paint: 'crosshair', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer', fill: 'copy' };
         this.editor.canvas.style.cursor = cursors[toolName] || 'default';
         this.updatePalette();
     }
@@ -226,7 +248,7 @@ class EditorUI {
 
     updatePalette(subGroup = null) {
         const activeLayer = this.editor.activeLayerName; const activeTool = this.editor.activeTool;
-        const showPalette = activeTool === 'paint';
+        const showPalette = activeTool === 'paint' || activeTool === 'fill';
         document.querySelector('.content-group h4').style.display = showPalette ? 'block' : 'none';
         this.paletteContainer.style.display = showPalette ? 'grid' : 'none';
         document.getElementById('palette-controls').style.display = showPalette ? 'flex' : 'none';
@@ -297,15 +319,27 @@ class EditorUI {
             textures.forEach(path => { const option = document.createElement('option'); option.value = path; option.textContent = path.split('/').pop(); select.appendChild(option); });
             if (layer === 'floor') {
                 const defaultFloorTexture = '/data/pngs/floor/floor_1.png';
-                if (textures.includes(defaultFloorTexture)) { select.value = defaultFloorTexture; this.editor.defaultTextures['floor'] = defaultFloorTexture; }
-                else if (textures.length > 0) { select.value = textures[0]; this.editor.defaultTextures['floor'] = textures[0]; }
+                if (textures.includes(defaultFloorTexture)) { 
+                    select.value = defaultFloorTexture; 
+                    this.editor.defaultTextures['floor'] = { key: defaultFloorTexture, size: 1};
+                }
+                else if (textures.length > 0) { 
+                    select.value = textures[0]; 
+                    this.editor.defaultTextures['floor'] = { key: textures[0], size: 1};
+                }
             }
         }
     }
 
     updateSettingsUI() {
-        this.gridWidthInput.value = this.editor.gridWidth; this.gridHeightInput.value = this.editor.gridHeight;
-        for(const [layer, select] of Object.entries(this.defaultTextureSelects)) select.value = this.editor.defaultTextures[layer] || '';
+        this.gridWidthInput.value = this.editor.gridWidth;
+        this.gridHeightInput.value = this.editor.gridHeight;
+        for (const [layer, defaultInfo] of Object.entries(this.editor.defaultTextures)) {
+            const select = this.defaultTextureSelects[layer];
+            const sizeSelect = document.getElementById(`default-${layer}-size`);
+            if (select) select.value = defaultInfo.key || '';
+            if (sizeSelect) sizeSelect.value = defaultInfo.size || '1';
+        }
     }
 
     populateNpcPalette() {
