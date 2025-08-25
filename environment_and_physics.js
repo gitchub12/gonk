@@ -1,5 +1,60 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// Rewritten to use a performant, correctly pivoted BoxGeometry for vector walls.
+// Rewritten to use Quaternions for robust vector wall placement and activate NPC animations.
+
+class NPC {
+    constructor(characterMesh, itemData, config) {
+        this.mesh = characterMesh;
+        this.config = config;
+        this.state = 'idle';
+        this.health = itemData.health || config.stats.health || 10;
+
+        this.speed = config.stats.speed || 0.025;
+        this.perceptionRadius = 10;
+        this.attackRange = config.stats.attackRange || 2.0;
+        this.attackCooldown = config.stats.attackCooldown || 2.0;
+        this.attackTimer = 0;
+    }
+
+    update(deltaTime, playerPosition) {
+        this.attackTimer -= deltaTime;
+        const distanceToPlayer = this.mesh.group.position.distanceTo(playerPosition);
+
+        let isMoving = false;
+        // State transitions
+        if (distanceToPlayer < this.perceptionRadius && this.state !== 'attacking') {
+            this.state = 'attacking';
+        } else if (distanceToPlayer >= this.perceptionRadius && this.state === 'attacking') {
+            this.state = 'idle';
+        }
+
+        // State actions
+        switch (this.state) {
+            case 'idle':
+                // Idle behavior
+                break;
+            case 'attacking':
+                this.mesh.group.lookAt(playerPosition.x, this.mesh.group.position.y, playerPosition.z);
+                if (distanceToPlayer > this.attackRange) {
+                    const direction = playerPosition.clone().sub(this.mesh.group.position).normalize();
+                    this.mesh.group.position.add(direction.multiplyScalar(this.speed));
+                    isMoving = true;
+                } else if (this.attackTimer <= 0) {
+                    this.attack();
+                }
+                break;
+        }
+
+        // Update animation based on state
+        const animToSet = isMoving ? 'walk' : 'idle';
+        window.setGonkAnimation(this.mesh, animToSet);
+        window.updateGonkAnimation(this.mesh, { deltaTime });
+    }
+
+    attack() {
+        // console.log(`${this.config.name} attacks!`);
+        this.attackTimer = this.attackCooldown;
+    }
+}
 
 class LevelRenderer {
     constructor() {
@@ -13,36 +68,21 @@ class LevelRenderer {
         const settings = levelData.settings || { width: 64, height: 64, defaults: {} };
 
         const processTileLayer = (layerName, y, rotationX, isSpecial) => {
-            const defaultInfo = settings.defaults[layerName];
             const layerItems = layers[layerName] ? new Map(layers[layerName]) : new Map();
-
-            if (defaultInfo && defaultInfo.key) {
-                const defaultSize = defaultInfo.size || 1;
-                for (let z = 0; z < settings.height; z += defaultSize) {
-                    for (let x = 0; x < settings.width; x += defaultSize) {
-                        const coordKey = `${x},${z}`;
-                        if (!layerItems.has(coordKey)) {
-                             this.createTile(x, z, { key: defaultInfo.key, size: defaultSize, rotation: 0 }, y, rotationX, isSpecial, layerName);
-                        }
-                    }
-                }
-            }
-            
             for (const [pos, item] of layerItems.entries()) {
                 const [x, z] = pos.split(',').map(Number);
                 this.createTile(x, z, item, y, rotationX, isSpecial, layerName);
             }
         };
 
-        processTileLayer('subfloor', -1.0, -Math.PI / 2, false);
         processTileLayer('floor', 0, -Math.PI / 2, false);
         processTileLayer('water', 0.2, -Math.PI / 2, true);
-        processTileLayer('ceiling', this.wallHeight, Math.PI / 2, false);
+        processTileLayer('ceiling', this.wallHeight - 0.001, Math.PI / 2, false);
         processTileLayer('sky', this.wallHeight + 1.0, Math.PI / 2, false);
-        processTileLayer('decor', 0.01, -Math.PI / 2, true);
+        processTileLayer('decor', 0, 0, true);
         processTileLayer('floater', 0.4, -Math.PI / 2, true);
         processTileLayer('dangler', this.wallHeight - 0.01, Math.PI / 2, true);
-        
+
         if (layers.walls) this.createWalls(layers.walls);
         if (layers.tapestry) this.createTapestries(layers.tapestry);
         if (layers.npcs) this.createNPCs(layers.npcs);
@@ -60,24 +100,35 @@ class LevelRenderer {
     createTile(x, z, item, y, rotationX, isSpecial, layerName = '') {
         const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
         let material = assetManager.getMaterial(materialName).clone();
-        
+
         material.transparent = true;
         material.alphaTest = 0.1;
-        if (layerName === 'water') material.opacity = 0.7;
-        
+        if (layerName === 'water') {
+            material.opacity = 0.7;
+            material.depthWrite = false;
+        }
+        if (layerName === 'decor') {
+            material.side = THREE.DoubleSide;
+        }
+
         const size = item.size || 1;
         const geoSize = this.gridSize * size;
 
         const planeGeo = new THREE.PlaneGeometry(geoSize, geoSize);
         const mesh = new THREE.Mesh(planeGeo, material);
-        mesh.rotation.x = rotationX;
+
+        if (layerName === 'decor') {
+            mesh.position.y = this.wallHeight / 2;
+        } else {
+            mesh.rotation.x = rotationX;
+        }
 
         const group = new THREE.Group();
         const posX = x * this.gridSize + geoSize / 2;
         const posZ = z * this.gridSize + geoSize / 2;
         group.position.set(posX, y, posZ);
         group.rotation.y = (item.rotation || 0) * -Math.PI / 2;
-        
+
         group.add(mesh);
         group.receiveShadow = !isSpecial;
         game.scene.add(group);
@@ -87,33 +138,33 @@ class LevelRenderer {
         for (const [key, item] of items) {
             const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
             const material = assetManager.getMaterial(materialName).clone();
-            
             material.transparent = true;
             material.alphaTest = 0.1;
-
             const isDoor = item.key.includes('/door/');
             let mesh;
 
             if (key.startsWith('VEC_')) {
                 const [x1_grid, y1_grid, x2_grid, y2_grid] = item.points;
+                const startPoint = new THREE.Vector3(x1_grid * this.gridSize, this.wallHeight / 2, y1_grid * this.gridSize);
+                const endPoint = new THREE.Vector3(x2_grid * this.gridSize, this.wallHeight / 2, y2_grid * this.gridSize);
 
-                const dx_world = (x2_grid - x1_grid) * this.gridSize;
-                const dz_world = (y2_grid - y1_grid) * this.gridSize;
-                
-                const length = Math.sqrt(dx_world * dx_world + dz_world * dz_world);
-                const angle = Math.atan2(dz_world, dx_world);
+                const length = startPoint.distanceTo(endPoint);
+                if (length < 0.01) continue;
+
+                material.map.wrapS = THREE.RepeatWrapping;
+                material.map.wrapT = THREE.RepeatWrapping;
+                material.map.repeat.set(length / this.gridSize, this.wallHeight / this.gridSize);
 
                 const wallGeo = new THREE.BoxGeometry(length, this.wallHeight, 0.1);
-                wallGeo.translate(length / 2, 0, 0);
-                
                 mesh = new THREE.Mesh(wallGeo, material);
 
-                mesh.position.set(
-                    x1_grid * this.gridSize,
-                    this.wallHeight / 2,
-                    y1_grid * this.gridSize
-                );
-                mesh.rotation.y = angle;
+                const direction = new THREE.Vector3().subVectors(endPoint, startPoint).normalize();
+                // Align the mesh's local X-axis (its length) with the direction vector
+                const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1, 0, 0), direction);
+                mesh.quaternion.copy(quaternion);
+
+                // Position the mesh at the midpoint between start and end
+                mesh.position.lerpVectors(startPoint, endPoint, 0.5);
 
             } else {
                 const [type, xStr, zStr] = key.split('_');
@@ -125,15 +176,62 @@ class LevelRenderer {
                 else { posX = (x + 1) * this.gridSize; posZ = z * this.gridSize + this.gridSize / 2; }
                 mesh.position.set(posX, this.wallHeight / 2, posZ);
             }
-            
+
             mesh.castShadow = true; mesh.receiveShadow = true;
             game.scene.add(mesh);
             if (isDoor) game.entities.doors.push(new Door(mesh, item));
         }
     }
-    
-    createTapestries(items) { for (const [key, item] of items) { const [type, xStr, zStr] = key.split('_'); const x = Number(xStr); const z = Number(zStr); const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, ""); const material = assetManager.getMaterial(materialName).clone(); material.map.wrapS = THREE.RepeatWrapping; material.map.repeat.x = -1; material.side = THREE.DoubleSide; material.transparent = true; material.alphaTest = 0.1; const tapestryGeo = new THREE.PlaneGeometry(this.gridSize, this.wallHeight); const mesh = new THREE.Mesh(tapestryGeo, material); let posX, posZ, rotY; const offset = 0.06; if (type === 'H') { posX = x * this.gridSize + this.gridSize / 2; posZ = (z + 1) * this.gridSize - offset; rotY = 0; } else { posX = (x + 1) * this.gridSize - offset; posZ = z * this.gridSize + this.gridSize / 2; rotY = Math.PI / 2; } mesh.position.set(posX, this.wallHeight / 2, posZ); mesh.rotation.y = rotY; mesh.castShadow = true; game.scene.add(mesh); } }
-    createNPCs(items) { for (const [pos, item] of items) { const [x, z] = pos.split(',').map(Number); const skinTextureName = item.key; const characterId = item.key.replace(/\d+$/, ''); const config = CHARACTER_CONFIG[characterId]; if (!config) { console.warn(`No character config found for '${characterId}'`); continue; } const char = window.createGonkMesh( config.minecraftModel || 'humanoid', { skinTexture: skinTextureName }, new THREE.Vector3(x * this.gridSize + this.gridSize/2, 0, z * this.gridSize + this.gridSize/2), item.key ); if(char) { char.group.rotation.y = (item.rotation || 0) * -Math.PI / 2; game.scene.add(char.group); game.entities.npcs.push(char); } } }
+
+    createTapestries(items) { 
+        for (const [key, item] of items) { 
+            const [type, xStr, zStr] = key.split('_'); 
+            const x = Number(xStr); const z = Number(zStr); 
+            const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, ""); 
+            const material = assetManager.getMaterial(materialName).clone(); 
+            material.side = THREE.DoubleSide; 
+            material.transparent = true; 
+            material.alphaTest = 0.1; 
+            const tapestryGeo = new THREE.PlaneGeometry(this.gridSize, this.wallHeight); 
+            const mesh = new THREE.Mesh(tapestryGeo, material); 
+            let posX, posZ, rotY; 
+            const offset = item.direction === 1 ? -0.06 : 0.06;
+            if (type === 'H') { 
+                posX = x * this.gridSize + this.gridSize / 2; 
+                posZ = (z + 1) * this.gridSize + offset; 
+                rotY = 0; 
+            } else { 
+                posX = (x + 1) * this.gridSize + offset; 
+                posZ = z * this.gridSize + this.gridSize / 2; 
+                rotY = Math.PI / 2; 
+            } 
+            mesh.position.set(posX, this.wallHeight / 2, posZ); 
+            mesh.rotation.y = rotY; 
+            mesh.castShadow = true; 
+            game.scene.add(mesh); 
+        } 
+    }
+
+    createNPCs(items) { 
+        for (const [pos, item] of items) { 
+            const [x, z] = pos.split(',').map(Number); 
+            const skinTextureName = item.key; 
+            const characterId = item.key.replace(/\d+$/, ''); 
+            const config = CHARACTER_CONFIG[characterId]; 
+            if (!config) { console.warn(`No character config found for '${characterId}'`); continue; } 
+            const charMesh = window.createGonkMesh( config.minecraftModel || 'humanoid', { skinTexture: skinTextureName }, new THREE.Vector3(x * this.gridSize + this.gridSize/2, 0, z * this.gridSize + this.gridSize/2), item.key ); 
+            if(charMesh) { 
+                charMesh.group.rotation.y = (item.rotation || 0) * -Math.PI / 2; 
+                if (config.scale) {
+                     charMesh.group.scale.multiplyScalar(config.scale);
+                }
+                game.scene.add(charMesh.group); 
+                const npcInstance = new NPC(charMesh, item, config);
+                game.entities.npcs.push(npcInstance); 
+            } 
+        } 
+    }
+
     createFallbackFloor() { const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x111111 })); floor.rotation.x = -Math.PI / 2; game.scene.add(floor); const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444); gridHelper.position.y = 0.01; game.scene.add(gridHelper); }
 }
 

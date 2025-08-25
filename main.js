@@ -1,11 +1,11 @@
 // BROWSERFIREFOXHIDE main.js
-// This file now only DEFINES and INSTANTIATES the core classes. The game loop has been moved to index.html.
+// Updated to lower player eye-level and to call the new NPC update loop.
 
 // === GAME GLOBAL CONSTANTS ===
 const GAME_GLOBAL_CONSTANTS = {
   PLAYER: {
     MAX_HEALTH: 10,
-    HEIGHT: 0.5,
+    HEIGHT: 0.45, // Lowered by 10% from 0.5
     COLLISION_RADIUS: 0.4
   },
   MOVEMENT: {
@@ -27,7 +27,6 @@ const GAME_GLOBAL_CONSTANTS = {
   },
 };
 Object.freeze(GAME_GLOBAL_CONSTANTS);
-// ... freeze other sub-objects ...
 
 // === INPUT HANDLER ===
 class InputHandler {
@@ -36,7 +35,7 @@ class InputHandler {
     this.yaw = Math.PI;
     this.setupEventListeners();
   }
-  
+
   setupEventListeners() {
     document.addEventListener('keydown', (e) => this.onKeyDown(e));
     document.addEventListener('keyup', (e) => this.keys[e.code] = false);
@@ -66,7 +65,7 @@ class InputHandler {
         if (window.playerWeaponSystem) playerWeaponSystem.handlePamphletAttack();
     }
   }
-  
+
   onMouseMove(e) {
     if (document.pointerLockElement !== game.canvas) return;
     this.yaw -= e.movementX * 0.002;
@@ -135,11 +134,19 @@ class Game {
   update(currentTime) {
     this.deltaTime = (currentTime - this.lastFrameTime) / 1000;
     this.lastFrameTime = currentTime;
+
+    // Update Projectiles
     for (let i = this.entities.projectiles.length - 1; i >= 0; i--) {
       if (!this.entities.projectiles[i].update(this.deltaTime)) {
         this.entities.projectiles.splice(i, 1);
       }
     }
+
+    // Update NPCs
+    for (const npc of this.entities.npcs) {
+        npc.update(this.deltaTime, this.camera.position);
+    }
+
     this.updateHUD();
   }
 
@@ -148,8 +155,7 @@ class Game {
       const healthLabel = document.querySelector('.health-label');
       const ammoDisplay = document.getElementById('gameHudAmmo');
       const gonkImage = document.getElementById('gonkImage');
-      
-      // Health and Ammo
+
       if (healthFill && healthLabel) {
           const healthPercent = Math.max(0, (this.state.health / GAME_GLOBAL_CONSTANTS.PLAYER.MAX_HEALTH) * 100);
           healthFill.style.width = `${healthPercent}%`;
@@ -159,7 +165,6 @@ class Game {
           ammoDisplay.textContent = `${this.state.ammo} / ${this.state.maxAmmo}`;
       }
 
-      // Animated Icon
       const icon = this.hudGonkIcon;
       icon.animTimer += this.deltaTime;
 
@@ -194,7 +199,6 @@ class Game {
     this.setupLighting();
   }
 }
-
 
 // === INSTANTIATION ===
 window.game = new Game();

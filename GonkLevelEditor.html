@@ -22,12 +22,12 @@
         #canvasContainer { flex-grow: 1; position: relative; }
         canvas { display: block; width: 100%; height: 100%; background-color: #111; cursor: default; }
         #statusBar { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 5px; font-size: 12px; display: flex; justify-content: space-between; z-index: 5; }
-        
+
         .tabs { display: flex; border-bottom: 1px solid var(--border-color); }
         .tab-button { flex-grow: 1; padding: 10px; background: var(--panel-bg); border: none; color: var(--text-color); cursor: pointer; border-bottom: 3px solid transparent; }
         .tab-button:hover { background: #333842; }
         .tab-button.active { border-bottom: 3px solid var(--accent-color); color: var(--text-hover); }
-        
+
         .tab-content { display: none; padding-top: 10px; flex-grow: 1; overflow-y: auto; position: relative; }
         .tab-content.active { display: flex; flex-direction: column; }
 
@@ -45,28 +45,44 @@
         .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
         .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
         .palette-item img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
-        
+
         .palette-item span { position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; left: 5%; width: 90%; text-align: center; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .palette-header { grid-column: 1 / -1; text-align: left; font-weight: bold; color: var(--accent-color); margin-top: 10px; padding-bottom: 4px; text-transform: capitalize; border-bottom: 1px solid var(--border-color); }
         #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
         #palette-controls input { flex-grow: 1; }
         #layer-actions { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; gap: 10px; }
         #layer-actions button { flex-grow: 1; }
-        
+
         .floating-toolbar { position: absolute; background-color: transparent; border: none; display: flex; padding: 5px; gap: 5px; z-index: 20; }
-        .floating-toolbar button { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; overflow:hidden; position: relative; }
+        .floating-toolbar button { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow:hidden; position: relative; }
         .floating-toolbar button:hover { background-color: #333842; }
         .floating-toolbar button.active { border-color: var(--accent-color); background-color: #333842;}
-        .floating-toolbar button img { width: 24px; height: 24px; image-rendering: pixelated; }
-        
+
         #toolbox { top: 10px; left: 10px; flex-direction: column; }
-        #toolbox button { width: 40px; height: 40px; }
-        
-        #layer-selector { top: 10px; left: 65px; flex-direction: row; flex-wrap: wrap; width: auto; max-width: calc(100% - 80px); }
+        #toolbox button { 
+            width: 64px; 
+            height: 58px;
+            flex-direction: column;
+            padding: 4px 0;
+            font-size: 11px;
+        }
+        #toolbox button img { 
+            width: 32px; 
+            height: 32px; 
+            image-rendering: pixelated; 
+            margin-bottom: 2px;
+        }
+        #toolbox .tool-label {
+            font-weight: bold;
+            color: var(--text-hover);
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #layer-selector { top: 10px; left: 85px; flex-direction: row; flex-wrap: wrap; width: auto; max-width: calc(100% - 100px); }
         #layer-selector button { width: 64px; height: 50px; flex-direction: column; }
         #layer-selector button img { width: 32px; height: 32px; margin-top: 2px; }
         #layer-selector button .layer-label { font-size: 10px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
-        
+
         .top-right-ui { position: absolute; top: 10px; right: 10px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; }
         #playtest-button { padding: 12px 24px; font-size: 1.2em; font-weight: bold; background-color: var(--play-btn-bg); border: 1px solid #1e7e34; color: white; cursor: pointer; border-radius: 5px; text-shadow: 1px 1px 2px black; }
@@ -132,32 +148,32 @@
                 <div class="horizontal-group">
                     <label for="default-subfloor-select">Subfloor:</label>
                     <select id="default-subfloor-select"></select>
-                    <select class="default-size-select" id="default-subfloor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <select class="default-size-select" id="default-subfloor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floor-select">Floor:</label>
                     <select id="default-floor-select"></select>
-                    <select class="default-size-select" id="default-floor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <select class="default-size-select" id="default-floor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-water-select">Water:</label>
                     <select id="default-water-select"></select>
-                     <select class="default-size-select" id="default-water-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                     <select class="default-size-select" id="default-water-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floater-select">Floater:</label>
                     <select id="default-floater-select"></select>
-                    <select class="default-size-select" id="default-floater-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <select class="default-size-select" id="default-floater-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-ceiling-select">Ceiling:</label>
                     <select id="default-ceiling-select"></select>
-                    <select class="default-size-select" id="default-ceiling-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <select class="default-size-select" id="default-ceiling-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
                 <div class="horizontal-group">
                      <label for="default-sky-select">Sky:</label>
                     <select id="default-sky-select"></select>
-                    <select class="default-size-select" id="default-sky-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <select class="default-size-select" id="default-sky-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option><option value="0.5">1/2</option><option value="0.25">1/4</option></select>
                 </div>
             </div>
         </div>
@@ -165,13 +181,13 @@
     <div id="canvasContainer">
         <canvas id="editorCanvas"></canvas>
         <div id="toolbox" class="floating-toolbar">
-            <button id="tool-paint" title="Paint (B)" class="active"><img src="/data/pngs/icons for UI/paintbrush.png" alt="P"></button>
-            <button id="tool-fill" title="Fill (F)"><img src="/data/pngs/icons for UI/bucket.png" alt="F"></button>
-            <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="R"></button>
-            <button id="tool-spawn" title="Place Spawn (P)"><img src="/data/pngs/icons for UI/gonkicon.png" alt="S"></button>
-            <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
-            <button id="tool-wall-mode" title="Switch Wall Mode (M)"><img src="/data/pngs/icons for UI/gridicon.png" alt="M"></button>
-            <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="T"></button>
+            <button id="tool-paint" title="Paint (B)" class="active"><img src="/data/pngs/icons for UI/paintbrush.png" alt="Paint"><span class="tool-label">Paint</span></button>
+            <button id="tool-fill" title="Fill (F)"><img src="/data/pngs/icons for UI/bucket.png" alt="Fill"><span class="tool-label">Fill</span></button>
+            <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="Rotate"><span class="tool-label">Rotate</span></button>
+            <button id="tool-spawn" title="Place Spawn (P)"><img src="/data/pngs/icons for UI/gonkicon.png" alt="Spawn"><span class="tool-label">Spawn</span></button>
+            <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="Erase"><span class="tool-label">Erase</span></button>
+            <button id="tool-wall-mode" title="Switch Wall Mode (M)"><img src="/data/pngs/icons for UI/gridicon.png" alt="Wall Mode"><span class="tool-label">Mode</span></button>
+            <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="Tile Size"><span class="tool-label">1x</span></button>
         </div>
         <div id="layer-selector" class="floating-toolbar"></div>
         <div class="top-right-ui">

@@ -9,8 +9,7 @@
         body { margin: 0; overflow: hidden; background: #000; cursor: crosshair; font-family: Arial, sans-serif; }
         canvas { display: block; }
         #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; display: flex; justify-content: center; align-items: center; z-index: 1000; font-family: 'Courier New', Courier, monospace;}
-        
-        /* HUD Styles from user's file */
+
         .game-hud-container { position: absolute; width: 100%; height: 100%; pointer-events: none; display: none; color: #eee; }
         .ally-boxes { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 1px; padding: 0; }
         .ally-box { width: 80px; height: 100px; background: rgba(0, 50, 100, 0.15); border: 2px solid rgba(0, 150, 200, 0.4); border-top: none; display: flex; align-items: center; justify-content: center; color: #00ffff; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
@@ -47,7 +46,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+
     <script>
         class ScriptLoader {
             constructor() {
@@ -89,7 +88,7 @@
                 });
             }
         }
-        
+
         async function initGame() {
             console.log('--- GAME INITIALIZING ---');
             await assetManager.loadAll();
@@ -104,7 +103,10 @@
             function gameLoop() {
                 requestAnimationFrame(gameLoop);
                 if (!game.isInitialized) return;
-                game.update(performance.now());
+
+                const currentTime = performance.now();
+                game.update(currentTime);
+
                 physics.updateMovement(game.deltaTime, inputHandler.keys, game.camera, false);
                 game.render();
             }

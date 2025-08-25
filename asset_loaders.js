@@ -1,5 +1,29 @@
 // BROWSERFIREFOXHIDE asset_loaders.js
-// This file has been rewritten for dynamic asset discovery.
+// Rewritten to use natural sorting and to dynamically load all character skins.
+
+function naturalSort(a, b) {
+    const re = /(\d+)/g;
+    const aParts = a.split(re);
+    const bParts = b.split(re);
+
+    for (let i = 0; i < Math.min(aParts.length, bParts.length); i++) {
+        const aPart = aParts[i];
+        const bPart = bParts[i];
+
+        if (i % 2 === 1) { // It's a number part
+            const aNum = parseInt(aPart, 10);
+            const bNum = parseInt(bPart, 10);
+            if (aNum !== bNum) {
+                return aNum - bNum;
+            }
+        } else { // It's a string part
+            if (aPart !== bPart) {
+                return aPart.localeCompare(bPart);
+            }
+        }
+    }
+    return a.length - b.length;
+}
 
 // === DYNAMIC ASSET LOADER ===
 class AssetManager {
@@ -42,6 +66,7 @@ class AssetManager {
       for (const category of this.textureCategories) {
           const path = `data/pngs/${category}/`;
           const files = await this.fetchDirectoryListing(path);
+          files.sort(naturalSort);
           for (const file of files) {
               const name = file.replace(/\.png$/, '');
               const fullPath = path + file;
@@ -49,9 +74,10 @@ class AssetManager {
               promises.push(this.loadTextureWithPromise(loader, name, fullPath));
           }
       }
-      
+
       const pamphletPath = 'data/weapons/pamphlets/';
       const pamphletFiles = await this.fetchDirectoryListing(pamphletPath);
+      pamphletFiles.sort(naturalSort);
       for (const file of pamphletFiles) {
           const name = file.replace(/\.png$/, '');
           const fullPath = pamphletPath + file;
@@ -59,7 +85,7 @@ class AssetManager {
            this.pamphletTextureNames.push(name);
            promises.push(this.loadTextureWithPromise(loader, name, fullPath));
       }
-      
+
       await Promise.all(promises);
   }
 
@@ -77,7 +103,7 @@ class AssetManager {
           );
       });
   }
-  
+
   async loadSounds() {
       const audioLoader = new THREE.AudioLoader();
       const promises = [];
@@ -107,23 +133,21 @@ class AssetManager {
       const loader = new THREE.TextureLoader();
       const promises = [];
       const skinPath = 'data/skins/';
+      const skinFiles = await this.fetchDirectoryListing(skinPath);
+      skinFiles.sort(naturalSort);
 
-      for (const charKey in CHARACTER_CONFIG) {
-          const char = CHARACTER_CONFIG[charKey];
-          const textureFile = char.skinTexture;
-          const textureName = textureFile.replace(/\.[^/.]+$/, "");
-          const fullPath = skinPath + textureFile;
-
+      for (const skinFile of skinFiles) {
+          const textureName = skinFile.replace(/\.png$/, "");
           if (this.textures[textureName]) continue;
-
+          const fullPath = skinPath + skinFile;
           promises.push(this.loadTextureWithPromise(loader, textureName, fullPath));
       }
       await Promise.all(promises);
   }
 
-  async loadTexture(name, path) { // For on-demand loading like furniture
+  async loadTexture(name, path) {
     if (this.textures[name]) return this.textures[name];
-    
+
     const loader = new THREE.TextureLoader();
     return new Promise((resolve) => {
         loader.load(path, 
@@ -143,7 +167,7 @@ class AssetManager {
         );
     });
   }
-  
+
   createMaterials() {
     for (const [name, texture] of Object.entries(this.textures)) {
         if (texture) {
@@ -151,11 +175,11 @@ class AssetManager {
         }
     }
   }
-  
+
   getMaterial(name) { 
     if (!this.materials[name]) {
         console.warn(`Material '${name}' not found. Using fallback.`);
-        return new THREE.MeshStandardMaterial({ color: 0xff00ff }); // Magenta fallback
+        return new THREE.MeshStandardMaterial({ color: 0xff00ff });
     }
     return this.materials[name];
   }
@@ -166,7 +190,7 @@ class AssetManager {
     }
     return this.textures[name] || null;
   }
-  
+
   getRandomPamphletMaterial() {
     const textureName = this.pamphletTextureNames[Math.floor(Math.random() * this.pamphletTextureNames.length)];
     const material = this.getMaterial(textureName);
@@ -174,8 +198,6 @@ class AssetManager {
   }
 }
 
-// === FURNITURE LOADER ===
-// ... (code unchanged from previous correct version)
 class FurnitureLoader {
     constructor() {
         this.config = {};
@@ -193,7 +215,7 @@ class FurnitureLoader {
                 const modelDef = manifest.models[modelKey];
                 await this.loadModel(modelKey, modelDef);
             }
-            
+
             const sceneObjects = [];
             for (const instanceDef of manifest.instances) {
                 const sceneObject = this.createInstance(instanceDef);
@@ -214,7 +236,7 @@ class FurnitureLoader {
         try {
             const response = await fetch(modelPath);
             const modelJson = await response.json();
-            
+
             const textureMap = await this.preloadTextures(modelJson.textures);
             const modelGroup = this.buildMeshFromModelData(modelJson, textureMap, modelDef);
 
@@ -229,7 +251,7 @@ class FurnitureLoader {
         for (const key in textures) {
             const texturePath = textures[key];
             const resolvedPath = this.resolveTexturePath(texturePath);
-            
+
             if (!this.textureCache.has(resolvedPath)) {
                 const texture = await assetManager.loadTexture(resolvedPath, resolvedPath);
                 this.textureCache.set(resolvedPath, texture);
@@ -264,10 +286,10 @@ class FurnitureLoader {
             position[0] -= 8;
             position[1] -= 8;
             position[2] -= 8;
-            
+
             const geometry = new THREE.BoxGeometry(...size);
             const materials = this.createMaterialsForElement(element, textureMap);
-            
+
             const mesh = new THREE.Mesh(geometry, materials);
             mesh.position.fromArray(position);
 
@@ -281,7 +303,7 @@ class FurnitureLoader {
                 const pivotGroup = new THREE.Group();
                 pivotGroup.position.fromArray(pivot);
                 modelGroup.add(pivotGroup);
-                
+
                 mesh.position.sub(new THREE.Vector3(...pivot));
                 pivotGroup.add(mesh);
                 pivotGroup.setRotationFromAxisAngle(axis, angle);
@@ -296,7 +318,7 @@ class FurnitureLoader {
     createMaterialsForElement(element, textureMap) {
         const materials = [];
         const faceOrder = ['east', 'west', 'up', 'down', 'south', 'north'];
-        
+
         for (const faceName of faceOrder) {
             const faceData = element.faces[faceName];
             if (!faceData) {
@@ -309,16 +331,16 @@ class FurnitureLoader {
                 materials.push(new THREE.MeshStandardMaterial({ color: 0xff00ff }));
                 continue;
             }
-            
+
             const mat = new THREE.MeshStandardMaterial({ map: texture.clone(), roughness: 0.8, metalness: 0.1 });
             const [u1, v1, u2, v2] = faceData.uv || [0, 0, 16, 16];
             const texWidth = texture.image.width;
             const texHeight = texture.image.height;
-            
+
             mat.map.offset.set(u1 / texWidth, 1 - (v2 / texHeight));
             mat.map.repeat.set((u2 - u1) / texWidth, (v2 - v1) / texHeight);
             mat.map.needsUpdate = true;
-            
+
             materials.push(mat);
         }
 
@@ -349,6 +371,6 @@ class FurnitureLoader {
         return instance;
     }
 }
-// === INSTANTIATION ===
+
 window.assetManager = new AssetManager();
 window.furnitureLoader = new FurnitureLoader();

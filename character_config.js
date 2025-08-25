@@ -6,6 +6,7 @@ const CHARACTER_CONFIG = {
     name: "Gungan",
     skinTexture: "gungan1.png",
     minecraftModel: "humanoid",
+    scale: 1.1, // Added scale property
     sounds: {
       meet: [],
       happy: [],
@@ -41,6 +42,7 @@ const CHARACTER_CONFIG = {
     name: "Stormtrooper",
     skinTexture: "stormtrooper1.png",
     minecraftModel: "humanoid",
+    scale: 1.0, // Added scale property
     sounds: {
       meet: [],
       happy: [],
@@ -71,5 +73,33 @@ const CHARACTER_CONFIG = {
       weight: 80,
       aggro: 0.6,
     }
+  },
+  wookiee: {
+    name: "Wookiee",
+    skinTexture: "wookiee1.png",
+    minecraftModel: "humanoid",
+    scale: 1.25, // Added scale property
+    stats: { health: 20, speed: 0.02, attackRange: 2.0, attackCooldown: 2.5 }
+  },
+  r2d2: {
+    name: "R2-D2",
+    skinTexture: "r2d21.png",
+    minecraftModel: "r2d2", // Assuming a custom model definition exists
+    scale: 0.7,
+    stats: { health: 15, speed: 0.03, attackRange: 10.0, attackCooldown: 1.8 }
+  },
+  bb8: {
+    name: "BB-8",
+    skinTexture: "bb81.png",
+    minecraftModel: "slime",
+    scale: 0.6,
+    stats: { health: 12, speed: 0.04, attackRange: 1.0, attackCooldown: 3.0 }
+  },
+  irongolem: {
+    name: "Iron Golem",
+    skinTexture: "irongolem1.png",
+    minecraftModel: "irongolem",
+    scale: 1.4,
+    stats: { health: 100, speed: 0.015, attackRange: 2.5, attackCooldown: 3.5 }
   }
 };
