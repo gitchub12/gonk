@@ -1,5 +1,6 @@
 // BROWSERFIREFOXHIDE gonk_models.js
-// Updated to reduce overall character scale to better fit the world height.
+// gonk_models.js
+// Finalized. Minecraft-style character model system with full skin format support.
 
 class GonkModelSystem {
   constructor() {
@@ -147,16 +148,22 @@ class GonkModelSystem {
       if (partDef.parent && character.parts[partDef.parent]) character.parts[partDef.parent].add(partGroup);
       else character.group.add(partGroup);
     }
-
-    const masterModelScale = 0.35; // Reduced scale to prevent being too tall
+    
+    // Scale Correction
+    const masterModelScale = 0.45; // Scales a 2m model to fit in a ~1m world
     character.group.scale.setScalar(modelDef.scale * masterModelScale);
-
+    
+    // Ground Offset Calculation
+    let totalHeight = 0;
     let bottomY = 0;
     if (modelType === 'humanoid') {
+        totalHeight = (modelDef.parts.head.size[1] + modelDef.parts.body.size[1] + modelDef.parts.leftLeg.size[1]);
         bottomY = modelDef.parts.leftLeg.position[1] - (modelDef.parts.leftLeg.size[1] / 2);
     } else if (modelType === 'slime') {
+        totalHeight = modelDef.parts.slimeBody.size[1];
         bottomY = modelDef.parts.slimeBody.position[1] - (modelDef.parts.slimeBody.size[1] / 2);
     } else { // Fallback for golems etc.
+        totalHeight = 32; // Approx pixel height
         bottomY = -12; // Approx leg bottom
     }
 
@@ -238,7 +245,7 @@ class GonkModelSystem {
     }
     const bodyBaseY = (parts.body && modelDef.parts.body) ? modelDef.parts.body.position[1] * dimensionScale.y : 0;
     if(parts.body) parts.body.position.y = bodyBaseY;
-
+    if (!isPlayer && character.animState !== 'aim') group.rotation.y += deltaTime * 0.25;
     switch (character.animState) {
       case 'walk': const walk = Math.sin(time); if (parts.rightLeg) parts.rightLeg.rotation.x = walk * 0.5; if (parts.leftLeg) parts.leftLeg.rotation.x = -walk * 0.5; if (parts.rightArm) parts.rightArm.rotation.x = -walk * 0.4; if (parts.leftArm) parts.leftArm.rotation.x = walk * 0.4; if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 2)) * 0.5; if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 2)) * 0.05; break;
       case 'run': const run = Math.sin(time * 1.5); if (parts.rightLeg) parts.rightLeg.rotation.x = run * 0.8; if (parts.leftLeg) parts.leftLeg.rotation.x = -run * 0.8; if (parts.rightArm) parts.rightArm.rotation.x = -run * 0.8; if (parts.leftArm) parts.leftArm.rotation.x = run * 0.8; if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 3)) * 1.5; if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 3)) * 0.08; break;

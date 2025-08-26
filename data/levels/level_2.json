@@ -1,0 +1,129 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 64,
+    "defaults": {
+      "subfloor": {
+        "key": "/data/pngs/subfloor/subfloor_15.png",
+        "size": 1
+      },
+      "floor": {
+        "key": "/data/pngs/floor/floor_20.png",
+        "size": 1
+      },
+      "ceiling": {
+        "key": "/data/pngs/ceiling/ceiling_2.png",
+        "size": 1
+      },
+      "sky": {
+        "key": "/data/pngs/sky/sky_9e.png",
+        "size": 1
+      }
+    }
+  },
+  "layers": {
+    "spawns": [
+      [
+        "20,11",
+        {
+          "number": 1,
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png"
+        }
+      ]
+    ],
+    "walls": [
+      [
+        "VEC_1756182526901_0.4892543391153209",
+        {
+          "type": "vector",
+          "points": [
+            23,
+            15,
+            26,
+            12
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756182528505_0.6183790805648651",
+        {
+          "type": "vector",
+          "points": [
+            26,
+            12,
+            26,
+            15
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756182529500_0.08041226486289099",
+        {
+          "type": "vector",
+          "points": [
+            26,
+            15,
+            23,
+            15
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756182536220_0.4653390636590451",
+        {
+          "type": "vector",
+          "points": [
+            17,
+            17,
+            22,
+            19
+          ],
+          "key": "/data/pngs/wall/wall_13.png"
+        }
+      ],
+      [
+        "VEC_1756182537514_0.920740071684568",
+        {
+          "type": "vector",
+          "points": [
+            22,
+            19,
+            20,
+            22
+          ],
+          "key": "/data/pngs/wall/wall_13.png"
+        }
+      ],
+      [
+        "VEC_1756182538377_0.20849307337341672",
+        {
+          "type": "vector",
+          "points": [
+            20,
+            22,
+            15,
+            20
+          ],
+          "key": "/data/pngs/wall/wall_13.png"
+        }
+      ],
+      [
+        "VEC_1756182539280_0.40711006094784585",
+        {
+          "type": "vector",
+          "points": [
+            15,
+            20,
+            17,
+            17
+          ],
+          "key": "/data/pngs/wall/wall_13.png"
+        }
+      ]
+    ]
+  }
+}

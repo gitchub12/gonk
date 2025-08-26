@@ -1,29 +1,5 @@
 // BROWSERFIREFOXHIDE editor_ui_and_assets.js
-// Rewritten to use natural sorting for assets and resize/realign NPC icons.
-
-function naturalSort(a, b) {
-    const re = /(\d+)/g;
-    const aParts = a.split(re);
-    const bParts = b.split(re);
-
-    for (let i = 0; i < Math.min(aParts.length, bParts.length); i++) {
-        const aPart = aParts[i];
-        const bPart = bParts[i];
-
-        if (i % 2 === 1) { // It's a number part
-            const aNum = parseInt(aPart, 10);
-            const bNum = parseInt(bPart, 10);
-            if (aNum !== bNum) {
-                return aNum - bNum;
-            }
-        } else { // It's a string part
-            if (aPart !== bPart) {
-                return aPart.localeCompare(bPart);
-            }
-        }
-    }
-    return a.length - b.length;
-}
+// Rewritten to remove reference to non-existent 'cover' asset directory.
 
 class EditorAssetManager {
     constructor(modelSystem) {
@@ -44,9 +20,7 @@ class EditorAssetManager {
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const files = Array.from(doc.querySelectorAll('a')).map(a => a.getAttribute('href')).filter(href => !href.startsWith('?') && !href.startsWith('/'));
-            files.sort(naturalSort); // Apply natural sort to all discovered files
-            return files;
+            return Array.from(doc.querySelectorAll('a')).map(a => a.getAttribute('href')).filter(href => !href.startsWith('?') && !href.startsWith('/'));
         } catch (e) {
             console.error(`Failed to fetch or parse directory listing for "${path}":`, e);
             return [];
@@ -65,7 +39,8 @@ class EditorAssetManager {
             const textureFiles = await this.fetchDirectoryListing(path);
             this.layerTextures[layerType] = textureFiles.filter(f => f.endsWith('.png')).map(f => `${path}${f}`);
         }
-
+        
+        // Discover Furniture/Assets
         try {
             const furnitureManifestResponse = await fetch('/data/furniture.json');
             const furnitureManifest = await furnitureManifestResponse.json();
@@ -80,7 +55,7 @@ class EditorAssetManager {
         } catch (e) { 
             console.error("Failed to discover furniture assets from manifest:", e); 
         }
-
+        
         return true;
     }
 
@@ -112,11 +87,8 @@ class EditorAssetManager {
                 const faceX = iconUV.x * scale, faceY = iconUV.y * scale, faceSize = iconUV.size * scale;
                 const hasHatLayer = modelDef === this.modelSystem.models['humanoid'];
                 const hatX = 40 * scale, hatY = 8 * scale, hatSize = 8 * scale;
-                // Draw smaller icon aligned to bottom
-                const iconSize = 48; // 25% smaller than 64
-                const yOffset = 16; // Aligns to bottom
-                ctx.drawImage(img, faceX, faceY, faceSize, faceSize, (64 - iconSize) / 2, yOffset, iconSize, iconSize);
-                if(hasHatLayer) ctx.drawImage(img, hatX, hatY, hatSize, hatSize, (64 - iconSize) / 2, yOffset, iconSize, iconSize);
+                ctx.drawImage(img, faceX, faceY, faceSize, faceSize, 0, 0, 64, 64);
+                if(hasHatLayer) ctx.drawImage(img, hatX, hatY, hatSize, hatSize, 0, 0, 64, 64);
                 this.npcIcons.set(skinName, iconCanvas.toDataURL());
                 resolve();
             };
@@ -168,13 +140,13 @@ class EditorUI {
 
         this.gridWidthInput.addEventListener('change', () => { this.editor.gridWidth = parseInt(this.gridWidthInput.value) || 64; this.editor.modifyState(()=>{});});
         this.gridHeightInput.addEventListener('change', () => { this.editor.gridHeight = parseInt(this.gridHeightInput.value) || 64; this.editor.modifyState(()=>{});});
-
+        
         for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
             const sizeSelect = document.getElementById(`default-${layer}-size`);
             const updateDefaultTexture = () => {
                 this.editor.defaultTextures[layer] = {
                     key: select.value,
-                    size: parseFloat(sizeSelect.value) || 1
+                    size: parseInt(sizeSelect.value) || 1
                 };
                 this.editor.modifyState(()=>{});
                 this.editor.render();
@@ -182,14 +154,14 @@ class EditorUI {
             select.addEventListener('change', updateDefaultTexture);
             if (sizeSelect) sizeSelect.addEventListener('change', updateDefaultTexture);
         }
-
+        
         Object.entries(this.toolButtons).forEach(([toolName, button]) => {
             if (button) button.addEventListener('click', () => this.setActiveTool(toolName));
         });
 
         this.populateDefaultTextureSettings(); this.setActiveLayer(this.editor.activeLayerName);
     }
-
+    
     createLayerSelector() {
         this.layerSelector.innerHTML = '';
         const specialNpcButtons = [
@@ -258,7 +230,7 @@ class EditorUI {
         this.editor.canvas.style.cursor = cursors[toolName] || 'default';
         this.updatePalette();
     }
-
+    
     updateUIForNewLevel() {
         this.levelNumberInput.value = this.editor.currentLevel;
         this.levelDisplay.textContent = `Level: ${this.editor.currentLevel}`;
@@ -275,45 +247,32 @@ class EditorUI {
         if (activeLayer === 'npcs') this.populateNpcPalette();
         else if (activeLayer === 'assets') this.populateAssetPalette();
         else this.populateTexturePalette();
-
+        
         const firstItem = this.paletteContainer.querySelector('.palette-item');
         if (firstItem) { firstItem.click(); } else { this.editor.activeBrush = null; }
 
         if(subGroup) { const header = document.getElementById(`palette-header-${subGroup}`); if(header) header.scrollIntoView({behavior: "smooth", block: "start"}); }
     }
-
+    
     showContextMenu(event, gridX, gridY) {
         this.hideContextMenu();
         const item = this.editor.levelData[this.editor.activeLayerName]?.get(`${gridX},${gridY}`);
         if (!item) return;
         const menuList = this.contextMenu.querySelector('ul'); menuList.innerHTML = '';
-
-        let options = [];
-        const activeLayer = this.editor.activeLayerName;
-
-        if (activeLayer === 'npcs') {
-            options = ['Set Health', 'Set Weapon', 'Delete'];
-        } else {
-            options = ['Properties', 'Delete'];
-             if(item.key?.toLowerCase().includes('door')) options.unshift('Set Key Requirement', 'Set Level Exit');
-             if(item.key?.toLowerCase().includes('wall')) options.unshift('Make Holographic');
-        }
-
+        let options = ['Properties', 'Delete'];
+        if(item.key?.toLowerCase().includes('door')) options.unshift('Set Key Requirement', 'Set Level Exit');
+        if(item.key?.toLowerCase().includes('wall')) options.unshift('Make Holographic');
         options.forEach(opt => {
             const li = document.createElement('li'); li.textContent = opt;
-            li.addEventListener('click', () => { 
-                this.editor.handleContextMenuAction(opt, item, gridX, gridY);
-                this.hideContextMenu(); 
-            });
+            li.addEventListener('click', () => { alert(`Action: ${opt} on ${item.key}`); this.hideContextMenu(); });
             menuList.appendChild(li);
         });
-
         this.contextMenu.style.left = `${event.clientX}px`; this.contextMenu.style.top = `${event.clientY}px`;
         this.contextMenu.style.display = 'block';
     }
 
     hideContextMenu() { this.contextMenu.style.display = 'none'; }
-
+    
     _populatePalette(items, createItemFn) {
         this.paletteContainer.innerHTML = ''; if (!items || items.length === 0) { this.paletteContainer.innerHTML = `<p>No assets found</p>`; return; }
         items.forEach(createItemFn);
