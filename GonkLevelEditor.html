@@ -50,7 +50,7 @@
         .palette-header { grid-column: 1 / -1; text-align: left; font-weight: bold; color: var(--accent-color); margin-top: 10px; padding-bottom: 4px; text-transform: capitalize; border-bottom: 1px solid var(--border-color); }
         #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
         #palette-controls input { flex-grow: 1; }
-        #layer-actions { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background-color: var(--panel-bg); border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; gap: 10px; }
+        #layer-actions { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
         #layer-actions button { flex-grow: 1; }
         
         .floating-toolbar { position: absolute; background-color: transparent; border: none; display: flex; padding: 5px; gap: 5px; z-index: 20; }
@@ -90,7 +90,7 @@
         </div>
 
         <div id="editor-content" class="tab-content active">
-            <div class="content-group-main">
+            <div class="content-group-main" style="flex-grow:1; overflow-y:auto;">
                  <div class="content-group">
                     <h4>Asset Palette</h4>
                     <div id="palette-controls">
@@ -99,11 +99,6 @@
                     </div>
                     <div id="palette-container" class="palette"></div>
                 </div>
-            </div>
-            <div id="layer-actions">
-                <button id="save-level-btn">Save Current Level</button>
-                <button id="reset-layer-btn">Reset Layer</button>
-                <button id="reset-map-btn">Reset Map</button>
             </div>
         </div>
 
@@ -115,6 +110,11 @@
                     <input type="number" id="level-number-input" value="1" min="1">
                 </div>
                 <button id="load-level-btn">Load Level</button>
+                 <div id="layer-actions">
+                    <button id="save-level-btn">Save Current Level</button>
+                    <button id="reset-layer-btn">Reset Layer</button>
+                    <button id="reset-map-btn">Reset Map</button>
+                </div>
             </div>
             <div class="content-group">
                 <h4>Map Dimensions</h4>

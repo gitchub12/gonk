@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// Rewritten to use Quaternions for robust vector wall placement and activate NPC animations.
+// Updated to add filename-based door transition logic and track the current level number.
 
 class NPC {
     constructor(characterMesh, itemData, config) {
@@ -159,11 +159,9 @@ class LevelRenderer {
                 mesh = new THREE.Mesh(wallGeo, material);
 
                 const direction = new THREE.Vector3().subVectors(endPoint, startPoint).normalize();
-                // Align the mesh's local X-axis (its length) with the direction vector
                 const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1, 0, 0), direction);
                 mesh.quaternion.copy(quaternion);
 
-                // Position the mesh at the midpoint between start and end
                 mesh.position.lerpVectors(startPoint, endPoint, 0.5);
 
             } else {
@@ -235,10 +233,119 @@ class LevelRenderer {
     createFallbackFloor() { const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x111111 })); floor.rotation.x = -Math.PI / 2; game.scene.add(floor); const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444); gridHelper.position.y = 0.01; game.scene.add(gridHelper); }
 }
 
-class Door { constructor(mesh, itemData = {}) { const config = itemData.properties || {}; this.mesh = mesh; this.textureKey = itemData.key || ''; this.isOpen = false; this.isLevelTransition = config.isLevelExit || false; this.targetLevel = config.targetLevel || null; this.originalY = mesh.position.y; } open() { if (this.isOpen) return; if (this.textureKey.includes('door_2.png')) { audioSystem.playSound('dooropen2'); } else { audioSystem.playSound('dooropen'); } if (this.isLevelTransition && this.targetLevel) { levelManager.loadLevel(this.targetLevel); return; } this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT; this.isOpen = true; setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME); } close() { if (!this.isOpen) return; this.mesh.position.y = this.originalY; this.isOpen = false; } }
-class LevelManager { async loadLevel(levelId) { try { let levelData; const playtestDataString = localStorage.getItem('gonk_level_to_play'); if (playtestDataString) { levelData = JSON.parse(playtestDataString); localStorage.removeItem('gonk_level_to_play'); } else { const response = await fetch(`data/levels/level_${levelId}.json`); if (!response.ok) throw new Error(`Level file not found for level_${levelId}.json`); levelData = await response.json(); } levelRenderer.buildLevelFromData(levelData); const furnitureObjects = await furnitureLoader.loadFromManifest('data/furniture.json'); for (const furniture of furnitureObjects) { game.scene.add(furniture); } } catch (error) { console.error(`Failed to load or build level ${levelId}:`, error); levelRenderer.createFallbackFloor(); } } }
+class Door {
+    constructor(mesh, itemData = {}) {
+        const config = itemData.properties || {};
+        this.mesh = mesh;
+        this.textureKey = itemData.key || '';
+        this.isOpen = false;
+        this.isLevelTransition = config.isLevelExit || false;
+        this.targetLevel = config.targetLevel || null;
+        this.originalY = mesh.position.y;
 
-class PhysicsSystem { constructor() { this.velocity = new THREE.Vector3() } updateMovement(deltaTime, keys, camera) { const acceleration = new THREE.Vector3(); const yaw = inputHandler.yaw; const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)).negate(); const right = new THREE.Vector3(forward.z, 0, -forward.x); if (keys['KeyW']) acceleration.add(forward); if (keys['KeyS']) acceleration.sub(forward); if (keys['KeyA']) acceleration.add(right); if (keys['KeyD']) acceleration.sub(right); if (acceleration.length() > 0) { acceleration.normalize().multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED); } this.velocity.add(acceleration); this.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION); const newPosition = camera.position.clone().add(this.velocity); newPosition.y = GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT; camera.position.copy(newPosition); } interact() { const playerPos = game.camera.position; let nearestDoor = null; let nearestDist = Infinity; for(const door of game.entities.doors) { const dist = playerPos.distanceTo(door.mesh.position); if (dist < nearestDist) { nearestDist = dist; nearestDoor = door; } } if (nearestDoor && nearestDist < 2.0) nearestDoor.open(); } }
+        // Fallback to filename-based logic if not specified in properties
+        if (!config.isLevelExit && this.textureKey) {
+            const doorName = this.textureKey.substring(this.textureKey.lastIndexOf('/') + 1);
+            
+            if (doorName === 'door_2.png') {
+                this.isLevelTransition = true;
+                this.targetLevel = window.levelManager.currentLevel + 1;
+            } else if (doorName === 'door_0.png' && window.levelManager.currentLevel > 1) {
+                this.isLevelTransition = true;
+                this.targetLevel = window.levelManager.currentLevel - 1;
+            }
+        }
+    }
+
+    open() {
+        if (this.isOpen) return;
+        if (this.textureKey.includes('door_2.png')) {
+            audioSystem.playSound('dooropen2');
+        } else {
+            audioSystem.playSound('dooropen');
+        }
+        if (this.isLevelTransition && this.targetLevel) {
+            levelManager.loadLevel(this.targetLevel);
+            return;
+        }
+        this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
+        this.isOpen = true;
+        setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME);
+    }
+
+    close() {
+        if (!this.isOpen) return;
+        this.mesh.position.y = this.originalY;
+        this.isOpen = false;
+    }
+}
+
+class LevelManager {
+    constructor() {
+        this.currentLevel = 0;
+    }
+
+    async loadLevel(levelId) {
+        try {
+            this.currentLevel = levelId;
+            let levelData;
+            const playtestDataString = localStorage.getItem('gonk_level_to_play');
+            if (playtestDataString) {
+                levelData = JSON.parse(playtestDataString);
+                localStorage.removeItem('gonk_level_to_play');
+            } else {
+                const response = await fetch(`data/levels/level_${levelId}.json`);
+                if (!response.ok) throw new Error(`Level file not found for level_${levelId}.json`);
+                levelData = await response.json();
+            }
+            levelRenderer.buildLevelFromData(levelData);
+            const furnitureObjects = await furnitureLoader.loadFromManifest('data/furniture.json');
+            for (const furniture of furnitureObjects) {
+                game.scene.add(furniture);
+            }
+        } catch (error) {
+            console.error(`Failed to load or build level ${levelId}:`, error);
+            levelRenderer.createFallbackFloor();
+        }
+    }
+}
+
+class PhysicsSystem {
+    constructor() {
+        this.velocity = new THREE.Vector3();
+    }
+    updateMovement(deltaTime, keys, camera) {
+        const acceleration = new THREE.Vector3();
+        const yaw = inputHandler.yaw;
+        const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)).negate();
+        const right = new THREE.Vector3(forward.z, 0, -forward.x);
+        if (keys['KeyW']) acceleration.add(forward);
+        if (keys['KeyS']) acceleration.sub(forward);
+        if (keys['KeyA']) acceleration.add(right);
+        if (keys['KeyD']) acceleration.sub(right);
+        if (acceleration.length() > 0) {
+            acceleration.normalize().multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED);
+        }
+        this.velocity.add(acceleration);
+        this.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
+        const newPosition = camera.position.clone().add(this.velocity);
+        newPosition.y = GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT;
+        camera.position.copy(newPosition);
+    }
+    interact() {
+        const playerPos = game.camera.position;
+        let nearestDoor = null;
+        let nearestDist = Infinity;
+        for(const door of game.entities.doors) {
+            const dist = playerPos.distanceTo(door.mesh.position);
+            if (dist < nearestDist) {
+                nearestDist = dist;
+                nearestDoor = door;
+            }
+        }
+        if (nearestDoor && nearestDist < 2.0) nearestDoor.open();
+    }
+}
 
 window.levelRenderer = new LevelRenderer();
 window.levelManager = new LevelManager();

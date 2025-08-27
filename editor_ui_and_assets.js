@@ -210,6 +210,11 @@ class EditorUI {
     }
 
     setActiveLayer(layerName, subGroup = null) {
+        const editorTabButton = document.querySelector('.tab-button[data-tab="editor"]');
+        if (!editorTabButton.classList.contains('active')) {
+            editorTabButton.click();
+        }
+
         this.editor.activeLayerName = layerName;
         document.querySelectorAll('#layer-selector button').forEach(btn => btn.classList.remove('active'));
         const buttons = this.layerButtons[layerName];

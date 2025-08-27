@@ -123,6 +123,26 @@
           ],
           "key": "/data/pngs/wall/wall_13.png"
         }
+      ],
+      [
+        "VEC_1756255720704_0.15950376250224785",
+        {
+          "type": "vector",
+          "points": [
+            10,
+            22,
+            13,
+            22
+          ],
+          "key": "/data/pngs/door/door_0.png"
+        }
+      ],
+      [
+        "V_9_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/door_0.png"
+        }
       ]
     ]
   }
