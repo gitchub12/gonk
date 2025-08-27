@@ -1,5 +1,11 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// Simplified to use the new asset manager factory, removing all local cloning logic.
+// Rewritten to introduce a centralized PhysicsSystem for robust collision detection and response.
+
+// --- COLLISION CONSTANTS ---
+const PLAYER_RADIUS = 0.4;
+const PLAYER_HEIGHT = 1.0;
+const NPC_RADIUS = 0.4;
+const PUSH_FACTOR = 0.05;
 
 class NPC {
     constructor(characterMesh, itemData, config) {
@@ -7,36 +13,49 @@ class NPC {
         this.config = config;
         this.state = 'idle';
         this.health = itemData.health || config.stats.health || 10;
+        this.velocity = new THREE.Vector3();
 
         this.speed = config.stats.speed || 0.025;
         this.perceptionRadius = 10;
         this.attackRange = config.stats.attackRange || 2.0;
         this.attackCooldown = config.stats.attackCooldown || 2.0;
         this.attackTimer = 0;
+
+        // Physics properties
+        this.weight = config.stats.weight || 80;
+        this.collider = {
+            isPlayer: false,
+            radius: config.stats.collisionRadius || NPC_RADIUS,
+            position: this.mesh.group.position,
+            velocity: this.velocity,
+            weight: this.weight
+        };
     }
 
     update(deltaTime, playerPosition) {
         this.attackTimer -= deltaTime;
         const distanceToPlayer = this.mesh.group.position.distanceTo(playerPosition);
-
         let isMoving = false;
-        // State transitions
+
         if (distanceToPlayer < this.perceptionRadius && this.state !== 'attacking') {
             this.state = 'attacking';
         } else if (distanceToPlayer >= this.perceptionRadius && this.state === 'attacking') {
             this.state = 'idle';
         }
 
-        // State actions
+        this.velocity.x = 0;
+        this.velocity.z = 0;
+
         switch (this.state) {
             case 'idle':
-                // Idle behavior
                 break;
             case 'attacking':
                 this.mesh.group.lookAt(playerPosition.x, this.mesh.group.position.y, playerPosition.z);
                 if (distanceToPlayer > this.attackRange) {
                     const direction = playerPosition.clone().sub(this.mesh.group.position).normalize();
-                    this.mesh.group.position.add(direction.multiplyScalar(this.speed));
+                    // Set velocity instead of directly modifying position
+                    this.velocity.x = direction.x * this.speed;
+                    this.velocity.z = direction.z * this.speed;
                     isMoving = true;
                 } else if (this.attackTimer <= 0) {
                     this.attack();
@@ -44,17 +63,16 @@ class NPC {
                 break;
         }
 
-        // Update animation based on state
         const animToSet = isMoving ? 'walk' : 'idle';
         window.setGonkAnimation(this.mesh, animToSet);
         window.updateGonkAnimation(this.mesh, { deltaTime });
     }
 
     attack() {
-        // console.log(`${this.config.name} attacks!`);
         this.attackTimer = this.attackCooldown;
     }
 }
+
 
 class LevelRenderer {
     constructor() {
@@ -64,6 +82,7 @@ class LevelRenderer {
 
     buildLevelFromData(levelData) {
         game.clearScene();
+        physics.clear(); // Clear physics colliders for the new level
         const layers = levelData.layers || {};
         const settings = levelData.settings || { width: 64, height: 64, defaults: {} };
 
@@ -90,10 +109,14 @@ class LevelRenderer {
         if (layers.spawns && layers.spawns.length > 0) {
             const [posStr, item] = layers.spawns[0];
             const [x, z] = posStr.split(',').map(Number);
-            game.camera.position.set(x * this.gridSize + this.gridSize/2, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, z * this.gridSize + this.gridSize/2);
+            const spawnX = x * this.gridSize + this.gridSize/2;
+            const spawnZ = z * this.gridSize + this.gridSize/2;
+            game.camera.position.set(spawnX, PLAYER_HEIGHT / 2, spawnZ);
+            physics.playerCollider.position.set(spawnX, PLAYER_HEIGHT / 2, spawnZ);
             if (inputHandler) inputHandler.yaw = (item.rotation || 0) * -Math.PI / 2;
         } else {
-             game.camera.position.set(this.gridSize/2, GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT, this.gridSize/2);
+             game.camera.position.set(this.gridSize/2, PLAYER_HEIGHT / 2, this.gridSize/2);
+             physics.playerCollider.position.set(this.gridSize/2, PLAYER_HEIGHT / 2, this.gridSize/2);
         }
     }
 
@@ -190,6 +213,7 @@ class LevelRenderer {
 
             mesh.castShadow = true; mesh.receiveShadow = true;
             game.scene.add(mesh);
+            physics.addWall(mesh); // Add wall to the physics system
             if (isDoor) game.entities.doors.push(new Door(mesh, item));
         }
     }
@@ -239,7 +263,8 @@ class LevelRenderer {
                 }
                 game.scene.add(charMesh.group); 
                 const npcInstance = new NPC(charMesh, item, config);
-                game.entities.npcs.push(npcInstance); 
+                game.entities.npcs.push(npcInstance);
+                physics.addDynamicEntity(npcInstance); // Add NPC to physics system
             } 
         } 
     }
@@ -257,10 +282,8 @@ class Door {
         this.targetLevel = config.targetLevel || null;
         this.originalY = mesh.position.y;
 
-        // Fallback to filename-based logic if not specified in properties
         if (!config.isLevelExit && this.textureKey) {
             const doorName = this.textureKey.substring(this.textureKey.lastIndexOf('/') + 1);
-            
             if (doorName === 'door_2.png') {
                 this.isLevelTransition = true;
                 this.targetLevel = window.levelManager.currentLevel + 1;
@@ -284,6 +307,7 @@ class Door {
         }
         this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.isOpen = true;
+        physics.removeWall(this.mesh); // Doors are not collidable when open
         setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME);
     }
 
@@ -291,6 +315,7 @@ class Door {
         if (!this.isOpen) return;
         this.mesh.position.y = this.originalY;
         this.isOpen = false;
+        physics.addWall(this.mesh); // Re-add collision when closed
     }
 }
 
@@ -326,31 +351,164 @@ class LevelManager {
 
 class PhysicsSystem {
     constructor() {
-        this.velocity = new THREE.Vector3();
+        this.walls = [];
+        this.dynamicEntities = [];
+        this.noclipEnabled = false;
+        this.playerCollider = {
+            isPlayer: true,
+            radius: PLAYER_RADIUS,
+            position: new THREE.Vector3(0, PLAYER_HEIGHT / 2, 0),
+            velocity: new THREE.Vector3(),
+            weight: 100 // Player is heaviest
+        };
+        this.playerEntity = { collider: this.playerCollider };
+        this.addDynamicEntity(this.playerEntity);
     }
-    updateMovement(deltaTime, keys, camera) {
+
+    clear() {
+        this.walls = [];
+        this.dynamicEntities = [];
+        this.addDynamicEntity(this.playerEntity);
+    }
+
+    addWall(mesh) {
+        mesh.geometry.computeBoundingBox();
+        const wallCollider = {
+            box: new THREE.Box3().setFromObject(mesh),
+            uuid: mesh.uuid // Store mesh UUID for reliable removal
+        };
+        this.walls.push(wallCollider);
+    }
+
+    removeWall(mesh) {
+        const wallIndex = this.walls.findIndex(wall => wall.uuid === mesh.uuid);
+        if (wallIndex > -1) {
+            this.walls.splice(wallIndex, 1);
+        }
+    }
+
+    addDynamicEntity(entity) {
+        if (entity && entity.collider) {
+            this.dynamicEntities.push(entity);
+        }
+    }
+
+    update(deltaTime, inputHandler, camera) {
+        this.updatePlayerVelocity(inputHandler);
+        
+        // Apply raw velocity movement if noclip is on
+        if (this.noclipEnabled) {
+            this.playerCollider.position.add(this.playerCollider.velocity);
+        } else {
+            // Move all dynamic entities based on their velocity
+            for (const entity of this.dynamicEntities) {
+                entity.collider.position.add(entity.collider.velocity);
+            }
+            this.resolveCollisions();
+        }
+
+        this.applyPostPhysicsUpdates(camera);
+    }
+    
+    updatePlayerVelocity(inputHandler) {
         const acceleration = new THREE.Vector3();
         const yaw = inputHandler.yaw;
         const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)).negate();
         const right = new THREE.Vector3(forward.z, 0, -forward.x);
-        if (keys['KeyW']) acceleration.add(forward);
-        if (keys['KeyS']) acceleration.sub(forward);
-        if (keys['KeyA']) acceleration.add(right);
-        if (keys['KeyD']) acceleration.sub(right);
+        if (inputHandler.keys['KeyW']) acceleration.add(forward);
+        if (inputHandler.keys['KeyS']) acceleration.sub(forward);
+        if (inputHandler.keys['KeyA']) acceleration.add(right);
+        if (inputHandler.keys['KeyD']) acceleration.sub(right);
+        
         if (acceleration.length() > 0) {
             acceleration.normalize().multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED);
         }
-        this.velocity.add(acceleration);
-        this.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
-        const newPosition = camera.position.clone().add(this.velocity);
-        newPosition.y = GAME_GLOBAL_CONSTANTS.PLAYER.HEIGHT;
-        camera.position.copy(newPosition);
+        
+        const currentVelocity = this.playerCollider.velocity;
+        currentVelocity.add(acceleration);
+        currentVelocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
     }
+
+    resolveCollisions() {
+        // Run multiple passes to allow collisions to propagate and settle
+        for (let i = 0; i < 3; i++) {
+            // Entity vs Wall
+            for (const entity of this.dynamicEntities) {
+                for (const wall of this.walls) {
+                    this.resolveWallCollision(entity.collider, wall.box);
+                }
+            }
+            
+            // Entity vs Entity
+            for (let j = 0; j < this.dynamicEntities.length; j++) {
+                for (let k = j + 1; k < this.dynamicEntities.length; k++) {
+                    this.resolveEntityCollision(this.dynamicEntities[j], this.dynamicEntities[k]);
+                }
+            }
+        }
+    }
+
+    resolveWallCollision(collider, wallBox) {
+        const sphere = new THREE.Sphere(collider.position, collider.radius);
+        if (sphere.intersectsBox(wallBox)) {
+            const closestPoint = new THREE.Vector3();
+            wallBox.clampPoint(sphere.center, closestPoint);
+            const penetrationVector = new THREE.Vector3().subVectors(sphere.center, closestPoint);
+            const penetrationDepth = sphere.radius - penetrationVector.length();
+            
+            if (penetrationDepth > 0) {
+                const resolutionVector = penetrationVector.normalize().multiplyScalar(penetrationDepth);
+                collider.position.add(resolutionVector);
+            }
+        }
+    }
+
+    resolveEntityCollision(entityA, entityB) {
+        const colA = entityA.collider;
+        const colB = entityB.collider;
+
+        const distVec = new THREE.Vector3().subVectors(colB.position, colA.position);
+        distVec.y = 0; // Collisions are 2D
+        const distance = distVec.length();
+        const totalRadius = colA.radius + colB.radius;
+
+        if (distance < totalRadius) {
+            const overlap = totalRadius - distance;
+            const resolutionVec = distance > 0 ? distVec.normalize().multiplyScalar(overlap) : new THREE.Vector3(totalRadius, 0, 0);
+
+            const totalWeight = colA.weight + colB.weight;
+            const ratioA = colB.weight / totalWeight;
+            const ratioB = colA.weight / totalWeight;
+
+            colA.position.sub(resolutionVec.clone().multiplyScalar(ratioA));
+            colB.position.add(resolutionVec.clone().multiplyScalar(ratioB));
+
+            // After pushing an entity, re-check its collision with walls immediately
+            for (const wall of this.walls) {
+                this.resolveWallCollision(colA, wall.box);
+                this.resolveWallCollision(colB, wall.box);
+            }
+        }
+    }
+    
+    applyPostPhysicsUpdates(camera) {
+        // Update camera from player collider
+        camera.position.copy(this.playerCollider.position);
+        
+        // Apply friction to non-player entities
+        for(const entity of this.dynamicEntities) {
+            if (!entity.collider.isPlayer) {
+                entity.collider.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
+            }
+        }
+    }
+
     interact() {
-        const playerPos = game.camera.position;
+        const playerPos = this.playerCollider.position;
         let nearestDoor = null;
         let nearestDist = Infinity;
-        for(const door of game.entities.doors) {
+        for (const door of game.entities.doors) {
+            if (door.isOpen) continue;
             const dist = playerPos.distanceTo(door.mesh.position);
             if (dist < nearestDist) {
                 nearestDist = dist;

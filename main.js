@@ -52,6 +52,13 @@ class InputHandler {
         e.preventDefault();
         if(window.physics) physics.interact();
     }
+    if (e.code === 'KeyP') {
+        e.preventDefault();
+        if (window.physics) {
+            window.physics.noclipEnabled = !window.physics.noclipEnabled;
+            console.log(`Noclip ${window.physics.noclipEnabled ? 'Enabled' : 'Disabled'}`);
+        }
+    }
     if (e.code === 'KeyH') {
         const hud = document.querySelector('.game-hud-container');
         if (hud) {

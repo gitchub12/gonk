@@ -6,16 +6,12 @@
         "textureNamespace": "chronokillers_star_wars"
     },
     "models": {
-        "crate": {
-            "file": "crate.json",
+        "holotable": {
+            "file": "holo_table.json",
             "scale": 0.0625
         }
     },
     "instances": [
-        {
-            "model": "crate",
-            "position": [5, 0.5, 5],
-            "rotation": [0, 0, 0]
-        }
+        
     ]
 }

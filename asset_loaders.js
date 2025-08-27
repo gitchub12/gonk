@@ -173,7 +173,6 @@ class AssetManager {
 }
 
 // === FURNITURE LOADER ===
-// ... (code unchanged from previous correct version)
 class FurnitureLoader {
     constructor() {
         this.config = {};
@@ -184,6 +183,7 @@ class FurnitureLoader {
     async loadFromManifest(manifestPath) {
         try {
             const response = await fetch(manifestPath);
+            if (!response.ok) throw new Error(`Manifest file not found: ${manifestPath}`);
             const manifest = await response.json();
             this.config = manifest._config;
 
@@ -193,9 +193,11 @@ class FurnitureLoader {
             }
             
             const sceneObjects = [];
-            for (const instanceDef of manifest.instances) {
-                const sceneObject = this.createInstance(instanceDef);
-                if (sceneObject) sceneObjects.push(sceneObject);
+            if (manifest.instances) {
+                for (const instanceDef of manifest.instances) {
+                    const sceneObject = this.createInstance(instanceDef);
+                    if (sceneObject) sceneObjects.push(sceneObject);
+                }
             }
             return sceneObjects;
 
@@ -211,6 +213,9 @@ class FurnitureLoader {
         const modelPath = this.config.modelPath + modelDef.file;
         try {
             const response = await fetch(modelPath);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} error loading model: ${modelPath}`);
+            }
             const modelJson = await response.json();
             
             const textureMap = await this.preloadTextures(modelJson.textures);

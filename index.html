@@ -106,11 +106,14 @@
                 if (!game.isInitialized) return;
                 const currentTime = performance.now();
                 game.update(currentTime);
-                physics.updateMovement(game.deltaTime, inputHandler.keys, game.camera, false);
                 
+                // NPC AI Update (determines their intent)
                 for (const npc of game.entities.npcs) {
-                    npc.update(game.deltaTime, game.camera.position);
+                    npc.update(game.deltaTime, physics.playerCollider.position);
                 }
+
+                // Central Physics Update (moves everyone and handles collisions)
+                physics.update(game.deltaTime, inputHandler, game.camera);
 
                 game.render();
             }
