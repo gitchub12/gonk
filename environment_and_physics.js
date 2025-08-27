@@ -166,8 +166,10 @@ class LevelRenderer {
             material.alphaTest = 0.1;
             const isDoor = item.key.includes('/door/');
             let mesh;
+            let isOBB = false;
 
             if (key.startsWith('VEC_')) {
+                isOBB = true;
                 const [x1_grid, y1_grid, x2_grid, y2_grid] = item.points;
                 const startPoint = new THREE.Vector3(x1_grid * this.gridSize, this.wallHeight / 2, y1_grid * this.gridSize);
                 const endPoint = new THREE.Vector3(x2_grid * this.gridSize, this.wallHeight / 2, y2_grid * this.gridSize);
@@ -189,6 +191,7 @@ class LevelRenderer {
                 mesh.position.lerpVectors(startPoint, endPoint, 0.5);
 
             } else {
+                isOBB = false;
                 const [type, xStr, zStr] = key.split('_');
                 const x = Number(xStr); const z = Number(zStr);
                 
@@ -210,11 +213,11 @@ class LevelRenderer {
                 }
                 mesh.position.set(posX, this.wallHeight / 2, posZ);
             }
-
+            
             mesh.castShadow = true; mesh.receiveShadow = true;
             game.scene.add(mesh);
-            physics.addWall(mesh); // Add wall to the physics system
-            if (isDoor) game.entities.doors.push(new Door(mesh, item));
+            physics.addWall(mesh, isOBB);
+            if (isDoor) game.entities.doors.push(new Door(mesh, item, isOBB));
         }
     }
 
@@ -264,18 +267,19 @@ class LevelRenderer {
                 game.scene.add(charMesh.group); 
                 const npcInstance = new NPC(charMesh, item, config);
                 game.entities.npcs.push(npcInstance);
-                physics.addDynamicEntity(npcInstance); // Add NPC to physics system
+                physics.addDynamicEntity(npcInstance);
             } 
         } 
     }
 
-    createFallbackFloor() { const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x111111 })); floor.rotation.x = -Math.PI / 2; game.scene.add(floor); const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444); gridHelper.position.y = 0.01; game.scene.add(gridHelper); }
+    createFallbackFloor() { const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x111111 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -0.01; game.scene.add(floor); const gridHelper = new THREE.GridHelper(100, 100, 0x888888, 0x444444); gridHelper.position.y = 0; game.scene.add(gridHelper); }
 }
 
 class Door {
-    constructor(mesh, itemData = {}) {
+    constructor(mesh, itemData = {}, isOBB) {
         const config = itemData.properties || {};
         this.mesh = mesh;
+        this.isOBB = isOBB;
         this.textureKey = itemData.key || '';
         this.isOpen = false;
         this.isLevelTransition = config.isLevelExit || false;
@@ -307,7 +311,7 @@ class Door {
         }
         this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.isOpen = true;
-        physics.removeWall(this.mesh); // Doors are not collidable when open
+        physics.removeWall(this.mesh);
         setTimeout(() => this.close(), GAME_GLOBAL_CONSTANTS.ENVIRONMENT.DOOR_OPEN_TIME);
     }
 
@@ -315,7 +319,7 @@ class Door {
         if (!this.isOpen) return;
         this.mesh.position.y = this.originalY;
         this.isOpen = false;
-        physics.addWall(this.mesh); // Re-add collision when closed
+        physics.addWall(this.mesh, this.isOBB);
     }
 }
 
@@ -325,13 +329,12 @@ class LevelManager {
     }
 
     async loadLevel(levelId) {
+        const playtestDataString = localStorage.getItem('gonk_level_to_play');
         try {
             this.currentLevel = levelId;
             let levelData;
-            const playtestDataString = localStorage.getItem('gonk_level_to_play');
             if (playtestDataString) {
                 levelData = JSON.parse(playtestDataString);
-                localStorage.removeItem('gonk_level_to_play');
             } else {
                 const response = await fetch(`data/levels/level_${levelId}.json`);
                 if (!response.ok) throw new Error(`Level file not found for level_${levelId}.json`);
@@ -345,6 +348,12 @@ class LevelManager {
         } catch (error) {
             console.error(`Failed to load or build level ${levelId}:`, error);
             levelRenderer.createFallbackFloor();
+        } finally {
+            // This block is guaranteed to run, even if an error occurs.
+            // This prevents the stale playtest data from getting stuck.
+            if (playtestDataString) {
+                localStorage.removeItem('gonk_level_to_play');
+            }
         }
     }
 }
@@ -359,7 +368,7 @@ class PhysicsSystem {
             radius: PLAYER_RADIUS,
             position: new THREE.Vector3(0, PLAYER_HEIGHT / 2, 0),
             velocity: new THREE.Vector3(),
-            weight: 100 // Player is heaviest
+            weight: 100
         };
         this.playerEntity = { collider: this.playerCollider };
         this.addDynamicEntity(this.playerEntity);
@@ -371,12 +380,22 @@ class PhysicsSystem {
         this.addDynamicEntity(this.playerEntity);
     }
 
-    addWall(mesh) {
-        mesh.geometry.computeBoundingBox();
+    addWall(mesh, isOBB) {
+        mesh.updateWorldMatrix(true, false);
         const wallCollider = {
-            box: new THREE.Box3().setFromObject(mesh),
-            uuid: mesh.uuid // Store mesh UUID for reliable removal
+            isOBB: isOBB,
+            uuid: mesh.uuid
         };
+
+        if (isOBB) {
+            wallCollider.center = mesh.position.clone();
+            const geoParams = mesh.geometry.parameters;
+            wallCollider.halfSize = new THREE.Vector3(geoParams.width / 2, geoParams.height / 2, geoParams.depth / 2);
+            wallCollider.rotation = mesh.quaternion.clone();
+            wallCollider.inverseRotation = mesh.quaternion.clone().invert();
+        } else {
+            wallCollider.aabb = new THREE.Box3().setFromObject(mesh);
+        }
         this.walls.push(wallCollider);
     }
 
@@ -396,11 +415,9 @@ class PhysicsSystem {
     update(deltaTime, inputHandler, camera) {
         this.updatePlayerVelocity(inputHandler);
         
-        // Apply raw velocity movement if noclip is on
         if (this.noclipEnabled) {
             this.playerCollider.position.add(this.playerCollider.velocity);
         } else {
-            // Move all dynamic entities based on their velocity
             for (const entity of this.dynamicEntities) {
                 entity.collider.position.add(entity.collider.velocity);
             }
@@ -424,22 +441,18 @@ class PhysicsSystem {
             acceleration.normalize().multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED);
         }
         
-        const currentVelocity = this.playerCollider.velocity;
-        currentVelocity.add(acceleration);
-        currentVelocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
+        this.playerCollider.velocity.add(acceleration);
+        this.playerCollider.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
     }
 
     resolveCollisions() {
-        // Run multiple passes to allow collisions to propagate and settle
         for (let i = 0; i < 3; i++) {
-            // Entity vs Wall
             for (const entity of this.dynamicEntities) {
                 for (const wall of this.walls) {
-                    this.resolveWallCollision(entity.collider, wall.box);
+                    this.resolveWallCollision(entity.collider, wall);
                 }
             }
             
-            // Entity vs Entity
             for (let j = 0; j < this.dynamicEntities.length; j++) {
                 for (let k = j + 1; k < this.dynamicEntities.length; k++) {
                     this.resolveEntityCollision(this.dynamicEntities[j], this.dynamicEntities[k]);
@@ -448,11 +461,18 @@ class PhysicsSystem {
         }
     }
 
-    resolveWallCollision(collider, wallBox) {
+    resolveWallCollision(collider, wall) {
+        if (wall.isOBB) {
+            this.resolveSphereOBBCollision(collider, wall);
+        } else {
+            this.resolveSphereAABBCollision(collider, wall);
+        }
+    }
+    
+    resolveSphereAABBCollision(collider, wall) {
         const sphere = new THREE.Sphere(collider.position, collider.radius);
-        if (sphere.intersectsBox(wallBox)) {
-            const closestPoint = new THREE.Vector3();
-            wallBox.clampPoint(sphere.center, closestPoint);
+        if (sphere.intersectsBox(wall.aabb)) {
+            const closestPoint = wall.aabb.clampPoint(sphere.center, new THREE.Vector3());
             const penetrationVector = new THREE.Vector3().subVectors(sphere.center, closestPoint);
             const penetrationDepth = sphere.radius - penetrationVector.length();
             
@@ -463,12 +483,39 @@ class PhysicsSystem {
         }
     }
 
+    resolveSphereOBBCollision(collider, wall) {
+        const sphereCenter = collider.position;
+        // Transform sphere center to the OBB's local space
+        const sphereCenterInOBBSpace = sphereCenter.clone().sub(wall.center);
+        sphereCenterInOBBSpace.applyQuaternion(wall.inverseRotation);
+
+        // Define the local AABB of the OBB
+        const localAABB = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(), wall.halfSize.clone().multiplyScalar(2));
+        
+        // Find the closest point on the local AABB to the transformed sphere center
+        const closestPointInOBBSpace = localAABB.clampPoint(sphereCenterInOBBSpace, new THREE.Vector3());
+        
+        const distanceSq = closestPointInOBBSpace.distanceToSquared(sphereCenterInOBBSpace);
+
+        if (distanceSq < collider.radius * collider.radius) {
+            const penetrationVecLocal = new THREE.Vector3().subVectors(sphereCenterInOBBSpace, closestPointInOBBSpace);
+            const penetrationDepth = collider.radius - Math.sqrt(distanceSq);
+            
+            if (penetrationDepth > 0 && penetrationVecLocal.lengthSq() > 0) {
+                const resolutionVecLocal = penetrationVecLocal.normalize().multiplyScalar(penetrationDepth);
+                // Transform the resolution vector back to world space and apply it
+                const resolutionVecWorld = resolutionVecLocal.applyQuaternion(wall.rotation);
+                collider.position.add(resolutionVecWorld);
+            }
+        }
+    }
+
     resolveEntityCollision(entityA, entityB) {
         const colA = entityA.collider;
         const colB = entityB.collider;
 
         const distVec = new THREE.Vector3().subVectors(colB.position, colA.position);
-        distVec.y = 0; // Collisions are 2D
+        distVec.y = 0;
         const distance = distVec.length();
         const totalRadius = colA.radius + colB.radius;
 
@@ -482,20 +529,12 @@ class PhysicsSystem {
 
             colA.position.sub(resolutionVec.clone().multiplyScalar(ratioA));
             colB.position.add(resolutionVec.clone().multiplyScalar(ratioB));
-
-            // After pushing an entity, re-check its collision with walls immediately
-            for (const wall of this.walls) {
-                this.resolveWallCollision(colA, wall.box);
-                this.resolveWallCollision(colB, wall.box);
-            }
         }
     }
     
     applyPostPhysicsUpdates(camera) {
-        // Update camera from player collider
         camera.position.copy(this.playerCollider.position);
         
-        // Apply friction to non-player entities
         for(const entity of this.dynamicEntities) {
             if (!entity.collider.isPlayer) {
                 entity.collider.velocity.multiplyScalar(GAME_GLOBAL_CONSTANTS.MOVEMENT.FRICTION);
