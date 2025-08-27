@@ -1,5 +1,5 @@
 // BROWSERFIREFOXHIDE environment_and_physics.js
-// Updated to add filename-based door transition logic and track the current level number.
+// Simplified to use the new asset manager factory, removing all local cloning logic.
 
 class NPC {
     constructor(characterMesh, itemData, config) {
@@ -99,7 +99,7 @@ class LevelRenderer {
 
     createTile(x, z, item, y, rotationX, isSpecial, layerName = '') {
         const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
-        let material = assetManager.getMaterial(materialName).clone();
+        let material = assetManager.getMaterial(materialName);
 
         material.transparent = true;
         material.alphaTest = 0.1;
@@ -137,7 +137,8 @@ class LevelRenderer {
     createWalls(items) {
         for (const [key, item] of items) {
             const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
-            const material = assetManager.getMaterial(materialName).clone();
+            const material = assetManager.getMaterial(materialName);
+            
             material.transparent = true;
             material.alphaTest = 0.1;
             const isDoor = item.key.includes('/door/');
@@ -153,7 +154,7 @@ class LevelRenderer {
 
                 material.map.wrapS = THREE.RepeatWrapping;
                 material.map.wrapT = THREE.RepeatWrapping;
-                material.map.repeat.set(length / this.gridSize, this.wallHeight / this.gridSize);
+                material.map.repeat.set(Math.round(length / this.gridSize), this.wallHeight / this.gridSize);
 
                 const wallGeo = new THREE.BoxGeometry(length, this.wallHeight, 0.1);
                 mesh = new THREE.Mesh(wallGeo, material);
@@ -167,11 +168,23 @@ class LevelRenderer {
             } else {
                 const [type, xStr, zStr] = key.split('_');
                 const x = Number(xStr); const z = Number(zStr);
-                const wallGeo = new THREE.BoxGeometry(type === 'H' ? this.gridSize : 0.1, this.wallHeight, type === 'V' ? this.gridSize : 0.1);
+                
+                material.map.wrapS = THREE.RepeatWrapping;
+                material.map.wrapT = THREE.RepeatWrapping;
+                material.map.repeat.set(1, 1);
+
+                const wallGeo = new THREE.BoxGeometry(this.gridSize, this.wallHeight, 0.1);
                 mesh = new THREE.Mesh(wallGeo, material);
+                
                 let posX, posZ;
-                if (type === 'H') { posX = x * this.gridSize + this.gridSize / 2; posZ = (z + 1) * this.gridSize; } 
-                else { posX = (x + 1) * this.gridSize; posZ = z * this.gridSize + this.gridSize / 2; }
+                if (type === 'H') {
+                    posX = x * this.gridSize + this.gridSize / 2;
+                    posZ = (z + 1) * this.gridSize;
+                } else { // 'V' type
+                    posX = (x + 1) * this.gridSize;
+                    posZ = z * this.gridSize + this.gridSize / 2;
+                    mesh.rotation.y = Math.PI / 2;
+                }
                 mesh.position.set(posX, this.wallHeight / 2, posZ);
             }
 
@@ -186,7 +199,8 @@ class LevelRenderer {
             const [type, xStr, zStr] = key.split('_'); 
             const x = Number(xStr); const z = Number(zStr); 
             const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, ""); 
-            const material = assetManager.getMaterial(materialName).clone(); 
+            const material = assetManager.getMaterial(materialName); 
+
             material.side = THREE.DoubleSide; 
             material.transparent = true; 
             material.alphaTest = 0.1; 

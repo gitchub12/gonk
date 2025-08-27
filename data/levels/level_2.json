@@ -143,6 +143,72 @@
           "type": "texture",
           "key": "/data/pngs/door/door_0.png"
         }
+      ],
+      [
+        "VEC_1756294372543_0.250825374854737",
+        {
+          "type": "vector",
+          "points": [
+            25,
+            19,
+            29,
+            16
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756294373525_0.5813733720798289",
+        {
+          "type": "vector",
+          "points": [
+            29,
+            16,
+            29,
+            19
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756294374187_0.990431328039391",
+        {
+          "type": "vector",
+          "points": [
+            29,
+            19,
+            25,
+            19
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "VEC_1756294377633_0.15431610441280685",
+        {
+          "type": "vector",
+          "points": [
+            29,
+            14,
+            29,
+            11
+          ],
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_28_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
+      ],
+      [
+        "V_28_8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1.png"
+        }
       ]
     ]
   }

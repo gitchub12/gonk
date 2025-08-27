@@ -1,11 +1,9 @@
 // BROWSERFIREFOXHIDE asset_loaders.js
-// This file has been rewritten for dynamic asset discovery.
+// Rewritten to act as a factory, creating fresh materials and textures on demand to prevent shared state issues.
 
-// === DYNAMIC ASSET LOADER ===
 class AssetManager {
   constructor() {
-    this.textures = {};
-    this.materials = {};
+    this.textures = {}; // Caches the master loaded textures
     this.sounds = {};
     this.pamphletTextureNames = [];
 
@@ -99,7 +97,6 @@ class AssetManager {
     await this.discoverAndLoadAssets();
     await this.loadCharacterSkins();
     await this.loadSounds();
-    this.createMaterials();
     console.log(`Asset loading complete. ${Object.keys(this.textures).length} textures and ${Object.keys(this.sounds).length} sounds loaded.`);
   }
 
@@ -121,7 +118,7 @@ class AssetManager {
       await Promise.all(promises);
   }
 
-  async loadTexture(name, path) { // For on-demand loading like furniture
+  async loadTexture(name, path) {
     if (this.textures[name]) return this.textures[name];
     
     const loader = new THREE.TextureLoader();
@@ -130,8 +127,7 @@ class AssetManager {
             (texture) => { 
                 texture.magFilter = THREE.NearestFilter;
                 texture.minFilter = THREE.NearestFilter;
-                this.textures[name] = texture; 
-                this.materials[name] = new THREE.MeshStandardMaterial({ map: texture });
+                this.textures[name] = texture;
                 resolve(texture); 
             },
             undefined, 
@@ -144,20 +140,22 @@ class AssetManager {
     });
   }
   
-  createMaterials() {
-    for (const [name, texture] of Object.entries(this.textures)) {
-        if (texture) {
-            this.materials[name] = new THREE.MeshStandardMaterial({ map: texture });
-        }
-    }
-  }
-  
-  getMaterial(name) { 
-    if (!this.materials[name]) {
-        console.warn(`Material '${name}' not found. Using fallback.`);
+  getMaterial(name) {
+    const baseTexture = this.getTexture(name);
+    if (!baseTexture || !baseTexture.image) {
+        console.warn(`Texture for material '${name}' not found or not loaded. Using fallback.`);
         return new THREE.MeshStandardMaterial({ color: 0xff00ff }); // Magenta fallback
     }
-    return this.materials[name];
+
+    // Create a new texture instance from the master image
+    const newTexture = new THREE.Texture(baseTexture.image);
+    newTexture.magFilter = THREE.NearestFilter;
+    newTexture.minFilter = THREE.NearestFilter;
+    newTexture.encoding = baseTexture.encoding;
+    newTexture.needsUpdate = true;
+    
+    // Return a completely new material using the new texture
+    return new THREE.MeshStandardMaterial({ map: newTexture });
   }
 
   getTexture(name) {
@@ -169,8 +167,8 @@ class AssetManager {
   
   getRandomPamphletMaterial() {
     const textureName = this.pamphletTextureNames[Math.floor(Math.random() * this.pamphletTextureNames.length)];
-    const material = this.getMaterial(textureName);
-    return material ? material.clone() : new THREE.MeshBasicMaterial({ color: 0xffff00 }); 
+    const material = this.getMaterial(textureName); // This will now correctly return a new material
+    return material ? material : new THREE.MeshBasicMaterial({ color: 0xffff00 }); 
   }
 }
 
