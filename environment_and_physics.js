@@ -1,5 +1,5 @@
-// BROWSERFIREFOXHIDE environment_and_physics.js
-// Rewritten to introduce a centralized PhysicsSystem for robust collision detection and response.
+// BROWSERFIREFOXHIDE environment_and_physics.js 
+// Corrected to load singular layer names ('wall', 'door', 'dock') from level JSON.
 
 // --- COLLISION CONSTANTS ---
 const PLAYER_RADIUS = 0.4;
@@ -53,7 +53,6 @@ class NPC {
                 this.mesh.group.lookAt(playerPosition.x, this.mesh.group.position.y, playerPosition.z);
                 if (distanceToPlayer > this.attackRange) {
                     const direction = playerPosition.clone().sub(this.mesh.group.position).normalize();
-                    // Set velocity instead of directly modifying position
                     this.velocity.x = direction.x * this.speed;
                     this.velocity.z = direction.z * this.speed;
                     isMoving = true;
@@ -82,7 +81,7 @@ class LevelRenderer {
 
     buildLevelFromData(levelData) {
         game.clearScene();
-        physics.clear(); // Clear physics colliders for the new level
+        physics.clear();
         const layers = levelData.layers || {};
         const settings = levelData.settings || { width: 64, height: 64, defaults: {} };
 
@@ -94,6 +93,7 @@ class LevelRenderer {
             }
         };
 
+        processTileLayer('subfloor', -0.1, -Math.PI / 2, false);
         processTileLayer('floor', 0, -Math.PI / 2, false);
         processTileLayer('water', 0.2, -Math.PI / 2, true);
         processTileLayer('ceiling', this.wallHeight - 0.001, Math.PI / 2, false);
@@ -102,12 +102,33 @@ class LevelRenderer {
         processTileLayer('floater', 0.4, -Math.PI / 2, true);
         processTileLayer('dangler', this.wallHeight - 0.01, Math.PI / 2, true);
 
-        if (layers.walls) this.createWalls(layers.walls);
+        if (layers.wall) this.createWalls(layers.wall);
+        if (layers.door) this.createDoors(layers.door);
+        if (layers.dock) this.createDocks(layers.dock);
         if (layers.tapestry) this.createTapestries(layers.tapestry);
         if (layers.npcs) this.createNPCs(layers.npcs);
 
+        let spawnPoint = null;
         if (layers.spawns && layers.spawns.length > 0) {
-            const [posStr, item] = layers.spawns[0];
+            const lastDock = localStorage.getItem('gonk_last_dock');
+            if (lastDock) {
+                const dockData = JSON.parse(lastDock);
+                const targetSpawnId = dockData.properties.target;
+                const foundSpawn = layers.spawns.find(item => item[1].id === targetSpawnId);
+                if (foundSpawn) {
+                    spawnPoint = foundSpawn;
+                } else {
+                    console.warn(`Target spawn ID '${targetSpawnId}' not found, using first spawn.`);
+                }
+                localStorage.removeItem('gonk_last_dock');
+            }
+            if (!spawnPoint) {
+                spawnPoint = layers.spawns[0];
+            }
+        }
+        
+        if (spawnPoint) {
+            const [posStr, item] = spawnPoint;
             const [x, z] = posStr.split(',').map(Number);
             const spawnX = x * this.gridSize + this.gridSize/2;
             const spawnZ = z * this.gridSize + this.gridSize/2;
@@ -157,70 +178,81 @@ class LevelRenderer {
         game.scene.add(group);
     }
 
+    createLineLayerObject(item, key) {
+        const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
+        const material = assetManager.getMaterial(materialName);
+        material.transparent = true;
+        material.alphaTest = 0.1;
+        let mesh;
+        let isOBB = false;
+
+        if (key.startsWith('VEC_')) {
+            isOBB = true;
+            const [x1_grid, y1_grid, x2_grid, y2_grid] = item.points;
+            const startPoint = new THREE.Vector3(x1_grid * this.gridSize, this.wallHeight / 2, y1_grid * this.gridSize);
+            const endPoint = new THREE.Vector3(x2_grid * this.gridSize, this.wallHeight / 2, y2_grid * this.gridSize);
+            const length = startPoint.distanceTo(endPoint);
+            if (length < 0.01) return null;
+
+            material.map.wrapS = THREE.RepeatWrapping;
+            material.map.wrapT = THREE.RepeatWrapping;
+            material.map.repeat.set(Math.round(length / this.gridSize), this.wallHeight / this.gridSize);
+
+            const wallGeo = new THREE.BoxGeometry(length, this.wallHeight, 0.1);
+            mesh = new THREE.Mesh(wallGeo, material);
+            const direction = new THREE.Vector3().subVectors(endPoint, startPoint).normalize();
+            const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1, 0, 0), direction);
+            mesh.quaternion.copy(quaternion);
+            mesh.position.lerpVectors(startPoint, endPoint, 0.5);
+        } else {
+            isOBB = false;
+            const [type, xStr, zStr] = key.split('_');
+            const x = Number(xStr); const z = Number(zStr);
+            material.map.wrapS = THREE.RepeatWrapping;
+            material.map.wrapT = THREE.RepeatWrapping;
+            material.map.repeat.set(1, 1);
+
+            const wallGeo = new THREE.BoxGeometry(this.gridSize, this.wallHeight, 0.1);
+            mesh = new THREE.Mesh(wallGeo, material);
+            
+            let posX, posZ;
+            if (type === 'H') {
+                posX = x * this.gridSize + this.gridSize / 2;
+                posZ = (z + 1) * this.gridSize;
+            } else { // 'V' type
+                posX = (x + 1) * this.gridSize;
+                posZ = z * this.gridSize + this.gridSize / 2;
+                mesh.rotation.y = Math.PI / 2;
+            }
+            mesh.position.set(posX, this.wallHeight / 2, posZ);
+        }
+        
+        mesh.castShadow = true; mesh.receiveShadow = true;
+        game.scene.add(mesh);
+        return { mesh, isOBB };
+    }
+
     createWalls(items) {
         for (const [key, item] of items) {
-            const materialName = item.key.split('/').pop().replace(/\.[^/.]+$/, "");
-            const material = assetManager.getMaterial(materialName);
-            
-            material.transparent = true;
-            material.alphaTest = 0.1;
-            const isDoor = item.key.includes('/door/');
-            let mesh;
-            let isOBB = false;
-
-            if (key.startsWith('VEC_')) {
-                isOBB = true;
-                const [x1_grid, y1_grid, x2_grid, y2_grid] = item.points;
-                const startPoint = new THREE.Vector3(x1_grid * this.gridSize, this.wallHeight / 2, y1_grid * this.gridSize);
-                const endPoint = new THREE.Vector3(x2_grid * this.gridSize, this.wallHeight / 2, y2_grid * this.gridSize);
-
-                const length = startPoint.distanceTo(endPoint);
-                if (length < 0.01) continue;
-
-                material.map.wrapS = THREE.RepeatWrapping;
-                material.map.wrapT = THREE.RepeatWrapping;
-                material.map.repeat.set(Math.round(length / this.gridSize), this.wallHeight / this.gridSize);
-
-                const wallGeo = new THREE.BoxGeometry(length, this.wallHeight, 0.1);
-                mesh = new THREE.Mesh(wallGeo, material);
-
-                const direction = new THREE.Vector3().subVectors(endPoint, startPoint).normalize();
-                const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1, 0, 0), direction);
-                mesh.quaternion.copy(quaternion);
-
-                mesh.position.lerpVectors(startPoint, endPoint, 0.5);
-
-            } else {
-                isOBB = false;
-                const [type, xStr, zStr] = key.split('_');
-                const x = Number(xStr); const z = Number(zStr);
-                
-                material.map.wrapS = THREE.RepeatWrapping;
-                material.map.wrapT = THREE.RepeatWrapping;
-                material.map.repeat.set(1, 1);
-
-                const wallGeo = new THREE.BoxGeometry(this.gridSize, this.wallHeight, 0.1);
-                mesh = new THREE.Mesh(wallGeo, material);
-                
-                let posX, posZ;
-                if (type === 'H') {
-                    posX = x * this.gridSize + this.gridSize / 2;
-                    posZ = (z + 1) * this.gridSize;
-                } else { // 'V' type
-                    posX = (x + 1) * this.gridSize;
-                    posZ = z * this.gridSize + this.gridSize / 2;
-                    mesh.rotation.y = Math.PI / 2;
-                }
-                mesh.position.set(posX, this.wallHeight / 2, posZ);
-            }
-            
-            mesh.castShadow = true; mesh.receiveShadow = true;
-            game.scene.add(mesh);
-            physics.addWall(mesh, isOBB);
-            if (isDoor) game.entities.doors.push(new Door(mesh, item, isOBB));
+            const wallObj = this.createLineLayerObject(item, key);
+            if(wallObj) physics.addWall(wallObj.mesh, wallObj.isOBB);
         }
     }
 
+    createDoors(items) {
+        for (const [key, item] of items) {
+            const doorObj = this.createLineLayerObject(item, key);
+            if(doorObj) game.entities.doors.push(new Door(doorObj.mesh, item, doorObj.isOBB));
+        }
+    }
+
+    createDocks(items) {
+         for (const [key, item] of items) {
+            const dockObj = this.createLineLayerObject(item, key);
+            if(dockObj) game.entities.doors.push(new Dock(dockObj.mesh, item, dockObj.isOBB));
+        }
+    }
+    
     createTapestries(items) { 
         for (const [key, item] of items) { 
             const [type, xStr, zStr] = key.split('_'); 
@@ -277,38 +309,18 @@ class LevelRenderer {
 
 class Door {
     constructor(mesh, itemData = {}, isOBB) {
-        const config = itemData.properties || {};
         this.mesh = mesh;
         this.isOBB = isOBB;
-        this.textureKey = itemData.key || '';
         this.isOpen = false;
-        this.isLevelTransition = config.isLevelExit || false;
-        this.targetLevel = config.targetLevel || null;
+        this.properties = itemData.properties || {};
         this.originalY = mesh.position.y;
-
-        if (!config.isLevelExit && this.textureKey) {
-            const doorName = this.textureKey.substring(this.textureKey.lastIndexOf('/') + 1);
-            if (doorName === 'door_2.png') {
-                this.isLevelTransition = true;
-                this.targetLevel = window.levelManager.currentLevel + 1;
-            } else if (doorName === 'door_0.png' && window.levelManager.currentLevel > 1) {
-                this.isLevelTransition = true;
-                this.targetLevel = window.levelManager.currentLevel - 1;
-            }
-        }
+        
+        physics.addWall(this.mesh, this.isOBB);
     }
 
     open() {
         if (this.isOpen) return;
-        if (this.textureKey.includes('door_2.png')) {
-            audioSystem.playSound('dooropen2');
-        } else {
-            audioSystem.playSound('dooropen');
-        }
-        if (this.isLevelTransition && this.targetLevel) {
-            levelManager.loadLevel(this.targetLevel);
-            return;
-        }
+        audioSystem.playSound('dooropen');
         this.mesh.position.y = this.originalY + GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.isOpen = true;
         physics.removeWall(this.mesh);
@@ -320,6 +332,32 @@ class Door {
         this.mesh.position.y = this.originalY;
         this.isOpen = false;
         physics.addWall(this.mesh, this.isOBB);
+    }
+}
+
+class Dock extends Door {
+    constructor(mesh, itemData = {}, isOBB) {
+        super(mesh, itemData, isOBB);
+    }
+
+    open() {
+        if (this.isOpen) return;
+        
+        if (this.properties.target) {
+            const match = this.properties.target.match(/(\d+)/);
+            const targetLevel = match ? parseInt(match[1]) : null;
+
+            if (targetLevel && levelManager.currentLevel !== targetLevel) {
+                 audioSystem.playSound('dooropen2');
+                 localStorage.setItem('gonk_last_dock', JSON.stringify({ properties: this.properties }));
+                 levelManager.loadLevel(targetLevel);
+                 return;
+            } else if (targetLevel) {
+                console.log("Side-path dock not yet implemented.");
+            }
+        }
+        
+        super.open();
     }
 }
 
@@ -349,8 +387,6 @@ class LevelManager {
             console.error(`Failed to load or build level ${levelId}:`, error);
             levelRenderer.createFallbackFloor();
         } finally {
-            // This block is guaranteed to run, even if an error occurs.
-            // This prevents the stale playtest data from getting stuck.
             if (playtestDataString) {
                 localStorage.removeItem('gonk_level_to_play');
             }
@@ -485,14 +521,11 @@ class PhysicsSystem {
 
     resolveSphereOBBCollision(collider, wall) {
         const sphereCenter = collider.position;
-        // Transform sphere center to the OBB's local space
         const sphereCenterInOBBSpace = sphereCenter.clone().sub(wall.center);
         sphereCenterInOBBSpace.applyQuaternion(wall.inverseRotation);
 
-        // Define the local AABB of the OBB
         const localAABB = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(), wall.halfSize.clone().multiplyScalar(2));
         
-        // Find the closest point on the local AABB to the transformed sphere center
         const closestPointInOBBSpace = localAABB.clampPoint(sphereCenterInOBBSpace, new THREE.Vector3());
         
         const distanceSq = closestPointInOBBSpace.distanceToSquared(sphereCenterInOBBSpace);
@@ -503,7 +536,6 @@ class PhysicsSystem {
             
             if (penetrationDepth > 0 && penetrationVecLocal.lengthSq() > 0) {
                 const resolutionVecLocal = penetrationVecLocal.normalize().multiplyScalar(penetrationDepth);
-                // Transform the resolution vector back to world space and apply it
                 const resolutionVecWorld = resolutionVecLocal.applyQuaternion(wall.rotation);
                 collider.position.add(resolutionVecWorld);
             }

@@ -1,0 +1,657 @@
+{
+  "__ahk_meta__": {
+    "hidden_command": "BROWSERFIREFOXHIDE",
+    "filename": "data/levels/level_2.json"
+  },
+  "settings": {
+    "width": 64,
+    "height": 64,
+    "defaults": {}
+  },
+  "layers": {
+    "floor": [
+      [
+        "9,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_13.png",
+          "rotation": 0
+        }
+      ]
+    ],
+    "water": [
+      [
+        "10,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "7,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "7,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "8,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "9,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "10,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "11,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "12,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "19,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "18,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "17,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "16,14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "15,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "14,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ],
+      [
+        "13,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_1.png",
+          "rotation": 0
+        }
+      ]
+    ]
+  }
+}

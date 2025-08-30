@@ -66,7 +66,8 @@
         #layer-selector button { width: 64px; height: 50px; flex-direction: column; }
         #layer-selector button img { width: 32px; height: 32px; margin-top: 2px; }
         #layer-selector button .layer-label { font-size: 10px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
-        
+        .layer-group { display: contents; } /* Allows flex items to be grouped without a container element */
+
         .top-right-ui { position: absolute; top: 10px; right: 10px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; }
         #playtest-button { padding: 12px 24px; font-size: 1.2em; font-weight: bold; background-color: var(--play-btn-bg); border: 1px solid #1e7e34; color: white; cursor: pointer; border-radius: 5px; text-shadow: 1px 1px 2px black; }
@@ -80,9 +81,34 @@
         #context-menu ul li { padding: 8px 12px; cursor: pointer; color: var(--text-color); }
         #context-menu ul li:hover { background-color: #333842; color: var(--text-hover); }
 
+        /* Styles for the new properties panel */
+        #properties-panel {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--panel-bg);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            z-index: 101;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #properties-panel h3 { margin-top: 0; color: var(--accent-color); }
+        .prop-group { margin-bottom: 15px; }
+        .prop-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .prop-group input, .prop-group select { width: 100%; padding: 8px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 3px; box-sizing: border-box; margin-top: 5px; }
+        .prop-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+        .prop-buttons button { padding: 10px; border: none; border-radius: 5px; cursor: pointer; color: white; flex-grow: 1; }
+        #save-prop-btn { background-color: var(--play-btn-bg); }
+        #cancel-prop-btn { background-color: #dc3545; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
     <div id="leftPanel">
         <div class="tabs">
             <button class="tab-button active" data-tab="editor">Editor</button>
@@ -186,6 +212,16 @@
     </div>
     <div id="context-menu">
         <ul></ul>
+    </div>
+
+    <div id="properties-panel">
+        <h3 id="prop-title">Item Properties</h3>
+        <div id="prop-content">
+            </div>
+        <div class="prop-buttons">
+            <button id="save-prop-btn">Save</button>
+            <button id="cancel-prop-btn">Cancel</button>
+        </div>
     </div>
     <script src="../gonk_models.js"></script> 
     <script src="editor_ui_and_assets.js"></script>

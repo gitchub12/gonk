@@ -1,5 +1,5 @@
-// BROWSERFIREFOXHIDE editor_ui_and_assets.js
-// Rewritten to remove reference to non-existent 'cover' asset directory.
+// BROWSERFIREFOXHIDE editor_ui_and_assets.js 
+// Corrected singular/plural mismatch in UI layer groups.
 
 class EditorAssetManager {
     constructor(modelSystem) {
@@ -8,7 +8,7 @@ class EditorAssetManager {
         this.npcIcons = new Map();
         this.furnitureJsons = new Map();
         this.assetIcons = new Map(); 
-        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'tapestry', 'dangler', 'spawn'];
+        this.textureLayers = ['subfloor', 'floor', 'water', 'floater', 'decor', 'ceiling', 'sky', 'wall', 'door', 'dock', 'tapestry', 'dangler', 'spawn'];
         this.layerTextures = {};
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
     }
@@ -16,31 +16,34 @@ class EditorAssetManager {
     async fetchDirectoryListing(path) {
         try {
             const response = await fetch(path);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            if (!response.ok) return []; // Silently fail if directory doesn't exist
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            return Array.from(doc.querySelectorAll('a')).map(a => a.getAttribute('href')).filter(href => !href.startsWith('?') && !href.startsWith('/'));
+            return Array.from(doc.querySelectorAll('a'))
+                .map(a => a.getAttribute('href'))
+                .filter(href => href.endsWith('.png'));
         } catch (e) {
-            console.error(`Failed to fetch or parse directory listing for "${path}":`, e);
+            console.warn(`Could not fetch or parse directory listing for "${path}":`, e);
             return [];
         }
     }
 
     async discoverAssets() {
-        // Discover NPC Skins
-        const skinFiles = await this.fetchDirectoryListing('/data/skins/');
-        this.npcSkins = skinFiles.filter(f => f.endsWith('.png')).map(f => `/data/skins/${f}`);
-        await this.generateNpcIcons();
-
-        // Discover Textures
+        // Discover Textures dynamically from folders
         for (const layerType of this.textureLayers) {
             const path = `/data/pngs/${layerType}/`;
             const textureFiles = await this.fetchDirectoryListing(path);
-            this.layerTextures[layerType] = textureFiles.filter(f => f.endsWith('.png')).map(f => `${path}${f}`);
+            this.layerTextures[layerType] = textureFiles.map(file => `${path}${file}`);
         }
         
-        // Discover Furniture/Assets
+        // Discover NPC Skins dynamically
+        const skinPath = '/data/skins/';
+        const skinFiles = await this.fetchDirectoryListing(skinPath);
+        this.npcSkins = skinFiles.map(f => `${skinPath}${f}`);
+        await this.generateNpcIcons();
+        
+        // Discover Furniture/Assets from its manifest
         try {
             const furnitureManifestResponse = await fetch('/data/furniture.json');
             const furnitureManifest = await furnitureManifestResponse.json();
@@ -105,6 +108,9 @@ class EditorUI {
         this.gridWidthInput = document.getElementById('grid-width-input'); this.gridHeightInput = document.getElementById('grid-height-input');
         this.levelNumberInput = document.getElementById('level-number-input'); this.levelDisplay = document.getElementById('level-display');
         this.contextMenu = document.getElementById('context-menu');
+        this.propertiesPanel = document.getElementById('properties-panel');
+        this.propContent = document.getElementById('prop-content');
+        this.currentPropItem = null;
         this.defaultTextureSelects = {}; this.layerButtons = {};
         ['subfloor', 'floor', 'water', 'floater', 'ceiling', 'sky'].forEach(id => {
             const el = document.getElementById(`default-${id}-select`); if(el) this.defaultTextureSelects[id] = el;
@@ -159,6 +165,11 @@ class EditorUI {
             if (button) button.addEventListener('click', () => this.setActiveTool(toolName));
         });
 
+        document.getElementById('save-prop-btn').addEventListener('click', e => { e.stopPropagation(); this.saveProperties(); });
+        document.getElementById('cancel-prop-btn').addEventListener('click', e => { e.stopPropagation(); this.hidePropertiesPanel(); });
+        this.contextMenu.addEventListener('click', e => e.stopPropagation()); 
+        this.propertiesPanel.addEventListener('click', e => e.stopPropagation());
+
         this.populateDefaultTextureSettings(); this.setActiveLayer(this.editor.activeLayerName);
     }
     
@@ -169,19 +180,33 @@ class EditorUI {
             { label: 'Droids', icon: '/data/pngs/icons for UI/droidicon.png', group: 'Droids' },
             { label: 'Stormies', icon: '/data/pngs/icons for UI/stormiesicon.png', group: 'Stormies' },
         ];
-        this.editor.layerOrder.forEach(layerName => {
-            if(layerName === 'npcs'){
-                specialNpcButtons.forEach(npcInfo => {
-                    const btn = this.createButton(layerName, npcInfo.label, npcInfo.icon);
-                    btn.addEventListener('click', () => this.setActiveLayer(layerName, npcInfo.group));
-                    this.layerSelector.appendChild(btn);
-                });
-            } else {
-                const btn = this.createButton(layerName, layerName, null);
-                btn.addEventListener('click', () => this.setActiveLayer(layerName));
-                this.layerSelector.appendChild(btn);
-            }
-        });
+        const layerGroups = {
+            'Ground': ['subfloor', 'floor', 'water'],
+            'Scenery': ['floater', 'decor', 'dangler'],
+            'Structure': ['wall', 'door', 'dock', 'tapestry'], // <-- CORRECTED TO SINGULAR
+            'Entities': ['npcs', 'assets', 'spawns'],
+            'Skybox': ['ceiling', 'sky']
+        };
+
+        for(const groupName in layerGroups){
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'layer-group';
+
+            layerGroups[groupName].forEach(layerName => {
+                 if(layerName === 'npcs'){
+                    specialNpcButtons.forEach(npcInfo => {
+                        const btn = this.createButton(layerName, npcInfo.label, npcInfo.icon);
+                        btn.addEventListener('click', () => this.setActiveLayer(layerName, npcInfo.group));
+                        groupDiv.appendChild(btn);
+                    });
+                } else {
+                    const btn = this.createButton(layerName, layerName, null);
+                    btn.addEventListener('click', () => this.setActiveLayer(layerName));
+                    groupDiv.appendChild(btn);
+                }
+            });
+            this.layerSelector.appendChild(groupDiv);
+        }
     }
 
     createButton(layerName, label, overrideIcon) {
@@ -190,13 +215,18 @@ class EditorUI {
         button.title = label.charAt(0).toUpperCase() + label.slice(1);
         let iconSrc = overrideIcon;
         if (!iconSrc) {
-            switch(layerName) {
-                case 'assets': iconSrc = '/data/pngs/icons for UI/crate.png'; break;
-                case 'spawns': iconSrc = '/data/pngs/spawn/hologonk_1.png'; break;
-                case 'walls': iconSrc = '/data/pngs/icons for UI/wallsicon.png'; break;
-                default:
-                    const textures = this.assetManager.layerTextures[layerName] || [];
-                    if (textures.length > 0) iconSrc = textures[0];
+            const iconMap = {
+                'assets': '/data/pngs/icons for UI/crate.png',
+                'spawns': '/data/pngs/spawn/hologonk_1.png',
+                'wall': '/data/pngs/icons for UI/wallsicon.png',
+                'door': '/data/pngs/icons for UI/dooricon.png',
+                'dock': '/data/pngs/icons for UI/dockicon.png',
+            };
+            if(iconMap[layerName]) {
+                iconSrc = iconMap[layerName];
+            } else {
+                const textures = this.assetManager.layerTextures[layerName] || [];
+                if (textures.length > 0) iconSrc = textures[0];
             }
         }
         if (iconSrc) {
@@ -259,24 +289,104 @@ class EditorUI {
         if(subGroup) { const header = document.getElementById(`palette-header-${subGroup}`); if(header) header.scrollIntoView({behavior: "smooth", block: "start"}); }
     }
     
-    showContextMenu(event, gridX, gridY) {
+    showContextMenu(event, itemKey, itemData, layerName) {
         this.hideContextMenu();
-        const item = this.editor.levelData[this.editor.activeLayerName]?.get(`${gridX},${gridY}`);
-        if (!item) return;
-        const menuList = this.contextMenu.querySelector('ul'); menuList.innerHTML = '';
-        let options = ['Properties', 'Delete'];
-        if(item.key?.toLowerCase().includes('door')) options.unshift('Set Key Requirement', 'Set Level Exit');
-        if(item.key?.toLowerCase().includes('wall')) options.unshift('Make Holographic');
-        options.forEach(opt => {
-            const li = document.createElement('li'); li.textContent = opt;
-            li.addEventListener('click', () => { alert(`Action: ${opt} on ${item.key}`); this.hideContextMenu(); });
-            menuList.appendChild(li);
+        const menuList = this.contextMenu.querySelector('ul');
+        menuList.innerHTML = '';
+        
+        const hasProps = ['docks', 'spawns'].includes(layerName);
+        
+        if (hasProps) {
+            const propLi = document.createElement('li');
+            propLi.textContent = 'Properties';
+            propLi.addEventListener('click', e => { 
+                e.stopPropagation();
+                this.showPropertiesPanel(itemKey, itemData, layerName); 
+                this.hideContextMenu(); 
+            });
+            menuList.appendChild(propLi);
+        }
+
+        const deleteLi = document.createElement('li');
+        deleteLi.textContent = 'Delete';
+        deleteLi.addEventListener('click', e => { 
+            e.stopPropagation();
+            this.editor.eraseItem({layer: layerName, key: itemKey, data: itemData});
+            this.hideContextMenu();
         });
-        this.contextMenu.style.left = `${event.clientX}px`; this.contextMenu.style.top = `${event.clientY}px`;
+        menuList.appendChild(deleteLi);
+
+        this.contextMenu.style.left = `${event.clientX}px`;
+        this.contextMenu.style.top = `${event.clientY}px`;
         this.contextMenu.style.display = 'block';
     }
 
     hideContextMenu() { this.contextMenu.style.display = 'none'; }
+    
+    showPropertiesPanel(itemKey, itemData, layerName) {
+        this.currentPropItem = { key: itemKey, data: itemData, layer: layerName };
+        this.propContent.innerHTML = '';
+        
+        let propHtml = '';
+        if (layerName === 'dock') { // Corrected to singular
+            const currentTarget = itemData.properties?.target || '';
+            propHtml = `
+                <div class="prop-group"><h3>Dock Properties</h3>
+                    <label for="dock-target">Target:</label>
+                    <input type="text" id="dock-target" value="${currentTarget}" placeholder="e.g., TO LEVEL 02A">
+                </div>`;
+        } else if (layerName === 'spawns') {
+            const currentId = itemData.id || '';
+            const currentRotation = itemData.rotation || 0;
+            propHtml = `
+                <div class="prop-group"><h3>Spawn Point Properties</h3>
+                    <label for="spawn-id">ID:</label>
+                    <input type="text" id="spawn-id" value="${currentId}" placeholder="e.g., FROM LEVEL 01">
+                    <label for="spawn-rotation">Facing Direction:</label>
+                    <select id="spawn-rotation">
+                        <option value="0" ${currentRotation === 0 ? 'selected' : ''}>Up (0)</option>
+                        <option value="1" ${currentRotation === 1 ? 'selected' : ''}>Right (90)</option>
+                        <option value="2" ${currentRotation === 2 ? 'selected' : ''}>Down (180)</option>
+                        <option value="3" ${currentRotation === 3 ? 'selected' : ''}>Left (270)</option>
+                    </select>
+                </div>`;
+        }
+        
+        this.propContent.innerHTML = propHtml;
+        this.propertiesPanel.style.display = 'block';
+    }
+
+    hidePropertiesPanel() {
+        this.propertiesPanel.style.display = 'none';
+        this.currentPropItem = null;
+    }
+
+    saveProperties() {
+        if (!this.currentPropItem) return;
+        
+        const { key, data, layer } = this.currentPropItem;
+        const itemToModify = this.editor.levelData[layer].get(key);
+
+        if (!itemToModify) {
+            console.error("Could not find item to modify in level data.");
+            this.hidePropertiesPanel();
+            return;
+        }
+
+        this.editor.modifyState(() => {
+            if (layer === 'dock') { // Corrected to singular
+                const newTarget = document.getElementById('dock-target').value;
+                if (!itemToModify.properties) itemToModify.properties = {};
+                itemToModify.properties.target = newTarget;
+            } else if (layer === 'spawns') {
+                const newId = document.getElementById('spawn-id').value;
+                const newRotation = parseInt(document.getElementById('spawn-rotation').value, 10);
+                itemToModify.id = newId;
+                itemToModify.rotation = newRotation;
+            }
+        });
+        this.hidePropertiesPanel();
+    }
     
     _populatePalette(items, createItemFn) {
         this.paletteContainer.innerHTML = ''; if (!items || items.length === 0) { this.paletteContainer.innerHTML = `<p>No assets found</p>`; return; }
@@ -284,8 +394,8 @@ class EditorUI {
     }
 
     populateTexturePalette() {
-        const selectedLayer = this.editor.activeLayerName; let textures = this.assetManager.layerTextures[selectedLayer];
-        if (selectedLayer === 'walls') textures = [...this.assetManager.layerTextures['wall'],...this.assetManager.layerTextures['door']];
+        const selectedLayer = this.editor.activeLayerName;
+        let textures = this.assetManager.layerTextures[selectedLayer];
         this._populatePalette(textures, path => {
             const item = document.createElement('div'); item.className = 'palette-item';
             const img = new Image(); img.src = path; item.appendChild(img);

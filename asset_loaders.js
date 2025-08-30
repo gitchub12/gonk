@@ -1,5 +1,5 @@
-// BROWSERFIREFOXHIDE asset_loaders.js
-// Rewritten to act as a factory, creating fresh materials and textures on demand to prevent shared state issues.
+// BROWSERFIREFOXHIDE asset_loaders.js 
+// Rewritten to use dynamic asset discovery instead of a manifest.
 
 class AssetManager {
   constructor() {
@@ -7,8 +7,9 @@ class AssetManager {
     this.sounds = {};
     this.pamphletTextureNames = [];
 
+    // All texture categories the game needs to know about.
     this.textureCategories = [
-        'ceiling', 'dangler', 'decor', 'door', 'floater', 'floor', 
+        'ceiling', 'dangler', 'decor', 'dock', 'door', 'floater', 'floor', 
         'hologonk', 'sky', 'subfloor', 'tapestry', 'wall', 'water'
     ];
     this.soundDefs = {
@@ -20,7 +21,7 @@ class AssetManager {
   async fetchDirectoryListing(path) {
       try {
           const response = await fetch(path);
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          if (!response.ok) return []; // It's okay for a directory to not exist.
           const html = await response.text();
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
@@ -28,7 +29,7 @@ class AssetManager {
               .map(a => a.getAttribute('href'))
               .filter(href => href.endsWith('.png'));
       } catch (e) {
-          console.error(`Failed to fetch or parse directory listing for "${path}":`, e);
+          console.warn(`Could not fetch or parse directory listing for "${path}":`, e);
           return [];
       }
   }
@@ -147,14 +148,12 @@ class AssetManager {
         return new THREE.MeshStandardMaterial({ color: 0xff00ff }); // Magenta fallback
     }
 
-    // Create a new texture instance from the master image
     const newTexture = new THREE.Texture(baseTexture.image);
     newTexture.magFilter = THREE.NearestFilter;
     newTexture.minFilter = THREE.NearestFilter;
     newTexture.encoding = baseTexture.encoding;
     newTexture.needsUpdate = true;
     
-    // Return a completely new material using the new texture
     return new THREE.MeshStandardMaterial({ map: newTexture });
   }
 
@@ -167,7 +166,7 @@ class AssetManager {
   
   getRandomPamphletMaterial() {
     const textureName = this.pamphletTextureNames[Math.floor(Math.random() * this.pamphletTextureNames.length)];
-    const material = this.getMaterial(textureName); // This will now correctly return a new material
+    const material = this.getMaterial(textureName);
     return material ? material : new THREE.MeshBasicMaterial({ color: 0xffff00 }); 
   }
 }

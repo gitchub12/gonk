@@ -1,33 +1,61 @@
 {
-    "_comment": "BROWSERFIREFOXHIDE data/furniture.json",
-    "_config": {
-        "modelPath": "data/furniture/models/",
-        "texturePath": "data/furniture/",
-        "textureNamespace": "chronokillers_star_wars"
+  "__ahk_meta__": {
+    "hidden_command": "BROWSERFIREFOXHIDE",
+    "filename": "data/furniture.json"
+  },
+  "_comment": "This file is a template to procedurally generate new levels.",
+  "_config": {
+    "modelPath": "data/furniture/models/",
+    "texturePath": "data/furniture/",
+    "textureNamespace": "chronokillers_star_wars"
+  },
+  "models": {
+    "holotable": {
+      "file": "holo_table.json",
+      "scale": 0.0625
+    }
+  },
+  "instances": [
+    {
+      "model": "holotable",
+      "position": [
+        -10,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
     },
-    "models": {
-        "holotable": {
-            "file": "holo_table.json",
-            "scale": 0.0625
-        }
+    {
+      "model": "holotable",
+      "position": [
+        10,
+        0,
+        5
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "scale": 1.5
     },
-    "instances": [
-        {
-            "model": "holotable",
-            "position": [-10, 0, 0],
-            "rotation": [0, 0, 0]
-        },
-        {
-            "model": "holotable",
-            "position": [10, 0, 5],
-            "rotation": [0, 45, 0],
-            "scale": 1.5
-        },
-        {
-            "model": "holotable",
-            "position": [0, 0, -10],
-            "rotation": [0, -90, 0],
-            "scale": 0.8
-        }
-    ]
+    {
+      "model": "holotable",
+      "position": [
+        0,
+        0,
+        -10
+      ],
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "scale": 0.8
+    }
+  ]
 }
