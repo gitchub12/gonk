@@ -2,20 +2,68 @@
     "_comment": "BROWSERFIREFOXHIDE data/weapons.json",
     "_defaults": {
         "categoryDefaults": {
-            "pistol": { "height": 2.5, "thickness": 0.8 },
-            "rifle": { "height": 4.0, "thickness": 1.2 },
-            "melee": { "height": 6.0, "thickness": 1.6 },
-            "saber": { "height": 8.0, "thickness": 0.6 }
+            "pistol": {
+                "offsets": { "position": { "x": -1.45, "y": -16.74, "z": 9.95 }, "rotation": { "x": 1.5429, "y": -1.5708, "z": 0 }, "scale": 70, "planes": { "dist": 0.0015, "yaw": 0.28, "pitch": 0.1 } }
+            },
+            "rifle": {
+                "offsets": { "position": { "x": -1.45, "y": -16.74, "z": 9.95 }, "rotation": { "x": 1.5429, "y": -1.5708, "z": 0 }, "scale": 70, "planes": { "dist": 0.0029, "yaw": 0.55, "pitch": 0.6 } }
+            },
+            "melee": {
+                "offsets": { "position": { "x": 0.03, "y": -20.65, "z": 9.94 }, "rotation": { "x": 1.7226, "y": -1.4765, "z": -0.0419 }, "scale": 123, "planes": { "dist": 0.0003, "yaw": 0.6, "pitch": 0.8 } }
+            },
+            "saber": {
+                "offsets": { "position": { "x": 5.41, "y": -7.61, "z": 17.67 }, "rotation": { "x": 1.5428, "y": 0.4642, "z": 0.4416 }, "scale": 70, "planes": { "dist": 0.0003, "yaw": 0.23, "pitch": 0.35 } },
+                "glow": { "color": "#ff0000", "intensity": 2, "distance": 4, "decay": 2 }
+            },
+            "long": {
+                "offsets": { "position": { "x": -1.45, "y": -16.74, "z": 9.95 }, "rotation": { "x": 1.5429, "y": -1.5708, "z": 0 }, "scale": 70, "planes": { "dist": 0.0029, "yaw": 0.55, "pitch": 0.6 } }
+            },
+            "unique": {
+                "offsets": { "position": { "x": -1.02, "y": -8.7, "z": 1.18 }, "rotation": { "x": 1.597, "y": -1.5708, "z": 0 }, "scale": 73, "planes": { "dist": 0.0027, "yaw": 0.5, "pitch": 0 } }
+            }
+        }
+    },
+    "pistol_dl44_han": {
+        "technicalRequirement": 30
+    },
+    "long_z6custom": {
+        "category": "long",
+        "technicalRequirement": 75
+    },
+    "long_z6": {
+        "category": "long",
+        "technicalRequirement": 75
+    },
+    "unique_sonicgrenade": {
+        "category": "unique",
+        "technicalRequirement": 60,
+        "offsets": {
+            "position": { "x": -0.8400, "y": -7.8000, "z": 7.0100 },
+            "rotation": { "x": 0.5533, "y": -1.3648, "z": 0.0000 },
+            "scale": 53.0,
+            "planes": { "dist": 0.0018, "yaw": 0.15, "pitch": 0.00 }
         }
     },
     "rifle_fork": {
-        "offsets": {
-            "position": { "x": -2.1, "y": -11.8, "z": -3.4 },
-            "rotation": { "x": 1.5882, "y": -1.5708, "z": 1.5533 },
-            "scale": 0.05
-        }
+        "category": "rifle",
+        "technicalRequirement": 5
     },
-    "melee_saber1": {
-        "category": "saber"
+    "saber_red": {
+        "category": "saber",
+        "glow": { "color": "#ff0000", "intensity": 2.5, "distance": 6 },
+        "technicalRequirement": 50,
+        "forceSensitivityRequirement": 70
+    },
+    "saber_blue": {
+        "category": "saber",
+        "glow": { "color": "#0088ff", "intensity": 2.5, "distance": 6 },
+        "technicalRequirement": 50,
+        "forceSensitivityRequirement": 70
+    },
+    "saber_green": {
+        "category": "saber",
+        "glow": { "color": "#00ff44", "intensity": 2.5, "distance": 6 },
+        "technicalRequirement": 50,
+        "forceSensitivityRequirement": 70
     }
 }

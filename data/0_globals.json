@@ -1,0 +1,14 @@
+# BROWSERFIREFOXHIDE
+# filename: 0_globals.json
+# Purpose: Holds universal default values.
+{
+    "defaults": {
+        "scale_x": 1.0,
+        "scale_y": 1.0,
+        "scale_z": 1.0,
+        "y_offset": 0.0,
+        "speed_multiplier": 1.0,
+        "flyspeed": 0.0,
+        "permanent_ally": false
+    }
+}

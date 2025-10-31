@@ -1,0 +1,3278 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 128,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      }
+    }
+  },
+  "layers": {
+    "floor": [
+      [
+        "14,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_0.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_2.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_3.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_4.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_5.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_6.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_8.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_9.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_10.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "14,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "15,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "16,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "17,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "18,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "19,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "20,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "21,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "22,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "23,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "32,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "33,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "33,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "23,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "21,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "19,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "17,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_38.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_7.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/2.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/4.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/4.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/5.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/6.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/7.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/8.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/9.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "31,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/10.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/elevation/11.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "floater": [
+      [
+        "12,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "11,4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_2a.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "4,4",
+        {
+          "type": "random_npc",
+          "key": "R1_Aliens",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,5",
+        {
+          "type": "random_npc",
+          "key": "R2_Aliens",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Aliens",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,6",
+        {
+          "type": "random_npc",
+          "key": "R3_Aliens",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Aliens",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,7",
+        {
+          "type": "random_npc",
+          "key": "R4_Aliens",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Aliens",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,8",
+        {
+          "type": "random_npc",
+          "key": "R5_Aliens",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Aliens",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,9",
+        {
+          "type": "random_npc",
+          "key": "R1_Takers",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Takers",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,10",
+        {
+          "type": "random_npc",
+          "key": "R2_Takers",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Takers",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,11",
+        {
+          "type": "random_npc",
+          "key": "R3_Takers",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Takers",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,12",
+        {
+          "type": "random_npc",
+          "key": "R4_Takers",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Takers",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,13",
+        {
+          "type": "random_npc",
+          "key": "R5_Takers",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Takers",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,14",
+        {
+          "type": "random_npc",
+          "key": "R1_droid_humanoid",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,15",
+        {
+          "type": "random_npc",
+          "key": "R2_droid_humanoid",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,16",
+        {
+          "type": "random_npc",
+          "key": "R3_droid_humanoid",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,17",
+        {
+          "type": "random_npc",
+          "key": "R4_droid_humanoid",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "4,18",
+        {
+          "type": "random_npc",
+          "key": "R5_droid_humanoid",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "6,19",
+        {
+          "type": "random_npc",
+          "key": "R1_Humans",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Humans",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "7,19",
+        {
+          "type": "random_npc",
+          "key": "R2_Humans",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Humans",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "8,19",
+        {
+          "type": "random_npc",
+          "key": "R3_Humans",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Humans",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "9,19",
+        {
+          "type": "random_npc",
+          "key": "R4_Humans",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Humans",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "10,19",
+        {
+          "type": "random_npc",
+          "key": "R5_Humans",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Humans",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "12,19",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Humans",
+            "subgroup": "human_female"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "13,19",
+        {
+          "type": "random_npc",
+          "key": "R2_human_female",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Humans",
+            "subgroup": "human_female"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "14,19",
+        {
+          "type": "random_npc",
+          "key": "R3_human_female",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Humans",
+            "subgroup": "human_female"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "15,19",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Humans",
+            "subgroup": "human_female"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "16,19",
+        {
+          "type": "random_npc",
+          "key": "R5_human_female",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Humans",
+            "subgroup": "human_female"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "17,19",
+        {
+          "type": "random_npc",
+          "key": "R1_human_male",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Humans",
+            "subgroup": "human_male"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,19",
+        {
+          "type": "random_npc",
+          "key": "R2_human_male",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Humans",
+            "subgroup": "human_male"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "19,19",
+        {
+          "type": "random_npc",
+          "key": "R3_human_male",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Humans",
+            "subgroup": "human_male"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,19",
+        {
+          "type": "random_npc",
+          "key": "R4_human_male",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Humans",
+            "subgroup": "human_male"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,19",
+        {
+          "type": "random_npc",
+          "key": "R5_human_male",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Humans",
+            "subgroup": "human_male"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "24,19",
+        {
+          "type": "random_npc",
+          "key": "R2_Mandalorians",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Mandalorians",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,19",
+        {
+          "type": "random_npc",
+          "key": "R1_Mandalorians",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Mandalorians",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "25,19",
+        {
+          "type": "random_npc",
+          "key": "R3_Mandalorians",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Mandalorians",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,19",
+        {
+          "type": "random_npc",
+          "key": "R4_Mandalorians",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Mandalorians",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "27,19",
+        {
+          "type": "random_npc",
+          "key": "R5_Mandalorians",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Mandalorians",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,19",
+        {
+          "type": "random_npc",
+          "key": "R1_Sith",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Sith",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,19",
+        {
+          "type": "random_npc",
+          "key": "R2_Sith",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Sith",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "30,19",
+        {
+          "type": "random_npc",
+          "key": "R3_Sith",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Sith",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "31,19",
+        {
+          "type": "random_npc",
+          "key": "R4_Sith",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Sith",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "32,19",
+        {
+          "type": "random_npc",
+          "key": "R5_Sith",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Sith",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,11",
+        {
+          "type": "random_npc",
+          "key": "R1_Imperials",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "24,11",
+        {
+          "type": "random_npc",
+          "key": "R2_Imperials",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "25,11",
+        {
+          "type": "random_npc",
+          "key": "R3_Imperials",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,11",
+        {
+          "type": "random_npc",
+          "key": "R4_Imperials",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "27,11",
+        {
+          "type": "random_npc",
+          "key": "R5_Imperials",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Imperials",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,12",
+        {
+          "type": "random_npc",
+          "key": "R1_Clones",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Clones",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,13",
+        {
+          "type": "random_npc",
+          "key": "R2_Clones",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Clones",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,14",
+        {
+          "type": "random_npc",
+          "key": "R3_Clones",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Clones",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,15",
+        {
+          "type": "random_npc",
+          "key": "R4_Clones",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Clones",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,16",
+        {
+          "type": "random_npc",
+          "key": "R5_Clones",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Clones",
+            "subgroup": "all"
+          },
+          "rotation": 0
+        }
+      ]
+    ],
+    "wall": [
+      [
+        "H_15_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/doublewall.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/doublewall2.png",
+            "level3": "/data/pngs/wall/wall3/doublewall3.png"
+          }
+        }
+      ],
+      [
+        "V_4_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_3",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_4_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_3_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_4_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_15_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_18_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_17_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_16_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_13_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_12_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_10_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_14_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_19_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_21_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_23_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_25_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_22_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_23_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_25_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_23_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_31_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_25_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_30_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_32_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_32_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_28_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_27_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_26_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_25_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_24_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_29_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_30_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_32_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_30_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_29_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_25_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_31_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_21_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_21_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_12_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_20_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_19_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_18_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_20_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_20_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_19_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_18_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_17_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_16_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_15_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_14_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_13_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_12_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_13_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_14_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_15_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_17_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_16_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_6_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_5_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_7_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_8_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_9_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_10_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_7_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_8_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_10_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_9_19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_9_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_6_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_7_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_8_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/awall_bars_low.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_14_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 01A",
+            "autoSpawnFor": "14,3"
+          }
+        }
+      ],
+      [
+        "H_16_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A",
+            "autoSpawnFor": "16,3"
+          }
+        }
+      ],
+      [
+        "H_18_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_2_green.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 03A"
+          }
+        }
+      ],
+      [
+        "H_20_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_2_green.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 04a"
+          }
+        }
+      ],
+      [
+        "H_22_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_3_purple.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 05a"
+          }
+        }
+      ],
+      [
+        "H_24_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_3_purple.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 06a"
+          }
+        }
+      ],
+      [
+        "H_26_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_4_red.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 07a"
+          }
+        }
+      ],
+      [
+        "H_28_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_4_red.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 08a"
+          }
+        }
+      ],
+      [
+        "H_30_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_5_yellow.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 09a"
+          }
+        }
+      ],
+      [
+        "H_32_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_5_yellow.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 10a"
+          }
+        }
+      ],
+      [
+        "H_33_2",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/trash.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 11A",
+            "autoSpawnFor": "33,3"
+          }
+        }
+      ]
+    ],
+    "dangler": [
+      [
+        "18,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "19,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "20,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "21,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "22,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "23,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "24,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "25,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/danglemid_a.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "26,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangleend.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "17,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangleend.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ]
+    ],
+    "elevation": [
+      [
+        "21,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "22,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/2.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 2,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/4.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 4,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/4.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 4,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/5.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 5,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/6.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 6,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/7.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 7,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/8.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 8,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/9.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 9,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/10.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 10,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "32,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/11.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 11,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "18,9",
+        {
+          "id": "L01-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "14,3",
+        {
+          "id": "FROM LEVEL 01",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "16,3",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "18,3",
+        {
+          "id": "FROM LEVEL 03",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "20,3",
+        {
+          "id": "FROM LEVEL 04",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "22,3",
+        {
+          "id": "FROM LEVEL 05",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "24,3",
+        {
+          "id": "FROM LEVEL 06",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "26,3",
+        {
+          "id": "FROM LEVEL 07",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "28,3",
+        {
+          "id": "FROM LEVEL 08",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "30,3",
+        {
+          "id": "FROM LEVEL 09",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "32,3",
+        {
+          "id": "FROM LEVEL10",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "33,3",
+        {
+          "id": "FROM LEVEL 11",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ]
+    ]
+  }
+}

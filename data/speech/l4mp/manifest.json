@@ -1,0 +1,85 @@
+{
+  "name": "L4-MP Companion Droid",
+  "sprites": {
+    "idle": [
+      "zap1.png",
+      "zap2.png",
+      "zap3.png",
+      "zap4.png",
+      "zap5.png",
+      "zap6.png",
+      "zap7.png",
+      "zap8.png"
+    ],
+    "animationSpeed": 0.2
+  },
+  "sounds": {
+    "idle": [
+      "judging-by-that-look-on-your-face-id-say-theres-something-on-your-mind.mp3",
+      "2.mp3",
+      "3.mp3",
+      "4.mp3",
+      "5.mp3",
+      "6.mp3",
+      "7.mp3",
+      "8.mp3",
+      "9.mp3",
+      "10.mp3"
+    ],
+    "meet": ["1.mp3"],
+    "happy": [
+      "11.mp3",
+      "12.mp3",
+      "13.mp3",
+      "14.mp3",
+      "15.mp3"
+    ],
+    "unhappy": [
+      "16.mp3",
+      "17.mp3",
+      "18.mp3"
+    ],
+    "combatStart": [
+      "19.mp3",
+      "20.mp3",
+      "21.mp3",
+      "22.mp3"
+    ],
+    "converted": [
+      "23.mp3",
+      "24.mp3",
+      "25.mp3"
+    ],
+    "injured": [
+      "26.mp3",
+      "27.mp3"
+    ],
+    "dying": "28.mp3"
+  },
+  "stats": {
+    "health": 1000,
+    "speed": 0.08,
+    "runSpeed": 0.12,
+    "collisionRadius": 0.4,
+    "spriteWidth": 0.6,
+    "spriteHeight": 0.6,
+    "color": "#00ffff",
+    "loyalty": 1.0,
+    "courage": 1.0,
+    "imperialAffiliation": 0.0,
+    "rebelAffiliation": 1.0,
+    "fellowAffiliation": 1.0,
+    "weaponPickupAbility": 0.0,
+    "scale": 0.8,
+    "weight": 15,
+    "floatHeight": 2.8,
+    "attackRange": 0,
+    "meleeRange": 0,
+    "isUnique": true,
+    "alwaysConverted": true,
+    "friendlyCompanion": true,
+    "glowIntensity": 0.3,
+    "glowColor": "#ffffff"
+  },
+  "behaviors": ["companionFollow", "speakToPlayer", "bobWhileSpeaking", "glowEffect"]
+}

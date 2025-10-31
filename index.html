@@ -8,69 +8,408 @@
     <style>
         body { margin: 0; overflow: hidden; background: #000; cursor: crosshair; font-family: Arial, sans-serif; }
         canvas { display: block; }
-        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; display: flex; justify-content: center; align-items: center; z-index: 1000; font-family: 'Courier New', Courier, monospace;}
-        
-        /* HUD Styles from user's file */
-        .game-hud-container { position: absolute; width: 100%; height: 100%; pointer-events: none; display: block; color: #eee; }
-        .ally-boxes { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 1px; padding: 0; }
-        .ally-box { width: 80px; height: 100px; background: rgba(0, 50, 100, 0.15); border: 2px solid rgba(0, 150, 200, 0.4); border-top: none; display: flex; align-items: center; justify-content: center; color: #00ffff; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
-        .gonk-health { position: absolute; bottom: 20px; left: 20px; display: flex; align-items: flex-end; gap: 20px; }
+        #damageFlash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.5); z-index: 999; pointer-events: none; display: none; }
+
+        /* Loading Screen Styles */
+        #loading-screen-container { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background-color: black; 
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            color: white; font-family: 'Courier New', Courier, monospace; 
+            z-index: 1000; display: none; justify-content: center; align-items: center; 
+        }
+        #loading-screen-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* This ensures the image scales correctly with black bars */
+            z-index: -1; /* Places the image behind the trivia content */
+        }
+        #loading-screen-content { width: 90%; max-width: 1400px; height: 90%; position: relative; }
+        #question { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.4175vw; text-align: center; padding: 20px; line-height: 1.4; color: #ffcc00; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px #000; font-weight: bold; }
+
+        .answer { 
+            position: absolute; 
+            padding: 10px;
+            border: 2px solid #ff0000; /* Default to red border */
+            border-radius: 8px;
+            font-size: 1.0vw;
+            cursor: pointer; 
+            background-color: rgba(30, 30, 30, 0.9); 
+            transition: background-color 0.2s, border-color 0.2s, opacity 0.5s; 
+            text-align: center;
+            height: 25%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            white-space: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            color: #d8d8d8;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-weight: bold;
+        }
+
+        #answer-top { top: 0; left: 50%; transform: translateX(-50%); width: 20%; height: 15%;}
+        #answer-bottom { bottom: 0; left: 50%; transform: translateX(-50%); width: 20%; height: 15%;}
+        #answer-left { left: 0; top: 50%; transform: translateY(-50%); width: 20%; height: 15%;}
+        #answer-right { right: 0; top: 50%; transform: translateY(-50%); width: 20%; height: 15%;}
+
+        .answer.highlighted { background-color: rgba(0, 100, 0, 0.6); border-color: #009900; }
+        .answer.correct { background-color: #009900; color: #ffffff; border-color: #3f3; opacity: 1; transition: opacity 3s linear 0s, background-color 0.2s; }
+        .answer.incorrect { background-color: #990000; color: #ffffff; border-color: #f33; opacity: 1; transition: opacity 3s linear 0s, background-color 0.2s; }
+        .answer.faded { opacity: 0; }
+
+        #punchline { position: absolute; top: 65%; left: 50%; transform: translateX(-50%); font-size: 2vw; opacity: 0; transition: opacity 1s; color: #0f0; text-shadow: 0 0 10px #0f0; display: none; }
+        #loadingStatus { position: absolute; bottom: 10px; left: 10px; color: #333; font-size: 12px; }
+        #feedback-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 15px 30px; border-radius: 8px; font-size: 24px; font-weight: bold; color: white; display: none; z-index: 2000; text-shadow: 1px 1px 2px black; }
+        #feedback-popup.correct { background-color: rgba(0, 200, 0, 0.8); }
+        #feedback-popup.incorrect { background-color: rgba(200, 0, 0, 0.8); }
+        /* FIX: Increased specificity to ensure trivia feedback popup moves down */
+        #loading-screen-container #feedback-popup {
+            top: 70% !important; /* Changed from 50% to move it down */
+        }
+
+
+        /* HUD Styles */
+        :root { --ally-color: rgba(0, 150, 200, 0.4); }
+        .game-hud-container { position: absolute; width: 100%; height: 100%; pointer-events: none; display: none; color: #eee; }
+        /* REVERTED: Moved Ally Boxes back to the bottom of the screen */
+        .ally-boxes { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            display: flex; 
+            flex-direction: row; /* Original horizontal layout */
+            gap: 8px; padding: 0; 
+        }
+        .ally-box { width: 121px; height: 148px; background: rgba(10, 20, 30, 0.5); border: 2px solid var(--ally-color); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: var(--ally-color); font-size: 14px; font-weight: bold; text-shadow: 0 0 5px var(--ally-color); backdrop-filter: blur(2px); padding: 5px; box-sizing: border-box; visibility: hidden; position: relative; overflow: hidden; }
+        .ally-box.visible { visibility: visible; }
+        .ally-box img { 
+            position: absolute; top: 5px; left: 12px;
+            width: 94px; height: 94px; image-rendering: pixelated; 
+            border: 1px solid rgba(0, 150, 200, 0.6); z-index: 2; 
+        }
+        .ally-name {
+            position: absolute; top: 102px; width: 100%; left: 0;
+            text-align: center; z-index: 3; line-height: 1.1; font-size: 15px;
+            color: #FFFFFF;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            opacity: 1.0;
+        }
+        .ally-health-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background-color: rgba(255, 0, 0, 0.8); transition: height 0.3s ease; z-index: 1; }
+        .ally-health-overlay-face { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background-color: rgba(255, 0, 0, 0.3); transition: height 0.3s ease; z-index: 3; }
+        .ally-health-overlay.pulsing { animation: pulseRed 1s infinite; }
+        .ally-health-overlay-face.pulsing { animation: pulseRed 1s infinite; }
+        @keyframes pulseRed { 0% { background-color: rgba(255, 0, 0, 0.3); } 50% { background-color: rgba(255, 0, 0, 0.6); } 100% { background-color: rgba(255, 0, 0, 0.3); } }
+        .ally-id-footer { 
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 20px; z-index: 4;
+            background-color: rgba(0,0,0,0.7); color: white; font-size: 16px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .gonk-health { position: absolute; bottom: 5px; left: 5px; display: flex; align-items: flex-end; gap: 20px; transform: translate(-5%, 5%); }
         .gonk-model { background: none; display: flex; align-items: center; justify-content: center; position: relative; }
-        .gonk-model img { width: 200px; height: auto; opacity: 0.9; image-rendering: pixelated; }
+        .gonk-model img { width: 260px; height: auto; opacity: 0.7; image-rendering: pixelated; }
         .health-bar-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         .health-bar { width: 200px; height: 25px; background: rgba(50, 0, 0, 0.5); border: 2px solid rgba(200, 0, 0, 0.8); border-radius: 4px; position: relative; overflow: hidden; }
         .health-fill { height: 100%; background: linear-gradient(90deg, #ff0000, #ff4444); width: 100%; transition: width 0.3s ease; }
         .health-label { position: absolute; width: 100%; text-align: center; line-height: 25px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; font-size: 12px; }
-        .ammo-display { position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255, 200, 0, 0.6); border-radius: 8px; padding: 15px; color: #ffcc00; font-size: 28px; font-weight: bold; text-shadow: 0 0 5px rgba(255, 200, 0, 0.5); min-width: 120px; text-align: center; }
+        /* MOVED: Weapon and Ammo displays to the left side */
+        .ammo-display { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 20px; /* Changed from right */
+            background: rgba(0, 0, 0, 0.5); 
+            border: 2px solid rgba(255, 200, 0, 0.6); 
+            border-radius: 8px; padding: 15px; color: #ffcc00; 
+            font-size: 28px; font-weight: bold; 
+            text-shadow: 0 0 5px rgba(255, 200, 0, 0.5); 
+            min-width: 120px; text-align: center; 
+        }
         .ammo-label { font-size: 14px; color: #ffaa00; margin-bottom: 5px; }
-        .weapon-display { position: absolute; bottom: 180px; right: 20px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
-        .crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; pointer-events: none; }
-        .crosshair::before, .crosshair::after { content: ''; position: absolute; background: rgba(255, 197, 0, 0.8); box-shadow: 0 0 5px rgba(255, 197, 0, 0.5); }
-        .crosshair::before { width: 100%; height: 2px; top: 50%; transform: translateY(-50%); }
-        .crosshair::after { height: 100%; width: 2px; left: 50%; transform: translateX(-50%); }
+        .weapon-display { position: absolute; bottom: 125px; left: 20px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 10px; color: white; font-size: 14px; min-width: 150px; text-align: center; }
+        .crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: rgba(255, 197, 0, 0.9); border-radius: 50%; box-shadow: 0 0 8px rgba(255, 197, 0, 0.7); pointer-events: none; }
+
+        #song-title-display {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5vw;
+            color: #ffcc00;
+            text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 15px #000;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #song-category-display {
+            position: absolute;
+            bottom: calc(15% + 3.0vw); /* Position it above the song title */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5vw; /* Smaller font for the category */
+            color: #cccccc;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-weight: normal;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #music-volume-display {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.2vw;
+            color: #ffcc00;
+            background-color: rgba(0,0,0,0.5);
+            padding: 8px 15px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #faction-relationship-hud {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95vh; /* Use viewport height to define width */
+            height: 95vh; /* Make it a square */
+            pointer-events: none;
+            display: none;
+        }
+        #faction-lines-svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        #faction-lines-svg circle {
+            pointer-events: none;
+            transition: cx 0.1s linear, cy 0.1s linear;
+        }
+
+        .faction-relationship-text {
+            font-size: 50px;
+            font-weight: bold;
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9));
+        }
+        .faction-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 20, 30, 0.8);
+            border: 2px solid #61afef;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            white-space: pre;
+            text-shadow: 1px 1px 2px black;
+            transition: box-shadow 0.5s ease-in-out, top 0.1s linear, left 0.1s linear;
+        }
+        .faction-node-shadow {
+            opacity: 0.25;
+            z-index: -1;
+            filter: blur(1px);
+        }
+
+        .faction-node.player_droid { background-color: #404040; border-color: #707070; }
+        .faction-node.rebels { background-color: #a12a2a; border-color: #d94242; }
+        .faction-node.aliens { background-color: #004d00; border-color: #008000; }
+        .faction-node.clones { background-color: #b05c00; border-color: #ff8c00; }
+        .faction-node.imperials { background-color: #101010; border-color: #444444; }
+        .faction-node.droids { background-color: #003366; border-color: #0066cc; }
+        .faction-node.mandalorians { background: linear-gradient(45deg, #00d2ff, #f9a429); border-color: #f9a429; }
+        .faction-node.sith { background-color: #330000; border-color: #990000; }
+        .faction-node.takers { background-color: #2E2E2E; border-color: #C0C0C0; }
+
+
+        .faction-node.improving { box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.4); }
+        .faction-node.worsening { box-shadow: 0 0 15px 5px rgba(139, 0, 0, 0.5); }
+
+        #faction-avatar-container {
+            position: absolute;
+            right: var(--faction-avatar-right, 10px); /* Controlled by JS */
+            top: var(--faction-avatar-top, 50%); /* Controlled by JS */
+            transform: var(--faction-avatar-transform, translateY(-50%)); /* Controlled by JS */
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: right 0.2s, top 0.2s, width 0.2s, height 0.2s;
+        }
+        .faction-avatar-box {
+            width: var(--faction-avatar-size, 80px);
+            height: var(--faction-avatar-size, 80px);
+            background-color: #000; /* Changed to solid black */
+            border: 2px solid var(--faction-avatar-border-color, #444);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative; /* Needed for absolute positioning of the name */
+            transition: box-shadow 0.5s ease-in-out; /* For glow effect */
+        }
+        .faction-avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .faction-avatar-name {
+            position: absolute;
+            bottom: 2px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* ADDED: Character Sheet HUD */
+        #character-sheet-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 1200px;
+            height: 80%;
+            background-color: rgba(10, 20, 30, 0.95);
+            border: 3px solid #ffcc00;
+            border-radius: 10px;
+            padding: 20px;
+            display: none; /* Controlled by KeyC in main.js */
+            z-index: 1500;
+            pointer-events: all;
+            color: #fff;
+            font-size: 18px;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
+        }
+        #module-display {
+            padding: 10px;
+            border: 1px solid #61afef;
+            min-height: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .module-icon {
+            width: 64px;
+            height: 64px;
+            border: 1px solid #444;
+            image-rendering: pixelated;
+        }
+
     </style>
 </head>
 <body>
-    <div id="loadingScreen">
-        <p id="loadingStatus">Initializing...</p>
+    <div id="loading-screen-container">
+        <img id="loading-screen-bg-image" src=""> <div id="loading-screen-content">
+            <div id="question"></div>
+            <div id="punchline"></div>
+            <div id="loadingStatus">Initializing...</div>
+        </div>
+        <div id="answer-top" class="answer"></div>
+        <div id="answer-left" class="answer"></div>
+        <div id="answer-right" class="answer"></div>
+        <div id="answer-bottom" class="answer"></div>
     </div>
+    <div id="feedback-popup"></div>
 
+    <div id="damageFlash"></div>
+    
+    <div id="character-sheet-container">
+        <h2>CHARACTER SHEET (WIP)</h2>
+        <p>Collected Modules:</p>
+        <div id="module-display"></div>
+        <p style="margin-top: 20px; color: #ffcc00;">[W]ires and Power Cells will be here eventually. Press 'C' to hide.</p>
+    </div>
     <div class="game-hud-container">
-        <div class="ally-boxes"><div class="ally-box">1</div><div class="ally-box">2</div><div class="ally-box">3</div><div class="ally-box">4</div></div>
+        <div class="ally-boxes">
+            <div id="ally-box-1" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
+            <div id="ally-box-2" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
+            <div id="ally-box-3" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
+            <div id="ally-box-4" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
+        </div>
         <div class="gonk-health">
             <div class="gonk-model"><img id="gonkImage" src="data/pngs/hologonk/hologonk_1.png" alt="Gonk"></div>
             <div class="health-bar-container"><div class="health-bar"><div class="health-fill"></div><div class="health-label">HEALTH: 100%</div></div></div>
         </div>
         <div class="weapon-display"><div class="ammo-label">WEAPON</div><div id="gameHudWeapon">PAMPHLET</div></div>
         <div class="ammo-display"><div class="ammo-label">AMMO</div><div id="gameHudAmmo">0 / 0</div></div>
+
+        <div id="faction-relationship-hud">
+            <svg id="faction-lines-svg" width="100%" height="100%"></svg>
+            <div id="faction-node-shadow-0" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-0" class="faction-node"></div>
+            <div id="faction-node-shadow-1" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-1" class="faction-node"></div>
+            <div id="faction-node-shadow-2" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-2" class="faction-node"></div>
+            <div id="faction-node-shadow-3" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-3" class="faction-node"></div>
+            <div id="faction-node-shadow-4" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-4" class="faction-node"></div>
+            <div id="faction-node-shadow-5" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-5" class="faction-node"></div>
+            <div id="faction-node-shadow-6" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-6" class="faction-node"></div>
+            <div id="faction-node-shadow-7" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-7" class="faction-node"></div>
+            <div id="faction-node-shadow-8" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-8" class="faction-node"></div>
+        </div>
+        <div id="faction-avatar-container"></div>
+        <div id="song-title-display"></div>
+        <div id="song-category-display"></div>
+        <div id="music-volume-display"></div>
         <div class="crosshair"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+
     <script>
         class ScriptLoader {
             constructor() {
                 this.scriptsToLoad = [
-                    { path: 'main.js', name: 'Main Engine' },
-                    { path: 'character_config.js', name: 'Character Config' },
-                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
-                    { path: 'environment_and_physics.js', name: 'Environment & Physics' },
-                    { path: 'player_gear.js', name: 'Player Gear' },
+                    // Configs and standalone classes first
+                    { path: 'game_and_character_config.js', name: 'Game Config' },
+                    { path: 'skybox_animator.js', name: 'Skybox Animator' },
                     { path: 'audio_system.js', name: 'Audio System' },
+                    { path: 'loadingScreenManager.js', name: 'Loading Screen Manager' }, // Moved earlier
+
+                    { path: 'npc_behavior.js', name: 'NPC Behavior' },
+                    { path: 'expression_manager.js', name: 'Expression Manager' },
+                    // Managers that depend on configs or are standalone
+                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
+                    { path: 'faction_manager.js', name: 'Faction Manager' },
+                    { path: 'faction_avatar_manager.js', name: 'Faction Avatar Manager' },
+                    { path: 'weapon_icons.js', name: 'Weapon Icons' },
                     { path: 'gonk_models.js', name: 'Gonk Models' },
-                    { path: 'weapon_icons.js', name: 'Weapon Icons' }
+
+                    // Core game logic that instantiates things
+                    { path: 'main.js', name: 'Main Engine' },
+
+                    // Systems that depend on core game objects
+                    { path: 'environment_and_physics.js', name: 'Environment & Physics' },
+                    { path: 'levelManager.js', name: 'Level Manager'},
+                    { path: 'player_gear.js', name: 'Player Gear' },
+                    { path: 'tab_faction_controls.js', name: 'Faction Tab Controls'},
+                    { path: 'tab_controls.js', name: 'Tab Controls UI'}
                 ];
             }
 
             async loadGame() {
-                const loadingStatus = document.getElementById('loadingStatus');
                 for (const script of this.scriptsToLoad) {
-                    if (loadingStatus) loadingStatus.textContent = `Loading ${script.name}...`;
                     try {
                         await this.loadScript(script.path);
                     } catch (error) {
-                        if (loadingStatus) loadingStatus.textContent = `CRITICAL ERROR loading ${script.name}.`;
+                        console.error(`CRITICAL ERROR loading ${script.name}.`, error);
                         return;
                     }
                 }
@@ -89,31 +428,62 @@
                 });
             }
         }
-        
+
         async function initGame() {
             console.log('--- GAME INITIALIZING ---');
-            await assetManager.loadAll();
+            // Instantiate LoadingScreenManager *after* its script is loaded
+            window.loadingScreenManager = new LoadingScreenManager(); 
+            await loadingScreenManager.loadTriviaData();
+
+            await assetManager.loadEssentialData();
+
             game.init();
+            window.tabControls = new TabControls(game, window.playerWeaponSystem, window.physics);
             audioSystem.init(game.camera);
-            await levelManager.loadLevel(1);
-            document.getElementById('loadingScreen').style.display = 'none';
-            startGameLoop();
+            await audioSystem.initializeMusic();
+            await window.factionAvatarManager.initialize();
+
+            await levelManager.loadLevel(1); // This will now correctly populate NPCs before the first game.update() call
+            game.respawnAllies(); // ADDED: Ensure allies are positioned correctly on first load
+            startGameLoop(); // The first frame of the loop will now apply the UI settings
         }
 
         function startGameLoop() {
+            const clock = new THREE.Clock();
             function gameLoop() {
                 requestAnimationFrame(gameLoop);
                 if (!game.isInitialized) return;
-                const currentTime = performance.now();
-                game.update(currentTime);
-                
-                // NPC AI Update (determines their intent)
-                for (const npc of game.entities.npcs) {
-                    npc.update(game.deltaTime, physics.playerCollider.position);
+
+                const deltaTime = clock.getDelta();
+                const totalTime = clock.getElapsedTime();
+
+                if (window.loadingScreenManager && window.loadingScreenManager.isActive) {
+                    window.loadingScreenManager.update();
+                    game.render(); // Render the 3D scene behind the loading screen
+                    return; // But stop the rest of the game logic
                 }
 
-                // Central Physics Update (moves everyone and handles collisions)
-                physics.update(game.deltaTime, inputHandler, game.camera);
+                game.update(deltaTime, totalTime);
+
+                if (!game.state.isPaused) {
+                    for (const npc of game.entities.npcs) {
+                        npc.update(game.deltaTime, physics.playerCollider.position);
+                        npc.updateHitboxes(); 
+                    }
+                    // ADDED: Pickup update loop
+                    for (let i = game.entities.pickups.length - 1; i >= 0; i--) {
+                        const pickup = game.entities.pickups[i];
+                        if (pickup.update) {
+                            if (!pickup.update(game.deltaTime)) {
+                                pickup.dispose();
+                                game.entities.pickups.splice(i, 1);
+                            }
+                        }
+                    }
+
+                    for (const npc of game.entities.npcs) npc.updateAnimation(game.deltaTime);
+                    physics.update(game.deltaTime, inputHandler, game.camera);
+                }
 
                 game.render();
             }

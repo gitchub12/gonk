@@ -1,0 +1,1075 @@
+# CODEBEGINSNOW
+# BROWSERFIREFOXHIDE
+# filename: 8_droids.json
+# Purpose: Contains data for the 'droids' faction.
+{
+    "_comment": "BROWSERFIREFOXHIDE data/skins/droids.json - Faction: droids",
+    "base_type_defaults": {
+        "droid_humanoid": {
+            "threat": 1,
+            "health": 55.0,
+            "melee_damage": 4.4,
+            "attack_cooldown": 2.7,
+            "attack_range": 15.4,
+            "accuracy": 88.0,
+            "perception_radius": 30.8,
+            "aggro": 0.55,
+            "scale_x": 0.8,
+            "scale_z": 0.8,
+            "speed": 0.03014,
+            "collision_radius": 0.4,
+            "weight": 110.0,
+            "soundSet": null,
+            "weight_lift": 77.0,
+            "technical_understanding": 93.5,
+            "force_sensitivity": 1.1,
+            "special_moves": null,
+            "jump_strength": 0.0
+        },
+        "irongolem": {
+            "threat": 2,
+            "health": 60.0,
+            "melee_damage": 18.0,
+            "attack_cooldown": 2.4,
+            "attack_range": 3.0,
+            "accuracy": 96.0,
+            "perception_radius": 30.0,
+            "aggro": 0.96,
+            "speed": 0.032880000000000006,
+            "collision_radius": 0.8,
+            "weight": 480.0,
+            "soundSet": null,
+            "weight_lift": 480.0,
+            "technical_understanding": 72.0,
+            "force_sensitivity": 1.2,
+            "special_moves": null,
+            "jump_strength": 0.25
+        },
+        "bb8": {
+            "threat": 1,
+            "health": 55.0,
+            "melee_damage": 1.1,
+            "attack_cooldown": 2.7,
+            "attack_range": 1.1,
+            "accuracy": 88.0,
+            "perception_radius": 24.200000000000003,
+            "aggro": 0.11,
+            "scale_x": 0.5,
+            "scale_y": 0.5,
+            "scale_z": 0.5,
+            "speed": 0.03014,
+            "collision_radius": 0.3,
+            "weight": 33.0,
+            "soundSet": null,
+            "weight_lift": 33.0,
+            "technical_understanding": 93.5,
+            "force_sensitivity": 2.2,
+            "special_moves": null,
+            "jump_strength": 0.0
+        },
+        "mousedroid": {
+            "threat": 1,
+            "health": 55.0,
+            "melee_damage": 1.1,
+            "attack_cooldown": 2.7,
+            "attack_range": 1.1,
+            "accuracy": 88.0,
+            "perception_radius": 19.8,
+            "aggro": 0.11,
+            "scale_x": 0.4,
+            "scale_y": 0.4,
+            "scale_z": 0.4,
+            "speed": 0.03014,
+            "collision_radius": 0.4,
+            "weight": 22.0,
+            "soundSet": null,
+            "weight_lift": 22.0,
+            "technical_understanding": 77.0,
+            "force_sensitivity": 1.1,
+            "special_moves": null,
+            "jump_strength": 0.0
+        }
+    },
+    "droid_humanoid": {
+        "name": "Humanoid Droids",
+        "baseType": "droid_humanoid",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/humanoid/generic/",
+        "textures": [
+            {
+                "file": "2-1b.png",
+                "armType": "steve",
+                "weight_lift": 88.0,
+                "default_weapon": null
+            },
+            {
+                "file": "B1.png",
+                "armType": "steve",
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "Battle Droid 1.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "Battle Droid 2.png",
+                "armType": "steve",
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "Battle Droid 4.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "Battle-Droid 3.png",
+                "armType": "steve",
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "Battle Droid Commander.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "BX Commando Droid.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 78.0,
+                "melee_damage": 7.8,
+                "attack_cooldown": 1.75,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.039000000000000006,
+                "weight": 130.0,
+                "weight_lift": 104.0,
+                "technical_understanding": 117.0,
+                "force_sensitivity": 2.6,
+                "jump_strength": 0.5,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "C3PO.png",
+                "armType": "alex",
+                "weight_lift": 66.0,
+                "technical_understanding": 88.0,
+                "force_sensitivity": 2.2,
+                "default_weapon": null
+            },
+            {
+                "file": "Commander Strategist Droid.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 60.0,
+                "melee_damage": 4.8,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "speed": 0.032880000000000006,
+                "weight": 120.0,
+                "weight_lift": 84.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "HK.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "OOMSeries Battle Droid.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "PK Droid.png",
+                "armType": "steve",
+                "weight_lift": 88.0,
+                "default_weapon": null
+            },
+            {
+                "file": "Professor Huyang.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 65.0,
+                "melee_damage": 5.2,
+                "attack_cooldown": 2.1,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.035620000000000004,
+                "weight": 130.0,
+                "weight_lift": 104.0,
+                "technical_understanding": 110.5,
+                "force_sensitivity": 1.3,
+                "jump_strength": 0.5,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "Security battle droid.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "21b.png",
+                "armType": "steve",
+                "weight_lift": 88.0,
+                "default_weapon": null
+            },
+            {
+                "file": "4-LOM.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 65.0,
+                "melee_damage": 5.2,
+                "attack_cooldown": 2.1,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.035620000000000004,
+                "weight": 130.0,
+                "weight_lift": 117.0,
+                "technical_understanding": 110.5,
+                "force_sensitivity": 2.6,
+                "jump_strength": 0.5,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "B1-Series-Battle-Droid.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "b2-supper-battle-droid.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 90.0,
+                "melee_damage": 9.6,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "scale_x": 1.2,
+                "scale_y": 1.1,
+                "scale_z": 1.2,
+                "speed": 0.032880000000000006,
+                "collision_radius": 0.6,
+                "weight": 180.0,
+                "weight_lift": 120.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "battle-droid-commander.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "C-21-Highsinger.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 65.0,
+                "melee_damage": 5.2,
+                "attack_cooldown": 2.1,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.035620000000000004,
+                "weight": 130.0,
+                "weight_lift": 117.0,
+                "technical_understanding": 110.5,
+                "force_sensitivity": 2.6,
+                "jump_strength": 0.5,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "C-3PO hd.png",
+                "armType": "alex",
+                "weight_lift": 66.0,
+                "technical_understanding": 88.0,
+                "force_sensitivity": 2.2,
+                "default_weapon": null
+            },
+            {
+                "file": "commando-droid.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 78.0,
+                "melee_damage": 7.8,
+                "attack_cooldown": 1.75,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.039000000000000006,
+                "weight": 130.0,
+                "weight_lift": 104.0,
+                "technical_understanding": 117.0,
+                "force_sensitivity": 2.6,
+                "jump_strength": 0.5,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "droid Ka-os.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 60.0,
+                "melee_damage": 4.8,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "speed": 0.032880000000000006,
+                "weight": 120.0,
+                "weight_lift": 84.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "droid-commando.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 78.0,
+                "melee_damage": 7.8,
+                "attack_cooldown": 1.75,
+                "attack_range": 18.2,
+                "accuracy": 104.0,
+                "perception_radius": 36.4,
+                "aggro": 0.65,
+                "speed": 0.039000000000000006,
+                "weight": 130.0,
+                "weight_lift": 104.0,
+                "technical_understanding": 117.0,
+                "force_sensitivity": 2.6,
+                "jump_strength": 0.5,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "HK-87-Assassin-Droid.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "IG-88.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "IG88 2.png",
+                "armType": "steve",
+                "threat": 5,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "OOM-Series-Security-Battle-Droid.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "Star-Wars-KOTOR-Assassin-Droid.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "Star-Wars-Triple-Zero.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 70.0,
+                "melee_damage": 5.6,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 19.6,
+                "accuracy": 112.0,
+                "perception_radius": 39.2,
+                "aggro": 0.7,
+                "speed": 0.038360000000000004,
+                "weight": 140.0,
+                "weight_lift": 126.0,
+                "technical_understanding": 119.0,
+                "force_sensitivity": 2.8,
+                "jump_strength": 0.75,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "super-battle-droid.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 90.0,
+                "melee_damage": 9.6,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "scale_x": 1.2,
+                "scale_y": 1.1,
+                "scale_z": 1.2,
+                "speed": 0.032880000000000006,
+                "collision_radius": 0.6,
+                "weight": 180.0,
+                "weight_lift": 120.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "t-series-tactical-droid.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 60.0,
+                "melee_damage": 4.8,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "speed": 0.032880000000000006,
+                "weight": 120.0,
+                "weight_lift": 84.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            },
+            {
+                "file": "tactical-droid.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 60.0,
+                "melee_damage": 4.8,
+                "attack_cooldown": 2.4,
+                "attack_range": 16.8,
+                "accuracy": 96.0,
+                "perception_radius": 33.6,
+                "aggro": 0.6,
+                "speed": 0.032880000000000006,
+                "weight": 120.0,
+                "weight_lift": 84.0,
+                "technical_understanding": 102.0,
+                "force_sensitivity": 1.2,
+                "jump_strength": 0.25,
+                "default_weapon": "rifle_swkotor.png"
+            },
+            {
+                "file": "tython droid.png",
+                "armType": "steve",
+                "default_weapon": "pistol_se14r_deathtrooper.png"
+            }
+        ]
+    },
+    "r2d2": {
+        "name": "R2 Units",
+        "baseType": "r2d2",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/humanoid/r2d2/",
+        "textures": [
+            {
+                "file": "r2d21.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            },
+            {
+                "file": "r2d22.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            },
+            {
+                "file": "r2d23.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            },
+            {
+                "file": "r2d24.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            }
+        ]
+    },
+    "r5d4": {
+        "name": "R5 Units",
+        "baseType": "r5d4",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/humanoid/r5d4/",
+        "textures": [
+            {
+                "file": "r5d41.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            },
+            {
+                "file": "skippy1.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 2.2,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 22.0,
+                "aggro": 0.11,
+                "scale_x": 0.6,
+                "scale_y": 0.6,
+                "scale_z": 0.6,
+                "speed": 0.03014,
+                "collision_radius": 0.4,
+                "weight": 99.0,
+                "soundSet": null,
+                "weight_lift": 44.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 2.2,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            }
+        ]
+    },
+    "irongolem": {
+        "name": "Large Droids",
+        "baseType": "irongolem",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/irongolem/irongolem/",
+        "textures": [
+            {
+                "file": "irongolem1.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem10.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem11.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem12.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem123.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem13.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem14.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem15.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem16.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem17.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem18.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem19.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem2.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem20.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem21.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem22.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem3.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem4.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem5.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem6.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem7.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem8.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "irongolem9.png",
+                "armType": "steve",
+                "default_weapon": null
+            }
+        ]
+    },
+    "xerox": {
+        "name": "Xerox Droids",
+        "baseType": "irongolem",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/irongolem/xerox/",
+        "textures": [
+            {
+                "file": "xerox1.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 60.0,
+                "melee_damage": 18.0,
+                "attack_cooldown": 2.4,
+                "attack_range": 3.0,
+                "accuracy": 96.0,
+                "perception_radius": 30.0,
+                "aggro": 0.96,
+                "speed": 0.032880000000000006,
+                "collision_radius": 0.8,
+                "weight": 480.0,
+                "soundSet": null,
+                "weight_lift": 480.0,
+                "technical_understanding": 72.0,
+                "force_sensitivity": 1.2,
+                "special_moves": null,
+                "jump_strength": 0.25,
+                "default_weapon": null
+            }
+        ]
+    },
+    "bb8": {
+        "name": "BB Units",
+        "baseType": "bb8",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/slime/bb8/",
+        "textures": [
+            {
+                "file": "bb81.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb810.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb82.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb83.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb84.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb85.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb86.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb87.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb88.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "bb89.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "snowgolem1.png",
+                "armType": "steve",
+                "default_weapon": null
+            }
+        ]
+    },
+    "gonk": {
+        "name": "Gonk Droids",
+        "baseType": "gonk",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/slime/gonk/",
+        "textures": [
+            {
+                "file": "gonk1.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 1.1,
+                "attack_cooldown": 2.7,
+                "attack_range": 1.1,
+                "accuracy": 88.0,
+                "perception_radius": 16.5,
+                "aggro": 0.0,
+                "scale_x": 0.8,
+                "scale_y": 0.8,
+                "scale_z": 0.8,
+                "speed": 0.03014,
+                "collision_radius": 0.8,
+                "weight": 165.0,
+                "soundSet": null,
+                "weight_lift": 165.0,
+                "technical_understanding": 55.0,
+                "force_sensitivity": 1.1,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "default_weapon": null
+            }
+        ]
+    },
+    "mousedroid": {
+        "name": "Mouse Droids",
+        "baseType": "mousedroid",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/slime/mousedroid/",
+        "textures": [
+            {
+                "file": "mouse_droid.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid1.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid10.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid11.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid12.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid2.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid3.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid4.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid5.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid6.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid7.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid8.png",
+                "armType": "steve",
+                "default_weapon": null
+            },
+            {
+                "file": "mouse_droid9.png",
+                "armType": "steve",
+                "default_weapon": null
+            }
+        ]
+    },
+    "probe": {
+        "name": "Probe Droids",
+        "baseType": "probe",
+        "faction": "droids",
+        "macroCategory": "Droids",
+        "path": "droids/spider/probe/",
+        "textures": [
+            {
+                "file": "probe1.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 55.0,
+                "melee_damage": 1.1,
+                "attack_cooldown": 2.7,
+                "attack_range": 13.2,
+                "accuracy": 88.0,
+                "perception_radius": 44.0,
+                "aggro": 0.55,
+                "y_offset": 1.5,
+                "speed": 0.03014,
+                "collision_radius": 0.5,
+                "weight": 55.0,
+                "default_weapon": "rifle_e11.png",
+                "soundSet": null,
+                "weight_lift": 66.0,
+                "technical_understanding": 93.5,
+                "force_sensitivity": 1.1,
+                "special_moves": null,
+                "jump_strength": 0.0,
+                "flyspeed": 0.2
+            }
+        ]
+    }
+}
+# CODEENDSNOW

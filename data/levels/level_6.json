@@ -1,0 +1,3320 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 64,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      }
+    }
+  },
+  "layers": {
+    "floor": [
+      [
+        "24,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "31,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "30,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "29,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "28,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "27,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "26,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "25,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_6.png",
+          "rotation": 0,
+          "properties": {},
+          "size": 0.25
+        }
+      ],
+      [
+        "24,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,48",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_21.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "water": [
+      [
+        "25,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,49",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,54",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,50",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,53",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,51",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,52",
+        {
+          "type": "texture",
+          "key": "/data/pngs/water/water_13.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "31,56",
+        {
+          "type": "npc",
+          "key": "C3PO",
+          "rotation": 0,
+          "properties": {
+            "baseType": "droid_humanoid",
+            "armType": "alex",
+            "name": "BB-T7"
+          }
+        }
+      ],
+      [
+        "29,56",
+        {
+          "type": "npc",
+          "key": "gamorrean_2",
+          "rotation": 0,
+          "properties": {
+            "baseType": "gamorrean",
+            "armType": "steve",
+            "weapon": "/data/weapons/melee_axe_gamorrean.png",
+            "name": "Karkgr"
+          }
+        }
+      ],
+      [
+        "24,61",
+        {
+          "type": "npc",
+          "key": "oldhan",
+          "rotation": 0,
+          "properties": {
+            "baseType": "human_male",
+            "armType": "steve",
+            "weapon": "/data/weapons/pistol_dl44_han.png",
+            "name": "Human_male 167"
+          }
+        }
+      ],
+      [
+        "24,62",
+        {
+          "type": "npc",
+          "key": "oldluke",
+          "rotation": 0,
+          "properties": {
+            "baseType": "human_male",
+            "armType": "steve",
+            "weapon": "/data/weapons/pistol_dl44_han.png",
+            "name": "Human_male 998"
+          }
+        }
+      ],
+      [
+        "24,60",
+        {
+          "type": "npc",
+          "key": "chewie detailed",
+          "rotation": 0,
+          "properties": {
+            "baseType": "wookiee",
+            "armType": "steve",
+            "weapon": "/data/weapons/rifle_bowcaster.png",
+            "name": "Wookiee 433"
+          }
+        }
+      ],
+      [
+        "27,51",
+        {
+          "type": "npc",
+          "key": "BeachPatrol",
+          "rotation": 0,
+          "properties": {
+            "baseType": "stormtrooper",
+            "armType": "steve",
+            "weapon": "/data/weapons/rifle_e11.png",
+            "name": "TK-3871"
+          }
+        }
+      ],
+      [
+        "29,51",
+        {
+          "type": "npc",
+          "key": "BeachPatrol",
+          "rotation": 0,
+          "properties": {
+            "baseType": "stormtrooper",
+            "armType": "steve",
+            "weapon": "/data/weapons/rifle_e11.png",
+            "name": "CR-1044"
+          }
+        }
+      ],
+      [
+        "26,49",
+        {
+          "type": "npc",
+          "key": "BeachPatrol",
+          "rotation": 0,
+          "properties": {
+            "baseType": "stormtrooper",
+            "armType": "steve",
+            "weapon": "/data/weapons/rifle_e11.png",
+            "name": "FN-450"
+          }
+        }
+      ],
+      [
+        "25,51",
+        {
+          "type": "npc",
+          "key": "BeachPatrol",
+          "rotation": 0,
+          "properties": {
+            "baseType": "stormtrooper",
+            "armType": "steve",
+            "weapon": "/data/weapons/rifle_e11.png",
+            "name": "AM-6675"
+          }
+        }
+      ]
+    ],
+    "wall": [
+      [
+        "V_23_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_23_56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_30_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_29_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_31_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "V_31_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_31_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_30_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_29_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_28_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_27_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_26_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_25_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_24_62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_1_panel.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "door": [
+      [
+        "H_25_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/door_1.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "screen": [
+      [
+        "V_30_56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/grate_1.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_31_56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/grate_1.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_27_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/screen_a_04.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_28_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/screen_a_02.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ]
+    ],
+    "panel": [
+      [
+        "H_27_55",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_05.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ]
+    ],
+    "dangler": [
+      [
+        "31,57",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,58",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,59",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,60",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,61",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,62",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ],
+      [
+        "31,56",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dangler/dangler_1.png",
+          "rotation": 1,
+          "properties": {}
+        }
+      ]
+    ],
+    "ceiling": [
+      [
+        "27,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_15.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_15.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_15.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_15.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "31,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,62",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "24,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,56",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,57",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,58",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,59",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,60",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "25,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "26,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "27,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "28,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "29,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "30,61",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/cmetalcurve.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 3,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ]
+    ],
+    "elevation": [
+      [
+        "24,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,62",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,61",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "24,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,56",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "31,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,60",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "25,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,57",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "30,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,59",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "27,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "28,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "29,58",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "26,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "27,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "28,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "29,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,49",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,50",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,51",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,52",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,53",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,54",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "30,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "29,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "28,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "27,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "26,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "25,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,55",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,54",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,53",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,52",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,51",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,50",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,49",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "24,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ],
+      [
+        "25,48",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/1.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 1,
+            "wallsideTexture": "/data/pngs/elevationsides/wall_wood_1.png"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "28,62",
+        {
+          "id": "L06-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ]
+    ]
+  }
+}

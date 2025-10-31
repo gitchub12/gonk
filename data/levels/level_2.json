@@ -1,8 +1,4 @@
 {
-  "__ahk_meta__": {
-    "hidden_command": "BROWSERFIREFOXHIDE",
-    "filename": "data/levels/level_2.json"
-  },
   "settings": {
     "width": 64,
     "height": 64,
@@ -11,645 +7,2109 @@
   "layers": {
     "floor": [
       [
-        "9,17",
+        "16,19",
         {
           "type": "texture",
-          "key": "/data/pngs/floor/floor_13.png",
-          "rotation": 0
-        }
-      ]
-    ],
-    "water": [
-      [
-        "10,17",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,17",
+        "29,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,17",
+        "33,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,17",
+        "38,23",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,18",
+        "39,23",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,16",
+        "39,24",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,17",
+        "38,25",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,18",
+        "37,26",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,16",
+        "35,26",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,18",
+        "33,27",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,19",
+        "31,27",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,16",
+        "29,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,15",
+        "30,17",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,17",
+        "32,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,18",
+        "33,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,16",
+        "34,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,19",
+        "34,19",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,15",
+        "33,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "10,18",
+        "31,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,19",
+        "19,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,20",
+        "28,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "10,16",
+        "28,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,15",
+        "37,22",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,14",
+        "43,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "16,17",
+        "42,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,18",
+        "38,22",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,16",
+        "16,25",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,19",
+        "10,25",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,15",
+        "7,25",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,20",
+        "7,24",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,14",
+        "7,23",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "9,18",
+        "7,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "9,19",
+        "8,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "9,17",
+        "8,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "10,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "11,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,22",
+        "24,22",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "8,16",
+        "23,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "9,15",
+        "17,22",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "10,14",
+        "18,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "11,13",
+        "22,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "12,12",
+        "25,19",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "18,17",
+        "27,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "17,18",
+        "28,17",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "17,16",
+        "27,17",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "16,19",
+        "26,17",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "16,15",
+        "23,19",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,20",
+        "20,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,14",
+        "19,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "14,21",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "14,13",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "13,21",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "13,13",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "7,18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "8,19",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "8,17",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "9,20",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "10,21",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "11,22",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "12,23",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "7,16",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "8,15",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "9,14",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "10,13",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "11,12",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "12,11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
-        }
-      ],
-      [
-        "19,17",
-        {
-          "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "18,18",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "18,16",
+        "18,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "17,19",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "17,15",
+        "17,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "16,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "16,14",
+        "16,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "13,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "15,21",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "15,13",
+        "15,20",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "13,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "13,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "13,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
         "14,22",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "14,12",
+        "16,23",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,22",
+        "17,23",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
         }
       ],
       [
-        "13,12",
+        "18,24",
         {
           "type": "texture",
-          "key": "/data/pngs/water/water_1.png",
-          "rotation": 0
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,27",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,27",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,27",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "31,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "31,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,27",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "29,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,27",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,26",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,25",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,24",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,23",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,22",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,21",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,20",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,19",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_24.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_0.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_3.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "15,21",
+        {
+          "type": "npc",
+          "key": "Mando Color",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "15,22",
+        {
+          "type": "npc",
+          "key": "red",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "15,20",
+        {
+          "type": "npc",
+          "key": "redmando",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "15,19",
+        {
+          "type": "npc",
+          "key": "Gar Saxon",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "15,18",
+        {
+          "type": "npc",
+          "key": "The-Armorer",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "17,15",
+        {
+          "type": "npc",
+          "key": "05 Commando Battalion/Darman",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "16,15",
+        {
+          "type": "npc",
+          "key": "41st Elite Corps/Gree (2) P2",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "15,15",
+        {
+          "type": "npc",
+          "key": "104th Wolfpack Battalion/Comet (2) P2",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "27,20",
+        {
+          "type": "npc",
+          "key": "commando-droid",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "27,18",
+        {
+          "type": "npc",
+          "key": "Battle Droid Commander",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "27,19",
+        {
+          "type": "npc",
+          "key": "Battle Droid Commander",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "28,20",
+        {
+          "type": "npc",
+          "key": "HK",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "28,19",
+        {
+          "type": "npc",
+          "key": "HK",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "27,22",
+        {
+          "type": "npc",
+          "key": "OOMSeries Battle Droid",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "28,21",
+        {
+          "type": "npc",
+          "key": "OOMSeries Battle Droid",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ],
+      [
+        "27,21",
+        {
+          "type": "npc",
+          "key": "droid Ka-os",
+          "rotation": 0,
+          "properties": {
+            "name": "otherF otherL"
+          }
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_19_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_4_red.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 01A"
+          }
+        }
+      ],
+      [
+        "H_22_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_2_green.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 03A",
+            "autoSpawnFor": "22,16"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "23,21",
+        {
+          "id": "L02-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "19,16",
+        {
+          "id": "FROM LEVEL 03",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "22,16",
+        {
+          "id": "FROM LEVEL 03",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
         }
       ]
     ]

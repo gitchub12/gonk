@@ -1,0 +1,349 @@
+{
+    "factions": {
+        "player_droid": {
+            "name": "Gonk Pope",
+            "homePosition": {
+                "x": 55,
+                "y": 6
+            },
+            "isStatic": true,
+            "mass": 1,
+            "elasticity": 0.2,
+            "homeRadius": 0,
+            "pushForces": {
+                "aliens": {
+                    "strength": 10,
+                    "radius": 10
+                }
+            }
+        },
+        "rebels": {
+            "name": "Rebels",
+            "homePosition": {
+                "x": 90,
+                "y": 46
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.29,
+            "homeRadius": 3,
+            "pushForces": {
+                "droids": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "clones": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "imperials": {
+                    "strength": 22,
+                    "radius": 47
+                },
+                "aliens": {
+                    "strength": 15,
+                    "radius": 8
+                },
+                "takers": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "sith": {
+                    "strength": 28,
+                    "radius": 47
+                },
+                "mandalorians": {
+                    "strength": 10,
+                    "radius": 10
+                }
+            }
+        },
+        "droids": {
+            "name": "Droids",
+            "homePosition": {
+                "x": 40.0,
+                "y": 0
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.2,
+            "homeRadius": 3,
+            "pushForces": {
+                "rebels": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "clones": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "imperials": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "aliens": {
+                    "strength": 38,
+                    "radius": 30
+                },
+                "takers": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "sith": {
+                    "radius": 10,
+                    "strength": 13
+                },
+                "mandalorians": {
+                    "strength": 10,
+                    "radius": 10
+                }
+            }
+        },
+        "clones": {
+            "name": "Clones",
+            "homePosition": {
+                "x": 40,
+                "y": 85
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.2,
+            "homeRadius": 3,
+            "pushForces": {
+                "rebels": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "droids": {
+                    "strength": 38,
+                    "radius": 30
+                },
+                "imperials": {
+                    "strength": 24,
+                    "radius": 8
+                },
+                "aliens": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "takers": {
+                    "strength": 45,
+                    "radius": 17
+                },
+                "sith": {
+                    "strength": 35,
+                    "radius": 18
+                },
+                "mandalorians": {
+                    "strength": 10,
+                    "radius": 10
+                }
+            }
+        },
+        "imperials": {
+            "name": "Imperials",
+            "homePosition": {
+                "x": 8,
+                "y": 49
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.33,
+            "homeRadius": 2,
+            "pushForces": {
+                "rebels": {
+                    "strength": 22,
+                    "radius": 49
+                },
+                "droids": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "clones": {
+                    "strength": 24,
+                    "radius": 8
+                },
+                "aliens": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "mandalorians": {
+                    "strength": 56,
+                    "radius": 15
+                },
+                "takers": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "sith": {
+                    "strength": 15,
+                    "radius": 7
+                }
+            }
+        },
+        "aliens": {
+            "name": "Aliens",
+            "homePosition": {
+                "x": 85,
+                "y": 70
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.2,
+            "homeRadius": 3,
+            "pushForces": {
+                "rebels": {
+                    "strength": 15,
+                    "radius": 8
+                },
+                "droids": {
+                    "strength": 38,
+                    "radius": 30
+                },
+                "clones": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "imperials": {
+                    "strength": 38,
+                    "radius": 8
+                },
+                "mandalorians": {
+                    "strength": 24,
+                    "radius": 10
+                },
+                "takers": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "sith": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "player_droid": {
+                    "strength": 10,
+                    "radius": 10
+                }
+            }
+        },
+        "mandalorians": {
+            "name": "Mandalorians",
+            "homePosition": {
+                "x": 70,
+                "y": 85
+            },
+            "isStatic": false,
+            "mass": 1.2,
+            "elasticity": 0.22,
+            "homeRadius": 5,
+            "pushForces": {
+                "imperials": {
+                    "strength": 56,
+                    "radius": 15
+                },
+                "sith": {
+                    "strength": 30,
+                    "radius": 23
+                },
+                "rebels": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "droids": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "clones": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "aliens": {
+                    "strength": 24,
+                    "radius": 10
+                },
+                "takers": {
+                    "strength": 26,
+                    "radius": 14
+                }
+            }
+        },
+        "takers": {
+            "name": "Takers",
+            "homePosition": {
+                "x": 5,
+                "y": 100
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.2,
+            "homeRadius": 4,
+            "pushForces": {
+                "rebels": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "imperials": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "clones": {
+                    "strength": 45,
+                    "radius": 17
+                },
+                "droids": {
+                    "strength": 45,
+                    "radius": 38
+                },
+                "aliens": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "sith": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "mandalorians": {
+                    "strength": 26,
+                    "radius": 14
+                }
+            }
+        },
+        "sith": {
+            "name": "Sith",
+            "homePosition": {
+                "x": 25,
+                "y": 30
+            },
+            "isStatic": false,
+            "mass": 1,
+            "elasticity": 0.1,
+            "homeRadius": 2,
+            "pushForces": {
+                "rebels": {
+                    "strength": 28,
+                    "radius": 60
+                },
+                "clones": {
+                    "strength": 35,
+                    "radius": 8
+                },
+                "mandalorians": {
+                    "strength": 30,
+                    "radius": 23
+                },
+                "droids": {
+                    "strength": 13,
+                    "radius": 10
+                },
+                "takers": {
+                    "strength": 10,
+                    "radius": 10
+                },
+                "imperials": {
+                    "strength": 15,
+                    "radius": 10
+                }
+            }
+        }
+    }
+}

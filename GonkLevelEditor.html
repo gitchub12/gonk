@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="file-identifier" content="BROWSERFIREFOXHIDE GonkLevelEditor.html; this must be in the first three physical lines of the file. DO NOT REMOVE!">
+    <meta name="file-identifier" content="GonkLevelEditor.html; BROWSERFIREFOXHIDE and filename must be in the first six physical lines of the file. DO NOT REMOVE!">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gonk FPS Level Editor</title>
     <style>
@@ -10,24 +10,29 @@
             --bg-color: #282c34;
             --panel-bg: #21252b;
             --border-color: #444;
+            --border-color-light: #333;
             --text-color: #abb2bf;
             --text-hover: #ffffff;
             --accent-color: #61afef;
             --input-bg: #1c1f24;
             --play-btn-bg: #28a745;
             --play-btn-hover: #218838;
+            --save-btn-bg: #555;
+            --save-btn-hover: #666;
+            --save-btn-dirty-bg: #007bff;
+            --save-btn-dirty-hover: #0069d9;
         }
         body { margin: 0; display: flex; height: 100vh; font-family: Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); }
-        #leftPanel { width: 300px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; }
+        #leftPanel { width: 350px; background-color: var(--panel-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; }
         #canvasContainer { flex-grow: 1; position: relative; }
         canvas { display: block; width: 100%; height: 100%; background-color: #111; cursor: default; }
         #statusBar { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 5px; font-size: 12px; display: flex; justify-content: space-between; z-index: 5; }
-        
+
         .tabs { display: flex; border-bottom: 1px solid var(--border-color); }
         .tab-button { flex-grow: 1; padding: 10px; background: var(--panel-bg); border: none; color: var(--text-color); cursor: pointer; border-bottom: 3px solid transparent; }
         .tab-button:hover { background: #333842; }
         .tab-button.active { border-bottom: 3px solid var(--accent-color); color: var(--text-hover); }
-        
+
         .tab-content { display: none; padding-top: 10px; flex-grow: 1; overflow-y: auto; position: relative; }
         .tab-content.active { display: flex; flex-direction: column; }
 
@@ -41,47 +46,124 @@
         .horizontal-group > select, .horizontal-group > input { flex-grow: 1; width: auto; }
         .horizontal-group button { flex-grow: 1; }
 
-        .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
-        .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
+        .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(77px, 1fr)); gap: 5px; }
+        .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); width: 77px; height: 77px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
         .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
-        .palette-item img { max-width: 48px; max-height: 48px; image-rendering: pixelated; }
-        
-        .palette-item span { position: absolute; bottom: 2px; font-size: 10px; background: rgba(0,0,0,0.6); padding: 1px 3px; border-radius: 2px; left: 5%; width: 90%; text-align: center; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .palette-item img { max-width: 58px; max-height: 58px; image-rendering: pixelated; }
+
+        /* Updated palette item span for better text wrapping */
+        .palette-item span {
+            font-size: 11px;
+            position: absolute;
+            bottom: 2px; /* Position at the bottom */
+            left: 2px;  /* Small padding from edges */
+            right: 2px;
+            background: rgba(0,0,0,0.7);
+            padding: 1px 3px;
+            border-radius: 2px;
+            width: calc(100% - 4px); /* Full width minus padding */
+            text-align: center;
+            box-sizing: border-box;
+            white-space: normal; /* Allow wrapping */
+            overflow-wrap: break-word; /* Break long words */
+            word-break: break-all; /* Force break even without spaces */
+            line-height: 1.1; /* Adjust line height */
+            max-height: 2.4em; /* Limit to roughly 2 lines */
+            overflow: hidden; /* Hide overflow */
+        }
         .palette-header { grid-column: 1 / -1; text-align: left; font-weight: bold; color: var(--accent-color); margin-top: 10px; padding-bottom: 4px; text-transform: capitalize; border-bottom: 1px solid var(--border-color); }
-        #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; }
+        #palette-controls { display: flex; gap: 5px; margin-bottom: 10px; flex-direction: column; }
         #palette-controls input { flex-grow: 1; }
         #layer-actions { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
         #layer-actions button { flex-grow: 1; }
-        
+        #save-characters-btn { background-color: var(--save-btn-bg); transition: background-color 0.3s; }
+        #save-characters-btn:hover { background-color: var(--save-btn-hover); }
+        #save-characters-btn.dirty { background-color: var(--save-btn-dirty-bg); font-weight: bold; }
+        #save-characters-btn.dirty:hover { background-color: var(--save-btn-dirty-hover); }
+
+
         .floating-toolbar { position: absolute; background-color: transparent; border: none; display: flex; padding: 5px; gap: 5px; z-index: 20; }
-        .floating-toolbar button { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; overflow:hidden; position: relative; }
+        .floating-toolbar button { background-color: var(--input-bg); border: 1px solid var(--border-color-light); color: var(--text-color); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; overflow:hidden; position: relative; }
         .floating-toolbar button:hover { background-color: #333842; }
         .floating-toolbar button.active { border-color: var(--accent-color); background-color: #333842;}
-        .floating-toolbar button img { width: 24px; height: 24px; image-rendering: pixelated; }
-        
-        #toolbox { top: 10px; left: 10px; flex-direction: column; }
-        #toolbox button { width: 40px; height: 40px; }
-        
-        #layer-selector { top: 10px; left: 65px; flex-direction: row; flex-wrap: wrap; width: auto; max-width: calc(100% - 80px); }
-        #layer-selector button { width: 64px; height: 50px; flex-direction: column; }
-        #layer-selector button img { width: 32px; height: 32px; margin-top: 2px; }
-        #layer-selector button .layer-label { font-size: 10px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
-        .layer-group { display: contents; } /* Allows flex items to be grouped without a container element */
+
+        #toolbox { top: 50%; left: 10px; transform: translateY(-50%); flex-direction: column; }
+        #toolbox button { width: 72px; height: 72px; }
+        #toolbox button img { width: 68px; height: 68px; image-rendering: pixelated; }
+
+        /* Main Layer Selector (Top-Left) */
+        #layer-selector {
+            top: 2px;
+            left: 2px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: auto;
+            max-width: calc(100% - 220px); /* Adjust max-width to leave space for utility layers */
+        }
+        #layer-selector button { width: 70px; height: 55px; flex-direction: column; }
+        #layer-selector button img { width: 35px; height: 35px; margin-top: 2px; }
+        #layer-selector button .layer-label { font-size: 11px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
+        .layer-group { display: contents; }
+
+        /* Utility Layer Selector (Top-Right) */
+        #utility-layers {
+            top: 2px;
+            right: 2px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-end; /* Align buttons to the right */
+            width: 210px; /* Fixed width for 3 buttons */
+        }
+        #utility-layers button { width: 65px; height: 55px; flex-direction: column; }
+        #utility-layers button img { width: 35px; height: 35px; margin-top: 2px; }
+        #utility-layers button .layer-label { font-size: 11px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
+
 
         .top-right-ui { position: absolute; top: 10px; right: 10px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; }
-        #playtest-button { padding: 12px 24px; font-size: 1.2em; font-weight: bold; background-color: var(--play-btn-bg); border: 1px solid #1e7e34; color: white; cursor: pointer; border-radius: 5px; text-shadow: 1px 1px 2px black; }
+        #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; margin-top: 50px; /* Adjust margin to avoid overlap with utility layers */ }
+
+        .bottom-right-ui { position: absolute; bottom: 10px; right: 10px; z-index: 20; }
+        #playtest-button {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            font-weight: bold;
+            background-color: var(--play-btn-bg);
+            border: 1px solid #1e7e34;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px black;
+            transform: scale(1.65);
+            transform-origin: bottom right;
+        }
         #playtest-button:hover { background-color: var(--play-btn-hover); }
+
+        .layer-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 10px;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px black;
+            z-index: 25;
+            pointer-events: none;
+            display: none; /* Hidden by default */
+        }
+        #elevation-level-display { color: red; }
+        #ceiling-height-display { color: cyan; }
+        #wall-height-display { color: #ffaa00; }
+
 
         #context-menu {
             display: none; position: absolute; background-color: var(--panel-bg); border: 1px solid var(--accent-color);
-            border-radius: 4px; padding: 5px; z-index: 100; min-width: 150px;
+            border-radius: 4px; padding: 5px 0; z-index: 100; min-width: 150px;
         }
         #context-menu ul { list-style: none; margin: 0; padding: 0; }
         #context-menu ul li { padding: 8px 12px; cursor: pointer; color: var(--text-color); }
         #context-menu ul li:hover { background-color: #333842; color: var(--text-hover); }
+        #context-menu ul li.context-menu-header { font-weight: bold; color: var(--accent-color); cursor: default; padding-bottom: 6px; margin-bottom: 4px; border-bottom: 1px solid var(--border-color); }
+        #context-menu ul li.context-menu-header:hover { background-color: transparent; }
 
-        /* Styles for the new properties panel */
         #properties-panel {
             display: none;
             position: absolute;
@@ -94,18 +176,39 @@
             padding: 20px;
             z-index: 101;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            width: 300px;
+            width: 900px; /* Increased width */
             max-height: 80vh;
             overflow-y: auto;
         }
-        #properties-panel h3 { margin-top: 0; color: var(--accent-color); }
-        .prop-group { margin-bottom: 15px; }
-        .prop-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .prop-group input, .prop-group select { width: 100%; padding: 8px; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 3px; box-sizing: border-box; margin-top: 5px; }
-        .prop-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+        #properties-panel h3 { margin-top: 0; color: var(--accent-color); display: flex; align-items: center; gap: 10px; }
+        /* Grid layout for prop-content */
+        #prop-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 15px; /* Gap between columns and rows */
+        }
+        /* Special styling for weapon properties */
+        #npc-weapon-group {
+            grid-column: 1 / -1; /* Span all 3 columns */
+        }
+        #npc-default-weapon-display {
+            background-color: #1c1f24; border: 1px solid #333; padding: 6px; font-size: 12px; border-radius: 3px; margin-top: 3px;
+        }
+        .prop-group { margin-bottom: 0; } /* Remove bottom margin as gap handles spacing */
+        .prop-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 11px; /* Smaller label */ }
+        .prop-group input, .prop-group select { width: 100%; padding: 6px; /* Smaller padding */ background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 3px; box-sizing: border-box; margin-top: 3px; font-size: 12px; /* Smaller font */ }
+        .prop-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; grid-column: 1 / -1; /* Make buttons span all columns */ }
         .prop-buttons button { padding: 10px; border: none; border-radius: 5px; cursor: pointer; color: white; flex-grow: 1; }
         #save-prop-btn { background-color: var(--play-btn-bg); }
-        #cancel-prop-btn { background-color: #dc3545; }
+        #delete-prop-btn { background-color: #dc3545; } /* Added style for delete button */
+        #cancel-prop-btn { background-color: #6c757d; } /* Added style for cancel button */
+        #template-builder-container { padding-right: 5px; }
+        .template-group { margin-bottom: 12px; }
+        #wall-extras .horizontal-group label {
+            min-width: 60px;
+            text-align: right;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -120,10 +223,9 @@
                  <div class="content-group">
                     <h4>Asset Palette</h4>
                     <div id="palette-controls">
-                        <input type="text" id="palette-search" placeholder="Search assets...">
-                        <button id="palette-refresh">Refresh</button>
-                    </div>
+                        </div>
                     <div id="palette-container" class="palette"></div>
+                    <div id="template-builder-container" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -138,6 +240,7 @@
                 <button id="load-level-btn">Load Level</button>
                  <div id="layer-actions">
                     <button id="save-level-btn">Save Current Level</button>
+                    <button id="save-characters-btn">Save characters.json</button>
                     <button id="reset-layer-btn">Reset Layer</button>
                     <button id="reset-map-btn">Reset Map</button>
                 </div>
@@ -180,28 +283,49 @@
                     <select id="default-ceiling-select"></select>
                     <select class="default-size-select" id="default-ceiling-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
+                 <div class="horizontal-group">
+                    <label for="default-ceiling-height">Ceiling Height:</label>
+                    <select id="default-ceiling-height">
+                        <option value="1">1x</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                    </select>
+                </div>
                 <div class="horizontal-group">
                      <label for="default-sky-select">Sky:</label>
                     <select id="default-sky-select"></select>
                     <select class="default-size-select" id="default-sky-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                </div>
+                 <div class="horizontal-group">
+                    <label for="default-skybox-select">Skybox:</label>
+                    <select id="default-skybox-select"></select>
+                </div>
+                <div class="horizontal-group">
+                     <label for="default-ceiling-wall-select">Ceiling Wall:</label>
+                    <select id="default-ceiling-wall-select"></select>
                 </div>
             </div>
         </div>
     </div>
     <div id="canvasContainer">
         <canvas id="editorCanvas"></canvas>
+        <div id="elevation-level-display" class="layer-indicator"></div>
+        <div id="ceiling-height-display" class="layer-indicator"></div>
+        <div id="wall-height-display" class="layer-indicator"></div>
         <div id="toolbox" class="floating-toolbar">
+            <button id="tool-template" title="Template Brush (G)"><img src="/data/pngs/icons for UI/stamp.png" alt="G"></button>
             <button id="tool-paint" title="Paint (B)" class="active"><img src="/data/pngs/icons for UI/paintbrush.png" alt="P"></button>
             <button id="tool-fill" title="Fill (F)"><img src="/data/pngs/icons for UI/bucket.png" alt="F"></button>
             <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="R"></button>
-            <button id="tool-spawn" title="Place Spawn (P)"><img src="/data/pngs/icons for UI/gonkicon.png" alt="S"></button>
             <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
             <button id="tool-wall-mode" title="Switch Wall Mode (M)"><img src="/data/pngs/icons for UI/gridicon.png" alt="M"></button>
             <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="T"></button>
         </div>
         <div id="layer-selector" class="floating-toolbar"></div>
-        <div class="top-right-ui">
+        <div id="utility-layers" class="floating-toolbar"></div> <div class="top-right-ui">
             <div id="level-display">Level: 1</div>
+        </div>
+        <div class="bottom-right-ui">
             <button id="playtest-button">PLAY</button>
         </div>
         <div id="statusBar">
@@ -216,14 +340,23 @@
 
     <div id="properties-panel">
         <h3 id="prop-title">Item Properties</h3>
+        <div id="npc-weapon-group" class="prop-group" style="display: none;">
+            <label>Default Weapon:</label>
+            <div id="npc-default-weapon-display"></div>
+            <label for="prop-weapon-override">Override Weapon:</label>
+            <select id="prop-weapon-override"></select>
+        </div>
         <div id="prop-content">
             </div>
         <div class="prop-buttons">
-            <button id="save-prop-btn">Save</button>
-            <button id="cancel-prop-btn">Cancel</button>
+             <button id="save-prop-btn">Save</button>
+             <button id="delete-prop-btn">Delete</button>
+             <button id="cancel-prop-btn">Cancel</button>
         </div>
     </div>
-    <script src="../gonk_models.js"></script> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="../gonk_models.js"></script>
     <script src="editor_ui_and_assets.js"></script>
     <script src="editor.js"></script>
 </body>

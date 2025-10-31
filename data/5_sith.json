@@ -1,0 +1,613 @@
+# CODEBEGINSNOW
+# BROWSERFIREFOXHIDE
+# filename: 5_sith.json
+# Purpose: Contains data for the 'sith' faction.
+{
+    "_comment": "BROWSERFIREFOXHIDE data/skins/sith.json - Faction: sith",
+    "base_type_defaults": {
+        "darth": {
+            "threat": 5,
+            "health": 150.0,
+            "melee_damage": 15.0,
+            "attack_cooldown": 1.5,
+            "attack_range": 3.0,
+            "accuracy": 142.5,
+            "perception_radius": 52.5,
+            "aggro": 1.2,
+            "speed": 0.041100000000000005,
+            "collision_radius": 0.5,
+            "weight": 127.5,
+            "soundSet": null,
+            "weight_lift": 120.0,
+            "technical_understanding": 75.0,
+            "force_sensitivity": 135.0,
+            "special_moves": null,
+            "jump_strength": 1.0
+        }
+    },
+    "darth": {
+        "name": "Sith & Villains",
+        "baseType": "darth",
+        "faction": "sith",
+        "macroCategory": "Sith",
+        "path": "sith/",
+        "textures": [
+            {
+                "file": "Asajj Ventress.png",
+                "armType": "alex",
+                "soundSet": "female",
+                "weight_lift": 120.0,
+                "technical_understanding": 90.0,
+                "force_sensitivity": 127.5,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Aurra Sing.png",
+                "armType": "alex",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "soundSet": "female",
+                "weight_lift": 112.0,
+                "technical_understanding": 84.0,
+                "force_sensitivity": 56.00000000000001,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_e11.png"
+            },
+            {
+                "file": "Cad Bane.png",
+                "armType": "alex",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 119.0,
+                "technical_understanding": 105.0,
+                "force_sensitivity": 21.0,
+                "jump_strength": 0.75,
+                "default_weapon": "pistol_dl44_han.png"
+            },
+            {
+                "file": "Darth Armory.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth dark.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Flamey.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Gungan.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Kastor.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Kermit.png",
+                "armType": "steve",
+                "soundSet": "female",
+                "weight_lift": 120.0,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Kylo Dark.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth kylo.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Malgus.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Mando.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth maul gray.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth paleus.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth reaper.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Redguy.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth redstripe.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Revan HD.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Revan1.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Skeleton.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth skullface.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth someguy 2.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth someguy1.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Succubus.png",
+                "armType": "alex",
+                "soundSet": "female",
+                "weight_lift": 120.0,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Talon.png",
+                "armType": "alex",
+                "soundSet": "female",
+                "weight_lift": 120.0,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth tv head.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Tyrannus.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Vader Helmetless.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darth vader saber.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth Vader.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darthfiremage.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darthmaul1.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darthmaul2.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darthmaul3.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "darthretro.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "dooku.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "emperor detailed.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "emperor1.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "emperor2.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "General Durge.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "rifle_e11.png"
+            },
+            {
+                "file": "General Hux.png",
+                "armType": "steve",
+                "threat": 2,
+                "health": 110.0,
+                "melee_damage": 11.0,
+                "attack_cooldown": 2.7,
+                "attack_range": 2.2,
+                "accuracy": 104.5,
+                "perception_radius": 38.5,
+                "aggro": 0.88,
+                "speed": 0.03014,
+                "weight": 93.5,
+                "weight_lift": 88.0,
+                "technical_understanding": 55.0,
+                "force_sensitivity": 99.0,
+                "jump_strength": 0.0,
+                "default_weapon": "pistol_se44_firstorder.png"
+            },
+            {
+                "file": "grievous.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "grievous2.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "grievous3.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Hutt Bounty Hunter.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 130.0,
+                "melee_damage": 13.0,
+                "attack_cooldown": 2.1,
+                "attack_range": 2.6,
+                "accuracy": 123.5,
+                "perception_radius": 45.5,
+                "aggro": 1.04,
+                "speed": 0.035620000000000004,
+                "weight": 110.5,
+                "weight_lift": 104.0,
+                "technical_understanding": 65.0,
+                "force_sensitivity": 117.0,
+                "jump_strength": 0.5,
+                "default_weapon": "rifle_e11.png"
+            },
+            {
+                "file": "Kylo Ren Detail.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Kylo RenBen.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "kyloren.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "kyloren2.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Moff Gideon.png",
+                "armType": "steve",
+                "threat": 3,
+                "health": 130.0,
+                "melee_damage": 13.0,
+                "attack_cooldown": 2.1,
+                "attack_range": 2.6,
+                "accuracy": 123.5,
+                "perception_radius": 45.5,
+                "aggro": 1.04,
+                "speed": 0.035620000000000004,
+                "weight": 110.5,
+                "weight_lift": 104.0,
+                "technical_understanding": 65.0,
+                "force_sensitivity": 117.0,
+                "jump_strength": 0.5,
+                "default_weapon": "saber_darksaber.png"
+            },
+            {
+                "file": "phasma2.png",
+                "armType": "alex",
+                "soundSet": "female",
+                "weight_lift": 120.0,
+                "default_weapon": "long_f11d_phasma.png"
+            },
+            {
+                "file": "red sith.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "reva thirdsister.png",
+                "armType": "alex",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "soundSet": "female",
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Savage Opress.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Second Sister Trilla Suduri.png",
+                "armType": "alex",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "soundSet": "female",
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "testmeandlearn.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Thrawn Fancy.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "pistol_dl44_han.png"
+            },
+            {
+                "file": "thrawn1.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "pistol_dl44_han.png"
+            },
+            {
+                "file": "Wrecker.png",
+                "armType": "steve",
+                "default_weapon": "rifle_e11.png"
+            },
+            {
+                "file": "Darth Maul in Robe.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth-Binks-on-planetminecraft-com.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Darth-Malak.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Grand-Moff-Tarkin.png",
+                "armType": "steve",
+                "threat": 1,
+                "health": 110.0,
+                "melee_damage": 11.0,
+                "attack_cooldown": 2.7,
+                "attack_range": 2.2,
+                "accuracy": 104.5,
+                "perception_radius": 38.5,
+                "aggro": 0.88,
+                "speed": 0.03014,
+                "weight": 93.5,
+                "weight_lift": 88.0,
+                "technical_understanding": 55.0,
+                "force_sensitivity": 99.0,
+                "jump_strength": 0.0,
+                "default_weapon": "pistol_dl44_han.png"
+            },
+            {
+                "file": "Jar-Jar-Binks-Sith.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Khem-Val-Devourer-of-Jedi.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "Sith-Lord-Darth-Tyranus.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "The-Fifth-Brother-Inquisitor.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "The-Grand-Inquisitor.png",
+                "armType": "steve",
+                "threat": 4,
+                "health": 140.0,
+                "melee_damage": 14.0,
+                "attack_cooldown": 1.7999999999999998,
+                "attack_range": 2.8,
+                "accuracy": 133.0,
+                "perception_radius": 49.0,
+                "aggro": 1.12,
+                "speed": 0.038360000000000004,
+                "weight": 119.0,
+                "weight_lift": 112.0,
+                "technical_understanding": 70.0,
+                "force_sensitivity": 126.0,
+                "jump_strength": 0.75,
+                "default_weapon": "saber_red.png"
+            },
+            {
+                "file": "trooper villain Arcann.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            }
+        ]
+    },
+    "sith": {
+        "name": "Sith",
+        "faction": "sith",
+        "baseType": "darth",
+        "macroCategory": "Sith",
+        "path": "sith/",
+        "textures": [
+            {
+                "file": "Darth Vader.png",
+                "armType": "steve",
+                "default_weapon": "saber_red.png"
+            }
+        ]
+    }
+}
+# CODEENDSNOW

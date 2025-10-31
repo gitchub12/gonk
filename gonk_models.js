@@ -1,10 +1,13 @@
 // BROWSERFIREFOXHIDE gonk_models.js
-// gonk_models.js
-// Finalized. Minecraft-style character model system with full skin format support.
+// update: DRAMATIC PERFORMANCE REWRITE.
+// 1. Replaced per-face material creation with a single shared material per skin, massively reducing draw calls.
+// 2. Implemented direct UV mapping on geometries instead of texture cloning and offsetting, reducing memory and improving performance.
+// 3. Cached materials to prevent re-creation.
 
 class GonkModelSystem {
   constructor() {
     this.models = this.defineModels();
+    this.materialCache = new Map();
     if (typeof window.Logger === 'undefined') {
         window.Logger = {
             debug: console.log, info: console.info, warn: console.warn, error: console.error
@@ -25,43 +28,39 @@ class GonkModelSystem {
           leftLeg: { size: [4, 12, 4], position: [-2, -6, 0], pivot: [0, 0, 0], parent: 'body' }
         },
         scale: 0.0625,
-        animationSpeed: 4.0,
-        iconUV: { x: 8, y: 8, size: 8 }
+        animationSpeed: 4.0
+      },
+      humanoid_alex: {
+        parts: {
+          head: { size: [8, 8, 8], position: [0, 6, 0], pivot: [0, 0, 0], parent: 'body' },
+          body: { size: [8, 12, 4], position: [0, 0, 0], pivot: [0, 0, 0], parent: null },
+          rightArm: { size: [3, 12, 4], position: [5.5, 5, 0], pivot: [0, 0, 0], parent: 'body' },
+          leftArm: { size: [3, 12, 4], position: [-5.5, 5, 0], pivot: [0, 0, 0], parent: 'body' },
+          rightLeg: { size: [4, 12, 4], position: [2, -6, 0], pivot: [0, 0, 0], parent: 'body' },
+          leftLeg: { size: [4, 12, 4], position: [-2, -6, 0], pivot: [0, 0, 0], parent: 'body' }
+        },
+        scale: 0.0625,
+        animationSpeed: 4.0
       },
       slime: {
         parts: {
           slimeBody: { size: [16, 16, 16], position: [0, 8, 0], pivot: [0, 0, 0], parent: null }
         },
         scale: 0.0625,
-        animationSpeed: 1.5,
-        iconUV: { x: 0, y: 16, size: 16 }
+        animationSpeed: 1.5
       },
-      snowgolem: {
+       irongolem: {
         parts: {
-          base: { size: [10, 10, 10], position: [0, -5, 0], pivot: [0, 5, 0], parent: null },
-          body: { size: [10, 10, 10], position: [0, 5, 0], pivot: [0, 5, 0], parent: 'base' },
-          head: { size: [8, 8, 8], position: [0, 13, 0], pivot: [0, 4, 0], parent: 'base' },
-          rightArm: { size: [12, 2, 2], position: [6, 5, 0], pivot: [-4, 0, 0], parent: 'base' },
-          leftArm: { size: [12, 2, 2], position: [-6, 5, 0], pivot: [4, 0, 0], parent: 'base' }
+            head: { size: [8, 10, 8], position: [0, 15, -1], pivot: [0, 0, 0], parent: 'body' },
+            body: { size: [14, 21, 10], position: [0, 2.5, 0], pivot: [0, 0, 0], parent: null },
+            rightArm: { size: [5, 30, 6], position: [9.5, 12, 0], pivot: [0, 0, 0], parent: 'body' },
+            leftArm: { size: [5, 30, 6], position: [-9.5, 12, 0], pivot: [0, 0, 0], parent: 'body' },
+            rightLeg: { size: [6, 31, 6], position: [4, -8, 0], pivot: [0, 0, 0], parent: 'body' },
+            leftLeg: { size: [6, 31, 6], position: [-4, -8, 0], pivot: [0, 0, 0], parent: 'body' }
         },
         scale: 0.0625,
-        animationSpeed: 3.0,
-        iconUV: { x: 0, y: 0, size: 8 }
+        animationSpeed: 2.0
       },
-      irongolem: {
-        parts: {
-          body: { size: [14, 20, 6], position: [0, -10, 0], pivot: [0, 10, 0], parent: null },
-          head: { size: [10, 10, 10], position: [0, 15, 0], pivot: [0, -5, 0], parent: 'body' },
-          nose: { size: [2, 4, 2], position: [0, 0, 5], pivot: [0, 0, -1], parent: 'head' },
-          rightArm: { size: [4, 12, 6], position: [9, 6, 0], pivot: [0, -6, 0], parent: 'body' },
-          leftArm: { size: [4, 12, 6], position: [-9, 6, 0], pivot: [0, -6, 0], parent: 'body' },
-          rightLeg: { size: [6, 10, 6], position: [4, -10, 0], pivot: [0, 5, 0], parent: 'body' },
-          leftLeg: { size: [6, 10, 6], position: [-4, -10, 0], pivot: [0, 5, 0], parent: 'body' }
-        },
-        scale: 0.0625,
-        animationSpeed: 2.5,
-        iconUV: { x: 0, y: 0, size: 10 }
-      }
     };
   }
 
@@ -74,192 +73,351 @@ class GonkModelSystem {
     return { type: 'legacy', scale: 1, hasOverlay: false }; // Default fallback
   }
 
-  getUVMapForFormat(partName, skinFormat, isOverlay = false) {
+  getUVMapForFormat(partName, skinFormat, isOverlay = false, armType = 'steve') {
     const isModern = skinFormat.type === 'modern';
     const scale = skinFormat.scale;
 
-    const modernUVMaps = {
-      head:     { base: { right: [0, 8, 8, 8],   left: [16, 8, 8, 8],  top: [8, 0, 8, 8],    bottom: [16, 0, 8, 8],  front: [8, 8, 8, 8],    back: [24, 8, 8, 8]  }, overlay: { right: [32, 8, 8, 8],  left: [48, 8, 8, 8],  top: [40, 0, 8, 8],   bottom: [48, 0, 8, 8],  front: [40, 8, 8, 8],   back: [56, 8, 8, 8]  } },
-      body:     { base: { right: [16, 20, 4, 12],left: [28, 20, 4, 12], top: [20, 16, 8, 4],  bottom: [28, 16, 8, 4], front: [20, 20, 8, 12], back: [32, 20, 8, 12] }, overlay: { right: [16, 36, 4, 12],left: [28, 36, 4, 12], top: [20, 32, 8, 4],  bottom: [28, 32, 8, 4], front: [20, 36, 8, 12], back: [32, 36, 8, 12] } },
-      rightArm: { base: { right: [40, 20, 4, 12],left: [48, 20, 4, 12], top: [44, 16, 4, 4],  bottom: [48, 16, 4, 4], front: [44, 20, 4, 12], back: [52, 20, 4, 12] }, overlay: { right: [40, 36, 4, 12],left: [48, 36, 4, 12], top: [44, 32, 4, 4],  bottom: [48, 32, 4, 4], front: [44, 36, 4, 12], back: [52, 36, 4, 12] } },
-      leftArm:  { base: { right: [32, 52, 4, 12],left: [40, 52, 4, 12], top: [36, 48, 4, 4],  bottom: [40, 48, 4, 4], front: [36, 52, 4, 12], back: [44, 52, 4, 12] }, overlay: { right: [48, 52, 4, 12],left: [56, 52, 4, 12], top: [52, 48, 4, 4],  bottom: [56, 48, 4, 4], front: [52, 52, 4, 12], back: [60, 52, 4, 12] } },
-      rightLeg: { base: { right: [0, 20, 4, 12], left: [8, 20, 4, 12],  top: [4, 16, 4, 4],   bottom: [8, 16, 4, 4],  front: [4, 20, 4, 12],  back: [12, 20, 4, 12] }, overlay: { right: [0, 36, 4, 12], left: [8, 36, 4, 12],  top: [4, 32, 4, 4],   bottom: [8, 32, 4, 4],  front: [4, 36, 4, 12],  back: [12, 36, 4, 12] } },
-      leftLeg:  { base: { right: [16, 52, 4, 12],left: [24, 52, 4, 12], top: [20, 48, 4, 4],  bottom: [24, 48, 4, 4], front: [20, 52, 4, 12], back: [28, 52, 4, 12] }, overlay: { right: [0, 52, 4, 12],  left: [8, 52, 4, 12],  top: [4, 48, 4, 4],   bottom: [8, 48, 4, 4],  front: [4, 52, 4, 12],  back: [12, 52, 4, 12] } },
-      slimeBody:{ base: { front: [0, 16, 16, 16], back: [32, 16, 16, 16], left: [16, 16, 16, 16], right: [48, 16, 16, 16], top: [16, 0, 16, 16], bottom: [32, 0, 16, 16] }, overlay: { front: [0, 48, 16, 16], back: [32, 48, 16, 16], left: [16, 48, 16, 16], right: [48, 48, 16, 16], top: [16, 32, 16, 16], bottom: [32, 32, 16, 16] } },
-      snowgolem: { base: { head: { front: [0, 0, 8, 8], back: [16, 0, 8, 8], top: [8, 0, 8, 8], bottom: [16, 0, 8, 8], left: [24, 0, 8, 8], right: [0, 0, 8, 8] }, body: { front: [0, 16, 10, 10], back: [20, 16, 10, 10], top: [0, 16, 10, 10], bottom: [10, 16, 10, 10], left: [30, 16, 10, 10], right: [0, 16, 10, 10] }, base: { front: [0, 26, 10, 10], back: [20, 26, 10, 10], top: [0, 26, 10, 10], bottom: [10, 26, 10, 10], left: [30, 26, 10, 10], right: [0, 26, 10, 10] }, rightArm: { front: [40, 16, 12, 2], back: [40, 20, 12, 2], top: [40, 18, 12, 2], bottom: [40, 16, 12, 2], left: [40, 18, 2, 2], right: [50, 18, 2, 2] }, leftArm: { front: [40, 16, 12, 2], back: [40, 20, 12, 2], top: [40, 18, 12, 2], bottom: [40, 16, 12, 2], left: [40, 18, 2, 2], right: [50, 18, 2, 2] } }, overlay: null },
-      irongolem: { base: { head: { front: [0, 0, 10, 10], back: [20, 0, 10, 10], top: [10, 0, 10, 10], bottom: [20, 0, 10, 10], left: [30, 0, 10, 10], right: [0, 0, 10, 10] }, body: { front: [0, 10, 14, 20], back: [28, 10, 14, 20], top: [14, 10, 14, 6], bottom: [28, 10, 14, 6], left: [42, 10, 6, 20], right: [0, 10, 6, 20] }, rightArm: { front: [40, 0, 6, 12], back: [52, 0, 6, 12], top: [46, 0, 6, 6], bottom: [40, 0, 6, 6], left: [40, 0, 6, 12], right: [52, 0, 6, 12] }, leftArm: { front: [40, 0, 6, 12], back: [52, 0, 6, 12], top: [46, 0, 6, 6], bottom: [40, 0, 6, 6], left: [40, 0, 6, 12], right: [52, 0, 6, 12] }, rightLeg: { front: [0, 30, 6, 10], back: [12, 30, 6, 10], top: [6, 30, 6, 6], bottom: [12, 30, 6, 6], left: [0, 30, 6, 10], right: [12, 30, 6, 10] }, leftLeg: { front: [0, 30, 6, 10], back: [12, 30, 6, 10], top: [6, 30, 6, 6], bottom: [12, 30, 6, 6], left: [0, 30, 6, 10], right: [12, 30, 6, 10] } }, overlay: null }
+    const steveUVMaps = {
+        head:     { base: { right: [0, 8, 8, 8],   left: [16, 8, 8, 8],  top: [8, 0, 8, 8],    bottom: [16, 0, 8, 8],  front: [8, 8, 8, 8],    back: [24, 8, 8, 8]  }, overlay: { right: [32, 8, 8, 8],  left: [48, 8, 8, 8],  top: [40, 0, 8, 8],   bottom: [48, 0, 8, 8],  front: [40, 8, 8, 8],   back: [56, 8, 8, 8]  } },
+        body:     { base: { right: [16, 20, 4, 12],left: [28, 20, 4, 12], top: [20, 16, 8, 4],  bottom: [28, 16, 8, 4], front: [20, 20, 8, 12], back: [32, 20, 8, 12] }, overlay: { right: [16, 36, 4, 12],left: [28, 36, 4, 12], top: [20, 32, 8, 4],  bottom: [28, 32, 8, 4], front: [20, 36, 8, 12], back: [32, 36, 8, 12] } },
+        rightArm: { base: { right: [40, 20, 4, 12],left: [48, 20, 4, 12], top: [44, 16, 4, 4],  bottom: [48, 16, 4, 4], front: [44, 20, 4, 12], back: [52, 20, 4, 12] }, overlay: { right: [40, 36, 4, 12],left: [48, 36, 4, 12], top: [44, 32, 4, 4],  bottom: [48, 32, 4, 4], front: [44, 36, 4, 12], back: [52, 36, 4, 12] } },
+        leftArm:  { base: { right: [32, 52, 4, 12],left: [40, 52, 4, 12], top: [36, 48, 4, 4],  bottom: [40, 48, 4, 4], front: [36, 52, 4, 12], back: [44, 52, 4, 12] }, overlay: { right: [48, 52, 4, 12],left: [56, 52, 4, 12], top: [52, 48, 4, 4],  bottom: [56, 48, 4, 4], front: [52, 52, 4, 12], back: [60, 52, 4, 12] } },
+        rightLeg: { base: { right: [0, 20, 4, 12], left: [8, 20, 4, 12],  top: [4, 16, 4, 4],   bottom: [8, 16, 4, 4],  front: [4, 20, 4, 12],  back: [12, 20, 4, 12] }, overlay: { right: [0, 36, 4, 12], left: [8, 36, 4, 12],  top: [4, 32, 4, 4],   bottom: [8, 32, 4, 4],  front: [4, 36, 4, 12],  back: [12, 36, 4, 12] } },
+        leftLeg:  { base: { right: [16, 52, 4, 12],left: [24, 52, 4, 12], top: [20, 48, 4, 4],  bottom: [24, 48, 4, 4], front: [20, 52, 4, 12], back: [28, 52, 4, 12] }, overlay: { right: [0, 52, 4, 12],  left: [8, 52, 4, 12],  top: [4, 48, 4, 4],   bottom: [8, 48, 4, 4],  front: [4, 52, 4, 12],  back: [12, 52, 4, 12] } },
+        slimeBody:{ base: { front: [8, 8, 8, 8], back: [24, 8, 8, 8], left: [16, 8, 8, 8], right: [0, 8, 8, 8], top: [8, 0, 8, 8], bottom: [16, 0, 8, 8] }, overlay: { front: [40, 8, 8, 8], back: [56, 8, 8, 8], left: [48, 8, 8, 8], right: [32, 8, 8, 8], top: [40, 0, 8, 8], bottom: [48, 0, 8, 8] } }
     };
 
-    const legacyUVMaps = {
-      head: { right: [0, 8, 8, 8], left: [16, 8, 8, 8], top: [8, 0, 8, 8], bottom: [16, 0, 8, 8], front: [8, 8, 8, 8], back: [24, 8, 8, 8] },
-      body: { right: [16, 20, 4, 12], left: [28, 20, 4, 12], top: [20, 16, 8, 4], bottom: [28, 16, 8, 4], front: [20, 20, 8, 12], back: [32, 20, 8, 12] },
-      rightArm: { right: [40, 20, 4, 12], left: [48, 20, 4, 12], top: [44, 16, 4, 4], bottom: [48, 16, 4, 4], front: [44, 20, 4, 12], back: [52, 20, 4, 12] },
-      leftArm: { right: [48, 20, 4, 12], left: [40, 20, 4, 12], top: [44, 16, 4, 4], bottom: [48, 16, 4, 4], front: [44, 20, 4, 12], back: [52, 20, 4, 12] },
-      rightLeg: { right: [0, 20, 4, 12], left: [8, 20, 4, 12], top: [4, 16, 4, 4], bottom: [8, 16, 4, 4], front: [4, 20, 4, 12], back: [12, 20, 4, 12] },
-      leftLeg: { right: [8, 20, 4, 12], left: [0, 20, 4, 12], top: [4, 16, 4, 4], bottom: [8, 16, 4, 4], front: [4, 20, 4, 12], back: [12, 20, 4, 12] }
+    const alexUVMaps = {
+        rightArm: { base: { right: [40, 20, 3, 12], left: [47, 20, 3, 12], top: [44, 16, 3, 4], bottom: [47, 16, 3, 4], front: [44, 20, 3, 12], back: [51, 20, 3, 12] }, overlay: { right: [40, 36, 3, 12], left: [47, 36, 3, 12], top: [44, 32, 3, 4], bottom: [47, 32, 3, 4], front: [44, 36, 3, 12], back: [51, 36, 3, 12] }},
+        leftArm:  { base: { right: [33, 52, 3, 12], left: [40, 52, 3, 12], top: [36, 48, 3, 4], bottom: [39, 48, 3, 4], front: [36, 52, 3, 12], back: [43, 52, 3, 12] }, overlay: { right: [49, 52, 3, 12], left: [56, 52, 3, 12], top: [52, 48, 3, 4], bottom: [55, 48, 3, 4], front: [52, 52, 3, 12], back: [59, 52, 3, 12] }}
     };
-    if (!isModern) return isOverlay ? null : legacyUVMaps[partName] || null;
+
+    let modernUVMaps = steveUVMaps;
+    if (armType === 'alex' && (partName === 'rightArm' || partName === 'leftArm')) {
+        modernUVMaps = { ...steveUVMaps, ...alexUVMaps };
+    }
+
+    if (!isModern) {
+      if (isOverlay) return null; 
+      if (partName === 'leftArm' || partName === 'leftLeg') {
+        const rightPartName = partName === 'leftArm' ? 'rightArm' : 'rightLeg';
+        const rightUV = modernUVMaps[rightPartName].base;
+        return { right: rightUV.left, left: rightUV.right, top: rightUV.top, bottom: rightUV.bottom, front: rightUV.front, back: rightUV.back };
+      }
+    }
+
     const uvSource = modernUVMaps[partName];
     if (!uvSource) return null;
+
     const uvMap = isOverlay ? uvSource.overlay : uvSource.base;
     if (!uvMap) return null;
+
     if (scale !== 1) {
       const scaledUV = {};
-      for (const [face, coords] of Object.entries(uvMap)) scaledUV[face] = coords.map(v => v * scale);
+      for (const [face, coords] of Object.entries(uvMap)) {
+        scaledUV[face] = coords.map(v => v * scale);
+      }
       return scaledUV;
     }
     return uvMap;
   }
 
+  getOrCreateMaterial(textureName, isOverlay, config) {
+    const cacheKey = `${textureName}_${isOverlay}_${config.transparent}_${config.alphaTexture}`;
+    if (this.materialCache.has(cacheKey)) {
+        return this.materialCache.get(cacheKey);
+    }
+
+    const texture = window.assetManager.getTexture(textureName);
+    let material;
+
+    if (isOverlay) {
+        material = new THREE.MeshLambertMaterial({
+            map: texture,
+            transparent: true,
+            alphaTest: 0.1,
+            depthWrite: false,
+            side: THREE.FrontSide
+        });
+    } else {
+        material = new THREE.MeshStandardMaterial({
+            map: texture,
+            roughness: 1.0,
+            metalness: 0.0,
+            side: THREE.FrontSide // Default to FrontSide
+        });
+    }
+
+    if (config.alphaTexture) {
+        material.transparent = true;
+        material.side = THREE.DoubleSide; // Make it double-sided for cutouts
+        material.alphaTest = 0.5;
+    }
+
+    if (config.transparent) {
+        material.transparent = true;
+        material.opacity = 0.6;
+        material.depthWrite = false;
+    }
+    
+    this.materialCache.set(cacheKey, material);
+    return material;
+  }
+
   createGonkMesh(modelType, config, position, characterType) {
-    const modelDef = this.models[modelType];
     const skinTexture = window.assetManager.getTexture(config.skinTexture);
-    if (!modelDef || !skinTexture) {
-      Logger.error(`Failed to create Gonk mesh for ${characterType} with skin ${config.skinTexture}`);
+    if (!skinTexture) {
+      Logger.error(`Failed to create Gonk mesh for ${characterType}: Missing skin texture.`);
       return null;
     }
+
+    let modelDef;
+    const armType = config.armType || 'steve';
+    if (modelType === 'humanoid') {
+        modelDef = (armType === 'alex') ? this.models.humanoid_alex : this.models.humanoid;
+    } else {
+        modelDef = this.models[modelType];
+    }
+
+    if (!modelDef) {
+        Logger.error(`Failed to find model definition for type: ${modelType}`);
+        return null;
+    }
+
     const skinFormat = this.detectSkinFormat(skinTexture);
-    const { scaleX = 1.0, scaleY = 1.0, scaleZ = 1.0 } = config;
-    const character = { modelDef, parts: {}, group: new THREE.Group(), position, type: characterType, animState: 'idle', animTime: 0, skinFormat, dimensionScale: { x: scaleX, y: scaleY, z: scaleZ }, weaponOffsets: { position: new THREE.Vector3(), rotation: new THREE.Euler(), scale: 1.0 } };
-    const buildOrder = ['base', 'body', 'head', 'nose', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg', 'slimeBody'];
+    const { scaleX = 1.0, scaleY = 1.0, scaleZ = 1.0, scale = 1.0 } = config;
+    const universalScaleModifier = 0.3;
+
+    const character = {
+      modelDef, parts: {}, hitboxes: {}, group: new THREE.Group(), position, type: characterType,
+      animState: 'idle', animTime: 0, skinFormat,
+      dimensionScale: { x: scaleX, y: scaleY, z: scaleZ },
+      weaponOffsets: { position: new THREE.Vector3(), rotation: new THREE.Euler(), scale: 1.0 },
+      groundOffset: 0,
+      editorRArmRot: null,
+      editorLArmRot: null,
+      onMeleeHitFrame: null,
+      meleeHitFrameFired: false
+    };
+    
+    const baseMaterial = this.getOrCreateMaterial(config.skinTexture, false, config);
+    const overlayMaterial = skinFormat.hasOverlay ? this.getOrCreateMaterial(config.skinTexture, true, config) : null;
+
+    const buildOrder = ['body', 'head', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg', 'slimeBody'];
+
     for (const partName of buildOrder) {
       if (!modelDef.parts[partName]) continue;
+
       const partDef = modelDef.parts[partName];
       const scaledSize = [ partDef.size[0] * scaleX, partDef.size[1] * scaleY, partDef.size[2] * scaleZ ];
       const partGroup = new THREE.Group();
-      partGroup.name = partName;
+
       const createLayer = (isOverlay) => {
-          const uvMap = this.getUVMapForFormat(partName, skinFormat, isOverlay);
+          const uvMap = this.getUVMapForFormat(partName, skinFormat, isOverlay, armType);
           if (!uvMap) return;
+
           const size = isOverlay ? [ scaledSize[0] + 0.5, scaledSize[1] + 0.5, scaledSize[2] + 0.5 ] : scaledSize;
-          const { geometry, materials } = this.createBoxGeometryWithUV(size, uvMap, skinTexture.image.width, skinTexture.image.height, config.skinTexture, isOverlay);
-          const mesh = new THREE.Mesh(geometry, materials);
-          mesh.name = `${partName}_mesh_${isOverlay ? 'overlay' : 'base'}`;
+          const geometry = this.createBoxGeometryWithUVs(size, uvMap, skinTexture.image.width, skinTexture.image.height);
+          
+          const material = isOverlay ? overlayMaterial : baseMaterial;
+          const mesh = new THREE.Mesh(geometry, material);
           mesh.castShadow = !isOverlay;
-          if (partName.includes('Arm') || partName.includes('Leg')) mesh.position.set(0, -scaledSize[1] / 2, 0);
-          else if (partName === 'head') mesh.position.set(0, scaledSize[1] / 2, 0);
+
+          if (partName.includes('Arm') || partName.includes('Leg')) {
+              mesh.position.set(0, -scaledSize[1] / 2, 0);
+          } else if (partName === 'head') {
+              mesh.position.set(0, scaledSize[1] / 2, 0);
+          }
+
           partGroup.add(mesh);
       };
+
       createLayer(false);
-      if (skinFormat.hasOverlay) createLayer(true);
+      if (overlayMaterial) createLayer(true);
+
       const scaledPos = [partDef.position[0] * scaleX, partDef.position[1] * scaleY, partDef.position[2] * scaleZ];
       partGroup.position.fromArray(scaledPos);
+
       character.parts[partName] = partGroup;
-      if (partDef.parent && character.parts[partDef.parent]) character.parts[partDef.parent].add(partGroup);
-      else character.group.add(partGroup);
-    }
-    
-    // Scale Correction
-    const masterModelScale = 0.45; // Scales a 2m model to fit in a ~1m world
-    character.group.scale.setScalar(modelDef.scale * masterModelScale);
-    
-    // Ground Offset Calculation
-    let totalHeight = 0;
-    let bottomY = 0;
-    if (modelType === 'humanoid') {
-        totalHeight = (modelDef.parts.head.size[1] + modelDef.parts.body.size[1] + modelDef.parts.leftLeg.size[1]);
-        bottomY = modelDef.parts.leftLeg.position[1] - (modelDef.parts.leftLeg.size[1] / 2);
-    } else if (modelType === 'slime') {
-        totalHeight = modelDef.parts.slimeBody.size[1];
-        bottomY = modelDef.parts.slimeBody.position[1] - (modelDef.parts.slimeBody.size[1] / 2);
-    } else { // Fallback for golems etc.
-        totalHeight = 32; // Approx pixel height
-        bottomY = -12; // Approx leg bottom
+      if (partDef.parent && character.parts[partDef.parent]) {
+        character.parts[partDef.parent].add(partGroup);
+      } else {
+        character.group.add(partGroup);
+      }
     }
 
-    const groundOffset = -bottomY * scaleY * modelDef.scale * masterModelScale;
+    for (const partName in character.parts) {
+        character.hitboxes[partName] = new THREE.OBB();
+    }
+
+    character.group.scale.setScalar(modelDef.scale * scale * universalScaleModifier);
+
+    let groundOffset = 0;
+    if (modelType === 'humanoid') {
+        groundOffset = 18 * scaleY * modelDef.scale * scale * universalScaleModifier;
+    } else if (modelType === 'irongolem') {
+        groundOffset = 21 * scaleY * modelDef.scale * scale * universalScaleModifier;
+    } else if (modelType === 'slime') {
+        groundOffset = (modelDef.parts.slimeBody.size[1] / 2) * scaleY * modelDef.scale * scale * universalScaleModifier;
+    }
+    character.groundOffset = groundOffset;
     character.group.position.copy(position).y += groundOffset;
 
     return character;
   }
 
-  createBoxGeometryWithUV(size, uvMap, textureWidth, textureHeight, textureName, isOverlay = false) {
-    const materials = [];
-    const faceNames = ['right', 'left', 'top', 'bottom', 'front', 'back'];
-    for (const faceName of faceNames) {
-      const uvCoords = uvMap[faceName];
-      const texture = window.assetManager.getTexture(textureName);
-      if (!uvCoords || !texture) {
-          materials.push(new THREE.MeshStandardMaterial({visible: false}));
-          continue;
-      }
-      const [u, v, w, h] = uvCoords;
-      let mat;
-      if (isOverlay) mat = new THREE.MeshLambertMaterial({ map: texture.clone(), transparent: true, alphaTest: 0.5, depthWrite: false });
-      else mat = new THREE.MeshStandardMaterial({ map: texture.clone(), roughness: 1.0, metalness: 0.0 });
-      mat.map.needsUpdate = true;
-      mat.map.offset.set(u / textureWidth, 1 - (v + h) / textureHeight);
-      mat.map.repeat.set(w / textureWidth, h / textureHeight);
-      materials.push(mat);
+  createBoxGeometryWithUVs(size, uvMap, textureWidth, textureHeight) {
+    const geometry = new THREE.BoxGeometry(...size);
+    const uvs = geometry.attributes.uv;
+    const faceOrder = ['right', 'left', 'top', 'bottom', 'front', 'back'];
+
+    for (let i = 0; i < faceOrder.length; i++) {
+        const faceName = faceOrder[i];
+        const uvCoords = uvMap[faceName];
+        if (!uvCoords) continue;
+
+        const [u, v, w, h] = uvCoords;
+        const u0 = u / textureWidth;
+        const v0 = 1 - (v + h) / textureHeight;
+        const u1 = (u + w) / textureWidth;
+        const v1 = 1 - v / textureHeight;
+
+        const faceIndices = [i * 4, i * 4 + 1, i * 4 + 2, i * 4 + 3];
+        uvs.setXY(faceIndices[0], u0, v1);
+        uvs.setXY(faceIndices[1], u1, v1);
+        uvs.setXY(faceIndices[2], u0, v0);
+        uvs.setXY(faceIndices[3], u1, v0);
     }
-    return { geometry: new THREE.BoxGeometry(...size), materials };
+
+    uvs.needsUpdate = true;
+    return geometry;
   }
 
-  updateCharacterSkin(character, skinFile) {
-    const newTexture = window.assetManager.getTexture(skinFile);
-    if (!newTexture) { Logger.error(`Cannot update skin. Texture not found: ${skinFile}`); return; }
-    const newSkinFormat = this.detectSkinFormat(newTexture);
-    character.skinFormat = newSkinFormat;
-    const faceNames = ['right', 'left', 'top', 'bottom', 'front', 'back'];
-    for (const partName in character.parts) {
-        const partGroup = character.parts[partName];
-        partGroup.traverse(mesh => {
-            if (mesh.isMesh) {
-                if (mesh.parent?.userData?.isWeapon) return;
-                const isOverlay = mesh.name.includes('overlay');
-                if (isOverlay && !newSkinFormat.hasOverlay) { mesh.visible = false; return; }
-                mesh.visible = true;
-                const uvMap = this.getUVMapForFormat(partName, newSkinFormat, isOverlay);
-                if (!uvMap) return;
-                const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-                for(let i=0; i < materials.length; i++) {
-                    const mat = materials[i];
-                    const faceName = faceNames[i];
-                    const uvCoords = uvMap[faceName];
-                    if (mat.map && uvCoords) {
-                        const [u, v, w, h] = uvCoords;
-                        mat.map = newTexture.clone();
-                        mat.map.needsUpdate = true;
-                        mat.map.offset.set(u / newTexture.image.width, 1 - (v + h) / newTexture.image.height);
-                        mat.map.repeat.set(w / newTexture.image.width, h / newTexture.image.height);
-                    }
-                }
-            }
-        });
+  setAnimation(character, animState) {
+    if (character.animState !== animState) {
+      character.animState = animState;
+      character.animTime = 0;
+      character.meleeHitFrameFired = false; 
     }
-    console.log(`Updated ${character.type} skin to ${skinFile}`);
   }
 
-  setAnimation(character, animState) { if (character.animState !== animState) { character.animState = animState; character.animTime = 0; } }
-  updateAnimation(character, options = {}) { character.animTime += options.deltaTime || 0; this.applyAnimationPose(character, character.animTime, options); }
+  updateAnimation(character, options = {}) {
+    if (options.isPaused && character.animState !== 'aim') return;
+    character.animTime += options.deltaTime || 0;
+    this.applyAnimationPose(character, character.animTime, options);
+  }
+
   applyAnimationPose(character, currentTime, options = {}) {
-    const { modelDef, parts, dimensionScale, group } = character;
-    const { deltaTime = 0.016, isPlayer = false, target } = options;
-    const time = currentTime * modelDef.animationSpeed;
-    Object.values(parts).forEach(part => part.rotation.set(0,0,0));
-    if (parts.slimeBody) {
-        const jumpPhase = time % 2.0; let scaleY = 1.0;
-        if (jumpPhase < 0.2) scaleY = 1.0 - (jumpPhase / 0.2) * 0.5; 
-        else if (jumpPhase >= 1.0 && jumpPhase < 1.2) { const landPhase = (jumpPhase - 1.0) / 0.2; scaleY = 0.5 + (1.0 - landPhase) * 0.5; }
-        parts.slimeBody.scale.y = scaleY; return;
+    if (!character || !character.modelDef) {
+        return;
     }
+    const { modelDef, parts, dimensionScale, group } = character;
+    const { isPaused = false, target } = options;
+    const time = currentTime * modelDef.animationSpeed;
+
+    if (!isPaused) {
+        Object.values(parts).forEach(part => part.rotation.set(0,0,0));
+    }
+
+    if (parts.slimeBody) {
+        const jumpPhase = time % 2.0;
+        let scaleY = 1.0;
+        if (jumpPhase < 0.2) { scaleY = 1.0 - (jumpPhase / 0.2) * 0.5; } 
+        else if (jumpPhase >= 1.0 && jumpPhase < 1.2) { const landPhase = (jumpPhase - 1.0) / 0.2; scaleY = 0.5 + (1.0 - landPhase) * 0.5; }
+        parts.slimeBody.scale.y = scaleY;
+        return;
+    }
+
     const bodyBaseY = (parts.body && modelDef.parts.body) ? modelDef.parts.body.position[1] * dimensionScale.y : 0;
     if(parts.body) parts.body.position.y = bodyBaseY;
-    if (!isPlayer && character.animState !== 'aim') group.rotation.y += deltaTime * 0.25;
-    switch (character.animState) {
-      case 'walk': const walk = Math.sin(time); if (parts.rightLeg) parts.rightLeg.rotation.x = walk * 0.5; if (parts.leftLeg) parts.leftLeg.rotation.x = -walk * 0.5; if (parts.rightArm) parts.rightArm.rotation.x = -walk * 0.4; if (parts.leftArm) parts.leftArm.rotation.x = walk * 0.4; if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 2)) * 0.5; if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 2)) * 0.05; break;
-      case 'run': const run = Math.sin(time * 1.5); if (parts.rightLeg) parts.rightLeg.rotation.x = run * 0.8; if (parts.leftLeg) parts.leftLeg.rotation.x = -run * 0.8; if (parts.rightArm) parts.rightArm.rotation.x = -run * 0.8; if (parts.leftArm) parts.leftArm.rotation.x = run * 0.8; if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 3)) * 1.5; if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 3)) * 0.08; break;
-      case 'shoot': if (parts.rightArm) parts.rightArm.rotation.x = -Math.PI / 2; if (parts.leftArm) parts.leftArm.rotation.x = -Math.PI / 2.2; if (parts.head) parts.head.rotation.y = -0.05; break;
-      default: const sway = Math.sin(time * 0.3) * 0.05; if (parts.rightArm) parts.rightArm.rotation.z = -sway; if (parts.leftArm) parts.leftArm.rotation.z = sway; if (parts.head) parts.head.rotation.y = Math.sin(time * 0.5) * 0.15; break;
+
+    if (!isPaused) {
+        switch (character.animState) {
+          case 'walk':
+            const walk = Math.sin(time);
+            if (parts.rightLeg) parts.rightLeg.rotation.x = walk * 0.5;
+            if (parts.leftLeg) parts.leftLeg.rotation.x = -walk * 0.5;
+            if (parts.rightArm) parts.rightArm.rotation.x = -walk * 0.4;
+            if (parts.leftArm) parts.leftArm.rotation.x = walk * 0.4;
+            if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 2)) * 0.5;
+            if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 2)) * 0.05;
+            break;
+          case 'run':
+            const run = Math.sin(time * 1.5);
+            if (parts.rightLeg) parts.rightLeg.rotation.x = run * 0.8;
+            if (parts.leftLeg) parts.leftLeg.rotation.x = -run * 0.8;
+            if (parts.rightArm) parts.rightArm.rotation.x = -run * 0.8;
+            if (parts.leftArm) parts.leftArm.rotation.x = run * 0.8;
+            if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 3)) * 1.5;
+            if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 3)) * 0.08;
+            break;
+          case 'shoot':
+            if (parts.rightArm) parts.rightArm.rotation.x = -Math.PI / 2;
+            if (parts.leftArm) parts.leftArm.rotation.x = -Math.PI / 2.2;
+            if (parts.head) parts.head.rotation.y = -0.05; 
+            break;
+          case 'melee':
+            const meleeDuration = 0.5;
+            const hitFrameTime = 0.2;
+            const progress = Math.min(character.animTime / meleeDuration, 1.0);
+            
+            if (character.animTime >= hitFrameTime && !character.meleeHitFrameFired) {
+                if (typeof character.onMeleeHitFrame === 'function') {
+                    character.onMeleeHitFrame();
+                }
+                character.meleeHitFrameFired = true;
+            }
+            
+            const startAngle = THREE.MathUtils.degToRad(-147);
+            const endAngle = THREE.MathUtils.degToRad(-29);
+            const slashAngle = startAngle + (endAngle - startAngle) * progress;
+
+            if (parts.leftArm) {
+                parts.leftArm.rotation.x = slashAngle;
+                parts.leftArm.rotation.z = Math.sin(progress * Math.PI) * 0.5;
+            }
+            if (parts.body) parts.body.rotation.y = Math.sin(progress * Math.PI) * -0.2;
+            break;
+          case 'aim':
+             if (parts.rightArm) parts.rightArm.rotation.x = -Math.PI / 2;
+            if (parts.leftArm) {
+                parts.leftArm.rotation.x = -Math.PI / 2;
+                parts.leftArm.rotation.z = -0.2;
+            }
+            break;
+          default: // idle
+            const sway = Math.sin(time * 0.3) * 0.05;
+            if (parts.rightArm) parts.rightArm.rotation.z = sway;
+            if (parts.leftArm) parts.leftArm.rotation.z = -sway;
+            if (parts.head) parts.head.rotation.y = Math.sin(time * 0.5) * 0.15;
+            break;
+        }
     }
-    if (target && character.animState === 'aim') {
-        const charPos = new THREE.Vector3(); group.getWorldPosition(charPos);
-        let targetYaw = Math.atan2(target.x - charPos.x, target.z - charPos.z);
-        let diff = targetYaw - group.rotation.y;
-        while(diff < -Math.PI) diff += 2 * Math.PI; while(diff > Math.PI) diff -= 2 * Math.PI;
-        group.rotation.y += diff * 0.1;
-        if (parts.rightArm) parts.rightArm.rotation.x = -Math.PI / 2;
-        if (parts.head) parts.head.rotation.y = 0;
+    
+    if (character.animState === 'aim' && target) {
+        const targetPos = target.movementCollider?.position;
+        if (targetPos) {
+            const headPos = new THREE.Vector3();
+            parts.head.getWorldPosition(headPos);
+
+            const localTarget = new THREE.Vector3();
+            parts.head.parent.worldToLocal(localTarget.copy(targetPos));
+
+            const lookAtTarget = new THREE.Vector3(localTarget.x, localTarget.y, localTarget.z);
+            parts.head.lookAt(lookAtTarget);
+        }
+    } else if (!isPaused && parts.head) {
+         parts.head.rotation.set(0,0,0);
+         const sway = Math.sin(time * 0.5) * 0.15;
+         parts.head.rotation.y = sway;
+    }
+
+
+    if (character.editorRArmRot && parts.rightArm) {
+        parts.rightArm.rotation.copy(character.editorRArmRot);
+    }
+    if (character.editorLArmRot && parts.leftArm) {
+        parts.leftArm.rotation.copy(character.editorLArmRot);
     }
   }
 }
@@ -268,4 +426,41 @@ window.gonkModels = new GonkModelSystem();
 window.createGonkMesh = window.gonkModels.createGonkMesh.bind(window.gonkModels);
 window.setGonkAnimation = window.gonkModels.setAnimation.bind(window.gonkModels);
 window.updateGonkAnimation = window.gonkModels.updateAnimation.bind(window.gonkModels);
-window.gonkModels.updateCharacterSkin = window.gonkModels.updateCharacterSkin.bind(window.gonkModels);
+
+window.generateNpcIconDataUrl = async (texture) => {
+    if (!texture || !texture.image) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const image = texture.image;
+
+    if (!image.complete || image.naturalHeight === 0) {
+        await new Promise(resolve => { 
+            image.onload = resolve;
+            image.onerror = () => resolve();
+        });
+    }
+
+    const headX = 8, headY = 8, headSize = 8;
+    const hatX = 40, hatY = 8, hatSize = 8;
+    const scale = image.width / 64;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+
+    ctx.drawImage(
+        image,
+        headX * scale, headY * scale, headSize * scale, headSize * scale,
+        0, 0, canvas.width, canvas.height
+    );
+
+    ctx.drawImage(
+        image,
+        hatX * scale, hatY * scale, headSize * scale, headSize * scale,
+        0, 0, canvas.width, canvas.height
+    );
+
+    return canvas.toDataURL();
+};
