@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_panel_five",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wallpanelfivepic",
+    "particle": "chronokillers_star_wars:blocks/wallpanelfivepic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/red_stained",
+    "2": "chronokillers_star_wars:blocks/light_gray"
+  }
+}

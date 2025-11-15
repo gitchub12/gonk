@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/gray_box_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/gray_box_three_pic",
+    "particle": "chronokillers_star_wars:blocks/gray_box_three_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/gray_cube",
+    "2": "chronokillers_star_wars:blocks/gray_cubes",
+    "3": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

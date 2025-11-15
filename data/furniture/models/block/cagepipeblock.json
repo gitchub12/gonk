@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/cage_pipe",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/cage_pipe_pic",
+    "particle": "chronokillers_star_wars:blocks/cage_pipe_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/cage_pipe",
+    "2": "chronokillers_star_wars:blocks/cage_piped"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/white_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/white_light_block_pic",
+    "particle": "chronokillers_star_wars:blocks/white_light_block_pic",
+    "0": "chronokillers_star_wars:blocks/white"
+  }
+}

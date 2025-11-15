@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/redstripelightvertical",
+      "x": 90
+    }
+  }
+}

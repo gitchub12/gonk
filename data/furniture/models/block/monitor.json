@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/monitor",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/monitor_pic",
+    "particle": "chronokillers_star_wars:blocks/monitor_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/green_screen",
+    "2": "chronokillers_star_wars:blocks/pc_panel",
+    "3": "chronokillers_star_wars:blocks/red_stained",
+    "4": "chronokillers_star_wars:blocks/white_stained"
+  }
+}

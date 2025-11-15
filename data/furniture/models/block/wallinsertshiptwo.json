@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_insert_ship_two",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wall_insert_two_pic",
+    "particle": "chronokillers_star_wars:blocks/wall_insert_two_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/wall_black_insert_black",
+    "-1": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

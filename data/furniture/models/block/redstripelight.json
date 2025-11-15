@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/red_stripe_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/redstripelightpic",
+    "particle": "chronokillers_star_wars:blocks/redstripelightpic",
+    "0": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

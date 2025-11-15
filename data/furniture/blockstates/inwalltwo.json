@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/inwalltwo"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/inwalltwo",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/inwalltwo",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/inwalltwo",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/inwalltwo",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/inwalltwo",
+      "x": 90
+    }
+  }
+}

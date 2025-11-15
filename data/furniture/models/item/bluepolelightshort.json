@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "chronokillers_star_wars:items/blue_short_pole_light_pic"
+  }
+}

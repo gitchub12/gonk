@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/computer_console_six",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/computerconsolesixpic",
+    "particle": "chronokillers_star_wars:blocks/computerconsolesixpic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/black_terracotta",
+    "2": "chronokillers_star_wars:blocks/polished_andesite"
+  }
+}

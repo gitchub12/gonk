@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/triplepipevertical"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/triplepipevertical",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/triplepipevertical",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/triplepipevertical",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/triplepipevertical",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/triplepipevertical",
+      "x": 90
+    }
+  }
+}

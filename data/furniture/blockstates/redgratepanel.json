@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/redgratepanel"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/redgratepanel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/redgratepanel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/redgratepanel",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/redgratepanel",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/redgratepanel",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/i_beam",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/i_beam_pic",
+    "particle": "chronokillers_star_wars:blocks/i_beam_pic",
+    "0": "chronokillers_star_wars:blocks/powder_grey"
+  }
+}

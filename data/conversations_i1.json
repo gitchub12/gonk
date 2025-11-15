@@ -1,0 +1,1250 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations_i1.json. Contains all 'i1' (neutral) attitude phrases for 'language_basic'.",
+  "phrases": [
+    {
+      "text": "Greetings, stranger.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ]
+    },
+    {
+      "text": "State your business.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "official",
+        "rude",
+        "challenge"
+      ]
+    },
+    {
+      "text": "Good day to you.",
+      "type": [
+        "greeting",
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "clone",
+        "alien",
+        "droid_humanoid"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "What's the news on the holonet?",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "holonet"
+    },
+    {
+      "text": "Seen any Takers around here?",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "takers"
+    },
+    {
+      "text": "This whole ship... it's a marvel.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "ship"
+    },
+    {
+      "text": "You look like you've seen things. Ever hear tales of the Old Republic?",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "history"
+    },
+    {
+      "text": "Just... move along.",
+      "type": [
+        "greeting",
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "sith"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "dismissive",
+        "rude"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "I've heard strange whispers... about the Force.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "force"
+    },
+    {
+      "text": "What's your take on the droids in this sector?",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "droids"
+    },
+    {
+      "text": "Praise the Gonk! Have you found faith?",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "droid_humanoid",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "gonk_faith"
+    },
+    {
+      "text": "Just passing through.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ]
+    },
+    {
+      "text": "Same to you.",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Admiring your hardware. Fine ship!",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "clone"
+      ],
+      "to_faction": [
+        "imperial"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "ship"
+    },
+    {
+      "text": "This 'StarChain' is a miracle... or a prison. Haven't decided.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "ship"
+      ],
+      "topic": "ship"
+    },
+    {
+      "text": "The holonet? Just static and lies if you ask me.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "holonet"
+      ],
+      "topic": "holonet"
+    },
+    {
+      "text": "I heard a strange broadcast on the holonet. Something about... independence.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "holonet"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "I've felt... strange things. Do you believe in the Force?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "force"
+    },
+    {
+      "text": "The Force is just a myth. Power is what's real.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "force",
+        "jedi"
+      ],
+      "topic": "force"
+    },
+    {
+      "text": "Oh, hello there. Are you a friend to the Jedi?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "clone",
+        "imperial"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "jedi"
+    },
+    {
+      "text": "The Jedi? Traitors, all of them.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "clone",
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "jedi"
+      ],
+      "topic": "jedi"
+    },
+    {
+      "text": "I heard whispers... about the Sith. You think they're really back?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "sith"
+    },
+    {
+      "text": "The Sith are a legend to scare children. Nothing more.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "sith"
+      ],
+      "topic": "sith"
+    },
+    {
+      "text": "My Gonk droid seems to pray. Do you believe the Gonk Pope is real?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "gonk_faith"
+    },
+    {
+      "text": "All these droids... sometimes I wonder who's really in charge.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "droids"
+    },
+    {
+      "text": "At least the Empire brought order. This... this is chaos.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "order"
+    },
+    {
+      "text": "'Order' is just another word for a cage.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "order"
+      ],
+      "topic": "order"
+    },
+    {
+      "text": "Talk of 'independence' is foolish. We must survive together.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "What's the point of surviving if you're not free?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "independence"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "These Takers... they're not like anything I've ever seen.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "takers"
+      ],
+      "topic": "takers"
+    },
+    {
+      "text": "They offer unity. A strange kind of peace.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "sith",
+        "taker"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "takers"
+      ],
+      "topic": "takers"
+    },
+    {
+      "text": "Credits don't spend well out here. It's all about barter.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "trade"
+    },
+    {
+      "text": "I'm just trying to make a living, same as everyone else.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "trade"
+    },
+    {
+      "text": "Another hull leak in my sector. The radiation is getting worse.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "ship"
+      ],
+      "topic": "survival"
+    },
+    {
+      "text": "We just have to survive. One day at a time.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "survival"
+    },
+    {
+      "text": "I heard a Mandalorian passed through here. Caused quite a stir.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "mandalore"
+    },
+    {
+      "text": "This is the Way.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "mandalore"
+      ],
+      "topic": "mandalore"
+    },
+    {
+      "text": "There's a high price on a Taker's head. Thinking of collecting.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "mandalorian",
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "takers"
+      ],
+      "topic": "bounty"
+    },
+    {
+      "text": "A bounty hunter tried to take me in last week. He's scrap now.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "bounty"
+    },
+    {
+      "text": "These rations taste like engine grease.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "food"
+    },
+    {
+      "text": "Have any fresh food? I'm sick of this processed junk.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "food"
+      ],
+      "topic": "food"
+    },
+    {
+      "text": "I'm just trying to find my brother. Last seen in this sector.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "family"
+    },
+    {
+      "text": "My squad is my family.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "clone",
+        "imperial",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "family"
+      ],
+      "topic": "family"
+    },
+    {
+      "text": "Nice blaster. Pre-Empire?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "weapons"
+    },
+    {
+      "text": "Keep your eyes off my hardware.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "mandalorian",
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "weapons"
+      ],
+      "topic": "weapons"
+    },
+    {
+      "text": "They say this part of the ship is from the Old Republic.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "ship"
+      ],
+      "topic": "history"
+    },
+    {
+      "text": "History is written by the victors. The Empire, for now.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "sith",
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "history"
+      ],
+      "topic": "history"
+    },
+    {
+      "text": "I heard the officer on Deck 5 was fragged by his own men.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "mutiny"
+    },
+    {
+      "text": "Discipline is all that keeps us alive. Talk of mutiny is treason.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "mutiny"
+      ],
+      "topic": "mutiny"
+    },
+    {
+      "text": "This chain is too crowded. All these... aliens.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "topic": "species"
+    },
+    {
+      "text": "I've met Wookiees, Rodians, Twi'leks... everyone's just trying to get by.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "species"
+      ],
+      "topic": "species"
+    },
+    {
+      "text": "Right. Move along.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "style_tags": [
+        "official",
+        "dismissive"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "I have nothing more to say to you.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "style_tags": [
+        "dismissive"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Good journey.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "It is the pride of the fleet. Now, move along.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial"
+      ],
+      "from_subgroup": [
+        "imperial_officer"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "ship"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "A ship is just a tool. Nothing more.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "ship"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "The Force is an old religion. This is the age of science.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "force"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "The Jedi were traitors. That's all.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "jedi"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "May the Force be with you.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "force",
+        "jedi"
+      ],
+      "outcome": "relation_change",
+      "value": 1
+    },
+    {
+      "text": "Vader warned us about Jedi vermin. Watch yourself.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "sith"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "jedi"
+      ],
+      "style_tags": [
+        "rude",
+        "challenge"
+      ],
+      "outcome": "relation_change",
+      "value": -2
+    },
+    {
+      "text": "I agree completely. You speak the truth.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "relation_change",
+      "value": 1
+    },
+    {
+      "text": "Finally, someone else who sees it.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "relation_change",
+      "value": 1
+    },
+    {
+      "text": "That's... an interesting opinion. I must disagree.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "outcome": "relation_change",
+      "value": -1
+    },
+    {
+      "text": "I'd watch your mouth if I were you. We're done here.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "imperial",
+        "sith",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "style_tags": [
+        "rude"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "I'm with you mate. Can't stand those clankers.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "clone",
+        "imperial"
+      ],
+      "to_faction": [
+        "clone",
+        "imperial"
+      ],
+      "on_topic_received": [
+        "droids"
+      ],
+      "style_tags": [
+        "agreement"
+      ],
+      "outcome": "push_faction_topic",
+      "value": {
+        "target_faction": "droids",
+        "change": -5
+      }
+    },
+    {
+      "text": "Another clanker-lover. Pathetic.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "i1",
+      "from_faction": [
+        "clone",
+        "imperial"
+      ],
+      "to_faction": [
+        "rebel",
+        "alien"
+      ],
+      "on_topic_reaction": "liked",
+      "style_tags": [
+        "rude"
+      ],
+      "outcome": "relation_change",
+      "value": -1
+    }
+  ]
+}

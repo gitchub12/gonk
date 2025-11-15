@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/com_panel_four",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/companel_four_pic",
+    "particle": "chronokillers_star_wars:blocks/companel_four_pic",
+    "0": "chronokillers_star_wars:blocks/bricks",
+    "1": "chronokillers_star_wars:blocks/cyan_wool",
+    "2": "chronokillers_star_wars:blocks/black_terracotta",
+    "3": "chronokillers_star_wars:blocks/comp_panel",
+    "-1": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/crate",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/cratepic",
+    "particle": "chronokillers_star_wars:blocks/cratepic",
+    "0": "chronokillers_star_wars:blocks/dead_horn_coral_block",
+    "1": "chronokillers_star_wars:blocks/crate",
+    "2": "chronokillers_star_wars:blocks/console",
+    "3": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

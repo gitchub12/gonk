@@ -1,0 +1,81 @@
+AI: 
+This is my internal working document describing my ultimate goals for this FPS game project.  It is not finished, not final, and not binding.  It is here to give context as I provide commands on where our ultimate destination may be.
+If you are ordered to put a new feature in, and there is an opportunity to simultaneously move forward on one of these objectives, you can pause and suggest this in chat before proceeding.
+I am telling you the ultimate goal so you can help me realize it.
+
+Central Game Concept:
+FPS game like Doom, but with a gameplay focus on roguelite elements, unlocking weapons and accessories and allies and new areas, facing intense boss battles, a mixture of dynamic and procedural levels, and incredible interactions with unique NPCs.
+This game is a thematic combination of FTL and Slay the Spire.
+Who are you (speaking to the human player)?  You begin as the Gonk Pope, but Gonk Pope is a program and not a person, and will be transplanted to a new body upon death.  
+For many playthroughs, the next body will be another GNK (Gonk) droid, but could later be other things.
+I love RPGs and Hades-like runs, and building a squad out of found characters.
+Instead of weapon upgrades, you get choices of stamps.  Little ink stamps on your body that give you bonuses that stack.  Lost at death.
+
+There is an ENEMY on the opposite side of the long ship who is recruiting cars to his cause.  DARTH GONK.
+
+This resembles the Shadow of Mordor nemesis system, and L4D swarm mechanics where they The Director hits you hard when you are bored.  
+NEVER winning, always on edge.
+
+How the actual game will go:
+Tutorial quick!
+Go down hallway with locked doors, skip them to go to a boss, AT-ST? get killed. 
+Meet l4mp, Unlock pamphlets.  Unlock gray doors.
+Get placed in a mouse droid, fast and unarmed but has pamphlets.  
+
+Get instructions, take choice of random ally and recruit him.  Get him sadly killed and die on same boss.
+
+Get instructions, get back in new version of gonk, Can run with shift.  Meet a xerox droid and get copies.
+The enemy is missing now at the locale.  What?      
+Some event causes an ally to flee or do a thing.  Discover courage and other traits. Click on ally's portrait at top to see sim-like traits (hunger etc.)  These are derivative from their true traits, leaving some mystery.
+
+Setup a spawn point in empty lair.  Unlock new weapon for ally.  Unlock secret passage to UL UR LL and LR segments.
+Discover that the OTHER team went through and took out your OG spawn point. 
+Unlock ship map, cool hologram feature.  3d!  There's not just forward and back but also a right and left ship, choices!  There's two paths forward at any time (like in Hades these will come with boons and punishments).
+Get periodic reports from up-ship.
+
+Defeat second boss for second spawn point or head back to OG to reclaim it from non-chosen NPC group, access tunnels to teleport between them.
+Max out team at 4 (plus you).  
+Assign them to ship segment 1 or 2, or have them accompany you.
+Gain lightsaber, have l4 tell you he can get you a new gripper in your next body.
+
+Extra allies can get assigned to any of the 25 ships/levels and any of the 2 routes.  There is a secret route between 5 and 20 that causes invasions and is baffling at first, but ultimately can be useful.
+Tasks we might assign to NPCs who can't join us:
+Join Assault Squad
+Start Assault
+Defend
+Build Fortifications
+Parley 
+	Gift
+	Alliance
+	Truce
+	Surrender
+	Bribe
+	Marriage (whatever, steal from Crusader Kings)
+	Etc.
+Sabotage
+Spy
+Get inspiration from cool games!
+
+
+Map is key, UI, assigning tasks.  Names and reports critical.  Some NPCs should have MAD skills, way better than Gonk.  This makes them valuable.  Have them conquer a ship alone, then make huge progress in another, and then a report that they're in danger and need help.  Exciting!
+Small picture per species, maybe more quality than variety.  Many types of enemies, spawns, fighting back the horde.  LOTS of weapons and tactics.  BUT YOU'RE A FRIGGIN GONK and can't hardly carry anything.
+
+Upgrade to better GNK model (texture?) with some upgrades.
+Later, gain ability to be other droids, faster fire rate, 
+2d Sprite Populations vs 3d guys?
+
+Ship will have 25 premade levels and 25 procedurally generated levels, guaranteeing a way through even if the procedural levels are garbage.  10-15 alien groups, 10-15 droid groups, 10-15 stormies groups, and probably 10-15 unique scripted characters.  
+It should be possible to convince some stormies or maybe even a Sith to rebel.  Hard.  
+
+Ship variants, trap ships, garbage chute, arboretum, dining car, ejectable ships etc.  
+By using some minecraft concepts and destroyable walls, it should be possible to hull breach in some procedural levels and get sucked into space along with an enemy horde, creating a bottleneck, but making near-permanent enemies of the natural inhabitants of the ship.
+
+Allow various gameplay styles:
+Shooter: take your 4 wookiees and tear shit up making a beeline for GONK SITH.
+Pacifist: Empathy, no weapons, persuasion run
+Swarm: Focus on breeding/recruiting swarms to join
+Strategist: build traps for enemies, feed them bad info, place saboteurs and ambush, dump them from ejectable ship.
+Rancor handler: befriend mobs and swarm everything
+O2 Run: vent everything to space and rule the droid survivors
+JEDI: Mind trick and force lightning your way through
+SITH: join the dark side and play from the opposite end of the ship.

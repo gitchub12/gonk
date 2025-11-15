@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/bluewallovals"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/bluewallovals",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/bluewallovals",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/bluewallovals",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/bluewallovals",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/bluewallovals",
+      "x": 90
+    }
+  }
+}

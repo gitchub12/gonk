@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/hanger_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/floor_light_pic",
+    "particle": "chronokillers_star_wars:blocks/floor_light_pic",
+    "0": "chronokillers_star_wars:blocks/emerald_block",
+    "1": "chronokillers_star_wars:blocks/white_shulker_box"
+  }
+}

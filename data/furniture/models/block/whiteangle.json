@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/white_angle",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/white_angle",
+    "particle": "chronokillers_star_wars:blocks/white_angle",
+    "0": "chronokillers_star_wars:blocks/white"
+  }
+}

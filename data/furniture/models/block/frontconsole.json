@@ -1,0 +1,16 @@
+{
+  "parent": "chronokillers_star_wars:custom/front_console",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/front_console_pic",
+    "particle": "chronokillers_star_wars:blocks/front_console_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/comp_panel",
+    "2": "chronokillers_star_wars:blocks/chrome",
+    "3": "chronokillers_star_wars:blocks/red_stained",
+    "4": "chronokillers_star_wars:blocks/gray_screenone",
+    "5": "chronokillers_star_wars:blocks/bluenew",
+    "6": "chronokillers_star_wars:blocks/emerald_block",
+    "7": "chronokillers_star_wars:blocks/center_on",
+    "8": "chronokillers_star_wars:blocks/smithing_table_side"
+  }
+}

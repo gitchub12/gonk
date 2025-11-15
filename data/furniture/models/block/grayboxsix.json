@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/gray_box_six",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/gray_box_six_pic",
+    "particle": "chronokillers_star_wars:blocks/gray_box_six_pic",
+    "0": "chronokillers_star_wars:blocks/powder_grey",
+    "1": "chronokillers_star_wars:blocks/bridge_box"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/ship_strip",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/shipstrippic",
+    "particle": "chronokillers_star_wars:blocks/shipstrippic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/jungle_pressure_plate_down",
+    "2": "chronokillers_star_wars:blocks/console"
+  }
+}

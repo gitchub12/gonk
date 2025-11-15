@@ -1,0 +1,14 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_details_four",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wall_detail_four_pic",
+    "particle": "chronokillers_star_wars:blocks/wall_detail_four_pic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/gray_wool",
+    "2": "chronokillers_star_wars:blocks/blue_box",
+    "3": "chronokillers_star_wars:blocks/trunk_lights",
+    "4": "chronokillers_star_wars:blocks/blanded",
+    "5": "chronokillers_star_wars:blocks/gray_screenone",
+    "6": "chronokillers_star_wars:blocks/bobby"
+  }
+}

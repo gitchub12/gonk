@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/yellow_empire_light_block",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/yellowempirelightpic",
+    "particle": "chronokillers_star_wars:blocks/yellowempirelightpic",
+    "0": "chronokillers_star_wars:blocks/yellow_empire_light_block"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/vaporator_center3",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/vap_center",
+    "particle": "chronokillers_star_wars:blocks/vaporator",
+    "0": "chronokillers_star_wars:blocks/vaporator",
+    "1": "chronokillers_star_wars:blocks/untitled",
+    "2": "chronokillers_star_wars:blocks/razor_crest",
+    "3": "chronokillers_star_wars:blocks/post_side"
+  }
+}

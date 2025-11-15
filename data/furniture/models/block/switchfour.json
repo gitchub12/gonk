@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/switch_four",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/switch_four_pic",
+    "particle": "chronokillers_star_wars:blocks/switch_four_pic",
+    "0": "chronokillers_star_wars:blocks/switch_grill",
+    "1": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

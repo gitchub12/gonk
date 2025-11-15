@@ -1,10 +1,13 @@
 // BROWSERFIREFOXHIDE npc_behavior.js
+// update: Corrected name generation logic in processName to accurately map faction/baseType to the correct name lists (e.g., 'imperialF' -> 'stormtrooperF', 'cloneF') as defined in npc_names.json, fixing console warnings.
 class NPC {
     constructor(characterMesh, itemData, npcConfig) {
         this.mesh = characterMesh;
         this.itemData = itemData; 
         this.config = npcConfig; // The unified config from asset manager
         this.name = itemData.properties?.name || 'NPC';
+        this.setWeaponData(); // NEW: Set weapon data right after config is available
+
         this.weaponData = null; // To be populated by weapon system
         this.isDead = false;
         this.spawnPoint = characterMesh.position.clone();
@@ -18,6 +21,8 @@ class NPC {
         this.hasMadeFleeDecision = false; // NEW: Flag to ensure flee check happens only once.
         this.followUpdateTimer = 0;
         this.followTarget = null;
+        this.hasSpoken = false;
+        this.isConversing = false;
 
         this.processName(itemData.properties?.name);
 
@@ -70,6 +75,37 @@ class NPC {
         this.createNameplate();
     }
 
+    setWeaponData() {
+        const weaponName = this.itemData.properties?.weapon || this.config.default_weapon;
+        if (!weaponName || weaponName === "none") {
+            this.weaponData = null;
+            return;
+        }
+
+        const cleanWeaponName = weaponName.split('/').pop().replace('.png', '');
+        const allWeaponData = window.assetManager.weaponData;
+
+        if (!allWeaponData || !allWeaponData[cleanWeaponName]) {
+            // console.warn(`Weapon data for "${cleanWeaponName}" not found.`);
+            this.weaponData = null;
+            return;
+        }
+
+        const specificWeaponStats = allWeaponData[cleanWeaponName];
+        const category = specificWeaponStats.category;
+
+        if (!category || !allWeaponData._defaults.categoryDefaults[category]) {
+            console.warn(`Invalid or missing category for weapon "${cleanWeaponName}".`);
+            this.weaponData = { ...specificWeaponStats }; // Use specific stats even if category is bad
+            return;
+        }
+
+        const categoryDefaults = allWeaponData._defaults.categoryDefaults[category];
+
+        // Merge defaults and specific stats. Specific stats take precedence.
+        this.weaponData = { ...categoryDefaults, ...specificWeaponStats };
+    }
+
     createNameplate() {
         this.nameplate = new THREE.Group();
         const parentObject = this.mesh.parts.head || this.mesh.group;
@@ -81,11 +117,11 @@ class NPC {
         this.nameplate.scale.set(0.005, 0.005, 0.005);
     
         this.nameplateName = new THREE.Group();
-        const nameSprite = this.createTextSprite(this.name, { fontsize: 48, fontface: 'Arial', textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
-        const nameWidth = nameSprite.material.map.image.width;
-        const nameHeight = nameSprite.material.map.image.height;
-        nameSprite.scale.set(nameWidth, nameHeight, 1.0);
-        this.nameplateName.add(nameSprite);
+        this.nameSprite = this.createTextSprite(this.name, { fontsize: 48, fontface: 'Arial', textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
+        const nameWidth = this.nameSprite.material.map.image.width;
+        const nameHeight = this.nameSprite.material.map.image.height;
+        this.nameSprite.scale.set(nameWidth, nameHeight, 1.0);
+        this.nameplateName.add(this.nameSprite);
         this.nameplateName.position.y = 15;
         this.nameplate.add(this.nameplateName);
     
@@ -125,13 +161,62 @@ class NPC {
     processName(name) {
         if (!name) { this.name = 'NPC'; return; }
 
-        const nameParts = name.trim().split(' ');
+        let currentName = name.trim();
         const nameData = window.assetManager?.nameData;
 
-        // Check if it's a default category name (e.g., "darthF darthL" or "wookieeL wookieeR")
-        if (nameParts.length === 2 && nameData && nameParts[0].endsWith('F') && nameParts[1].endsWith('L')) {
-            const colF = nameParts[0]; // e.g., "cloneF"
-            const colL = nameParts[1];
+        // Intercept placeholder names and correct them to match keys in npc_names.json
+        const nameParts = currentName.split(' ');
+        if (nameParts.length === 2 && nameParts[0].endsWith('F') && nameParts[1].endsWith('L')) {
+            let colF = nameParts[0];
+            let colL = nameParts[1];
+
+            // FIX: Map faction/macroCategory to correct name list key
+            const faction = (this.config.faction || '').toLowerCase();
+            const baseType = (this.config.baseType || '').toLowerCase();
+            
+            // Re-map column keys to match list names in npc_names.json
+            const nameKeyMap = {
+                'imperialf': 'stormtrooperF',
+                'imperiall': 'stormtrooperL',
+                'clonef': 'cloneF',
+                'clonel': 'cloneL',
+                'mandaloriansf': 'mandoF',
+                'mandaloriansl': 'mandoL',
+                'sithf': 'darthF',
+                'sithl': 'darthL',
+                'takersf': 'takerF',
+                'takersl': 'takerL',
+                'wookieef': 'wookieeF', // ADDED: Specific mapping for Wookiees
+                'wookieel': 'wookieeL', // ADDED: Specific mapping for Wookiees
+                'aliensf': 'humanoidF', // Generic alien fallback
+                'aliensl': 'humanoidL',
+                'droidsf': 'droidF',
+                'droidsl': 'droidL',
+                'rebelsf': 'maleF', // Rebel default is male, but we check baseType below
+                'rebelsl': 'maleL'
+            };
+
+            // Override for Rebels (which can be human_male/female)
+            if (faction === 'rebels') {
+                if (baseType === 'human_female') {
+                    colF = 'femaleF';
+                    colL = 'femaleL';
+                } else if (baseType === 'human_male') {
+                    colF = 'maleF';
+                    colL = 'maleL';
+                }
+            }
+
+            // Apply name key map for other macroCategories
+            // Prioritize baseType for specific races like Wookiees
+            if (baseType === 'wookiee') {
+                colF = 'wookieeF';
+                colL = 'wookieeL';
+            } else {
+                colF = nameKeyMap[colF.toLowerCase()] || colF;
+                colL = nameKeyMap[colL.toLowerCase()] || colL;
+            }
+
 
             const validF = (nameData[colF] || []).filter(Boolean);
             const validL = (nameData[colL] || []).filter(Boolean);
@@ -140,23 +225,19 @@ class NPC {
                 const partF = validF[Math.floor(Math.random() * validF.length)];
                 let partL = validL.length > 0 ? validL[Math.floor(Math.random() * validL.length)] : '';
 
-                // Determine if a space is needed based on the category
-                const noSpaceCategories = ['droid', 'wookiee', 'gamorrean', 'stormtrooper', 'taker'];
-                // FIX: Use the NPC's actual macroCategory for name rules, not a guess from the name key.
-                // This is the root cause of the naming bug.
-                const nameType = (this.config.macroCategory || 'other').toLowerCase();
-
-                if (noSpaceCategories.includes(nameType)) {
-                    this.name = `${partF}${partL}`.trim();
+                // Determine if a space is needed based on the name category key
+                if (colF === 'droidF' || colF === 'wookieeF' || colF === 'gamorreanF' || colF === 'stormtrooperF' || colF === 'takerF' || colF === 'mandoF' || colF === 'darthF') {
+                    this.name = `${partF}${partL.trim()}`;
                 } else {
-                    this.name = `${partF} ${partL}`.trim();
+                    this.name = `${partF} ${partL.trim()}`;
                 }
+                this.name = this.name.trim(); // Final trim for safety
             } else {
-                this.name = name; // Fallback to the category name if columns are invalid
+                this.name = currentName; // Fallback to the placeholder if columns are invalid
+                console.log(`[NameProc] Failed to find names for '${colF}'. Using placeholder.`);
             }
         } else {
-            // It's a manually set name, use it as is.
-            this.name = name;
+            this.name = currentName; // It's a manually set name, use it as is.
         }
     }
 
@@ -167,8 +248,24 @@ class NPC {
         this.healthBar.scale.x = barWidth * Math.max(0, healthPercent);
         this.healthBar.position.x = - (barWidth * (1 - healthPercent)) / 2;
 
-        if (this.isAlly && this.healthBar.material.color.getHex() !== 0x00ff64) {
-             this.healthBar.material.color.set(0x00ff64);
+        let nameColor = new THREE.Color(1, 1, 1); // Default white
+
+        if (this.isAlly) {
+            nameColor = new THREE.Color(0, 1, 0.4); // Green for allies
+            if (this.healthBar.material.color.getHex() !== 0x00ff64) {
+                 this.healthBar.material.color.set(0x00ff64);
+            }
+        } else if (this.isFriend) {
+            nameColor = new THREE.Color(0.4, 1, 0.4); // Light green for friends
+        } else {
+            const relationship = window.game.factionManager.getRelationship(this.getEffectiveFaction(), 'player_droid');
+            if (relationship > GAME_GLOBAL_CONSTANTS.FACTIONS.HOSTILE_THRESHOLD) {
+                nameColor = new THREE.Color(1, 0, 0); // Red for hostiles
+            }
+        }
+
+        if (this.nameSprite) {
+            this.nameSprite.material.color.set(nameColor);
         }
     }
 
@@ -185,12 +282,12 @@ class NPC {
         canvas.height = fontsize * 1.4; 
 
         context.font = "Bold " + fontsize + "px " + fontface;
-        context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`;
+        context.fillStyle = `rgba(255, 255, 255, 1.0)`;
         context.fillText(message, 0, fontsize);
 
         const texture = new THREE.Texture(canvas);
         texture.needsUpdate = true;
-        const spriteMaterial = new THREE.SpriteMaterial({ map: texture, depthTest: true, depthWrite: true, transparent: true, alphaTest: 0.1 });
+        const spriteMaterial = new THREE.SpriteMaterial({ map: texture, color: `rgb(${textColor.r}, ${textColor.g}, ${textColor.b})`, depthTest: true, depthWrite: true, transparent: true, alphaTest: 0.1 });
         return new THREE.Sprite(spriteMaterial);
     }
 
@@ -239,6 +336,19 @@ class NPC {
         if (window.audioSystem) audioSystem.playNpcHurtSound(this);
         this.updateNameplate();
 
+        // If this NPC is an ally and was attacked, have other allies aggro the attacker
+        if (this.isAlly && attacker) {
+            for (const ally of window.game.state.allies) {
+                if (ally.npc && !ally.npc.isDead && ally.npc !== this) {
+                    ally.npc.aggro(attacker);
+                }
+            }
+        }
+
+        if (this.health <= 0) {
+            this.die(attacker);
+        }
+
         if (attacker) {
             const attackerFaction = attacker.isPlayer ? 'player_droid' : (attacker.getEffectiveFaction ? attacker.getEffectiveFaction() : attacker.faction);
             const isHostileAttacker = window.game.factionManager.getRelationship(this.getEffectiveFaction(), attackerFaction) > GAME_GLOBAL_CONSTANTS.FACTIONS.HOSTILE_THRESHOLD;
@@ -286,69 +396,18 @@ class NPC {
         this.wanderTarget = this.mesh.group.position.clone().add(fleeDirection.multiplyScalar(5));
     }
 
-    // UPDATED: Added pickup drops with distinct scale and Y-offsets for intentional flicker/overlap
     die(killer = null) {
-        this.isDead = true;
-        this.currentState = 'DEAD';
-        this.movementCollider.velocity.set(0, 0, 0);
-
-        // --- Drop Pickups ---
-        const dropPosition = this.mesh.group.position.clone();
-        dropPosition.y = physics.getGroundHeight(dropPosition.x, dropPosition.z);
-
-        // Health pickup (Overlay Icon/Flicker: slightly smaller, slightly higher Y-offset)
-        game.entities.pickups.push(new Pickup('health', 'heatlhsmall', dropPosition.clone(), 0.85, 0.001));
-
-        // Module drop (Base Icon: full scale, base Y-offset)
-        const moduleOptions = [
-            'force_mindtrick', 'force_shield', 'melee_damageup', 
-            'move_jump', 'move_speed', 'ranged_firerateup', 
-            'toughness_armorup', 'toughness_healthup'
-        ];
-        const randomModule = moduleOptions[Math.floor(Math.random() * moduleOptions.length)];
-        // The yOffset should be 0 or slightly negative relative to the base hover height.
-        game.entities.pickups.push(new Pickup('module', randomModule, dropPosition.clone(), 1.0, 0));
-        // --- End Drop Pickups ---
-
-
-        if (this.config.baseType === 'gamorrean' && window.audioSystem) {
-            audioSystem.playPositionalSoundFromList('gamorreandeath', this.mesh.group.position, 0.9);
-        } else if (this.config.baseType === 'wookiee' && window.audioSystem) {
-            audioSystem.playPositionalSoundFromList('wookdeath', this.mesh.group.position, 0.9);
-        } else if (window.audioSystem) {
-            const maleTypes = ['human_male', 'humanoid', 'clone', 'mandalorian', 'stormtrooper', 'darth', 'taker'];
-            const soundSet = this.itemData.properties?.soundSet;
-
-            if (soundSet === 'female') {
-                audioSystem.playPositionalSoundFromList('femaledeath', this.mesh.group.position, 0.9);
-            } else if (maleTypes.includes(this.config.baseType) && soundSet !== 'female') {
-                audioSystem.playMaleDeathSound(this.mesh.group.position, 0.9);
-            }
-        }
-
-        if (killer && window.game.factionManager) {
-            const killerFaction = (killer === physics.playerEntity || killer.isPlayer) ? 'player_droid' : killer.faction;
-            if(killerFaction === 'player_droid') game.handlePlayerKill(this);
-
-            window.game.factionManager.applyKillRepulsion(killerFaction, this.faction);
-
-            // If killed by player or an ally, trigger the sad animation for the victim's faction
-            if ((killerFaction === 'player_droid' || killer.isAlly) && window.factionAvatarManager) {
-                window.factionAvatarManager.triggerSpecialAnimation(this.faction, 's1');
-            }
-        }
-
-        if (this.mesh.modelDef && this.mesh.modelDef.parts.head) {
-            physics.createRagdoll(this.mesh);
-        }
-        game.scene.remove(this.mesh.group);
-        if (this.isAlly) game.removeAlly(this);
+        handleNpcDeath(this, killer);
     }
 
     onPamphletHit() {
         if (this.isAlly || this.isDead) return;
         this.hitCount++;
-        this.conversionProgress = Math.min(this.hitCount * 0.2, 1.0); // Increased conversion rate
+        let conversionRate = 0.2;
+        if (game.state.playerStats.pamphlet_effectiveness_bonus) {
+            conversionRate *= (1 + game.state.playerStats.pamphlet_effectiveness_bonus);
+        }
+        this.conversionProgress = Math.min(this.hitCount * conversionRate, 1.0); // Increased conversion rate
 
         // Update and show the conversion bar
         this.conversionBar.visible = true;
@@ -497,6 +556,7 @@ class NPC {
 
         if (this.nameplate.visible) {
             this.nameplate.lookAt(game.camera.position);
+            this.updateNameplate();
         }
 
         if (this.allyRing) {
@@ -515,8 +575,9 @@ class NPC {
             case 'ATTACKING':
             case 'DEFENDING_ALLY':
                 if (this.target && !this.target.isDead) {
-                    const targetCollider = this.target.movementCollider || this.target.collider; // This can be undefined if target is invalid
-                    if (!targetCollider) {
+                    const targetCollider = this.target.movementCollider || this.target.collider; 
+                    if (!targetCollider || typeof targetCollider.position === 'undefined') {
+                        console.warn('NPC target has no valid collider or position!', this.name, this.target);
                         this.currentState = 'IDLING';
                         break;
                     }
@@ -601,35 +662,84 @@ class NPC {
                         this.velocity.z = direction.z * this.speed;
                         this.mesh.group.lookAt(this.followTarget.x, this.mesh.group.position.y, this.followTarget.z);
                         isMoving = true;
+                    } else {
+                        // Ally is at its follow position, now perform idle actions
+                        if (this.stateTimer > 3.0 + Math.random() * 4.0) { // Every 3-7 seconds
+                            this.stateTimer = 0;
+                            if (Math.random() < 0.4) { // 40% chance to wander
+                                const wanderAngle = Math.random() * Math.PI * 2;
+                                const wanderDist = Math.random() * 1.0 + 0.5; // Wander 0.5 to 1.5 meters
+                                this.wanderTarget = this.followTarget.clone().add(new THREE.Vector3(Math.cos(wanderAngle) * wanderDist, 0, Math.sin(wanderAngle) * wanderDist));
+                            } else if (Math.random() < 0.7) { // 30% chance to look at player
+                                this.wanderTarget = null; // Clear wander target
+                                const playerPos = physics.playerCollider.position.clone();
+                                playerPos.y = this.mesh.group.position.y; // Only look horizontally
+                                this.mesh.group.lookAt(playerPos);
+                            } else { // 30% chance to look around randomly
+                                this.wanderTarget = null; // Clear wander target
+                                const lookAtPoint = this.followTarget.clone().add(new THREE.Vector3((Math.random()-0.5)*5, 0, (Math.random()-0.5)*5));
+                                lookAtPoint.y = this.mesh.group.position.y; // Only look horizontally
+                                this.mesh.group.lookAt(lookAtPoint);
+                            }
+                        }
+
+                        if (this.wanderTarget) {
+                            if (this.mesh.group.position.distanceTo(this.wanderTarget) > 0.2) {
+                                const direction = this.wanderTarget.clone().sub(this.mesh.group.position).normalize();
+                                this.velocity.x = direction.x * this.speed * 0.3; // Wander slowly
+                                this.velocity.z = direction.z * this.speed * 0.3;
+                                this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
+                                isMoving = true;
+                            } else {
+                                this.wanderTarget = null;
+                            }
+                        }
                     }
                 }
                 break;
 
             case 'IDLING':
-                if (this.stateTimer > 3.0 + Math.random() * 4.0) { // Every 3-7 seconds
-                    this.stateTimer = 0;
-                    if (Math.random() > 0.5) { // 50% chance to walk
-                        const wanderAngle = Math.random() * Math.PI * 2;
-                        const wanderDist = Math.random() * 1.5 + 0.5; // Walk 0.5 to 2 meters
-                        this.wanderTarget = this.spawnPoint.clone().add(new THREE.Vector3(Math.cos(wanderAngle) * wanderDist, 0, Math.sin(wanderAngle) * wanderDist));
-                    } else { // 50% chance to just look around
-                        this.wanderTarget = null;
-                        const lookAtPoint = this.spawnPoint.clone().add(new THREE.Vector3((Math.random()-0.5)*10, 0, (Math.random()-0.5)*10));
-                        this.mesh.group.lookAt(lookAtPoint.x, this.mesh.group.position.y, lookAtPoint.z);
-                    }
+                if (this.isConversing) {
+                    this.stateTimer = 0; // Reset timer to prevent other idle actions
+                    // Transition to CONVERSING state
+                    this.currentState = 'CONVERSING';
+                    break;
+                }
+                // ... rest of IDLING logic ...
+
+            case 'CONVERSING':
+                if (!this.isConversing || !this.target) { // If conversation ends or target is lost
+                    this.currentState = 'IDLING';
+                    break;
                 }
 
-                if (this.wanderTarget) {
-                    if (this.wanderTarget && this.mesh.group.position.distanceTo(this.wanderTarget) > 0.2) {
-                        const direction = this.wanderTarget.clone().sub(this.mesh.group.position).normalize();
-                        this.velocity.x = direction.x * this.speed * 0.5; // Wander slowly
-                        this.velocity.z = direction.z * this.speed * 0.5;
-                        this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
-                        isMoving = true;
-                    } else {
-                        this.wanderTarget = null;
-                    }
+                const otherNpc = this.target; // Assuming 'target' is the other conversing NPC
+                const myPosition = this.mesh.group.position;
+                const otherPosition = otherNpc.mesh.group.position;
+
+                // Make them face each other
+                const lookAtTarget = otherPosition.clone();
+                lookAtTarget.y = myPosition.y;
+                this.mesh.group.lookAt(lookAtTarget);
+
+                // Calculate desired distance (collision radiuses almost touching)
+                const myRadius = this.config.collision_radius || 0.5;
+                const otherRadius = otherNpc.config.collision_radius || 0.5;
+                const desiredDistance = (myRadius + otherRadius) * 1.05; // A small buffer
+
+                const currentDistance = myPosition.distanceTo(otherPosition);
+
+                if (currentDistance > desiredDistance) {
+                    // Move towards each other
+                    const direction = otherPosition.clone().sub(myPosition).normalize();
+                    this.velocity.x = direction.x * this.speed * 0.5; // Move slower during conversation
+                    this.velocity.z = direction.z * this.speed * 0.5;
+                    isMoving = true;
+                } else {
+                    // Stop moving once close enough
+                    this.velocity.set(0, 0, 0);
                 }
+                break;
                 break;
         }
     }
@@ -646,6 +756,22 @@ class NPC {
                 this.target = null;
                 this.isAggro = false;
                 this.currentState = this.isAlly ? 'FOLLOWING' : 'IDLING';
+            }
+            // NEW: Check if current target has become friendly
+            if (this.target && this.isAlly) { // Only allies should terminate friendly fire
+                const targetFaction = this.target.isPlayer ? 'player_droid' : (this.target.getEffectiveFaction ? this.target.getEffectiveFaction() : this.target.faction);
+                const myFaction = this.getEffectiveFaction();
+
+                let relationship = this.personalRelationships[targetFaction];
+                if (relationship === undefined) {
+                    relationship = window.game.factionManager.getRelationship(myFaction, targetFaction);
+                }
+
+                if (relationship <= GAME_GLOBAL_CONSTANTS.FACTIONS.FRIENDLY_THRESHOLD) { // If target is now friendly
+                    this.target = null;
+                    this.isAggro = false;
+                    this.currentState = 'FOLLOWING'; // Allies return to following
+                }
             }
             return;
         }
@@ -711,8 +837,39 @@ class NPC {
         return bestTarget;
     }
 
+    // --- NEW: Conversation Highlight ---
+    startHighlight(color) {
+        if (!this.mesh || !this.mesh.group) return;
+        const highlightColor = new THREE.Color(color);
+
+        this.mesh.group.traverse((child) => {
+            if (child.isMesh && child.material) {
+                const materials = Array.isArray(child.material) ? child.material : [child.material];
+                materials.forEach(mat => {
+                    if (mat.uniforms && mat.uniforms.rimColor) {
+                        mat.uniforms.rimColor.value = highlightColor;
+                        mat.uniforms.rimIntensity.value = 1.0;
+                    }
+                });
+            }
+        });
+    }
+
+    stopHighlight() {
+        if (!this.mesh || !this.mesh.group) return;
+        this.startHighlight(0x000000); // Set color to black to effectively hide it
+    }
+    // --- END NEW ---
+
     updateAnimation(deltaTime) {
-        if (this.isDead) return;
+        if (this.isDead && this.mesh.animState !== 'death') {
+            return;
+        }
+        
+        if (this.mesh.animState === 'death') {
+            window.updateGonkAnimation(this.mesh, { deltaTime });
+            return;
+        }
 
         const collider = this.movementCollider;
         const distanceMoved = collider.position.distanceTo(collider.lastPosition);

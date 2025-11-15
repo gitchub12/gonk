@@ -1,0 +1,14 @@
+{
+  "parent": "chronokillers_star_wars:custom/console2high5",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/console2high",
+    "particle": "chronokillers_star_wars:blocks/cardreadergraypic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/acacia_planks",
+    "2": "chronokillers_star_wars:blocks/trunk_lights2",
+    "3": "chronokillers_star_wars:blocks/blast_furnace_topone",
+    "6": "chronokillers_star_wars:blocks/data_screen_five",
+    "7": "chronokillers_star_wars:blocks/data_screen_four",
+    "8": "chronokillers_star_wars:blocks/data_screen_three"
+  }
+}

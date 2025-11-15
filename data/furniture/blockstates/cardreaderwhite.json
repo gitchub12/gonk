@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/cardreaderwhite",
+      "x": 90
+    }
+  }
+}

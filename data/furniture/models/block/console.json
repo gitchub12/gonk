@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/console",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/console_pic",
+    "particle": "chronokillers_star_wars:blocks/console_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/top",
+    "2": "chronokillers_star_wars:blocks/screenn"
+  }
+}

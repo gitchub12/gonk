@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/console_keyboard",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/console_keyboard_pic",
+    "particle": "chronokillers_star_wars:blocks/console_keyboard_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/keyboard_flipped"
+  }
+}

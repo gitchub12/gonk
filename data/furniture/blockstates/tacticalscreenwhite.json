@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/tacticalscreenwhite",
+      "x": 90
+    }
+  }
+}

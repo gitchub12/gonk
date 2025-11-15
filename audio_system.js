@@ -63,7 +63,9 @@ class AudioSystem {
              'triviacorrect': '/data/sounds/trivia/triviacorrect.wav',
              'triviawrong': '/data/sounds/trivia/triviawrong.wav',
              // ADDED: Pickup sound
-             'pickup': '/data/sounds/pickup.wav' 
+             'pickup': '/data/sounds/pickup.wav',
+             'NPCpickup': '/data/sounds/UIsoundeffects/NPCpickup.wav',
+             'NPCcannotpickup': '/data/sounds/UIsoundeffects/NPCcannotpickup.wav' 
         };
     }
     

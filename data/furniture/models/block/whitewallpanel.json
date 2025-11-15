@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/white_wall_panel",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/whitewallpanelpic",
+    "particle": "chronokillers_star_wars:blocks/whitewallpanelpic",
+    "0": "chronokillers_star_wars:blocks/white_panel",
+    "1": "chronokillers_star_wars:blocks/white_panels"
+  }
+}

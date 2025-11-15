@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/angle_door_light_upsidedown",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/angle_door_light_upsidedown_pic",
+    "particle": "chronokillers_star_wars:blocks/angle_door_light_upsidedown_pic",
+    "0": "chronokillers_star_wars:blocks/door_light__side",
+    "1": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

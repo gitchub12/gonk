@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/empire_redlight_block",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/empire_redlight_block_pic",
+    "particle": "chronokillers_star_wars:blocks/empire_redlight_block_pic",
+    "0": "chronokillers_star_wars:blocks/empire_redlight_block"
+  }
+}

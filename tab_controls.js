@@ -7,8 +7,6 @@ class TabControls {
         this.game = gameInstance;
         this.pws = playerWeaponSystem;
         this.physics = physicsSystem;
-        this.factionControls = new TabFactionControls(gameInstance, this);
-        this.isVisible = false;
         this.leftPanel = null;
         this.rightPanel = null;
         this.animIndex = 0;
@@ -31,6 +29,8 @@ class TabControls {
         this.boltOriginHelper.renderOrder = 1000; // Render on top
         this.boltOriginHelper.visible = false;
         this.game.scene.add(this.boltOriginHelper);
+
+        this.factionControls = new TabFactionControls(this.game, this);
 
         this.createPanels();
         this.addEventListeners();
@@ -66,7 +66,7 @@ class TabControls {
         `;
 
         const effectsHTML = `
-            <h4>Saber/Blaster Bolt Glow (Emissive)</h4>
+            <h4>Lighting</h4>
             <p>Affects all sabers, bolts, and weapon glows. <span id="glow_origin_status" style="color: #ffcc00;">[Light Origin Helper ON]</span></p>
             <div class="control-group"><label>Color:</label><input type="color" class="effects-input" id="fx_glow_color" value="#00ffff"></div>
             <div class="control-group"><label>Brightness: <span id="fx_glow_intensity_val">2.5</span></label><input type="range" class="effects-slider" id="fx_glow_intensity" min="0" max="10" value="2.5" step="0.1"></div>
@@ -89,8 +89,6 @@ class TabControls {
         `;
         
         const factionHTMLs = this.factionControls.createFactionHTML();
-        // This will be injected later
-        const simKillHTML = `<div id="sim-kill-buttons"></div>`;
 
         const speedHTML = `
             <h4>Physics & Speed Constants</h4>
@@ -173,23 +171,39 @@ class TabControls {
             <div class="control-group"><label>HUD X Offset: <span id="faction_hud_offsetX_val">0</span></label><input type="range" class="faction-hud-slider" id="faction_hud_offsetX" min="-50" max="50" value="0" step="1"></div>
             <div class="control-group"><label>HUD Y Offset: <span id="faction_hud_offsetY_val">0</span></label><input type="range" class="faction-hud-slider" id="faction_hud_offsetY" min="-50" max="50" value="0" step="1"></div>
             <div class="control-group"><label>Line Width: <span id="faction_hud_lineWidth_val">2</span></label><input type="range" class="faction-hud-slider" id="faction_hud_lineWidth" min="1" max="10" value="2" step="0.5"></div>
-            <hr><h4>Faction Avatars (Right Side)</h4>
-            <div class="control-group"><label>Size (px): <span id="avatar_size_val">80</span></label><input type="range" class="avatar-slider" id="avatar_size" min="20" max="250" value="80" step="1"></div>
-            <div class="control-group"><label>X Offset (from Right %): <span id="avatar_offsetX_val">2</span></label><input type="range" class="avatar-slider" id="avatar_offsetX" min="0" max="95" value="2" step="1"></div>
-            <div class="control-group"><label>Y Offset (from Top %): <span id="avatar_offsetY_val">50</span></label><input type="range" class="avatar-slider" id="avatar_offsetY" min="0" max="95" value="50" step="1"></div>
+            <hr><h4>Faction Avatar (Right HUD)</h4>
+            <div class="control-group"><label>Avatar HUD X Offset: <span id="faction_avatar_offsetX_val">10</span></label><input type="range" class="faction-hud-slider" id="faction_avatar_offsetX" min="-200" max="400" value="10" step="1"></div>
+            <div class="control-group"><label>Avatar HUD Y Offset: <span id="faction_avatar_offsetY_val">50</span></label><input type="range" class="faction-hud-slider" id="faction_avatar_offsetY" min="0" max="100" value="50" step="1"></div>
+            <div class="control-group"><label>Avatar HUD Scale: <span id="faction_avatar_scale_val">1</span></label><input type="range" class="faction-hud-slider" id="faction_avatar_scale" min="0.1" max="3" value="1" step="0.05"></div>
             <button id="snapshot_visuals_btn">Snapshot Visuals</button>
         `;
 
         const uiPositionHTML = `
-            <h4>Health/Gonk Display (Bottom-Left)</h4>
-            <div class="control-group"><label>Left Offset (%): <span id="ui_gonk_offsetX_val">23</span></label><input type="range" class="ui-slider" id="ui_gonk_offsetX" min="0" max="100" value="23" step="1"></div>
-            <div class="control-group"><label>Bottom Offset (%): <span id="ui_gonk_offsetY_val">5</span></label><input type="range" class="ui-slider" id="ui_gonk_offsetY" min="0" max="100" value="5" step="1"></div>
-            <h4>Ally Boxes (Bottom-Center)</h4>
+            <h4>Health/Energy Gauges (Bottom-Left)</h4>
+            <div class="control-group"><label>Left Offset (%): <span id="ui_gauges_offsetX_val">1</span></label><input type="range" class="ui-slider" id="ui_gauges_offsetX" min="0" max="100" value="1" step="1"></div>
+            <div class="control-group"><label>Bottom Offset (%): <span id="ui_gauges_offsetY_val">1</span></label><input type="range" class="ui-slider" id="ui_gauges_offsetY" min="0" max="100" value="1" step="1"></div>
+            <div class="control-group"><label>Gauge Size (px): <span id="ui_gauges_size_val">150</span></label><input type="range" class="ui-slider" id="ui_gauges_size" min="50" max="400" value="150" step="10"></div>
+            <hr><h4>Health/Energy Overlay</h4>
+            <div class="control-group"><label>Left Offset (%): <span id="ui_overlay_offsetX_val">0.49</span></label><input type="range" class="ui-slider" id="ui_overlay_offsetX" min="-2" max="2" value="0.49" step="0.01"></div>
+            <div class="control-group"><label>Bottom Offset (%): <span id="ui_overlay_offsetY_val">0.0</span></label><input type="range" class="ui-slider" id="ui_overlay_offsetY" min="-2" max="2" value="0" step="0.01"></div>
+            <div class="control-group"><label>Overlay Size (%): <span id="ui_overlay_size_val">46.2</span></label><input type="range" class="ui-slider" id="ui_overlay_size" min="10" max="200" value="46.2" step="0.1"></div>
+            <hr><h4>Health Sphere (Red)</h4>
+            <div class="control-group"><label>Left Offset (px): <span id="ui_health_offsetX_val">71.2</span></label><input type="range" class="ui-slider" id="ui_health_offsetX" min="-500" max="500" value="71.2" step="0.1"></div>
+            <div class="control-group"><label>Bottom Offset (px): <span id="ui_health_offsetY_val">10.0</span></label><input type="range" class="ui-slider" id="ui_health_offsetY" min="-500" max="500" value="10" step="0.1"></div>
+            <div class="control-group"><label>Scale: <span id="ui_health_scale_val">1.85</span></label><input type="range" class="ui-slider" id="ui_health_scale" min="0.1" max="3.0" value="1.85" step="0.05"></div>
+            <hr><h4>Power Sphere (Blue)</h4>
+            <div class="control-group"><label>Left Offset (px): <span id="ui_power_offsetX_val">229.4</span></label><input type="range" class="ui-slider" id="ui_power_offsetX" min="-500" max="500" value="229.4" step="0.1"></div>
+            <div class="control-group"><label>Bottom Offset (px): <span id="ui_power_offsetY_val">14.4</span></label><input type="range" class="ui-slider" id="ui_power_offsetY" min="-500" max="500" value="14.4" step="0.1"></div>
+            <div class="control-group"><label>Scale: <span id="ui_power_scale_val">1.65</span></label><input type="range" class="ui-slider" id="ui_power_scale" min="0.1" max="3.0" value="1.65" step="0.05"></div>
+            <hr><h4>Ally Boxes (Bottom-Center)</h4>
             <div class="control-group"><label>X Offset (%): <span id="ui_ally_offsetX_val">57</span></label><input type="range" class="ui-slider" id="ui_ally_offsetX" min="0" max="100" value="57" step="1"></div>
-            <div class="control-group"><label>Bottom Offset (%): <span id="ui_ally_offsetY_val">10</span></label><input type="range" class="ui-slider" id="ui_ally_offsetY" min="0" max="100" value="10" step="1"></div>
-            <h4>Ammo/Weapon Display (Bottom-Left)</h4>
-            <div class="control-group"><label>Left Offset (%): <span id="ui_ammo_offsetX_val">12</span></label><input type="range" class="ui-slider" id="ui_ammo_offsetX" min="0" max="100" value="12" step="1"></div>
-            <div class="control-group"><label>Bottom Offset (%): <span id="ui_ammo_offsetY_val">43</span></label><input type="range" class="ui-slider" id="ui_ammo_offsetY" min="0" max="100" value="43" step="1"></div>
+            <div class="control-group"><label>Bottom Offset (px): <span id="ui_ally_offsetY_val">10</span></label><input type="range" class="ui-slider" id="ui_ally_offsetY" min="0" max="100" value="10" step="1"></div>
+            <hr><h4>Weapon Display</h4>
+            <div class="control-group"><label>Left Offset (%): <span id="ui_weapon_offsetX_val">12</span></label><input type="range" class="ui-slider" id="ui_weapon_offsetX" min="0" max="100" value="12" step="1"></div>
+            <div class="control-group"><label>Bottom Offset (%): <span id="ui_weapon_offsetY_val">20</span></label><input type="range" class="ui-slider" id="ui_weapon_offsetY" min="0" max="100" value="20" step="1"></div>
+            <hr><h4>Pamphlet/Ammo Display</h4>
+            <div class="control-group"><label>Left Offset (%): <span id="ui_ammo_offsetX_val">91</span></label><input type="range" class="ui-slider" id="ui_ammo_offsetX" min="0" max="100" value="91" step="1"></div>
+            <div class="control-group"><label>Bottom Offset (%): <span id="ui_ammo_offsetY_val">1</span></label><input type="range" class="ui-slider" id="ui_ammo_offsetY" min="0" max="100" value="1" step="1"></div>
             <button id="ui_snapshotBtn">Snapshot UI</button>
         `;
 
@@ -209,16 +223,13 @@ class TabControls {
             <button id="npc_snapshotBtn">Snapshot NPC Weapon</button>`;
 
         let weaponCatTabs = '';
-        // This logic is being removed because it was incorrectly loading ALL weapon categories,
-        // including NPC-only ones, into the player's weapon system context.
-        // The new system will handle NPC weapons entirely within the level editor's properties panel.
-        // if (window.assetManager && window.assetManager.weaponData && window.assetManager.weaponData._defaults) {
-        //     const categories = Object.keys(window.assetManager.weaponData._defaults.categoryDefaults);
-        //     categories.forEach((cat, index) => {
-        //         const activeClass = index === 0 ? 'active' : '';
-        //         weaponCatTabs += `<button class="editor-tab-btn weapon-cat-btn ${activeClass}" data-category="${cat}">${cat}</button>`;
-        //     });
-        // }
+        if (window.assetManager && window.assetManager.weaponData && window.assetManager.weaponData._defaults) {
+            const categories = Object.keys(window.assetManager.weaponData._defaults.categoryDefaults);
+            categories.forEach((cat, index) => {
+                const activeClass = index === 0 ? 'active' : '';
+                weaponCatTabs += `<button class="editor-tab-btn weapon-cat-btn ${activeClass}" data-category="${cat}">${cat}</button>`;
+            });
+        }
         
         const rightPanelHTML = `
             <div class="editor-main-content">
@@ -229,7 +240,7 @@ class TabControls {
         const leftPanelHTML = `
             <div class="editor-main-content">
                 <div id="tab-pane-combat" class="tab-pane">${combatHTML}</div>
-                <div id="tab-pane-effects" class="tab-pane">${effectsHTML}</div>${simKillHTML}
+                <div id="tab-pane-effects" class="tab-pane">${effectsHTML}</div>
                 ${factionHTMLs.globals}
                 ${factionHTMLs.panes}
                 <div id="tab-pane-speed" class="tab-pane">${speedHTML}</div>
@@ -245,7 +256,7 @@ class TabControls {
             </div>
             <div class="tab-buttons">
                 <button class="editor-tab-btn" data-tab="tab-pane-combat">Combat</button>
-                <button class="editor-tab-btn" data-tab="tab-pane-effects">Effects</button>
+                <button class="editor-tab-btn" data-tab="tab-pane-effects">LIGHTING</button>
                 <button class="editor-tab-btn active" data-tab="tab-pane-faction-globals">Factions</button>
                 ${factionHTMLs.tabs}
                 <button class="editor-tab-btn" data-tab="tab-pane-speed">Speed</button>
@@ -258,8 +269,8 @@ class TabControls {
 
         const panelStyle = `
             .editorPanel { position: absolute; top: 10px; color: white; background-color: rgba(10, 20, 30, 0.85); padding: 10px; border-radius: 8px; font-family: monospace; border: 1px solid rgba(0, 150, 200, 0.4); backdrop-filter: blur(5px); display: none; z-index: 1001; user-select: none; max-height: 95vh; display: flex; }
-            #leftEditorPanel { left: 10px; width: 380px; }
-            #rightEditorPanel { right: 10px; width: 320px; }
+            #leftEditorPanel { left: 10px; width: 420px; }
+            #rightEditorPanel { right: 10px; width: 380px; }
             .editor-main-content { flex-grow: 1; padding-right: 10px; overflow-y: auto; }
             .editorPanel h4 { margin-top: 10px; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px; color: #00ffff; }
             .editorPanel p { font-size: 11px; color: #aaa; margin-bottom: 15px; }
@@ -270,8 +281,8 @@ class TabControls {
             .editorPanel input[type="color"] { height: 30px; padding: 0; }
             .editorPanel button { width: 100%; padding: 8px; margin-top: 10px; background: #444; border: 1px solid #666; color: #fff; cursor: pointer; border-radius: 4px; }
             .editorPanel button:hover { background: #555; }
-            .tab-buttons { display: flex; flex-direction: column; gap: 5px; border-left: 1px solid #555; padding-left: 10px; overflow-y: auto; }
-            .editor-tab-btn { margin-top: 0; border-radius: 4px; text-align: right; text-transform: capitalize; background-color: #21252b; color: #888; border: 1px solid #444; transition: all 0.2s ease; }
+            .tab-buttons { display: flex; flex-direction: column; flex-wrap: nowrap; gap: 5px; padding-left: 10px; border-left: 1px solid #555; margin-left: 10px; width: 80px; flex-shrink: 0; }
+            .editor-tab-btn { flex-grow: 0; margin-top: 0; border-radius: 4px; text-align: center; text-transform: capitalize; background-color: #21252b; color: #888; border: 1px solid #444; transition: all 0.2s ease; padding: 8px 4px; font-size: 11px; width: 100%; }
             .editor-tab-btn.active { background-color: #FFFFFF; color: #000000; font-weight: bold; border-color: #FFF; }
             .editor-tab-btn.faction-color-tab { color: #fff; background-color: var(--faction-bg); border-color: var(--faction-border); }
             .editor-tab-btn.faction-color-tab.active { box-shadow: 0 0 10px var(--faction-border); border-width: 2px; }
@@ -316,9 +327,6 @@ class TabControls {
 
         // Faction HUD in Label Tab
         document.querySelectorAll('.faction-hud-slider').forEach(el => el.addEventListener('input', (e) => this.updateFactionHudFromUI(e)));
-
-        // ADDED: Faction Avatar sliders
-        document.querySelectorAll('.avatar-slider').forEach(el => el.addEventListener('input', (e) => this.updateFactionAvatarFromUI(e)));
 
 
         // Labels & Rings
@@ -455,26 +463,17 @@ class TabControls {
         document.getElementById('faction_hud_offsetY_val').textContent = hud.OFFSET_Y.toFixed(0);
         document.getElementById('faction_hud_lineWidth_val').textContent = hud.LINE_WIDTH.toFixed(1);
 
-        // This was the missing link. The faction HUD sliders were not calling the avatar position update.
-        if (window.factionAvatarManager) {
-            window.factionAvatarManager.updatePosition(hud.OFFSET_X, hud.OFFSET_Y);
-        }
-    }
+        const avatarX = document.getElementById('faction_avatar_offsetX').value;
+        const avatarY = document.getElementById('faction_avatar_offsetY').value;
+        const avatarScale = document.getElementById('faction_avatar_scale').value;
 
-    updateFactionAvatarFromUI() {
-        const size = document.getElementById('avatar_size').value;
-        const offsetX = document.getElementById('avatar_offsetX').value;
-        const offsetY = document.getElementById('avatar_offsetY').value;
+        document.documentElement.style.setProperty('--faction-avatar-offset-x', `${avatarX}px`);
+        document.documentElement.style.setProperty('--faction-avatar-offset-y', `${avatarY}%`);
+        document.documentElement.style.setProperty('--faction-avatar-transform', `translateY(-${avatarY}%) scale(${avatarScale})`);
 
-        document.getElementById('avatar_size_val').textContent = size;
-        document.getElementById('avatar_offsetX_val').textContent = offsetX;
-        document.getElementById('avatar_offsetY_val').textContent = offsetY;
-
-        const root = document.documentElement;
-        root.style.setProperty('--faction-avatar-size', `${size}px`);
-        root.style.setProperty('--faction-avatar-right', `${offsetX}%`);
-        root.style.setProperty('--faction-avatar-top', `${offsetY}%`);
-        root.style.setProperty('--faction-avatar-transform', `translateY(-${offsetY}%)`);
+        document.getElementById('faction_avatar_offsetX_val').textContent = avatarX;
+        document.getElementById('faction_avatar_offsetY_val').textContent = avatarY;
+        document.getElementById('faction_avatar_scale_val').textContent = avatarScale;
     }
 
     snapshotVisuals() {
@@ -633,56 +632,10 @@ WEAPON_RANGES: ${JSON.stringify(GAME_GLOBAL_CONSTANTS.WEAPON_RANGES, null, 4)},`
         // ... implementation from original file ...
     }
 
-    updateUIFromUI() {
-        // Health/Gonk Display
-        const gonkX = document.getElementById('ui_gonk_offsetX').value + '%';
-        const gonkY = document.getElementById('ui_gonk_offsetY').value + '%';
-        this.game.gonkHealthContainer.style.left = `${gonkX}px`;
-        this.game.gonkHealthContainer.style.bottom = `${gonkY}px`;
-        document.getElementById('ui_gonk_offsetX_val').textContent = gonkX;
-        document.getElementById('ui_gonk_offsetY_val').textContent = gonkY;
-
-        // Ally Boxes
-        const allyX = document.getElementById('ui_ally_offsetX').value;
-        const allyY = document.getElementById('ui_ally_offsetY').value;
-        this.game.allyBoxesContainer.style.left = `${allyX}%`; // This is a transformX so % is correct
-        this.game.allyBoxesContainer.style.bottom = `${allyY}px`; // This is a direct offset
-        document.getElementById('ui_ally_offsetX_val').textContent = allyX;
-        document.getElementById('ui_ally_offsetY_val').textContent = allyY;
-
-        // Ammo/Weapon Display
-        const ammoX = document.getElementById('ui_ammo_offsetX').value;
-        const ammoY = document.getElementById('ui_ammo_offsetY').value;
-        const ammoContainer = document.querySelector('.ammo-display');
-        const weaponContainer = document.querySelector('.weapon-display');
-        if (ammoContainer) {
-            ammoContainer.style.left = `${ammoX}%`;
-            ammoContainer.style.bottom = `${ammoY}%`;
-        }
-        if (weaponContainer) {
-            weaponContainer.style.left = `${ammoX}%`; // Align with ammo
-            weaponContainer.style.bottom = `calc(${ammoY}% + 105px)`; // Position above ammo
-        }
-        document.getElementById('ui_ammo_offsetX_val').textContent = ammoX;
-        document.getElementById('ui_ammo_offsetY_val').textContent = ammoY;
-    }
-
-    snapshotUI() {
-        const gonkX = document.getElementById('ui_gonk_offsetX').value;
-        const gonkY = document.getElementById('ui_gonk_offsetY').value;
-        const allyX = document.getElementById('ui_ally_offsetX').value;
-        const allyY = document.getElementById('ui_ally_offsetY').value;
-        const ammoX = document.getElementById('ui_ammo_offsetX').value;
-        const ammoY = document.getElementById('ui_ammo_offsetY').value;
-        console.log(`// --- UI Snapshot ---
-Gonk: { left: ${gonkX}%, bottom: ${gonkY}% }
-Allies: { left: ${allyX}%, bottom: ${allyY}px }
-Ammo/Weapon: { left: ${ammoX}%, bottom: ${ammoY}% }`);
-    }
-
     snapshotDamageFx() {
         // ... implementation from original file ...
     }
+
 
     getMuzzleOffsetFromUI() {
         const x = parseFloat(document.getElementById('npc_muzzle_posX').value);
@@ -770,6 +723,9 @@ Ammo/Weapon: { left: ${ammoX}%, bottom: ${ammoY}% }`);
     }
 
     show() {
+        if (window.game && window.game.state.isConversationActive) {
+            return; // Do not show the debug menu or pause the game if a conversation is active.
+        }
         this.isVisible = true;
         this.game.state.isPaused = true;
         this.leftPanel.style.display = 'flex';
@@ -964,11 +920,98 @@ Ammo/Weapon: { left: ${ammoX}%, bottom: ${ammoY}% }`);
     }
 
     updateNpcPoseFromUI() {
-        // ... implementation from original file ...
+        const npc = this.getNearestNpc();
+        if (!npc) {
+            console.warn("No NPC found to update pose.");
+            return;
+        }
+
+        // Body adjustments
+        const bodyRotY = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_body_rotY').value));
+        const bodyPosY = parseFloat(document.getElementById('npc_body_posY').value);
+        const bodyScale = parseFloat(document.getElementById('npc_body_scale').value);
+
+        npc.mesh.group.rotation.y = bodyRotY;
+        npc.mesh.group.position.y = npc.spawnPoint.y + bodyPosY; // Adjust from spawn point
+        npc.mesh.group.scale.set(bodyScale, bodyScale, bodyScale);
+
+        // Left Arm adjustments
+        const lArmScaleY = parseFloat(document.getElementById('npc_lArm_scaleY').value);
+        const lArmRotX = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_lArm_rotX').value));
+        const lArmRotY = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_lArm_rotY').value));
+        const lArmRotZ = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_lArm_rotZ').value));
+
+        if (npc.mesh.parts.lArm) {
+            npc.mesh.parts.lArm.scale.y = lArmScaleY;
+            npc.mesh.parts.lArm.rotation.set(lArmRotX, lArmRotY, lArmRotZ);
+        }
+
+        // Right Arm adjustments
+        const rArmScaleY = parseFloat(document.getElementById('npc_rArm_scaleY').value);
+        const rArmRotX = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_rArm_rotX').value));
+        const rArmRotY = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_rArm_rotY').value));
+        const rArmRotZ = THREE.MathUtils.degToRad(parseFloat(document.getElementById('npc_rArm_rotZ').value));
+
+        if (npc.mesh.parts.rArm) {
+            npc.mesh.parts.rArm.scale.y = rArmScaleY;
+            npc.mesh.parts.rArm.rotation.set(rArmRotX, rArmRotY, rArmRotZ);
+        }
+
+        // Update value spans
+        document.getElementById('npc_body_rotY_val').textContent = parseFloat(document.getElementById('npc_body_rotY').value).toFixed(0);
+        document.getElementById('npc_body_posY_val').textContent = bodyPosY.toFixed(1);
+        document.getElementById('npc_body_scale_val').textContent = bodyScale.toFixed(2);
+
+        document.getElementById('npc_lArm_scaleY_val').textContent = lArmScaleY.toFixed(2);
+        document.getElementById('npc_lArm_rotX_val').textContent = parseFloat(document.getElementById('npc_lArm_rotX').value).toFixed(0);
+        document.getElementById('npc_lArm_rotY_val').textContent = parseFloat(document.getElementById('npc_lArm_rotY').value).toFixed(0);
+        document.getElementById('npc_lArm_rotZ_val').textContent = parseFloat(document.getElementById('npc_lArm_rotZ').value).toFixed(0);
+
+        document.getElementById('npc_rArm_scaleY_val').textContent = rArmScaleY.toFixed(2);
+        document.getElementById('npc_rArm_rotX_val').textContent = parseFloat(document.getElementById('npc_rArm_rotX').value).toFixed(0);
+        document.getElementById('npc_rArm_rotY_val').textContent = parseFloat(document.getElementById('npc_rArm_rotY').value).toFixed(0);
+        document.getElementById('npc_rArm_rotZ_val').textContent = parseFloat(document.getElementById('npc_rArm_rotZ').value).toFixed(0);
     }
 
     snapshotNpcPoseToConsole() {
-        // ... implementation from original file ...
+        const npc = this.getNearestNpc();
+        if (!npc) {
+            console.warn("No NPC found to snapshot pose.");
+            return;
+        }
+
+        const bodyRotY = parseFloat(document.getElementById('npc_body_rotY').value);
+        const bodyPosY = parseFloat(document.getElementById('npc_body_posY').value);
+        const bodyScale = parseFloat(document.getElementById('npc_body_scale').value);
+
+        const lArmScaleY = parseFloat(document.getElementById('npc_lArm_scaleY').value);
+        const lArmRotX = parseFloat(document.getElementById('npc_lArm_rotX').value);
+        const lArmRotY = parseFloat(document.getElementById('npc_lArm_rotY').value);
+        const lArmRotZ = parseFloat(document.getElementById('npc_lArm_rotZ').value);
+
+        const rArmScaleY = parseFloat(document.getElementById('npc_rArm_scaleY').value);
+        const rArmRotX = parseFloat(document.getElementById('npc_rArm_rotX').value);
+        const rArmRotY = parseFloat(document.getElementById('npc_rArm_rotY').value);
+        const rArmRotZ = parseFloat(document.getElementById('npc_rArm_rotZ').value);
+
+        console.log(`// --- NPC Pose Snapshot for ${npc.name} ---
+// Body
+// Y-Rotation: ${bodyRotY.toFixed(0)}
+// Y-Position (Offset): ${bodyPosY.toFixed(1)}
+// Instance Scale: ${bodyScale.toFixed(2)}
+
+// Left Arm
+// Arm Length: ${lArmScaleY.toFixed(2)}
+// Rot X: ${lArmRotX.toFixed(0)}
+// Rot Y: ${lArmRotY.toFixed(0)}
+// Rot Z: ${lArmRotZ.toFixed(0)}
+
+// Right Arm
+// Arm Length: ${rArmScaleY.toFixed(2)}
+// Rot X: ${rArmRotX.toFixed(0)}
+// Rot Y: ${rArmRotY.toFixed(0)}
+// Rot Z: ${rArmRotZ.toFixed(0)}
+`);
     }
 
     updateLabelAndRingFromUI() {
@@ -1015,8 +1058,134 @@ Ammo/Weapon: { left: ${ammoX}%, bottom: ${ammoY}% }`);
     snapshotLabelAndRing() {
         // ... this is an old function, will be replaced by snapshotVisuals ...
     }
-    
+
     cycleNpcAnimation() {
         // ... implementation from original file ...
+    }
+
+    updateUIFromUI() {
+        // Health/Energy Gauges
+        const gaugesContainer = document.querySelector('.player-gauges-container');
+        if (gaugesContainer) {
+            const gaugesX = document.getElementById('ui_gauges_offsetX').value;
+            const gaugesY = document.getElementById('ui_gauges_offsetY').value;
+            const gaugesSize = document.getElementById('ui_gauges_size').value;
+            gaugesContainer.style.left = gaugesX + '%';
+            gaugesContainer.style.bottom = gaugesY + '%';
+            document.documentElement.style.setProperty('--gauge-size', gaugesSize + 'px');
+            document.getElementById('ui_gauges_offsetX_val').textContent = gaugesX;
+            document.getElementById('ui_gauges_offsetY_val').textContent = gaugesY;
+            document.getElementById('ui_gauges_size_val').textContent = gaugesSize;
+        }
+
+        // Health/Energy Overlay
+        const overlay = document.getElementById('health-energy-overlay');
+        if (overlay) {
+            const overlayX = document.getElementById('ui_overlay_offsetX').value;
+            const overlayY = document.getElementById('ui_overlay_offsetY').value;
+            const overlaySizePercent = document.getElementById('ui_overlay_size').value;
+
+            // Calculate actual size: 100% = 1100px (baseline), 200% = 2200px, etc.
+            const baselineSize = 1100; // This is the 100% reference size
+            const overlayWidth = Math.round((overlaySizePercent / 100) * baselineSize);
+
+            overlay.style.left = overlayX + '%';
+            overlay.style.bottom = overlayY + '%';
+            overlay.style.width = overlayWidth + 'px';
+            overlay.style.height = 'auto';
+            document.documentElement.style.setProperty('--overlay-size', overlayWidth + 'px');
+
+            document.getElementById('ui_overlay_offsetX_val').textContent = parseFloat(overlayX).toFixed(1);
+            document.getElementById('ui_overlay_offsetY_val').textContent = parseFloat(overlayY).toFixed(1);
+            document.getElementById('ui_overlay_size_val').textContent = parseFloat(overlaySizePercent).toFixed(1);
+        }
+
+        // Health Sphere (Red)
+        const healthCanvas = document.getElementById('health-gauge-canvas');
+        if (healthCanvas && window.gaugeManager && window.gaugeManager.healthGauge) {
+            const healthX = document.getElementById('ui_health_offsetX').value;
+            const healthY = document.getElementById('ui_health_offsetY').value;
+            const healthScale = document.getElementById('ui_health_scale').value;
+            healthCanvas.style.left = healthX + 'px';
+            healthCanvas.style.bottom = healthY + 'px';
+            window.gaugeManager.healthGauge.setScale(parseFloat(healthScale));
+            document.getElementById('ui_health_offsetX_val').textContent = parseFloat(healthX).toFixed(1);
+            document.getElementById('ui_health_offsetY_val').textContent = parseFloat(healthY).toFixed(1);
+            document.getElementById('ui_health_scale_val').textContent = parseFloat(healthScale).toFixed(2);
+        }
+
+        // Power Sphere (Blue)
+        const powerCanvas = document.getElementById('power-gauge-canvas');
+        if (powerCanvas && window.gaugeManager && window.gaugeManager.powerGauge) {
+            const powerX = document.getElementById('ui_power_offsetX').value;
+            const powerY = document.getElementById('ui_power_offsetY').value;
+            const powerScale = document.getElementById('ui_power_scale').value;
+            powerCanvas.style.left = powerX + 'px';
+            powerCanvas.style.bottom = powerY + 'px';
+            window.gaugeManager.powerGauge.setScale(parseFloat(powerScale));
+            document.getElementById('ui_power_offsetX_val').textContent = parseFloat(powerX).toFixed(1);
+            document.getElementById('ui_power_offsetY_val').textContent = parseFloat(powerY).toFixed(1);
+            document.getElementById('ui_power_scale_val').textContent = parseFloat(powerScale).toFixed(2);
+        }
+
+        // Ally Boxes
+        const allyX = document.getElementById('ui_ally_offsetX').value;
+        const allyY = document.getElementById('ui_ally_offsetY').value;
+        this.game.allyBoxesContainer.style.left = `${allyX}%`;
+        this.game.allyBoxesContainer.style.bottom = `${allyY}px`;
+        document.getElementById('ui_ally_offsetX_val').textContent = allyX;
+        document.getElementById('ui_ally_offsetY_val').textContent = allyY;
+
+        // Weapon Display
+        const weaponX = document.getElementById('ui_weapon_offsetX').value;
+        const weaponY = document.getElementById('ui_weapon_offsetY').value;
+        const weaponContainer = document.querySelector('.weapon-display');
+        if (weaponContainer) {
+            weaponContainer.style.left = `${weaponX}%`;
+            weaponContainer.style.bottom = `${weaponY}%`;
+            document.getElementById('ui_weapon_offsetX_val').textContent = weaponX;
+            document.getElementById('ui_weapon_offsetY_val').textContent = weaponY;
+        }
+
+        // Ammo Display
+        const ammoX = document.getElementById('ui_ammo_offsetX').value;
+        const ammoY = document.getElementById('ui_ammo_offsetY').value;
+        const ammoContainer = document.querySelector('.ammo-display');
+        if (ammoContainer) {
+            ammoContainer.style.left = `${ammoX}%`;
+            ammoContainer.style.bottom = `${ammoY}%`;
+            document.getElementById('ui_ammo_offsetX_val').textContent = ammoX;
+            document.getElementById('ui_ammo_offsetY_val').textContent = ammoY;
+        }
+    }
+
+    snapshotUI() {
+        const gaugesX = document.getElementById('ui_gauges_offsetX').value;
+        const gaugesY = document.getElementById('ui_gauges_offsetY').value;
+        const gaugesSize = document.getElementById('ui_gauges_size').value;
+        const overlayX = document.getElementById('ui_overlay_offsetX').value;
+        const overlayY = document.getElementById('ui_overlay_offsetY').value;
+        const overlaySizePercent = document.getElementById('ui_overlay_size').value;
+        const overlayActualSize = Math.round((overlaySizePercent / 100) * 1100); // Calculate actual px from %
+        const healthX = document.getElementById('ui_health_offsetX').value;
+        const healthY = document.getElementById('ui_health_offsetY').value;
+        const healthScale = document.getElementById('ui_health_scale').value;
+        const powerX = document.getElementById('ui_power_offsetX').value;
+        const powerY = document.getElementById('ui_power_offsetY').value;
+        const powerScale = document.getElementById('ui_power_scale').value;
+        const allyX = document.getElementById('ui_ally_offsetX').value;
+        const allyY = document.getElementById('ui_ally_offsetY').value;
+        const weaponX = document.getElementById('ui_weapon_offsetX').value;
+        const weaponY = document.getElementById('ui_weapon_offsetY').value;
+        const ammoX = document.getElementById('ui_ammo_offsetX').value;
+        const ammoY = document.getElementById('ui_ammo_offsetY').value;
+        console.log(`// --- UI Snapshot ---
+Gauges: { left: ${gaugesX}%, bottom: ${gaugesY}%, size: ${gaugesSize}px }
+Overlay: { left: ${overlayX}%, bottom: ${overlayY}%, scale: ${overlaySizePercent}%, actualWidth: ${overlayActualSize}px }
+Health Sphere: { left: ${healthX}px, bottom: ${healthY}px, scale: ${healthScale} }
+Power Sphere: { left: ${powerX}px, bottom: ${powerY}px, scale: ${powerScale} }
+Allies: { left: ${allyX}%, bottom: ${allyY}px }
+Weapon: { left: ${weaponX}%, bottom: ${weaponY}% }
+Ammo: { left: ${ammoX}%, bottom: ${ammoY}% }`);
     }
 }

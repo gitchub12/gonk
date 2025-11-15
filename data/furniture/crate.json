@@ -1,7 +1,7 @@
 {
-  "_comment": "A simple 16x16x16 cube model for a crate. BROWSERFIREFOXHIDE crate.json",
+  "_comment": "A simple 16x16x16 cube model for a crate. Corrected texture paths.",
   "textures": {
-    "all": "chronokillers_star_wars:blocks/crate"
+    "all": "blocks/crate.png"
   },
   "elements": [
     {

@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/blue_stripe_light_vertical",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/bluestripelightverticalpic",
+    "particle": "chronokillers_star_wars:blocks/bluestripelightverticalpic",
+    "0": "chronokillers_star_wars:blocks/bluenew"
+  }
+}

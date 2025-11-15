@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/smallredlight"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/smallredlight",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/smallredlight",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/smallredlight",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/smallredlight",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/smallredlight",
+      "x": 90
+    }
+  }
+}

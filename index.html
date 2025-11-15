@@ -10,6 +10,203 @@
         canvas { display: block; }
         #damageFlash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0.5); z-index: 999; pointer-events: none; display: none; }
 
+        /* New Character Page Layout */
+        #character-page-wrapper {
+            display: none; /* Hidden by default */
+            flex-direction: row;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99;
+            justify-content: center;
+            align-items: center;
+            gap: 2vw;
+            padding: 5vh 5vw;
+            box-sizing: border-box;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        #character-sheet-container, #upgrade-container {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            transform: none !important;
+            height: 90vh !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column;
+            border-radius: 10px;
+        }
+
+        #character-sheet-container {
+            width: 30% !important;
+            max-width: 450px !important;
+            padding: 15px;
+        }
+
+        #upgrade-container {
+            flex-grow: 1;
+            width: auto !important;
+            padding: 15px;
+            overflow: hidden !important; /* Ensure upgrade container itself doesn't scroll */
+        }
+        
+        #upgrade-container > svg {
+            overflow: visible; /* Allow lines to be drawn outside the immediate SVG bounds if needed */
+        }
+
+
+        #stats-display {
+            overflow-y: auto; /* Allow scrolling ONLY for the stats part */
+            flex-grow: 1; /* Allow it to take up available space */
+            flex-shrink: 1;
+            padding-right: 10px; /* For scrollbar */
+        }
+
+        #module-display {
+            flex-shrink: 0; /* Don't let modules area shrink */
+            max-height: 200px; /* Limit height */
+            overflow-y: auto;
+        }
+        
+        .upgrade-node.fallback {
+            font-size: 6px;
+            text-align: center;
+            line-height: 1.1;
+            word-break: break-word;
+            color: white;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        /* Upgrade UI Styles */
+        .upgrade-node {
+            position: absolute;
+            /* width and height set by JavaScript for flexible sizing */
+            background-color: #222;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid #61afef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .upgrade-node:hover {
+            transform: scale(1.1);
+            border-color: #fff;
+            box-shadow: 0 0 10px #61afef;
+        }
+        .upgrade-node.purchased {
+            border-color: #ffc107;
+            opacity: 1;
+        }
+        .upgrade-node.available {
+            opacity: 0.95;
+            border-style: dashed;
+        }
+        .upgrade-node:not(.available):not(.purchased) {
+            opacity: 0.9;
+        }
+
+        #upgrade-tooltip {
+            display: none;
+            position: fixed; /* Use fixed to escape container bounds */
+            background: rgba(0,0,0,0.9);
+            border: 1px solid #61afef;
+            padding: 10px;
+            color: white;
+            z-index: 101;
+            border-radius: 5px;
+            min-width: 200px;
+            max-width: 350px;
+            font-size: 14px;
+        }
+        #upgrade-tooltip h3 { margin: 0 0 5px 0; color: #61afef; }
+        #upgrade-tooltip p { margin: 0; }
+        #upgrade-tooltip .cost { margin-top: 8px; color: #ffc107; font-weight: bold; }
+
+        /* Map Screen */
+        #map-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+        #map-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Upgrade UI Controls */
+        #upgrade-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            background: rgba(200, 50, 50, 0.8);
+            color: white;
+            border: 2px solid #ff4444;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 102;
+            transition: all 0.2s;
+        }
+        #upgrade-close-btn:hover {
+            background: rgba(255, 50, 50, 0.9);
+            transform: scale(1.1);
+        }
+        #upgrade-action-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 102;
+        }
+        #upgrade-action-buttons button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid;
+            transition: all 0.2s;
+        }
+        #upgrade-undo-btn {
+            background: rgba(200, 100, 50, 0.8);
+            color: white;
+            border-color: #ff8844;
+        }
+        #upgrade-undo-btn:hover {
+            background: rgba(255, 120, 60, 0.9);
+            transform: scale(1.05);
+        }
+        #upgrade-confirm-btn {
+            background: rgba(50, 200, 100, 0.8);
+            color: white;
+            border-color: #44ff88;
+        }
+        #upgrade-confirm-btn:hover {
+            background: rgba(60, 255, 120, 0.9);
+            transform: scale(1.05);
+        }
+
         /* Loading Screen Styles */
         #loading-screen-container { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -26,8 +223,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; /* This ensures the image scales correctly with black bars */
-            z-index: -1; /* Places the image behind the trivia content */
+            object-fit: contain;
+            z-index: -1;
         }
         #loading-screen-content { width: 90%; max-width: 1400px; height: 90%; position: relative; }
         #question { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.4175vw; text-align: center; padding: 20px; line-height: 1.4; color: #ffcc00; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px #000; font-weight: bold; }
@@ -35,7 +232,7 @@
         .answer { 
             position: absolute; 
             padding: 10px;
-            border: 2px solid #ff0000; /* Default to red border */
+            border: 2px solid #ff0000;
             border-radius: 8px;
             font-size: 1.0vw;
             cursor: pointer; 
@@ -70,159 +267,106 @@
         #feedback-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 15px 30px; border-radius: 8px; font-size: 24px; font-weight: bold; color: white; display: none; z-index: 2000; text-shadow: 1px 1px 2px black; }
         #feedback-popup.correct { background-color: rgba(0, 200, 0, 0.8); }
         #feedback-popup.incorrect { background-color: rgba(200, 0, 0, 0.8); }
-        /* FIX: Increased specificity to ensure trivia feedback popup moves down */
-        #loading-screen-container #feedback-popup {
-            top: 70% !important; /* Changed from 50% to move it down */
-        }
-
+        #loading-screen-container #feedback-popup { top: 70% !important; }
 
         /* HUD Styles */
         :root { --ally-color: rgba(0, 150, 200, 0.4); }
         .game-hud-container { position: absolute; width: 100%; height: 100%; pointer-events: none; display: none; color: #eee; }
-        /* REVERTED: Moved Ally Boxes back to the bottom of the screen */
-        .ally-boxes { 
-            position: absolute; 
-            bottom: 10px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            display: flex; 
-            flex-direction: row; /* Original horizontal layout */
-            gap: 8px; padding: 0; 
+        .ally-boxes { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: row; gap: 8px; padding: 0; }
+        /* NEW ALLY BOX STATES */
+        .ally-box { 
+            width: 121px; height: 148px; background: rgba(10, 20, 30, 0.5); border: 2px solid var(--ally-color); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: var(--ally-color); font-size: 14px; font-weight: bold; text-shadow: 0 0 5px var(--ally-color); backdrop-filter: blur(2px); padding: 5px; box-sizing: border-box; visibility: hidden; position: relative; overflow: hidden; transition: transform 0.3s ease-in-out; 
         }
-        .ally-box { width: 121px; height: 148px; background: rgba(10, 20, 30, 0.5); border: 2px solid var(--ally-color); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: var(--ally-color); font-size: 14px; font-weight: bold; text-shadow: 0 0 5px var(--ally-color); backdrop-filter: blur(2px); padding: 5px; box-sizing: border-box; visibility: hidden; position: relative; overflow: hidden; }
+        .ally-boxes-shifted .ally-box { transform: translateY(50px); }
         .ally-box.visible { visibility: visible; }
-        .ally-box img { 
-            position: absolute; top: 5px; left: 12px;
-            width: 94px; height: 94px; image-rendering: pixelated; 
-            border: 1px solid rgba(0, 150, 200, 0.6); z-index: 2; 
-        }
-        .ally-name {
-            position: absolute; top: 102px; width: 100%; left: 0;
-            text-align: center; z-index: 3; line-height: 1.1; font-size: 15px;
-            color: #FFFFFF;
-            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-            opacity: 1.0;
-        }
+        .ally-box img { position: absolute; top: 5px; left: 12px; width: 94px; height: 94px; image-rendering: pixelated; border: 1px solid rgba(0, 150, 200, 0.6); z-index: 2; }
+        .ally-name { position: absolute; top: 102px; width: 100%; left: 0; text-align: center; z-index: 3; line-height: 1.1; font-size: 15px; color: #FFFFFF; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; opacity: 1.0; }
         .ally-health-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background-color: rgba(255, 0, 0, 0.8); transition: height 0.3s ease; z-index: 1; }
         .ally-health-overlay-face { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background-color: rgba(255, 0, 0, 0.3); transition: height 0.3s ease; z-index: 3; }
         .ally-health-overlay.pulsing { animation: pulseRed 1s infinite; }
         .ally-health-overlay-face.pulsing { animation: pulseRed 1s infinite; }
         @keyframes pulseRed { 0% { background-color: rgba(255, 0, 0, 0.3); } 50% { background-color: rgba(255, 0, 0, 0.6); } 100% { background-color: rgba(255, 0, 0, 0.3); } }
-        .ally-id-footer { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 20px; z-index: 4;
-            background-color: rgba(0,0,0,0.7); color: white; font-size: 16px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center;
+        .ally-id-footer { position: absolute; bottom: 0; left: 0; width: 100%; height: 20px; z-index: 4; background-color: rgba(0,0,0,0.7); color: white; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        
+        /* NEW: Ally Conversation Movement */
+        .ally-box.shift-up { transform: translateY(-20px) !important; }
+        .ally-box.shift-down { transform: translateY(50px) !important; }
+
+        /* NEW: Player Gauges */
+        :root {
+            --gauge-size: 150px; /* Gauge circle size */
+            --gauge-container-x: 1%; /* Gauge container X position */
+            --gauge-container-y: 1%; /* Gauge container Y position (from bottom) */
+            --gauge-gap: 10px; /* Gap between gauges */
+            --overlay-size: 508px; /* Overlay image size - 46.2% of 1100px baseline */
+            --overlay-x: 0.49%; /* Overlay X offset */
+            --overlay-y: 0%; /* Overlay Y offset (from bottom) */
+            --ammo-x: 91%; /* Ammo display X position */
+            --ammo-y: 1%; /* Ammo display Y position (from bottom) */
+            --weapon-x: 12%; /* Weapon display X position */
+            --weapon-y: 20%; /* Weapon display Y position (from bottom) */
         }
 
+        .player-gauges-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .gauge-canvas {
+            position: absolute;
+            width: var(--gauge-size);
+            height: var(--gauge-size);
+            image-rendering: auto;
+            pointer-events: none;
+        }
+
+        #health-gauge-canvas {
+            bottom: 10px;
+            left: 71.2px;
+        }
+
+        #power-gauge-canvas {
+            bottom: 14.4px;
+            left: 229.4px;
+        }
+
+        #health-energy-overlay {
+            position: absolute;
+            width: var(--overlay-size);
+            height: var(--overlay-size);
+            bottom: var(--overlay-y);
+            left: var(--overlay-x);
+            z-index: 11;
+            pointer-events: none;
+            image-rendering: auto;
+            object-fit: contain;
+        }
+
+
         .gonk-health { position: absolute; bottom: 5px; left: 5px; display: flex; align-items: flex-end; gap: 20px; transform: translate(-5%, 5%); }
-        .gonk-model { background: none; display: flex; align-items: center; justify-content: center; position: relative; }
-        .gonk-model img { width: 260px; height: auto; opacity: 0.7; image-rendering: pixelated; }
+        /* .gonk-model is now deprecated for the lower left corner */
         .health-bar-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
         .health-bar { width: 200px; height: 25px; background: rgba(50, 0, 0, 0.5); border: 2px solid rgba(200, 0, 0, 0.8); border-radius: 4px; position: relative; overflow: hidden; }
         .health-fill { height: 100%; background: linear-gradient(90deg, #ff0000, #ff4444); width: 100%; transition: width 0.3s ease; }
         .health-label { position: absolute; width: 100%; text-align: center; line-height: 25px; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; font-size: 12px; }
-        /* MOVED: Weapon and Ammo displays to the left side */
-        .ammo-display { 
-            position: absolute; 
-            bottom: 20px; 
-            left: 20px; /* Changed from right */
-            background: rgba(0, 0, 0, 0.5); 
-            border: 2px solid rgba(255, 200, 0, 0.6); 
-            border-radius: 8px; padding: 15px; color: #ffcc00; 
-            font-size: 28px; font-weight: bold; 
-            text-shadow: 0 0 5px rgba(255, 200, 0, 0.5); 
-            min-width: 120px; text-align: center; 
-        }
+        .ammo-display { position: absolute; bottom: var(--ammo-y); left: var(--ammo-x); background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255, 200, 0, 0.6); border-radius: 8px; padding: 15px; color: #ffcc00; font-size: 28px; font-weight: bold; text-shadow: 0 0 5px rgba(255, 200, 0, 0.5); min-width: 120px; text-align: center; }
         .ammo-label { font-size: 14px; color: #ffaa00; margin-bottom: 5px; }
-        .weapon-display { position: absolute; bottom: 125px; left: 20px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 10px; color: white; font-size: 14px; min-width: 150px; text-align: center; }
+        .weapon-display { position: absolute; bottom: var(--weapon-y); left: var(--weapon-x); background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 10px; color: white; font-size: 14px; min-width: 150px; text-align: center; }
         .crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: rgba(255, 197, 0, 0.9); border-radius: 50%; box-shadow: 0 0 8px rgba(255, 197, 0, 0.7); pointer-events: none; }
-
-        #song-title-display {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.5vw;
-            color: #ffcc00;
-            text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 15px #000;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-        }
-
-        #song-category-display {
-            position: absolute;
-            bottom: calc(15% + 3.0vw); /* Position it above the song title */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5vw; /* Smaller font for the category */
-            color: #cccccc;
-            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-            font-weight: normal;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-        }
-
-        #music-volume-display {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 1.2vw;
-            color: #ffcc00;
-            background-color: rgba(0,0,0,0.5);
-            padding: 8px 15px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none;
-        }
-
-        #faction-relationship-hud {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 95vh; /* Use viewport height to define width */
-            height: 95vh; /* Make it a square */
-            pointer-events: none;
-            display: none;
-        }
-        #faction-lines-svg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-        #faction-lines-svg circle {
-            pointer-events: none;
-            transition: cx 0.1s linear, cy 0.1s linear;
-        }
-
-        .faction-relationship-text {
-            font-size: 50px;
-            font-weight: bold;
-            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9));
-        }
-        .faction-node {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 20, 30, 0.8);
-            border: 2px solid #61afef;
-            color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            white-space: pre;
-            text-shadow: 1px 1px 2px black;
-            transition: box-shadow 0.5s ease-in-out, top 0.1s linear, left 0.1s linear;
-        }
-        .faction-node-shadow {
-            opacity: 0.25;
-            z-index: -1;
-            filter: blur(1px);
-        }
-
+        #song-title-display { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); font-size: 2.5vw; color: #ffcc00; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 15px #000; font-weight: bold; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
+        #song-category-display { position: absolute; bottom: calc(15% + 3.0vw); left: 50%; transform: translateX(-50%); font-size: 1.5vw; color: #cccccc; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; font-weight: normal; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
+        #music-volume-display { position: absolute; bottom: 20px; right: 20px; font-size: 1.2vw; color: #ffcc00; background-color: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 5px; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
+        #faction-relationship-hud { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95vh; height: 95vh; pointer-events: none; display: none; }
+        #faction-lines-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #faction-lines-svg circle { pointer-events: none; transition: cx 0.1s linear, cy 0.1s linear; }
+        .faction-relationship-text { font-size: 50px; font-weight: bold; filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9)); }
+        .faction-node { position: absolute; transform: translate(-50%, -50%); background: rgba(10, 20, 30, 0.8); border: 2px solid #61afef; color: #ffffff; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: bold; text-align: center; white-space: pre; text-shadow: 1px 1px 2px black; transition: box-shadow 0.5s ease-in-out, top 0.1s linear, left 0.1s linear; }
+        .faction-node-shadow { opacity: 0.25; z-index: -1; filter: blur(1px); }
         .faction-node.player_droid { background-color: #404040; border-color: #707070; }
         .faction-node.rebels { background-color: #a12a2a; border-color: #d94242; }
         .faction-node.aliens { background-color: #004d00; border-color: #008000; }
@@ -232,82 +376,185 @@
         .faction-node.mandalorians { background: linear-gradient(45deg, #00d2ff, #f9a429); border-color: #f9a429; }
         .faction-node.sith { background-color: #330000; border-color: #990000; }
         .faction-node.takers { background-color: #2E2E2E; border-color: #C0C0C0; }
-
-
         .faction-node.improving { box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.4); }
         .faction-node.worsening { box-shadow: 0 0 15px 5px rgba(139, 0, 0, 0.5); }
-
         #faction-avatar-container {
             position: absolute;
-            right: var(--faction-avatar-right, 10px); /* Controlled by JS */
-            top: var(--faction-avatar-top, 50%); /* Controlled by JS */
-            transform: var(--faction-avatar-transform, translateY(-50%)); /* Controlled by JS */
-            display: flex;
-            flex-direction: column;
+            right: var(--faction-avatar-offset-x, 10px);
+            top: var(--faction-avatar-offset-y, 50%);
+            transform: var(--faction-avatar-transform, translateY(-50%) scale(1.0));
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            grid-template-rows: repeat(3, 1fr);    /* 3 rows */
             gap: 5px;
-            transition: right 0.2s, top 0.2s, width 0.2s, height 0.2s;
+            width: calc(76px * 3 + 5px * 2); /* 3 avatars + 2 gaps */
+            height: calc(76px * 3 + 5px * 2); /* 3 avatars + 2 gaps */
+            transition: none; /* Remove transition for now, can re-add later if needed */
+
+            /* Fixed Faction Grid Order */
+            grid-template-areas:
+                "takers imperials sith"
+                "clones gonk droids"
+                "mandalorians aliens rebels";
         }
         .faction-avatar-box {
-            width: var(--faction-avatar-size, 80px);
-            height: var(--faction-avatar-size, 80px);
-            background-color: #000; /* Changed to solid black */
-            border: 2px solid var(--faction-avatar-border-color, #444);
+            width: 76px; /* 5% smaller than 80px */
+            height: 76px; /* 5% smaller than 80px */
+            background-color: #000;
+            border: 3px solid var(--faction-avatar-border-color, #444); /* FIXED: 3px border */
             border-radius: 5px;
             overflow: hidden;
-            position: relative; /* Needed for absolute positioning of the name */
-            transition: box-shadow 0.5s ease-in-out; /* For glow effect */
+            position: relative;
+            transition: box-shadow 0.5s ease-in-out, transform 0.1s linear; /* ADDED transform transition for smooth movement */
         }
+        .faction-avatar-box[id*="takers"] { grid-area: takers; }
+        .faction-avatar-box[id*="imperials"] { grid-area: imperials; }
+        .faction-avatar-box[id*="sith"] { grid-area: sith; }
+        .faction-avatar-box[id*="clones"] { grid-area: clones; }
+        .faction-avatar-box[id*="player_droid"] { grid-area: gonk; }
+        .faction-avatar-box[id*="droids"] { grid-area: droids; }
+        .faction-avatar-box[id*="mandalorians"] { grid-area: mandalorians; }
+        .faction-avatar-box[id*="aliens"] { grid-area: aliens; }
+        .faction-avatar-box[id*="rebels"] { grid-area: rebels; }
+        
         .faction-avatar-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
-        .faction-avatar-name {
+        .faction-avatar-box.gonk-avatar-box {
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+        /* Style for the relocated animated Hologonk element */
+        #hologonk-avatar-relocated {
+            width: 100%; 
+            height: 100%; 
+            opacity: 1.0; 
+            image-rendering: pixelated;
+        }
+        
+        .faction-avatar-box.gonk-avatar-box img {
+             /* Hiding the default image, the animated one will take over */
+            display: none; 
+        }
+
+        .faction-avatar-name { position: absolute; top: 2px; width: 100%; text-align: center; font-weight: bold; }
+        .faction-avatar-relationship {
             position: absolute;
             bottom: 2px;
             width: 100%;
             text-align: center;
             font-weight: bold;
+            font-size: calc(76px / 4); /* Adjusted font size based on new avatar size */
+            color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1-1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Single-pixel black outline */
         }
         
-        /* ADDED: Character Sheet HUD */
         #character-sheet-container {
+            display: none;
             position: absolute;
             top: 50%;
-            left: 50%;
+            left: 25%; /* Moved to the left */
             transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 1200px;
-            height: 80%;
-            background-color: rgba(10, 20, 30, 0.95);
-            border: 3px solid #ffcc00;
-            border-radius: 10px;
+            width: 45%;
+            max-width: 600px;
+            background: rgba(0,0,0,0.85);
+            border: 2px solid #61afef;
             padding: 20px;
-            display: none; /* Controlled by KeyC in main.js */
-            z-index: 1500;
-            pointer-events: all;
-            color: #fff;
-            font-size: 18px;
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
+            z-index: 100;
+            color: white;
+            font-family: monospace;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(97, 175, 239, 0.5);
+        }
+        #character-sheet-container h2, #character-sheet-container h3 {
+            text-align: center;
+            color: #61afef;
+            text-shadow: 0 0 5px #61afef;
+        }
+        #stats-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+        }
+        .stat-entry {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 5px;
+        }
+        .stat-label {
+            font-weight: bold;
+            color: #abb2bf;
+        }
+        .stat-value {
+            color: #61afef;
+            font-weight: bold;
         }
         #module-display {
-            padding: 10px;
-            border: 1px solid #61afef;
-            min-height: 200px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
         }
         .module-icon {
             width: 64px;
             height: 64px;
-            border: 1px solid #444;
-            image-rendering: pixelated;
+            border: 2px solid #61afef;
+            background: rgba(0,0,0,0.5);
         }
+        #wire-display {
+            text-align: right;
+            font-size: 1.2em;
+            color: #61afef;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+        }
+
+        /* Conversation UI Styles */
+        #conversation-container { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 60%; max-width: 900px; display: none; flex-direction: column; gap: 8px; z-index: 1099; pointer-events: none; }
+        .conversation-box-wrapper { display: none; flex-direction: row; align-items: center; gap: 10px; }
+        .faction-label { font-size: 16px; font-weight: bold; text-transform: uppercase; color: #ccc; text-shadow: 1px 1px 2px #000; }
+        .conversation-box { background-color: rgba(0, 0, 0, 0.8); border: 2px solid #888; border-radius: 5px; padding: 15px; color: #fff; font-size: 22px; font-weight: bold; text-shadow: 1px 1px 3px #000; flex-grow: 1; transition: opacity 1s ease-in-out; }
+        #conversation-lines-svg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1098; } /* Lower than container, but still high */
+        .conversation-pointer { opacity: 0.2; transition: opacity 1s ease-in-out; }
+        #offscreen-indicators { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1101; }
+        .offscreen-arrow { font-size: 24px; text-shadow: 0 0 5px #000; }
 
     </style>
 </head>
 <body>
+    <svg id="conversation-lines-svg">
+        <polygon id="conversation-pointer-1" class="conversation-pointer"/>
+        <polygon id="conversation-pointer-2" class="conversation-pointer"/>
+        <polygon id="conversation-pointer-3" class="conversation-pointer"/>
+    </svg>
+    <div id="conversation-container">
+        <div id="conversation-slot-1" class="conversation-box-wrapper">
+            <span class="faction-label"></span><div class="conversation-box"></div>
+        </div>
+        <div id="conversation-slot-2" class="conversation-box-wrapper">
+            <span class="faction-label"></span><div class="conversation-box"></div>
+        </div>
+        <div id="conversation-slot-3" class="conversation-box-wrapper">
+            <span class="faction-label"></span><div class="conversation-box"></div>
+        </div>
+        <div id="offscreen-indicators"></div>
+    </div>
     <div id="loading-screen-container">
         <img id="loading-screen-bg-image" src=""> <div id="loading-screen-content">
             <div id="question"></div>
@@ -323,12 +570,36 @@
 
     <div id="damageFlash"></div>
     
-    <div id="character-sheet-container">
-        <h2>CHARACTER SHEET (WIP)</h2>
-        <p>Collected Modules:</p>
-        <div id="module-display"></div>
-        <p style="margin-top: 20px; color: #ffcc00;">[W]ires and Power Cells will be here eventually. Press 'C' to hide.</p>
+    <div id="character-page-wrapper">
+        <div id="character-sheet-container">
+            <h2 style="text-align: center; color: #61afef;">GONK POPE STATUS</h2>
+            <div id="spare-core-display" style="text-align: center; font-size: 1.1em; color: #00ff00; margin-bottom: 15px;">
+                Spare Cores: <span id="spare-core-count">0</span>
+            </div>
+            <div id="stats-display" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                </div>
+            <h3 style="text-align: center; color: #61afef;">MODULES</h3>
+            <div id="module-display" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                </div>
+            <div id="wire-display" style="text-align: right; font-size: 1.2em; color: #61afef; margin-top: 10px;">Wire: 0</div>
+        </div>
+
+        <div id="upgrade-container"></div>
+
+        <!-- Upgrade UI Controls -->
+        <button id="upgrade-close-btn" style="display: none;">✕</button>
+        <div id="upgrade-action-buttons" style="display: none;">
+            <button id="upgrade-undo-btn">Undo</button>
+            <button id="upgrade-confirm-btn">Confirm</button>
+        </div>
     </div>
+    <div id="upgrade-tooltip"></div>
+
+    <!-- Map Screen -->
+    <div id="map-screen" style="display: none;">
+        <canvas id="map-canvas"></canvas>
+    </div>
+
     <div class="game-hud-container">
         <div class="ally-boxes">
             <div id="ally-box-1" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
@@ -336,12 +607,14 @@
             <div id="ally-box-3" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
             <div id="ally-box-4" class="ally-box"><div class="ally-health-overlay"></div><div class="ally-health-overlay-face"></div><img><span class="ally-name"></span><div class="ally-color-footer"></div></div>
         </div>
-        <div class="gonk-health">
-            <div class="gonk-model"><img id="gonkImage" src="data/pngs/hologonk/hologonk_1.png" alt="Gonk"></div>
-            <div class="health-bar-container"><div class="health-bar"><div class="health-fill"></div><div class="health-label">HEALTH: 100%</div></div></div>
+        <img id="health-energy-overlay" src="data/pngs/HUD/health_energy_overlay.png">
+        <div class="player-gauges-container">
+            <canvas id="health-gauge-canvas" class="gauge-canvas"></canvas>
+            <canvas id="power-gauge-canvas" class="gauge-canvas"></canvas>
         </div>
+
         <div class="weapon-display"><div class="ammo-label">WEAPON</div><div id="gameHudWeapon">PAMPHLET</div></div>
-        <div class="ammo-display"><div class="ammo-label">AMMO</div><div id="gameHudAmmo">0 / 0</div></div>
+        <div class="ammo-display"><div class="ammo-label">PAMPHLETS</div><div id="gameHudAmmo">0 / 0</div></div>
 
         <div id="faction-relationship-hud">
             <svg id="faction-lines-svg" width="100%" height="100%"></svg>
@@ -364,43 +637,74 @@
             <div id="faction-node-shadow-8" class="faction-node faction-node-shadow"></div>
             <div id="faction-node-8" class="faction-node"></div>
         </div>
-        <div id="faction-avatar-container"></div>
+        <div id="faction-avatar-container">
+             <img id="hologonk-avatar-relocated" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Animated Gonk Avatar">
+        </div>
         <div id="song-title-display"></div>
         <div id="song-category-display"></div>
         <div id="music-volume-display"></div>
         <div class="crosshair"></div>
     </div>
 
+<div id="loading-screen"></div>
+
+<div id="cheats-menu" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000;">
+    <h2 style="text-align: center;">Cheats</h2>
+    <div style="margin-bottom: 10px;">
+        <input type="checkbox" id="no-clipping-checkbox">
+        <label for="no-clipping-checkbox">No Clipping</label>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <input type="checkbox" id="invincibility-checkbox">
+        <label for="invincibility-checkbox">Invincibility</label>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label for="pamphlets-input">Pamphlets:</label>
+        <input type="number" id="pamphlets-input" value="999" style="width: 60px;">
+        <button id="set-pamphlets-button">Set</button>
+    </div>
+    <button id="close-cheats-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+</div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="character_upgrades.js"></script>
+    <script src="map_screen.js"></script>
 
     <script>
         class ScriptLoader {
             constructor() {
                 this.scriptsToLoad = [
-                    // Configs and standalone classes first
+                    // --- CORE FOUNDATION (INSTANTIATION) ---
+                    // These must be loaded first to ensure global singletons are available before use in initGame/Game constructor.
+                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
+                    { path: 'furniture.js?v=5', name: 'Furniture' },
                     { path: 'game_and_character_config.js', name: 'Game Config' },
+                    { path: 'gonk_models.js', name: 'Gonk Models' },
+                    { path: 'faction_manager.js', name: 'Faction Manager' },
+                    { path: 'weapon_pickup_manager.js', name: 'Weapon Pickup Manager' },
+                    { path: 'animated_gauges.js', name: 'Animated Gauges' },
+                    { path: 'player_gear.js', name: 'Player Gear' },
+                    { path: 'main.js?v=2', name: 'Main Engine' },
+                    
+                    // --- UTILITY/DEPENDENCIES ---
                     { path: 'skybox_animator.js', name: 'Skybox Animator' },
                     { path: 'audio_system.js', name: 'Audio System' },
-                    { path: 'loadingScreenManager.js', name: 'Loading Screen Manager' }, // Moved earlier
-
+                    { path: 'loadingScreenManager.js', name: 'Loading Screen Manager' },
+                    { path: 'environment_and_physics.js?v=2', name: 'Environment & Physics' },
                     { path: 'npc_behavior.js', name: 'NPC Behavior' },
-                    { path: 'expression_manager.js', name: 'Expression Manager' },
-                    // Managers that depend on configs or are standalone
-                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
-                    { path: 'faction_manager.js', name: 'Faction Manager' },
+                    { path: 'npc_behavior_death.js', name: 'NPC Behavior Death' },
+                    { path: 'conversation_controller.js', name: 'Conversation Controller' },
+                    { path: 'conversation_logger.js', name: 'Conversation Logger' },
+                    
                     { path: 'faction_avatar_manager.js', name: 'Faction Avatar Manager' },
                     { path: 'weapon_icons.js', name: 'Weapon Icons' },
-                    { path: 'gonk_models.js', name: 'Gonk Models' },
-
-                    // Core game logic that instantiates things
-                    { path: 'main.js', name: 'Main Engine' },
-
-                    // Systems that depend on core game objects
-                    { path: 'environment_and_physics.js', name: 'Environment & Physics' },
+                    { path: 'data/npc_name_assigner.js', name: 'NPC Name Assigner' },
                     { path: 'levelManager.js', name: 'Level Manager'},
-                    { path: 'player_gear.js', name: 'Player Gear' },
+                    
+                    // --- UI/DEBUG (Lowest Priority) ---
                     { path: 'tab_faction_controls.js', name: 'Faction Tab Controls'},
-                    { path: 'tab_controls.js', name: 'Tab Controls UI'}
+                    { path: 'tab_controls.js', name: 'Tab Controls UI'},
+                    { path: 'conversation_ui_manager.js', name: 'Conversation UI Manager'}
                 ];
             }
 
@@ -408,6 +712,9 @@
                 for (const script of this.scriptsToLoad) {
                     try {
                         await this.loadScript(script.path);
+                        if (script.name === 'Asset Loaders') {
+                            window.assetManager = new AssetManager();
+                        }
                     } catch (error) {
                         console.error(`CRITICAL ERROR loading ${script.name}.`, error);
                         return;
@@ -431,21 +738,55 @@
 
         async function initGame() {
             console.log('--- GAME INITIALIZING ---');
-            // Instantiate LoadingScreenManager *after* its script is loaded
-            window.loadingScreenManager = new LoadingScreenManager(); 
+            // === INSTANTIATION ===
+            window.game = new Game();
+            window.weaponPickupManager = new WeaponPickupManager();
+            window.playerWeaponSystem = new PlayerWeaponSystem();
+            window.inputHandler = new InputHandler();
+
+            // Instantiation of LNM must be inside initGame because its class definition depends on previous scripts.
+            window.loadingScreenManager = new LoadingScreenManager();
+            
+            // assetManager is guaranteed to exist here due to script load order change.
             await loadingScreenManager.loadTriviaData();
-
             await assetManager.loadEssentialData();
-
             game.init();
+            window.gaugeManager.init(); // Initialize animated gauge system
             window.tabControls = new TabControls(game, window.playerWeaponSystem, window.physics);
+
+            // Apply initial gauge positions from tab control defaults
+            setTimeout(() => {
+                // Fix container position to match tab control defaults
+                const gaugesContainer = document.querySelector('.player-gauges-container');
+                if (gaugesContainer) {
+                    gaugesContainer.style.left = '1%';
+                    gaugesContainer.style.bottom = '1%';
+                }
+
+                // Fix individual gauge canvas positions
+                const healthCanvas = document.getElementById('health-gauge-canvas');
+                const powerCanvas = document.getElementById('power-gauge-canvas');
+                if (healthCanvas) {
+                    healthCanvas.style.left = '71.2px';
+                    healthCanvas.style.bottom = '10px';
+                }
+                if (powerCanvas) {
+                    powerCanvas.style.left = '230.2px';
+                    powerCanvas.style.bottom = '14.4px';
+                }
+            }, 100);
+            window.conversationUIManager.init(game.camera, game.canvas);
             audioSystem.init(game.camera);
             await audioSystem.initializeMusic();
+            window.factionAvatarManager = new FactionAvatarManager();
             await window.factionAvatarManager.initialize();
 
-            await levelManager.loadLevel(1); // This will now correctly populate NPCs before the first game.update() call
-            game.respawnAllies(); // ADDED: Ensure allies are positioned correctly on first load
-            startGameLoop(); // The first frame of the loop will now apply the UI settings
+            // Initialize map screen
+            initMapScreen();
+
+            await levelManager.loadLevel(1);
+            game.respawnAllies();
+            startGameLoop();
         }
 
         function startGameLoop() {
@@ -453,32 +794,27 @@
             function gameLoop() {
                 requestAnimationFrame(gameLoop);
                 if (!game.isInitialized) return;
-
                 const deltaTime = clock.getDelta();
                 const totalTime = clock.getElapsedTime();
 
                 if (window.loadingScreenManager && window.loadingScreenManager.isActive) {
                     window.loadingScreenManager.update();
-                    game.render(); // Render the 3D scene behind the loading screen
-                    return; // But stop the rest of the game logic
+                    game.render();
+                    return;
                 }
 
                 game.update(deltaTime, totalTime);
+                window.conversationUIManager.update();
+                window.gaugeManager.update(deltaTime); // Update animated gauges
 
                 if (!game.state.isPaused) {
                     for (const npc of game.entities.npcs) {
                         npc.update(game.deltaTime, physics.playerCollider.position);
                         npc.updateHitboxes(); 
                     }
-                    // ADDED: Pickup update loop
                     for (let i = game.entities.pickups.length - 1; i >= 0; i--) {
                         const pickup = game.entities.pickups[i];
-                        if (pickup.update) {
-                            if (!pickup.update(game.deltaTime)) {
-                                pickup.dispose();
-                                game.entities.pickups.splice(i, 1);
-                            }
-                        }
+                        if (pickup.update) { if (!pickup.update(game.deltaTime)) { pickup.dispose(); game.entities.pickups.splice(i, 1); } }
                     }
 
                     for (const npc of game.entities.npcs) npc.updateAnimation(game.deltaTime);

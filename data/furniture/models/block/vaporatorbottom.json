@@ -1,0 +1,14 @@
+{
+  "parent": "chronokillers_star_wars:custom/vaporator",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/vaoporpic",
+    "particle": "chronokillers_star_wars:blocks/vaporator",
+    "0": "chronokillers_star_wars:blocks/vaporator",
+    "1": "chronokillers_star_wars:blocks/razor_crest",
+    "2": "chronokillers_star_wars:blocks/untitled",
+    "3": "chronokillers_star_wars:blocks/post_side",
+    "4": "chronokillers_star_wars:blocks/cp26",
+    "5": "chronokillers_star_wars:blocks/89",
+    "6": "chronokillers_star_wars:blocks/probe_droid"
+  }
+}

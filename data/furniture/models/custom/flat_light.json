@@ -1,0 +1,272 @@
+{
+  "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        6,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        114,
+        0
+      ],
+      "translation": [
+        0,
+        3.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        45
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "gui": {
+      "rotation": [
+        15,
+        222,
+        0
+      ],
+      "translation": [
+        -1,
+        3,
+        1
+      ],
+      "scale": [
+        0.825,
+        0.925,
+        0.625
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        270,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        -8
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        131,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        -1.6
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "Cube",
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#0",
+          "uv": [
+            3,
+            11,
+            6,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [
+            3,
+            11,
+            6,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [
+            3,
+            11,
+            6,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [
+            3,
+            11,
+            6,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [
+            3,
+            11,
+            6,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#0",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Cube",
+      "from": [
+        4.3,
+        0.5,
+        4.2
+      ],
+      "to": [
+        11.9,
+        1.5,
+        11.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#1",
+          "uv": [
+            1,
+            0,
+            15.8,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#1",
+          "uv": [
+            0,
+            0,
+            2.6,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#1",
+          "uv": [
+            0,
+            0,
+            15.8,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#1",
+          "uv": [
+            0,
+            0,
+            1.6,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#1",
+          "uv": [
+            0,
+            0,
+            15.8,
+            15.6
+          ]
+        }
+      }
+    }
+  ]
+}

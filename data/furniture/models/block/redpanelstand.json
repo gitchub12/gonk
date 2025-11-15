@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/red_panel_stand",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/redpanelstandpic",
+    "particle": "chronokillers_star_wars:blocks/redpanelstandpic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/blue-red_panel_back",
+    "2": "chronokillers_star_wars:blocks/red_stand"
+  }
+}

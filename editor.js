@@ -26,6 +26,7 @@ class LevelEditor {
         this.activeTemplate = {};
         this.isTemplateCloned = false;
         this.placementPreview = null;
+        this.pillarPlacementMode = 'center';
 
         this.hoveredItem = null;
         this.hoveredDrawableLine = null;
@@ -166,6 +167,11 @@ class LevelEditor {
         this.render();
     }
 
+    setPillarPlacementMode(mode) {
+        this.pillarPlacementMode = mode;
+        this.render();
+    }
+
     async preloadAllTextures() {
         const allPaths = new Set(['/data/pngs/icons for UI/crate.png', '/data/pngs/icons for UI/spawn_arrow.png', '/data/pngs/icons for UI/elevationicon.png', '/data/pngs/icons for UI/skyboxicon.png']);
         Object.values(this.assetManager.layerTextures).forEach(arr => arr.forEach(path => allPaths.add(path)));
@@ -189,7 +195,7 @@ class LevelEditor {
     redo() { if (this.historyIndex < this.history.length - 1) { this.historyIndex++; this.levelData = this.cloneLevelData(this.history[this.historyIndex]); this.render(); this.statusMsg.textContent = 'Redo'; } }
     modifyState(modificationAction) { this.saveStateToHistory(); modificationAction(); this.isLevelDirty = true; this.render(); }
     resizeCanvas() { const container = document.getElementById('canvasContainer'); this.canvas.width = container.clientWidth; this.canvas.height = container.clientHeight; this.render(); }
-    getMouseWorldCoords(e) { const rect = this.canvas.getBoundingClientRect(); const mouseX = e.clientX - rect.left; const mouseY = e.clientY - rect.top; return { x: (mouseX - this.panX) / this.zoom, y: (mouseY - this.panY) / this.zoom }; }
+    getMouseWorldCoords(e) { const rect = this.canvas.getBoundingClientRect(); const mouseX = (e.clientX + 9) - rect.left; const mouseY = e.clientY - rect.top; return { x: (mouseX - this.panX) / this.zoom, y: (mouseY - this.panY) / this.zoom }; }
     getGridCoordsFromEvent(e) { const { x: worldX, y: worldY } = this.getMouseWorldCoords(e); return { x: Math.floor(worldX / this.gridSize), y: Math.floor(worldY / this.gridSize) }; }
     getVertexCoordsFromEvent(e) { const { x: worldX, y: worldY } = this.getMouseWorldCoords(e); return { x: Math.round(worldX / this.gridSize), y: Math.round(worldY / this.gridSize) }; }
 
@@ -217,7 +223,7 @@ class LevelEditor {
             return 'XF XL';
         }
         // Prioritize macroCategory for name type
-        const categoryKey = iconInfo.config.macroCategory || iconInfo.config.baseType || 'other';
+        const categoryKey = iconInfo.config.baseType || iconInfo.config.macroCategory || 'other';
         const categoryLower = categoryKey.toLowerCase();
 
         // Mapping for Name Lists (same as in npc_behavior.js)
@@ -239,12 +245,26 @@ class LevelEditor {
             'quarterpint': 'other', 'hutt': 'other'
         };
 
-        const listKey = nameListMap[categoryLower] || 'humanoid'; // Default if no specific mapping
+        let listKey = nameListMap[categoryLower] || 'humanoid'; // Default if no specific mapping
+
+        if (categoryLower === 'sith') {
+            listKey = 'darth';
+        }
+
+        // Special case for Wookiee name placeholders
+        if (listKey === 'wookiee') {
+            return 'wookieeF wookieeR';
+        }
 
         // Return placeholder string
         return `${listKey}F ${listKey}L`;
     }
 
+
+    setPillarPlacementMode(mode) {
+        this.pillarPlacementMode = mode;
+        this.render();
+    }
 
     placeItem(gridX, gridY, customSize, itemData, layerNameOverride) {
         const activeLayerName = layerNameOverride || this.activeLayerName;
@@ -282,6 +302,11 @@ class LevelEditor {
                 });
             }
 
+            if (activeLayerName === 'pillar') {
+                item.properties.height = item.properties.height || this.ui.pillarHeight;
+                item.properties.placement = this.pillarPlacementMode;
+            }
+
             const overlapSize = size < 1 ? 1 : size;
             this.deleteOverlappingTiles(gridX, gridY, overlapSize, this.levelData[activeLayerName]);
 
@@ -291,6 +316,9 @@ class LevelEditor {
                 const iconInfo = this.assetManager.npcIcons.get(brush.key);
                 if (iconInfo && iconInfo.config) {
                     item.properties.alphaTexture = true;
+                }
+                if (!item.properties.name) {
+                    item.properties.name = this.generateDefaultNamePlaceholderForNpc(brush.key);
                 }
                  const opacitySlider = document.getElementById('npc-opacity-slider');
                  if (opacitySlider && parseInt(opacitySlider.value) < 100) {
@@ -625,6 +653,28 @@ class LevelEditor {
     onMouseDown(e) {
         if (e.target.closest('#leftPanel, .floating-toolbar, .top-right-ui, #properties-panel, #utility-layers')) return; // Added #utility-layers
 
+        if (this.activeLayerName === 'pillar' && e.button === 0) {
+            const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
+            const gs = this.gridSize;
+            const gridX = Math.floor(worldX / gs);
+            const gridY = Math.floor(worldY / gs);
+            const fracX = worldX / gs - gridX;
+            const fracY = worldY / gs - gridY;
+
+            let newMode = 'center';
+            if (fracX < 0.33 && fracY < 0.33) newMode = 'topLeft';
+            else if (fracX > 0.66 && fracY < 0.33) newMode = 'topRight';
+            else if (fracX < 0.33 && fracY > 0.66) newMode = 'bottomLeft';
+            else if (fracX > 0.66 && fracY > 0.66) newMode = 'bottomRight';
+
+            this.setPillarPlacementMode(newMode);
+
+            const placementSelect = document.getElementById('pillar-placement-select');
+            if (placementSelect) {
+                placementSelect.value = newMode;
+            }
+        }
+
         this.lastMouse = { x: e.clientX, y: e.clientY };
         this.lastPlacedGrid = { x: null, y: null };
 
@@ -702,6 +752,11 @@ class LevelEditor {
         if (this.vectorWallStart) needsRender = true;
         if (this.placementPreview) { this.placementPreview.direction = this.getOverlayDirection(e, this.placementPreview.line); needsRender = true; }
         if (this.activeTool === 'template' && this.isTemplateCloned) needsRender = true;
+
+        if (this.activeLayerName === 'pillar') {
+            needsRender = true;
+        }
+
         if (needsRender) this.render();
 
         if(this.isPainting) {
@@ -760,6 +815,9 @@ class LevelEditor {
         } else if (this.activeLayerName === 'ceiling' && e.ctrlKey) {
             const step = e.deltaY > 0 ? -1 : 1;
             this.ui.updateCeilingHeight(this.ui.ceilingHeight + step);
+        } else if (this.activeLayerName === 'pillar' && e.ctrlKey) {
+            const step = e.deltaY > 0 ? 1 : -1;
+            this.ui.updatePillarHeight(this.ui.pillarHeight + step);
         }
         else {
             const zoomSpeed = 1.1; const oldZoom = this.zoom;
@@ -800,9 +858,14 @@ class LevelEditor {
 
         this.drawGridAndBorders();
         this.drawHoverAndVectorUI();
+        this.drawPillarPlacementPreview();
 
         if (this.activeTool === 'template' && this.isTemplateCloned) {
             this.drawTemplatePreview();
+        }
+
+        if (this.activeLayerName === 'pillar') {
+            this.drawPillarPlacementPreview();
         }
 
         this.ctx.restore();
@@ -821,6 +884,33 @@ class LevelEditor {
     }
 
     drawGridAndBorders() { const gs = this.gridSize; this.ctx.lineWidth = 1 / this.zoom; this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; this.ctx.beginPath(); for (let x = 0; x <= this.gridWidth; x++) { this.ctx.moveTo(x * gs, 0); this.ctx.lineTo(x * gs, this.gridHeight * gs); } for (let y = 0; y <= this.gridHeight; y++) { this.ctx.moveTo(0, y * gs); this.ctx.lineTo(this.gridWidth * gs, y * gs); } this.ctx.stroke(); this.ctx.strokeStyle = '#900'; this.ctx.lineWidth = 3 / this.zoom; this.ctx.strokeRect(0, 0, this.gridWidth * gs, this.gridHeight * gs); }
+
+    drawPillarPlacementPreview() {
+        if (this.activeLayerName !== 'pillar') return;
+
+        const { x: gridX, y: gridY } = this.getGridCoordsFromEvent({ clientX: this.lastMouse.x, clientY: this.lastMouse.y });
+        const gs = this.gridSize;
+        const radius = 4 / this.zoom;
+
+        const placements = {
+            'center': { x: (gridX + 0.5) * gs, y: (gridY + 0.5) * gs },
+            'topLeft': { x: gridX * gs, y: gridY * gs },
+            'topRight': { x: (gridX + 1) * gs, y: gridY * gs },
+            'bottomLeft': { x: gridX * gs, y: (gridY + 1) * gs },
+            'bottomRight': { x: (gridX + 1) * gs, y: (gridY + 1) * gs }
+        };
+
+        for (const [mode, pos] of Object.entries(placements)) {
+            this.ctx.beginPath();
+            this.ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+            if (mode === this.pillarPlacementMode) {
+                this.ctx.fillStyle = 'rgba(255, 255, 0, 0.9)';
+                this.ctx.fill();
+            }
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            this.ctx.stroke();
+        }
+    }
 
     drawHoverAndVectorUI() {
         const gs = this.gridSize;
@@ -1024,10 +1114,45 @@ class LevelEditor {
             const [x, y] = coordKey.split(',').map(Number);
             const size = item.size || 1;
             let img = null;
-            if (item.type === 'npc' || item.type === 'asset' || item.type === 'pillar') {
+            if (item.type === 'npc' || item.type === 'asset') {
                 img = window[item.key + '_icon_img'];
+            } else if (item.type === 'pillar') {
+                const props = item.properties || {};
+                const width = props.width || 11;
+                const placement = props.placement || 'center';
+                const radius = (gs * (width / 100)) / 2;
+
+                let cx = (x + 0.5) * gs;
+                let cy = (y + 0.5) * gs;
+
+                if (placement === 'topLeft') {
+                    cx = x * gs;
+                    cy = y * gs;
+                } else if (placement === 'topRight') {
+                    cx = (x + 1) * gs;
+                    cy = y * gs;
+                } else if (placement === 'bottomLeft') {
+                    cx = x * gs;
+                    cy = (y + 1) * gs;
+                } else if (placement === 'bottomRight') {
+                    cx = (x + 1) * gs;
+                    cy = (y + 1) * gs;
+                }
+
+                this.ctx.fillStyle = 'blue';
+                this.ctx.beginPath();
+                this.ctx.arc(cx, cy, radius, 0, 2 * Math.PI, false);
+                this.ctx.fill();
+
+                const height = props.height || 3;
+                this.ctx.fillStyle = 'white';
+                this.ctx.font = `bold ${gs * 0.25}px monospace`;
+                this.ctx.textAlign = 'left';
+                this.ctx.textBaseline = 'bottom';
+                this.ctx.fillText(height, x * gs + 2, (y + 1) * gs - 2);
+
+                continue;
             } else if (item.type === 'random_npc') {
-                // --- NEW: Draw placeholder for random NPCs ---
                 const factionColors = { Aliens: '#008000', Takers: '#C0C0C0', Droids: '#0066cc', Humans: '#b05c00', Mandalorians: '#FFC72C', Sith: '#990000', Imperials: '#444444', Clones: '#ff8c00' };
                 const color = factionColors[item.properties.macroCategory] || '#555';
                 
@@ -1043,8 +1168,7 @@ class LevelEditor {
                 this.ctx.textBaseline = 'middle';
                 this.ctx.fillText(`R${item.properties.threat}`, x * gs + gs / 2, y * gs + gs / 2);
 
-                continue; // Skip the rest of the drawing logic for this item
-                // --- END NEW ---
+                continue;
             } else {
                 img = this.preloadedImages.get(item.key);
             }
@@ -1297,8 +1421,13 @@ class LevelEditor {
             if (layerMap.size > 0) {
                 if (this.tileLayers.includes(layerName)) {
                     const defaultKey = this.defaultTextures[layerName]?.key;
-                    const customTiles = Array.from(layerMap.entries()).filter(([key, item]) => item.key !== defaultKey);
-                    if (customTiles.length > 0) levelObject.layers[layerName] = customTiles;
+                    // Explicitly filter out any tile that uses the default texture for that layer.
+                    const customTiles = Array.from(layerMap.entries()).filter(([key, item]) => {
+                        return item.key !== defaultKey;
+                    });
+                    if (customTiles.length > 0) {
+                        levelObject.layers[layerName] = customTiles;
+                    }
                 } else {
                     levelObject.layers[layerName] = Array.from(layerMap.entries());
                 }
@@ -1308,10 +1437,6 @@ class LevelEditor {
     }
 
     async saveLevel() {
-        if (this.assetManager.isCharacterDataDirty) {
-            alert("Unsaved character data changes. Please save the master character file from the Settings tab first.");
-            return;
-        }
         const levelDataToSave = this.getLevelDataObject();
         const jsonString = JSON.stringify(levelDataToSave, null, 2);
         const path = `data/levels/level_${this.currentLevel}.json`;

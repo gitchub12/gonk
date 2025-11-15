@@ -1,0 +1,1932 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 128,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      },
+      "ceiling": {
+        "key": "/data/pngs/ceiling/ceiling_27.png",
+        "size": 1
+      },
+      "floor": {
+        "key": "/data/pngs/floor/Gemini_Generated_Image_y18ekry18ekry18e.png",
+        "size": 1
+      },
+      "water": {
+        "key": "/data/pngs/water/water_3.png",
+        "size": 1
+      },
+      "floater": {
+        "key": "/data/pngs/floater/floater_2a.png",
+        "size": 1
+      }
+    }
+  },
+  "layers": {
+    "floor": [
+      [
+        "20,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/d8um255-3bf75e1c-12cf-41c2-a053-b688781af68f.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "14,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "15,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "16,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_15.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "floater": [
+      [
+        "32,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "35,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "37,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "36,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "34,13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "26,5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "31,5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "35,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "35,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "34,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "35,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "36,10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "35,11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "38,12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "30,15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "27,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "28,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "31,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "32,16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floater/floater_1.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "38,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "33,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,9",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,9",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,9",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,13",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,15",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,15",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "33,16",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "33,15",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,17",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "27,18",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "27,17",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,17",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "12,15",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "14,16",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "19,16",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,15",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,15",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "24,15",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "22,16",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,13",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "27,11",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,11",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,10",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,11",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "31,11",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "56,16",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "46,19",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "40,20",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "42,19",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "46,18",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "44,18",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "45,15",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "46,14",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "45,29",
+        {
+          "type": "random_npc",
+          "key": "R4_human_female",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "52,9",
+        {
+          "type": "random_npc",
+          "key": "R5_human_female",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "50,110",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "48,109",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "43,107",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "39,107",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "32,108",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "30,108",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,109",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "25,109",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,108",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,108",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,108",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "37,109",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "50,111",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "51,111",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "47,111",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "25,110",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "24,110",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,110",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,112",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "22,112",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "42,113",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "51,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "57,116",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "56,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "49,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "46,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "38,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "35,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,115",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,114",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,114",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "8,112",
+        {
+          "type": "random_npc",
+          "key": "R2_imperial_officer",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "17,116",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "30,116",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "47,118",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "51,119",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "50,119",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "44,119",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "32,118",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "30,118",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "26,118",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "23,118",
+        {
+          "type": "random_npc",
+          "key": "R3_imperial_officer",
+          "properties": {
+            "threat": 3,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,120",
+        {
+          "type": "random_npc",
+          "key": "R4_imperial_officer",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,121",
+        {
+          "type": "random_npc",
+          "key": "R4_imperial_officer",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,122",
+        {
+          "type": "random_npc",
+          "key": "R4_imperial_officer",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "29,122",
+        {
+          "type": "random_npc",
+          "key": "R4_imperial_officer",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "28,121",
+        {
+          "type": "random_npc",
+          "key": "R4_imperial_officer",
+          "properties": {
+            "threat": 4,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "39,124",
+        {
+          "type": "random_npc",
+          "key": "R5_imperial_officer",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ]
+    ],
+    "wall": [
+      [
+        "H_17_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wall_13.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979432033_0.6215857591516027",
+        {
+          "type": "vector",
+          "points": [
+            15,
+            126,
+            56,
+            127
+          ],
+          "key": "/data/pngs/wall/sewerbrown.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979434329_0.2442492466001137",
+        {
+          "type": "vector",
+          "points": [
+            60,
+            122,
+            60,
+            106
+          ],
+          "key": "/data/pngs/wall/sewerbrown.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979436327_0.7671418663887319",
+        {
+          "type": "vector",
+          "points": [
+            13,
+            107,
+            16,
+            123
+          ],
+          "key": "/data/pngs/wall/sewerbrown.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979440194_0.7308372566406925",
+        {
+          "type": "vector",
+          "points": [
+            16,
+            123,
+            30,
+            35
+          ],
+          "key": "/data/pngs/wall/sewerbrown.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979442760_0.3162797910859433",
+        {
+          "type": "vector",
+          "points": [
+            22,
+            25,
+            18,
+            25
+          ],
+          "key": "/data/pngs/wall/grate_5.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "VEC_1762979443279_0.6132349330347595",
+        {
+          "type": "vector",
+          "points": [
+            18,
+            25,
+            11,
+            25
+          ],
+          "key": "/data/pngs/wall/grate_5.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_14_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A",
+            "autoSpawnFor": "14,6"
+          }
+        }
+      ],
+      [
+        "H_16_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A",
+            "autoSpawnFor": "16,6"
+          }
+        }
+      ],
+      [
+        "H_18_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A"
+          }
+        }
+      ],
+      [
+        "H_20_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A",
+            "autoSpawnFor": "20,6"
+          }
+        }
+      ]
+    ],
+    "screen": [
+      [
+        "H_19_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/11.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_17_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/screen/12.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ]
+    ],
+    "panel": [
+      [
+        "H_19_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_00.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "V_30_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_00.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "V_38_7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_00.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_40_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_00.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ],
+      [
+        "H_37_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/console_a_00.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ]
+    ],
+    "ceiling": [
+      [
+        "20,9",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_4.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 1,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "19,8",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_4.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 1,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "18,8",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_4.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 1,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "17,8",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_4.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 1,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ],
+      [
+        "14,8",
+        {
+          "type": "ceiling",
+          "key": "/data/pngs/ceiling/ceiling_4.png",
+          "rotation": 0,
+          "properties": {
+            "heightMultiplier": 1,
+            "wallsideTexture": "/data/pngs/ceilingsides/cside_default.png"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "17,10",
+        {
+          "id": "L01-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "14,6",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "16,6",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "18,6",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "20,6",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ]
+    ]
+  }
+}

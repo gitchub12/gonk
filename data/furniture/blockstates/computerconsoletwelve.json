@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/computerconsoletwelve",
+      "x": 90
+    }
+  }
+}

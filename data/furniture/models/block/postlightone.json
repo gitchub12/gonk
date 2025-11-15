@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/post_light_one",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/postlightonepic",
+    "particle": "chronokillers_star_wars:blocks/postlightonepic",
+    "0": "chronokillers_star_wars:blocks/dead_horn_coral_block",
+    "1": "chronokillers_star_wars:blocks/gray_stained_glass",
+    "2": "chronokillers_star_wars:blocks/cobblestone"
+  }
+}

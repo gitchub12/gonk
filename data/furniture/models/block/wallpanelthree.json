@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_panel_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wallpanelthreepic",
+    "particle": "chronokillers_star_wars:blocks/wallpanelthreepic",
+    "0": "chronokillers_star_wars:blocks/blanded",
+    "1": "chronokillers_star_wars:blocks/pink_wool",
+    "2": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

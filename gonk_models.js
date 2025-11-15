@@ -378,6 +378,17 @@ class GonkModelSystem {
             }
             if (parts.body) parts.body.rotation.y = Math.sin(progress * Math.PI) * -0.2;
             break;
+          case 'death':
+            const deathDuration = 0.5;
+            const deathProgress = Math.min(character.animTime / deathDuration, 1.0);
+            if (parts.body) {
+                parts.body.rotation.x = -Math.PI / 2 * deathProgress;
+            }
+            if (deathProgress >= 1.0) {
+                // After the animation is done, we can consider the animation "finished"
+                // and it can be stopped.
+            }
+            break;
           case 'aim':
              if (parts.rightArm) parts.rightArm.rotation.x = -Math.PI / 2;
             if (parts.leftArm) {

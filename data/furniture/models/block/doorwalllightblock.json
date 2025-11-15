@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/door_light_block",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/door_light_block_pic",
+    "particle": "chronokillers_star_wars:blocks/door_light_block_pic",
+    "0": "chronokillers_star_wars:blocks/door_light",
+    "1": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

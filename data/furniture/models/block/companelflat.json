@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/com_panel_flat",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/com_panel_flat_pic",
+    "particle": "chronokillers_star_wars:blocks/com_panel_flat_pic",
+    "0": "chronokillers_star_wars:blocks/pc_paneled",
+    "1": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

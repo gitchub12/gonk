@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/switch_nine",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/switch_nine_pic",
+    "particle": "chronokillers_star_wars:blocks/switch_nine_pic",
+    "0": "chronokillers_star_wars:blocks/switch_nine",
+    "1": "chronokillers_star_wars:blocks/cyan_wool",
+    "2": "chronokillers_star_wars:blocks/white_stained",
+    "3": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

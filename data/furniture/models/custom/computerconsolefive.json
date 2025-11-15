@@ -1,0 +1,1209 @@
+{
+  "credit": "Made with Blockbench",
+  "elements": [
+    {
+      "name": "bottom block",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        8,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            8,
+            16,
+            16
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 270,
+          "texture": "#0"
+        }
+      }
+    },
+    {
+      "name": "top block",
+      "from": [
+        0,
+        8,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            16
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        }
+      }
+    },
+    {
+      "name": "angle",
+      "from": [
+        0.1,
+        3.45,
+        1.7
+      ],
+      "to": [
+        15.9,
+        14.45,
+        9.7
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "x",
+        "origin": [
+          8,
+          7.45,
+          6.7
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            11
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            11
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            11
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            16
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            16
+          ],
+          "rotation": 270,
+          "texture": "#0"
+        }
+      }
+    },
+    {
+      "name": "left bottom stick",
+      "from": [
+        11.8,
+        13.45,
+        -4.325
+      ],
+      "to": [
+        12.4,
+        17.45,
+        -3.725
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 90,
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 270,
+          "texture": "#2"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick",
+      "from": [
+        3.9,
+        13.75,
+        -2.825
+      ],
+      "to": [
+        4.5,
+        17.35,
+        -2.225
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            3.6
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            3.6
+          ],
+          "texture": "#2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            3.6
+          ],
+          "texture": "#2"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            3.6
+          ],
+          "texture": "#2"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 90,
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 270,
+          "texture": "#2"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick handle",
+      "from": [
+        3.3,
+        16.85,
+        -2.925
+      ],
+      "to": [
+        5.1,
+        17.45,
+        -2.125
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            6,
+            4.8,
+            6.6
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.6
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            2,
+            4,
+            4.8,
+            4.6
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.6
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            1.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            1.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "left bottom stick handle",
+      "from": [
+        10.7,
+        16.85,
+        -4.425
+      ],
+      "to": [
+        13.5,
+        17.55,
+        -3.625
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            4.8,
+            4.7
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.7
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            2,
+            6,
+            4.8,
+            6.7
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.7
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            2.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            2.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick",
+      "from": [
+        2.4,
+        13.75,
+        0.075
+      ],
+      "to": [
+        3,
+        18.35,
+        0.675
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4.6
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4.6
+          ],
+          "texture": "#2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4.6
+          ],
+          "texture": "#2"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4.6
+          ],
+          "texture": "#2"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 90,
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 270,
+          "texture": "#2"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick handle",
+      "from": [
+        2.3,
+        16.85,
+        -0.025
+      ],
+      "to": [
+        3.1,
+        17.25,
+        0.775
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "left bottom stick",
+      "from": [
+        13.4,
+        13.75,
+        0.475
+      ],
+      "to": [
+        14,
+        17.75,
+        1.075
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            4
+          ],
+          "texture": "#2"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 90,
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.6,
+            0.6
+          ],
+          "rotation": 270,
+          "texture": "#2"
+        }
+      }
+    },
+    {
+      "name": "left bottom stick handle",
+      "from": [
+        13.3,
+        16.85,
+        0.375
+      ],
+      "to": [
+        14.1,
+        19.05,
+        1.175
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7,
+            -0.2,
+            9.2
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            7,
+            0.8,
+            9.2
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            0,
+            7,
+            0.8,
+            9.2
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            1,
+            7,
+            -0.2,
+            9.2
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick handle",
+      "from": [
+        2.3,
+        17.45,
+        -0.025
+      ],
+      "to": [
+        3.1,
+        17.85,
+        0.775
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "right bottom stick handle",
+      "from": [
+        2.3,
+        18.05,
+        -0.025
+      ],
+      "to": [
+        3.1,
+        18.45,
+        0.775
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8,
+          19.05,
+          5.175
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.4
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 90,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0.8,
+            0.8
+          ],
+          "rotation": 270,
+          "texture": "#3"
+        }
+      }
+    },
+    {
+      "name": "Cube",
+      "from": [
+        5.83,
+        12.15,
+        3.575
+      ],
+      "to": [
+        8.75,
+        13.15,
+        13.375
+      ],
+      "rotation": {
+        "angle": -45,
+        "axis": "x",
+        "origin": [
+          8.15,
+          7.15,
+          6.975
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            1,
+            2.92
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            12,
+            6.2,
+            13,
+            16
+          ],
+          "rotation": 270,
+          "texture": "#0",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            1,
+            2.92
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            1,
+            9.8
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            15.92,
+            15.8
+          ],
+          "rotation": 180,
+          "texture": "#5"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            2.92,
+            9.8
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        88,
+        0
+      ],
+      "translation": [
+        0,
+        0.5,
+        -1
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        75,
+        -146,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.37,
+        0.37,
+        0.37
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.95,
+        0.95,
+        0.95
+      ]
+    },
+    "gui": {
+      "rotation": [
+        30,
+        130,
+        0
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        270,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        270,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        -14
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
+    }
+  }
+}

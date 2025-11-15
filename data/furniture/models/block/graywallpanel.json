@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/gray_wall_panel",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/graywallpanelpic",
+    "particle": "chronokillers_star_wars:blocks/graywallpanelpic",
+    "0": "chronokillers_star_wars:blocks/gray_panel",
+    "1": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

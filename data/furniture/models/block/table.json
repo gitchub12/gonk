@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/table",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/tablepic",
+    "particle": "chronokillers_star_wars:blocks/tablepic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/hopper_outside"
+  }
+}

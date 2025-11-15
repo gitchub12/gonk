@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/black_angle_upsidedown",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/black_angle_upside_down",
+    "particle": "chronokillers_star_wars:blocks/black_angle_upside_down",
+    "0": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

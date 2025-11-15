@@ -1,0 +1,15 @@
+{
+  "parent": "chronokillers_star_wars:custom/console2high25",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/console2high2",
+    "particle": "chronokillers_star_wars:blocks/cardreadergraypic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "2": "chronokillers_star_wars:blocks/blue_screen",
+    "3": "chronokillers_star_wars:blocks/bridge_box_screensone",
+    "4": "chronokillers_star_wars:blocks/data",
+    "5": "chronokillers_star_wars:blocks/green_screen",
+    "6": "chronokillers_star_wars:blocks/mon_screen",
+    "7": "chronokillers_star_wars:blocks/trunk_lights2",
+    "8": "chronokillers_star_wars:blocks/acacia_planks"
+  }
+}

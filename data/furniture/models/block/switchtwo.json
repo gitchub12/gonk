@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/switch_two",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/switch_two_pic",
+    "particle": "chronokillers_star_wars:blocks/switch_two_pic",
+    "0": "chronokillers_star_wars:blocks/bluenew",
+    "1": "chronokillers_star_wars:blocks/red_stained",
+    "2": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

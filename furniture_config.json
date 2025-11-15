@@ -1,0 +1,23 @@
+{
+    "_comment": "BROWSERFIREFOXHIDE data/furniture.json",
+    "_config": {
+        "modelPath": "data/furniture/models/item/",
+        "texturePath": "data/furniture/",
+        "textureNamespace": "chronokillers_star_wars"
+    },
+    "models": {
+        "crate": {
+            "file": "models/custom/crate.json",
+            "icon": "textures/items/cratepic.png"
+        },
+        "holotable": {
+            "file": "models/custom/holotable.json",
+            "icon": "textures/items/holotablepic.png"
+        },
+        "chair": {
+            "file": "models/custom/chair.json",
+            "icon": "textures/blocks/chair_pic.png"
+        }
+    },
+    "instances": []
+}

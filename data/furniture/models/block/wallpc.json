@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_pc",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wallpc_pic",
+    "particle": "chronokillers_star_wars:blocks/wallpc_pic",
+    "0": "chronokillers_star_wars:blocks/wallpc",
+    "1": "chronokillers_star_wars:blocks/card_reader"
+  }
+}

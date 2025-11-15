@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/computerconsolenine",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/computerconsoleninepie",
+    "particle": "chronokillers_star_wars:blocks/computerconsoleninepie",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/pc_panels"
+  }
+}

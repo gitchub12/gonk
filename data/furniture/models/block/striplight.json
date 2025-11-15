@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/strip_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/striplightpic",
+    "particle": "chronokillers_star_wars:blocks/striplightpic",
+    "0": "chronokillers_star_wars:blocks/bone_block_top",
+    "1": "chronokillers_star_wars:blocks/detector_rail_on",
+    "2": "chronokillers_star_wars:blocks/white_wool"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "parent": "chronokillers_star_wars:custom/console2high35",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/console2high3",
+    "particle": "chronokillers_star_wars:blocks/cardreadergraypic",
+    "1": "chronokillers_star_wars:blocks/at-st_screen",
+    "2": "chronokillers_star_wars:blocks/data_screen",
+    "3": "chronokillers_star_wars:blocks/card_reader",
+    "4": "chronokillers_star_wars:blocks/trunk_lights2",
+    "5": "chronokillers_star_wars:blocks/acacia_planks",
+    "missing": "chronokillers_star_wars:blocks/card_reader"
+  }
+}

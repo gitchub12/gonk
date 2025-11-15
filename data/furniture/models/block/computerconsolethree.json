@@ -1,0 +1,16 @@
+{
+  "parent": "chronokillers_star_wars:custom/com_panel_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/com_panel_three_pic",
+    "particle": "chronokillers_star_wars:blocks/com_panel_three_pic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/stripped_oak_wood",
+    "2": "chronokillers_star_wars:blocks/purpur_pillar",
+    "3": "chronokillers_star_wars:blocks/consolerone",
+    "4": "chronokillers_star_wars:blocks/cyan_wool",
+    "5": "chronokillers_star_wars:blocks/white_stained",
+    "6": "chronokillers_star_wars:blocks/blast_furnace_topone",
+    "7": "chronokillers_star_wars:blocks/red_stained",
+    "8": "chronokillers_star_wars:blocks/gray_screenone"
+  }
+}

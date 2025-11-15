@@ -1,0 +1,19 @@
+{
+  "parent": "chronokillers_star_wars:custom/holo_table",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/holotablepic",
+    "particle": "chronokillers_star_wars:blocks/holotablepic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/this",
+    "2": "chronokillers_star_wars:blocks/cyan_wool",
+    "3": "chronokillers_star_wars:blocks/top",
+    "4": "chronokillers_star_wars:blocks/dual_panel",
+    "-1": "chronokillers_star_wars:blocks/pink_wool",
+    "5": "chronokillers_star_wars:blocks/tri_panels",
+    "6": "chronokillers_star_wars:blocks/control__table",
+    "7": "chronokillers_star_wars:blocks/topper",
+    "8": "chronokillers_star_wars:blocks/red_stained",
+    "9": "chronokillers_star_wars:blocks/screen",
+    "10": "chronokillers_star_wars:blocks/wall"
+  }
+}

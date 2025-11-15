@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/black_panel_stand",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/black_panel_stand_pic",
+    "particle": "chronokillers_star_wars:blocks/black_panel_stand_pic",
+    "0": "chronokillers_star_wars:blocks/light_gray_concrete",
+    "1": "chronokillers_star_wars:blocks/pc_paneled",
+    "2": "chronokillers_star_wars:blocks/comp_panel"
+  }
+}

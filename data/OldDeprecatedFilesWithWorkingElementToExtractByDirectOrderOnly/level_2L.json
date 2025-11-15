@@ -1,0 +1,341 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/OldDeprecatedFilesWithWorkingElementToExtractByDirectOrderOnly/level_2L.json",
+  "ship_metadata": {
+    "ship_id": "2L",
+    "dominant_faction": "clones",
+    "secondary_faction": "droids",
+    "relationship": "-",
+    "control_percentage": 60,
+    "description": "Clone-controlled ship at war with Droids. Clones hold 60% control."
+  },
+  "settings": {
+    "width": 64,
+    "height": 64,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      }
+    }
+  },
+  "layers": {
+    "floor": [
+      [
+        "18,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_0.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_2.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "25,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "24,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "17,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_17.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "10,11",
+        {
+          "type": "npc",
+          "key": "Savage Opress",
+          "rotation": 0,
+          "properties": {
+            "baseType": "darth",
+            "armType": "steve",
+            "weapon": "/data/weapons/saber_red.png",
+            "name": "CayUmbra"
+          },
+          "size": 8
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_18_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_4_red.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 01a",
+            "autoSpawnFor": "18,7"
+          }
+        }
+      ],
+      [
+        "H_23_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02a",
+            "autoSpawnFor": "23,7"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "21,9",
+        {
+          "id": "L03-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "18,7",
+        {
+          "id": "FROM LEVEL 01",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "23,7",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ]
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/deck_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/decklightpic",
+    "particle": "chronokillers_star_wars:blocks/decklightpic",
+    "0": "chronokillers_star_wars:blocks/light_gray_concrete",
+    "1": "chronokillers_star_wars:blocks/soul_torch_light"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/grate",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/gratepic",
+    "particle": "chronokillers_star_wars:blocks/gratepic",
+    "0": "chronokillers_star_wars:blocks/grate",
+    "1": "chronokillers_star_wars:blocks/card_reader"
+  }
+}

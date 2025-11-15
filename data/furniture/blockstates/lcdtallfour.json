@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/lcdtallfour"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/lcdtallfour",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/lcdtallfour",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/lcdtallfour",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/lcdtallfour",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/lcdtallfour",
+      "x": 90
+    }
+  }
+}

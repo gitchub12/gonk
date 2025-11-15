@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "chronokillers_star_wars:items/small_pipe_three_pic"
+  }
+}

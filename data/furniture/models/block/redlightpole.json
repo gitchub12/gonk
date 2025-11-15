@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/red_light_pole",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/red_light_pole_pic",
+    "particle": "chronokillers_star_wars:blocks/red_light_pole_pic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

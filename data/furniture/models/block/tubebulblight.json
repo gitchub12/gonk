@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/tube_bulb_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/tubebulblightpic",
+    "particle": "chronokillers_star_wars:blocks/tubebulblightpic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/pink_wool",
+    "2": "chronokillers_star_wars:blocks/white_stained"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/crate_four",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/crate_three_pic",
+    "particle": "chronokillers_star_wars:blocks/crate_three_pic",
+    "0": "chronokillers_star_wars:blocks/blue_box",
+    "1": "chronokillers_star_wars:blocks/dead_horn_coral_block_blue",
+    "2": "chronokillers_star_wars:blocks/dead_horn_coral_block",
+    "3": "chronokillers_star_wars:blocks/trunk_lights",
+    "4": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

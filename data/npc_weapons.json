@@ -1,297 +1,1174 @@
-### 1. npc_weapons.json
-// BROWSERFIREFOXHIDE data/npc_weapons.json
-// update: Significant revision adding 'power_drain', 'drop_faction', 'tier_required', and 'drop_value' (for weighted drop system).
-// update: Values for power_drain and drop_value set based on weapon size and rarity/complexity.
-// update: Renamed 'drop_value' to 'drop_weight' and added 'aliens' and 'mandalorians' to default drop factions.
 {
-    "_comment": "Centralized configuration for all NPC-usable weapons. Non-listed weapons inherit category defaults.",
-    "_defaults": {
-        "categoryDefaults": {
-            "longarm": {
-                "damage": 12,
-                "ammo_max": 80,
-                "ammo_starting": 80,
-                "attack_cooldown_mult": 1.2,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 85,
-                "sound_set": "longshot",
-                "technical_understanding": 60,
-                "force_sensitivity": 0,
-                "energy_type": "energy",
-                "radius": null,
-                "bolt_speed_mult": 1.0,
-                "bolt_color": "#ff0000",
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.3,
-                "tier_required": 1,
-                "drop_weight": 30,
-                "drop_faction": ["imperials", "clones", "rebels", "mandalorians"]
-            },
-            "rifle": {
-                "damage": 10,
-                "ammo_max": 60,
-                "ammo_starting": 60,
-                "attack_cooldown_mult": 1.0,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 70,
-                "sound_set": "rifleshot",
-                "technical_understanding": 50,
-                "force_sensitivity": 0,
-                "energy_type": "energy",
-                "radius": null,
-                "bolt_speed_mult": 1.0,
-                "bolt_color": "#ff0000",
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.25,
-                "tier_required": 1,
-                "drop_weight": 40,
-                "drop_faction": ["imperials", "clones", "rebels", "mandalorians"]
-            },
-            "pistol": {
-                "damage": 8,
-                "ammo_max": 40,
-                "ammo_starting": 40,
-                "attack_cooldown_mult": 0.8,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 35,
-                "sound_set": "pistolshot",
-                "technical_understanding": 30,
-                "force_sensitivity": 0,
-                "energy_type": "energy",
-                "radius": null,
-                "bolt_speed_mult": 1.0,
-                "bolt_color": "#ff0000",
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.2,
-                "tier_required": 1,
-                "drop_weight": 50,
-                "drop_faction": ["imperials", "rebels"]
-            },
-            "melee": {
-                "damage": 7,
-                "ammo_max": 0,
-                "ammo_starting": 0,
-                "attack_cooldown_mult": 0.7,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 40,
-                "sound_set": "meleehit",
-                "technical_understanding": 10,
-                "force_sensitivity": 0,
-                "energy_type": "physical",
-                "radius": null,
-                "bolt_speed_mult": 0.0,
-                "bolt_color": null,
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.35,
-                "tier_required": 1,
-                "drop_weight": 20,
-                "drop_faction": ["aliens", "takers"]
-            },
-            "saber": {
-                "damage": 15,
-                "ammo_max": 0,
-                "ammo_starting": 0,
-                "attack_cooldown_mult": 0.6,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 55,
-                "sound_set": "saber",
-                "technical_understanding": 50,
-                "force_sensitivity": 70,
-                "energy_type": "plasma",
-                "radius": null,
-                "bolt_speed_mult": 0.0,
-                "bolt_color": "#ff0000",
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.4,
-                "tier_required": 3,
-                "drop_weight": 5,
-                "drop_faction": ["sith"]
-            },
-            "unique": {
-                "damage": 10,
-                "ammo_max": 50,
-                "ammo_starting": 50,
-                "attack_cooldown_mult": 1.0,
-                "attack_range_mult": 1.0,
-                "accuracy_mult": 1.0,
-                "scale_x": 1.0,
-                "scale_y": 1.0,
-                "scale_z": 1.0,
-                "weight": 80,
-                "sound_set": "uniqueshot",
-                "technical_understanding": 70,
-                "force_sensitivity": 0,
-                "energy_type": "energy",
-                "radius": null,
-                "bolt_speed_mult": 1.0,
-                "bolt_color": "#ff0000",
-                "bolt_length": null,
-                "bolt_diameter": null,
-                "power_drain": 0.5,
-                "tier_required": 2,
-                "drop_weight": 10,
-                "drop_faction": ["imperials", "takers", "sith"]
-            }
-        }
-    },
-    
-    "long_a280c": { "category": "longarm", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 30 },
-    "long_crossbow": { 
-        "category": "longarm", 
-        "damage": 18, 
-        "ammo_max": 5, 
-        "attack_cooldown_mult": 2.5,
-        "technical_understanding": 50,
-        "weight": 110,
-        "bolt_speed_mult": 0.7,
-        "energy_type": "physical",
-        "drop_faction": ["aliens"], "tier_required": 1, "drop_weight": 20
-    },
-    "long_ee3_mando": { "category": "longarm", "drop_faction": ["mandalorians"], "tier_required": 1, "drop_weight": 30 },
-    "long_el16": { "category": "longarm" },
-    "long_f11d": { "category": "longarm", "drop_faction": ["imperials"], "tier_required": 1, "drop_weight": 30 },
-    "long_f11d_phasma": { "category": "longarm", "bolt_color": "#ffaa00", "technical_understanding": 70, "weight": 90, "drop_faction": ["imperials", "sith"], "tier_required": 1, "drop_weight": 15 },
-    "long_ionblaster": { "category": "longarm", "damage": 8, "energy_type": "ion", "technical_understanding": 70, "weight": 95, "power_drain": 0.4, "drop_weight": 15 },
-    "long_OC_lightgun": { "category": "longarm", "damage": 14, "attack_cooldown_mult": 0.8 },
-    "long_spb50": { "category": "longarm" },
-    "long_stw48": { "category": "longarm" },
-    "long_tl50": { "category": "longarm" },
-    "long_z6": { "category": "longarm", "damage": 18, "attack_cooldown_mult": 0.5, "weight": 130, "technical_understanding": 80, "power_drain": 0.6, "drop_weight": 10 },
-    "long_z6custom": { "category": "longarm", "damage": 18, "attack_cooldown_mult": 0.5, "weight": 130, "technical_understanding": 80, "power_drain": 0.6, "drop_weight": 10 },
-
-    "melee_amphistaff_vong": { "category": "melee", "technical_understanding": 0, "weight": 60, "damage": 10, "energy_type": "venom", "power_drain": 0.4, "drop_faction": ["aliens"], "drop_weight": 20 },
-    "melee_amphistaff_yuuzhanvong": { "category": "melee", "technical_understanding": 0, "weight": 60, "damage": 10, "energy_type": "venom", "power_drain": 0.4, "drop_faction": ["aliens"], "drop_weight": 20 },
-    "melee_axe_gamorrean": { "category": "melee", "damage": 12, "weight": 70, "power_drain": 0.5, "drop_faction": ["aliens"], "drop_weight": 20 },
-    "melee_electrostaffdark_magnaguard": { "category": "melee", "damage": 15, "weight": 80, "technical_understanding": 60, "energy_type": "electric", "power_drain": 0.6, "drop_faction": ["droids"], "drop_weight": 15 },
-    "melee_electrostafflit_magnaguard": { "category": "melee", "damage": 15, "weight": 80, "technical_understanding": 60, "energy_type": "electric", "power_drain": 0.6, "drop_faction": ["droids"], "drop_weight": 15 },
-    "melee_electrostaff_magnaguard": { "category": "melee", "damage": 15, "weight": 80, "technical_understanding": 60, "energy_type": "electric", "power_drain": 0.6, "drop_faction": ["droids"], "drop_weight": 15 },
-    "melee_forkstaff_raider": { "category": "melee", "damage": 8, "drop_faction": ["takers"], "drop_weight": 25 },
-    "melee_gaffilong": { "category": "melee", "damage": 9, "weight": 65, "drop_faction": ["aliens", "mandalorians"], "drop_weight": 20 },
-    "melee_gaffi_bobafett": { "category": "melee", "damage": 9, "weight": 65, "drop_faction": ["mandalorians"], "drop_weight": 15 },
-    "melee_gaffi_tusken": { "category": "melee", "damage": 9, "weight": 65, "drop_faction": ["aliens"], "drop_weight": 20 },
-    "melee_pike_guard": { "category": "melee", "damage": 10, "weight": 75, "drop_faction": ["imperials", "sith"], "drop_weight": 15 },
-    "melee_ryyk_curved": { "category": "melee", "damage": 5, "weight": 30, "drop_faction": ["aliens"], "drop_weight": 30 },
-    "melee_scythe_vicrul": { "category": "melee", "damage": 5, "weight": 30, "drop_faction": ["takers"], "drop_weight": 30 },
-    "melee_sithcane_palpatine": { "category": "melee", "damage": 7, "technical_understanding": 50, "force_sensitivity": 55, "power_drain": 0.3, "drop_faction": ["sith"], "drop_weight": 10 },
-    "melee_spear": { "category": "melee", "damage": 9, "weight": 70 },
-    "melee_spear_phasma": { "category": "melee", "damage": 10, "weight": 75, "power_drain": 0.45, "drop_faction": ["imperials", "rebels"], "drop_weight": 20 },
-    "melee_vibroax_aplek": { "category": "melee", "damage": 13, "weight": 85, "power_drain": 0.6, "drop_faction": ["takers"], "drop_weight": 15 },
-    "melee_vibrocleaver_trudgen": { "category": "melee", "damage": 12, "weight": 70, "power_drain": 0.6, "drop_faction": ["takers"], "drop_weight": 15 },
-    "melee_vibrohammer": { "category": "melee", "damage": 14, "weight": 90, "power_drain": 0.7, "drop_faction": ["mandalorians"], "drop_weight": 10 },
-    "melee_warclub_ushar": { "category": "melee", "damage": 10, "weight": 70, "drop_faction": ["takers"], "drop_weight": 15 },
-    "melee_weequay": { "category": "melee", "damage": 8, "weight": 60, "drop_faction": ["aliens"], "drop_weight": 25 },
-    "melee_zapper_a": { "category": "melee", "damage": 10, "technical_understanding": 30, "energy_type": "electric", "power_drain": 0.4 },
-
-    "pistol_a110_jyn": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 50 },
-    "pistol_ad616K6KA_cyril": { "category": "pistol" },
-    "pistol_c96_SWTOR": { "category": "pistol" },
-    "pistol_dh17_rebel": { "category": "pistol", "drop_faction": ["aliens", "rebels"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_dl18_luke": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_dl44_han": { "category": "pistol", "damage": 12, "attack_cooldown_mult": 0.7, "technical_understanding": 40, "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 35 },
-    "pistol_dt12_greedo": { "category": "pistol" },
-    "pistol_dt29_krennic": { "category": "pistol", "drop_faction": ["imperials"], "tier_required": 1, "drop_weight": 35 },
-    "pistol_glie44_finn": { "category": "pistol", "drop_faction": ["imperials"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_glie44_leia": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_IB94_mando": { "category": "pistol", "damage": 10, "technical_understanding": 50, "drop_faction": ["mandalorians"], "tier_required": 1, "drop_weight": 20 },
-    "pistol_nn14_rey": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_relby23_bespinguard": { "category": "pistol" },
-    "pistol_rv07_crackerbarrel": { "category": "pistol" },
-    "pistol_satineslament_leia": { "category": "pistol" },
-    "pistol_se14c_cornelius": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 45 },
-    "pistol_se14r_deathtrooper": { "category": "pistol", "drop_faction": ["droids"], "tier_required": 1, "drop_weight": 40 },
-    "pistol_se44_firstorder": { "category": "pistol", "drop_faction": ["sith"], "tier_required": 1, "drop_weight": 35 },
-    "pistol_vm19_vess": { "category": "pistol" },
-    "pistol_x8_lando": { "category": "pistol", "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 35 },
-
-    "rifle_bowcaster": { 
-        "category": "rifle", 
-        "damage": 15, 
-        "ammo_max": 5,
-        "attack_cooldown_mult": 1.5,
-        "weight": 110,
-        "bolt_speed_mult": 0.8, 
-        "energy_type": "plasma",
+  "_comment": "Centralized configuration for all NPC-usable weapons. Non-listed weapons inherit category defaults. DPS balanced to 10 standard, 25 max.",
+  "_metadata_fileName_": "npc_weapons.json",
+  "_defaults": {
+    "categoryDefaults": {
+      "longarm": {
+        "damage": 12,
+        "ammo_max": 80,
+        "ammo_starting": 80,
+        "attack_cooldown_mult": 1.2,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 85,
+        "sound_set": "longshot",
         "technical_understanding": 60,
+        "force_sensitivity": 0,
+        "energy_type": "energy",
+        "radius": null,
+        "bolt_speed_mult": 1,
+        "bolt_color": "#ff0000",
+        "bolt_length": null,
+        "bolt_diameter": null,
+        "power_drain": 0.3,
+        "tier_required": 1,
+        "drop_weight": 30,
+        "drop_faction": [
+          "imperials",
+          "clones",
+          "rebels",
+          "mandalorians"
+        ],
+        "charm_defense": 10,
+        "offsets": {
+          "position": {
+            "x": -1.45,
+            "y": -16.74,
+            "z": 9.95
+          },
+          "rotation": {
+            "x": 1.543,
+            "y": -1.571,
+            "z": 0
+          },
+          "scale": 70,
+          "planes": {
+            "dist": 0.003,
+            "yaw": 0.55,
+            "pitch": 0.6
+          }
+        }
+      },
+      "rifle": {
+        "damage": 10,
+        "ammo_max": 60,
+        "ammo_starting": 60,
+        "attack_cooldown_mult": 1,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 70,
+        "sound_set": "rifleshot",
+        "technical_understanding": 50,
+        "force_sensitivity": 0,
+        "energy_type": "energy",
+        "radius": null,
+        "bolt_speed_mult": 1,
+        "bolt_color": "#ff0000",
+        "bolt_length": null,
+        "bolt_diameter": null,
+        "power_drain": 0.25,
+        "tier_required": 1,
+        "drop_weight": 40,
+        "drop_faction": [
+          "imperials",
+          "clones",
+          "rebels",
+          "mandalorians"
+        ],
+        "charm_defense": 10,
+        "offsets": {
+          "position": {
+            "x": -1.45,
+            "y": -16.74,
+            "z": 9.95
+          },
+          "rotation": {
+            "x": 1.543,
+            "y": -1.571,
+            "z": 0
+          },
+          "scale": 70,
+          "planes": {
+            "dist": 0.003,
+            "yaw": 0.55,
+            "pitch": 0.6
+          }
+        }
+      },
+      "pistol": {
+        "damage": 8,
+        "ammo_max": 40,
+        "ammo_starting": 40,
+        "attack_cooldown_mult": 0.8,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 35,
+        "sound_set": "pistolshot",
+        "technical_understanding": 30,
+        "force_sensitivity": 0,
+        "energy_type": "energy",
+        "radius": null,
+        "bolt_speed_mult": 1,
+        "bolt_color": "#ff0000",
+        "bolt_length": null,
+        "bolt_diameter": null,
+        "power_drain": 0.2,
+        "tier_required": 1,
+        "drop_weight": 50,
+        "drop_faction": [
+          "imperials",
+          "rebels"
+        ],
+        "lie_defense": 10,
+        "offsets": {
+          "position": {
+            "x": -1.45,
+            "y": -16.74,
+            "z": 9.95
+          },
+          "rotation": {
+            "x": 1.543,
+            "y": -1.571,
+            "z": 0
+          },
+          "scale": 70,
+          "planes": {
+            "dist": 0.002,
+            "yaw": 0.28,
+            "pitch": 0.1
+          }
+        }
+      },
+      "melee": {
+        "damage": 7,
+        "ammo_max": 0,
+        "ammo_starting": 0,
+        "attack_cooldown_mult": 0.7,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 40,
+        "sound_set": "meleehit",
+        "technical_understanding": 10,
+        "force_sensitivity": 0,
+        "energy_type": "physical",
+        "radius": null,
+        "bolt_speed_mult": 0,
+        "bolt_color": null,
+        "bolt_length": null,
+        "bolt_diameter": null,
+        "power_drain": 0.35,
+        "tier_required": 1,
+        "drop_weight": 20,
+        "drop_faction": [
+          "aliens",
+          "takers"
+        ],
+        "offsets": {
+          "position": {
+            "x": 0.03,
+            "y": -20.65,
+            "z": 9.94
+          },
+          "rotation": {
+            "x": 1.723,
+            "y": -1.476,
+            "z": -0.042
+          },
+          "scale": 123,
+          "planes": {
+            "dist": 0,
+            "yaw": 0.6,
+            "pitch": 0.8
+          }
+        }
+      },
+      "saber": {
+        "damage": 15,
+        "ammo_max": 0,
+        "ammo_starting": 0,
+        "attack_cooldown_mult": 0.6,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 55,
+        "sound_set": "saber",
+        "technical_understanding": 50,
+        "force_sensitivity": 70,
+        "energy_type": "plasma",
+        "radius": null,
+        "bolt_speed_mult": 0,
+        "bolt_color": "#ff0000",
+        "bolt_length": null,
+        "bolt_diameter": null,
+        "power_drain": 0.4,
+        "tier_required": 5,
+        "drop_weight": 5,
+        "drop_faction": [
+          "sith",
+          "rebels"
+        ],
+        "jump_strength": 0.25,
+        "offsets": {
+          "position": {
+            "x": 5.41,
+            "y": -7.61,
+            "z": 17.67
+          },
+          "rotation": {
+            "x": 1.543,
+            "y": 0.464,
+            "z": 0.442
+          },
+          "scale": 70,
+          "planes": {
+            "dist": 0,
+            "yaw": 0.23,
+            "pitch": 0.35
+          }
+        },
+        "glow": {
+          "color": "#ff0000",
+          "intensity": 2,
+          "distance": 4,
+          "decay": 2
+        }
+      },
+      "unique": {
+        "damage": 10,
+        "ammo_max": 50,
+        "ammo_starting": 50,
+        "attack_cooldown_mult": 1,
+        "attack_range_mult": 1,
+        "accuracy_mult": 1,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "weight": 80,
+        "sound_set": "uniqueshot",
+        "technical_understanding": 70,
+        "force_sensitivity": 0,
+        "energy_type": "energy",
+        "radius": null,
+        "bolt_speed_mult": 1,
+        "bolt_color": "#ff0000",
+        "bolt_length": null,
+        "bolt_diameter": null,
         "power_drain": 0.5,
-        "drop_faction": ["aliens"], "tier_required": 1, "drop_weight": 20
+        "tier_required": 2,
+        "drop_weight": 10,
+        "drop_faction": [
+          "imperials",
+          "takers",
+          "sith"
+        ],
+        "offsets": {
+          "position": {
+            "x": -1.02,
+            "y": -8.7,
+            "z": 1.18
+          },
+          "rotation": {
+            "x": 1.597,
+            "y": -1.571,
+            "z": 0
+          },
+          "scale": 73,
+          "planes": {
+            "dist": 0.003,
+            "yaw": 0.5,
+            "pitch": 0
+          }
+        }
+      }
+    }
+  },
+  "long_a280c": {
+    "category": "longarm",
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 30
+  },
+  "long_crossbow": {
+    "category": "longarm",
+    "damage": 18,
+    "ammo_max": 5,
+    "attack_cooldown_mult": 2.5,
+    "technical_understanding": 50,
+    "weight": 110,
+    "bolt_speed_mult": 0.7,
+    "energy_type": "physical",
+    "bolt_color": null,
+    "drop_faction": [
+      "aliens"
+    ],
+    "tier_required": 1,
+    "drop_weight": 20
+  },
+  "long_ee3_mando": {
+    "category": "longarm",
+    "drop_faction": [
+      "mandalorians"
+    ],
+    "tier_required": 1,
+    "drop_weight": 30
+  },
+  "long_el16": {
+    "category": "longarm"
+  },
+  "long_f11d": {
+    "category": "longarm",
+    "drop_faction": [
+      "imperials"
+    ],
+    "tier_required": 1,
+    "drop_weight": 30
+  },
+  "long_f11d_phasma": {
+    "category": "longarm",
+    "bolt_color": "#ffaa00",
+    "technical_understanding": 75,
+    "weight": 90,
+    "drop_faction": [
+      "imperials",
+      "sith"
+    ],
+    "tier_required": 1,
+    "drop_weight": 15
+  },
+  "long_ionblaster": {
+    "category": "longarm",
+    "damage": 8,
+    "energy_type": "ion",
+    "bolt_color": "#00ccff",
+    "technical_understanding": 70,
+    "weight": 95,
+    "power_drain": 0.4,
+    "drop_weight": 15
+  },
+  "long_OC_lightgun": {
+    "category": "longarm",
+    "damage": 14,
+    "attack_cooldown_mult": 0.8
+  },
+  "long_spb50": {
+    "category": "longarm"
+  },
+  "long_stw48": {
+    "category": "longarm"
+  },
+  "long_tl50": {
+    "category": "longarm"
+  },
+  "long_z6": {
+    "category": "longarm",
+    "damage": 15,
+    "attack_cooldown_mult": 0.5,
+    "ammo_max": 150,
+    "weight": 130,
+    "technical_understanding": 75,
+    "power_drain": 0.6,
+    "drop_weight": 10,
+    "special_moves": "autofire",
+    "speed": -0.005
+  },
+  "long_z6custom": {
+    "category": "longarm",
+    "damage": 15,
+    "attack_cooldown_mult": 0.5,
+    "ammo_max": 150,
+    "weight": 130,
+    "technical_understanding": 75,
+    "power_drain": 0.6,
+    "drop_weight": 10,
+    "special_moves": "autofire",
+    "speed": -0.005,
+    "charm_defense": 25
+  },
+  "melee_amphistaff_vong": {
+    "category": "melee",
+    "technical_understanding": 0,
+    "weight": 60,
+    "damage": 10,
+    "energy_type": "venom",
+    "bolt_color": "#aaff00",
+    "power_drain": 0.4,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 20
+  },
+  "melee_amphistaff_yuuzhanvong": {
+    "category": "melee",
+    "technical_understanding": 0,
+    "weight": 60,
+    "damage": 10,
+    "energy_type": "venom",
+    "bolt_color": "#aaff00",
+    "power_drain": 0.4,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 20
+  },
+  "melee_axe_gamorrean": {
+    "category": "melee",
+    "damage": 12,
+    "weight": 70,
+    "power_drain": 0.5,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 20
+  },
+  "melee_electrostaffdark_magnaguard": {
+    "category": "melee",
+    "damage": 15,
+    "weight": 80,
+    "technical_understanding": 60,
+    "energy_type": "electric",
+    "bolt_color": "#9966ff",
+    "power_drain": 0.6,
+    "drop_faction": [
+      "droids"
+    ],
+    "drop_weight": 15,
+    "special_moves": "disarm"
+  },
+  "melee_electrostaff_lit_magnaguard": {
+    "category": "melee",
+    "damage": 15,
+    "weight": 80,
+    "technical_understanding": 60,
+    "energy_type": "electric",
+    "bolt_color": "#9966ff",
+    "power_drain": 0.6,
+    "drop_faction": [
+      "droids"
+    ],
+    "drop_weight": 15,
+    "special_moves": "disarm"
+  },
+  "melee_electrostaff_magnaguard": {
+    "category": "melee",
+    "damage": 15,
+    "weight": 80,
+    "technical_understanding": 60,
+    "energy_type": "electric",
+    "bolt_color": "#9966ff",
+    "power_drain": 0.6,
+    "drop_faction": [
+      "droids"
+    ],
+    "drop_weight": 15,
+    "special_moves": "disarm"
+  },
+  "melee_forkstaff_raider": {
+    "category": "melee",
+    "damage": 8,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 25
+  },
+  "melee_gaffilong": {
+    "category": "melee",
+    "damage": 9,
+    "weight": 65,
+    "drop_faction": [
+      "aliens",
+      "mandalorians"
+    ],
+    "drop_weight": 20,
+    "special_moves": "disarm"
+  },
+  "melee_gaffi_bobafett": {
+    "category": "melee",
+    "damage": 9,
+    "weight": 65,
+    "drop_faction": [
+      "mandalorians"
+    ],
+    "drop_weight": 15,
+    "special_moves": "disarm"
+  },
+  "melee_gaffi_tusken": {
+    "category": "melee",
+    "damage": 9,
+    "weight": 65,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 20,
+    "special_moves": "disarm"
+  },
+  "melee_pike_guard": {
+    "category": "melee",
+    "damage": 10,
+    "weight": 75,
+    "drop_faction": [
+      "imperials",
+      "sith"
+    ],
+    "drop_weight": 15,
+    "special_moves": "disarm"
+  },
+  "melee_ryyk_curved": {
+    "category": "melee",
+    "damage": 35,
+    "attack_cooldown_mult": 4,
+    "weight": 30,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 30
+  },
+  "melee_scythe_vicrul": {
+    "category": "melee",
+    "damage": 5,
+    "weight": 30,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 30
+  },
+  "melee_sithcane_palpatine": {
+    "category": "melee",
+    "damage": 12,
+    "technical_understanding": 50,
+    "force_sensitivity": 40,
+    "power_drain": 0.3,
+    "drop_faction": [
+      "sith"
+    ],
+    "drop_weight": 10,
+    "charm_attack": 25,
+    "lie_defense": 20,
+    "speed": -0.005
+  },
+  "melee_spear": {
+    "category": "melee",
+    "damage": 9,
+    "weight": 70
+  },
+  "melee_spear_phasma": {
+    "category": "melee",
+    "damage": 10,
+    "weight": 75,
+    "power_drain": 0.45,
+    "drop_faction": [
+      "imperials",
+      "rebels"
+    ],
+    "drop_weight": 20
+  },
+  "melee_vibroax_aplek": {
+    "category": "melee",
+    "damage": 13,
+    "weight": 85,
+    "power_drain": 0.6,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 15
+  },
+  "melee_vibrocleaver_trudgen": {
+    "category": "melee",
+    "damage": 12,
+    "weight": 70,
+    "power_drain": 0.6,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 15
+  },
+  "melee_vibrohammer": {
+    "category": "melee",
+    "damage": 14,
+    "weight": 90,
+    "power_drain": 0.7,
+    "drop_faction": [
+      "mandalorians"
+    ],
+    "drop_weight": 10,
+    "speed": -0.005
+  },
+  "melee_warclub_ushar": {
+    "category": "melee",
+    "damage": 10,
+    "weight": 70,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 15
+  },
+  "melee_weequay": {
+    "category": "melee",
+    "damage": 8,
+    "weight": 60,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 25
+  },
+  "melee_zapper_a": {
+    "category": "melee",
+    "damage": 10,
+    "technical_understanding": 30,
+    "energy_type": "electric",
+    "bolt_color": "#9966ff",
+    "power_drain": 0.4
+  },
+  "pistol_a110_jyn": {
+    "category": "pistol",
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 50
+  },
+  "pistol_ad616K6KA_cyril": {
+    "category": "pistol"
+  },
+  "pistol_c96_SWTOR": {
+    "category": "pistol"
+  },
+  "pistol_dh17_rebel": {
+    "category": "pistol",
+    "drop_faction": [
+      "aliens",
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_dl18_luke": {
+    "category": "pistol",
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_dl44_han": {
+    "category": "pistol",
+    "damage": 12,
+    "attack_cooldown_mult": 0.7,
+    "technical_understanding": 30,
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35,
+    "lie_defense": 30,
+    "lie_attack": 20
+  },
+  "pistol_dt12_greedo": {
+    "lie_defense": 20,
+    "lie_attack": 15
+  },
+  "pistol_dt29_krennic": {
+    "drop_faction": [
+      "imperials"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35,
+    "lie_defense": 25
+  },
+  "pistol_glie44_finn": {
+    "drop_faction": [
+      "imperials"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_glie44_leia": {
+    "category": "pistol",
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_IB94_mando": {
+    "category": "pistol",
+    "damage": 10,
+    "technical_understanding": 50,
+    "drop_faction": [
+      "mandalorians"
+    ],
+    "tier_required": 1,
+    "drop_weight": 20,
+    "lie_defense": 20
+  },
+  "pistol_nn14_rey": {
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_relby23_bespinguard": {
+    "category": "pistol"
+  },
+  "pistol_rv07_crackerbarrel": {
+    "category": "pistol"
+  },
+  "pistol_satineslament_leia": {
+    "category": "pistol",
+    "charm_attack": 25
+  },
+  "pistol_se14c_cornelius": {
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 45
+  },
+  "pistol_se14r_deathtrooper": {
+    "category": "pistol",
+    "drop_faction": [
+      "droids"
+    ],
+    "tier_required": 1,
+    "drop_weight": 40,
+    "special_moves": "autofire"
+  },
+  "pistol_se44_firstorder": {
+    "drop_faction": [
+      "sith"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35
+  },
+  "pistol_vm19_vess": {
+    "category": "pistol"
+  },
+  "pistol_x8_lando": {
+    "category": "pistol",
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35,
+    "lie_defense": 30,
+    "lie_attack": 25
+  },
+  "rifle_bowcaster": {
+    "category": "rifle",
+    "damage": 15,
+    "ammo_max": 5,
+    "attack_cooldown_mult": 1.5,
+    "weight": 110,
+    "bolt_speed_mult": 0.8,
+    "energy_type": "plasma",
+    "bolt_color": "#00ff44",
+    "technical_understanding": 60,
+    "power_drain": 0.5,
+    "drop_faction": [
+      "aliens"
+    ],
+    "tier_required": 1,
+    "drop_weight": 20,
+    "charm_defense": 25
+  },
+  "rifle_dc15a": {
+    "category": "rifle"
+  },
+  "rifle_dc15scarbine": {
+    "category": "rifle",
+    "drop_faction": [
+      "clones"
+    ],
+    "tier_required": 1,
+    "drop_weight": 40
+  },
+  "rifle_dlt19": {
+    "category": "rifle",
+    "drop_faction": [
+      "imperials"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35,
+    "special_moves": "autofire"
+  },
+  "rifle_dlt19e": {
+    "category": "rifle"
+  },
+  "rifle_e11": {
+    "category": "rifle",
+    "drop_faction": [
+      "droids",
+      "imperials",
+      "mandalorians"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35
+  },
+  "rifle_ee3_boba": {
+    "category": "rifle",
+    "drop_faction": [
+      "mandalorians"
+    ],
+    "tier_required": 1,
+    "drop_weight": 20,
+    "charm_defense": 20
+  },
+  "rifle_el16_finn": {
+    "category": "rifle"
+  },
+  "rifle_fork": {
+    "category": "rifle",
+    "technical_understanding": 5
+  },
+  "rifle_fwmb10bred": {
+    "category": "rifle"
+  },
+  "rifle_fwmb10white": {
+    "category": "rifle"
+  },
+  "rifle_ion": {
+    "category": "rifle",
+    "damage": 8,
+    "energy_type": "ion",
+    "bolt_color": "#00ccff",
+    "technical_understanding": 70,
+    "weight": 95,
+    "power_drain": 0.4,
+    "drop_weight": 20,
+    "charm_defense": 15
+  },
+  "rifle_ionblaster_jawa": {
+    "category": "rifle",
+    "damage": 7,
+    "energy_type": "ion",
+    "bolt_color": "#00ccff",
+    "technical_understanding": 60,
+    "weight": 40,
+    "power_drain": 0.3,
+    "drop_faction": [
+      "aliens"
+    ],
+    "tier_required": 1,
+    "drop_weight": 30
+  },
+  "rifle_rt97c_snipey": {
+    "category": "rifle",
+    "attack_range_mult": 1.5,
+    "accuracy_mult": 1.3,
+    "weight": 90,
+    "technical_understanding": 75,
+    "power_drain": 0.5,
+    "drop_weight": 25,
+    "charm_defense": 20
+  },
+  "rifle_swkotor": {
+    "category": "rifle",
+    "drop_faction": [
+      "droids"
+    ],
+    "tier_required": 1,
+    "drop_weight": 40
+  },
+  "rifle_t21": {
+    "category": "rifle",
+    "drop_faction": [
+      "imperials"
+    ],
+    "tier_required": 1,
+    "drop_weight": 35,
+    "special_moves": "autofire"
+  },
+  "rifle_t21bheavy": {
+    "category": "rifle"
+  },
+  "saber_3": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_4": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_5": {
+    "category": "saber",
+    "bolt_color": "#00ff00",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_6": {
+    "category": "saber",
+    "bolt_color": "#800080",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_7": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_8": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_9": {
+    "category": "saber",
+    "bolt_color": "#00ff00",
+    "force_sensitivity": 75,
+    "drop_weight": 10
+  },
+  "saber_blue": {
+    "category": "saber",
+    "glow": {
+      "color": "#0088ff",
+      "intensity": 2.5,
+      "distance": 6
     },
-    "rifle_dc15a": { "category": "rifle" },
-    "rifle_dc15scarbine": { "category": "rifle", "drop_faction": ["clones"], "tier_required": 1, "drop_weight": 40 },
-    "rifle_dlt19": { "category": "rifle", "drop_faction": ["imperials"], "tier_required": 1, "drop_weight": 35 },
-    "rifle_dlt19e": { "category": "rifle" },
-    "rifle_e11": { "category": "rifle", "drop_faction": ["droids", "imperials", "mandalorians"], "tier_required": 1, "drop_weight": 35 },
-    "rifle_ee3_boba": { "category": "rifle", "drop_faction": ["mandalorians"], "tier_required": 1, "drop_weight": 20 },
-    "rifle_el16_finn": { "category": "rifle" },
-    "rifle_fork": { "category": "rifle", "technical_understanding": 40 },
-    "rifle_fwmb10bred": { "category": "rifle" },
-    "rifle_fwmb10white": { "category": "rifle" },
-    "rifle_ion": { "category": "rifle", "damage": 8, "energy_type": "ion", "technical_understanding": 70, "weight": 95, "power_drain": 0.4, "drop_weight": 20 },
-    "rifle_ionblaster_jawa": { "category": "rifle", "damage": 7, "energy_type": "ion", "technical_understanding": 60, "weight": 40, "power_drain": 0.3, "drop_faction": ["aliens"], "tier_required": 1, "drop_weight": 30 },
-    "rifle_rt97c_snipey": { "category": "rifle", "attack_range_mult": 1.5, "accuracy_mult": 1.3, "weight": 90, "technical_understanding": 75, "power_drain": 0.5, "drop_weight": 25 },
-    "rifle_swkotor": { "category": "rifle", "drop_faction": ["droids"], "tier_required": 1, "drop_weight": 40 },
-    "rifle_t21": { "category": "rifle", "drop_faction": ["imperials"], "tier_required": 1, "drop_weight": 35 },
-    "rifle_t21bheavy": { "category": "rifle" },
-
-    "saber_3": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_4": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_5": { "category": "saber", "bolt_color": "#00ff00", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_6": { "category": "saber", "bolt_color": "#800080", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_7": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_8": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_9": { "category": "saber", "bolt_color": "#00ff00", "force_sensitivity": 75, "drop_weight": 10 },
-    "saber_blueshort": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 75, "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 10 },
-    "saber_blulong": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 75, "drop_faction": ["rebels"], "tier_required": 1, "drop_weight": 10 },
-    "saber_darksaber": { "category": "saber", "bolt_color": "#000000", "technical_understanding": 80, "force_sensitivity": 85, "drop_faction": ["sith", "mandalorians"], "tier_required": 1, "drop_weight": 2 },
-    "saber_dooku": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 95, "power_drain": 0.7, "drop_weight": 5 },
-    "saber_doublebladed": { "category": "saber", "damage": 20, "attack_cooldown_mult": 0.5, "bolt_color": "#ff0000", "force_sensitivity": 90, "weight": 90, "power_drain": 0.8, "drop_weight": 5 },
-    "saber_halfspin": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 80 },
-    "saber_red": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 75, "drop_faction": ["sith"], "tier_required": 1, "drop_weight": 10 },
-    "saber_spinner": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 100, "power_drain": 0.9, "drop_weight": 2 },
-    "saber_sword1": { "category": "saber", "bolt_color": "#00ff00", "force_sensitivity": 75 },
-    "saber_sword2": { "category": "saber", "bolt_color": "#ff0000", "force_sensitivity": 75 },
-    "saber_sword3": { "category": "saber", "bolt_color": "#0088ff", "force_sensitivity": 75 },
-
-    "unique_eweb": { 
-        "category": "unique", 
-        "damage": 25, 
-        "ammo_max": 200, 
-        "attack_cooldown_mult": 0.4, 
-        "weight": 130, 
-        "technical_understanding": 90,
-        "accuracy_mult": 1.2,
-        "power_drain": 0.9,
-        "drop_weight": 10
+    "technical_understanding": 50,
+    "force_sensitivity": 70
+  },
+  "saber_blueshort": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 75,
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 10
+  },
+  "saber_blulong": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 75,
+    "drop_faction": [
+      "rebels"
+    ],
+    "tier_required": 1,
+    "drop_weight": 10
+  },
+  "saber_darksaber": {
+    "category": "saber",
+    "bolt_color": "#000000",
+    "technical_understanding": 80,
+    "force_sensitivity": 85,
+    "drop_faction": [
+      "sith",
+      "mandalorians"
+    ],
+    "tier_required": 1,
+    "drop_weight": 2,
+    "charm_attack": 30
+  },
+  "saber_dooku": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 10,
+    "power_drain": 0.7,
+    "drop_weight": 5,
+    "charm_attack": 20
+  },
+  "saber_doublebladed": {
+    "category": "saber",
+    "damage": 20,
+    "attack_cooldown_mult": 0.5,
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 15,
+    "weight": 90,
+    "power_drain": 0.8,
+    "drop_weight": 5
+  },
+  "saber_green": {
+    "category": "saber",
+    "glow": {
+      "color": "#00ff44",
+      "intensity": 2.5,
+      "distance": 6
     },
-    "unique_forcelightning": { "category": "unique", "damage": 15, "technical_understanding": 0, "force_sensitivity": 90, "energy_type": "electric", "attack_range_mult": 0.8, "power_drain": 0.7, "drop_faction": ["sith"], "tier_required": 1, "drop_weight": 5 },
-    "unique_forcepike": { "category": "unique", "damage": 12, "technical_understanding": 50, "weight": 85, "drop_faction": ["imperials", "sith"], "drop_weight": 15 },
-    "unique_forkgun": { "category": "unique", "damage": 14, "technical_understanding": 65 },
-    "unique_gungangrenade": { "category": "unique", "damage": 20, "attack_cooldown_mult": 3.0, "radius": 5.0, "technical_understanding": 40, "energy_type": "physical", "power_drain": 0.2, "drop_faction": ["aliens"], "drop_weight": 20 },
-    "unique_mwc35cgattlinglaser": { "category": "unique", "damage": 20, "ammo_max": 150, "attack_cooldown_mult": 0.3, "weight": 120, "technical_understanding": 80, "power_drain": 0.8, "drop_weight": 10 },
-    "unique_sonicgrenade": { "category": "unique", "damage": 15, "attack_cooldown_mult": 2.0, "radius": 3.0, "technical_understanding": 50, "energy_type": "sound", "power_drain": 0.3, "drop_faction": ["takers"], "drop_weight": 20 },
-    "unique_thermaldetonator": { "category": "unique", "damage": 25, "attack_cooldown_mult": 3.0, "radius": 4.0, "technical_understanding": 70, "energy_type": "explosive", "power_drain": 0.2, "drop_weight": 15 }
+    "technical_understanding": 50,
+    "force_sensitivity": 70
+  },
+  "saber_halfspin": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 80
+  },
+  "saber_red": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 70,
+    "drop_faction": [
+      "sith"
+    ],
+    "tier_required": 1,
+    "drop_weight": 10,
+    "glow": {
+      "color": "#ff0000",
+      "intensity": 2.5,
+      "distance": 6
+    },
+    "technical_understanding": 50
+  },
+  "saber_redd": {
+    "category": "saber"
+  },
+  "saber_spinner": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 20,
+    "power_drain": 0.9,
+    "drop_weight": 2
+  },
+  "saber_sword1": {
+    "category": "saber",
+    "bolt_color": "#00ff00",
+    "force_sensitivity": 75
+  },
+  "saber_sword2": {
+    "category": "saber",
+    "bolt_color": "#ff0000",
+    "force_sensitivity": 75
+  },
+  "saber_sword3": {
+    "category": "saber",
+    "bolt_color": "#0088ff",
+    "force_sensitivity": 75
+  },
+  "unique_eweb": {
+    "category": "unique",
+    "damage": 30,
+    "ammo_max": 200,
+    "attack_cooldown_mult": 1.5,
+    "weight": 130,
+    "technical_understanding": 90,
+    "accuracy_mult": 1.2,
+    "power_drain": 0.9,
+    "drop_weight": 10,
+    "charm_defense": 30,
+    "special_moves": "autofire",
+    "speed": -0.005
+  },
+  "unique_forcelightning": {
+    "category": "unique",
+    "damage": 15,
+    "technical_understanding": 0,
+    "force_sensitivity": 20,
+    "energy_type": "electric",
+    "bolt_color": "#9966ff",
+    "attack_range_mult": 0.8,
+    "power_drain": 0.7,
+    "drop_faction": [
+      "sith"
+    ],
+    "tier_required": 1,
+    "drop_weight": 5
+  },
+  "unique_forcepike": {
+    "category": "unique",
+    "damage": 12,
+    "technical_understanding": 50,
+    "weight": 85,
+    "drop_faction": [
+      "imperials",
+      "sith"
+    ],
+    "drop_weight": 15
+  },
+  "unique_forkgun": {
+    "category": "unique",
+    "damage": 14,
+    "technical_understanding": 65
+  },
+  "unique_gungangrenade": {
+    "category": "unique",
+    "damage": 20,
+    "attack_cooldown_mult": 3,
+    "radius": 5,
+    "technical_understanding": 40,
+    "energy_type": "physical",
+    "bolt_color": null,
+    "power_drain": 0.2,
+    "drop_faction": [
+      "aliens"
+    ],
+    "drop_weight": 20
+  },
+  "unique_mwc35cgattlinglaser": {
+    "category": "unique",
+    "damage": 20,
+    "ammo_max": 150,
+    "attack_cooldown_mult": 0.65,
+    "weight": 120,
+    "technical_understanding": 80,
+    "power_drain": 0.8,
+    "drop_weight": 10,
+    "charm_defense": 30,
+    "special_moves": "autofire",
+    "speed": -0.005
+  },
+  "unique_sonicgrenade": {
+    "category": "unique",
+    "damage": 15,
+    "attack_cooldown_mult": 2,
+    "radius": 3,
+    "technical_understanding": 60,
+    "energy_type": "sound",
+    "bolt_color": "#ffaa00",
+    "power_drain": 0.3,
+    "drop_faction": [
+      "takers"
+    ],
+    "drop_weight": 20,
+    "offsets": {
+      "position": {
+        "x": -0.84,
+        "y": -7.8,
+        "z": 7.01
+      },
+      "rotation": {
+        "x": 0.553,
+        "y": -1.365,
+        "z": 0
+      },
+      "scale": 53,
+      "planes": {
+        "dist": 0.002,
+        "yaw": 0.15,
+        "pitch": 0
+      }
+    }
+  },
+  "unique_thermaldetonator": {
+    "category": "unique",
+    "damage": 25,
+    "attack_cooldown_mult": 3,
+    "radius": 4,
+    "technical_understanding": 70,
+    "energy_type": "explosive",
+    "bolt_color": "#ff6600",
+    "power_drain": 0.2,
+    "drop_weight": 15
+  }
 }

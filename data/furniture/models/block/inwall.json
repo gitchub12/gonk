@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/in_wall",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/inwall_pic",
+    "particle": "chronokillers_star_wars:blocks/inwall_pic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/console",
+    "2": "chronokillers_star_wars:blocks/red_stained",
+    "3": "chronokillers_star_wars:blocks/tex_in_wall"
+  }
+}

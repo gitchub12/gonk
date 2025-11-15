@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/black_angle",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/black_angle_pic",
+    "particle": "chronokillers_star_wars:blocks/black_angle_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/computerpanelnine"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/computerpanelnine",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/computerpanelnine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/computerpanelnine",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/computerpanelnine",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/computerpanelnine",
+      "x": 90
+    }
+  }
+}

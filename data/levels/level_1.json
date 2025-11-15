@@ -909,10 +909,10 @@
         "6,19",
         {
           "type": "random_npc",
-          "key": "R1_Humans",
+          "key": "R1_Rebels",
           "properties": {
             "threat": 1,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "all"
           },
           "rotation": 0
@@ -922,10 +922,10 @@
         "7,19",
         {
           "type": "random_npc",
-          "key": "R2_Humans",
+          "key": "R2_Rebels",
           "properties": {
             "threat": 2,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "all"
           },
           "rotation": 0
@@ -935,10 +935,10 @@
         "8,19",
         {
           "type": "random_npc",
-          "key": "R3_Humans",
+          "key": "R3_Rebels",
           "properties": {
             "threat": 3,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "all"
           },
           "rotation": 0
@@ -948,10 +948,10 @@
         "9,19",
         {
           "type": "random_npc",
-          "key": "R4_Humans",
+          "key": "R4_Rebels",
           "properties": {
             "threat": 4,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "all"
           },
           "rotation": 0
@@ -961,10 +961,10 @@
         "10,19",
         {
           "type": "random_npc",
-          "key": "R5_Humans",
+          "key": "R5_Rebels",
           "properties": {
             "threat": 5,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "all"
           },
           "rotation": 0
@@ -977,7 +977,7 @@
           "key": "R1_human_female",
           "properties": {
             "threat": 1,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_female"
           },
           "rotation": 0
@@ -990,7 +990,7 @@
           "key": "R2_human_female",
           "properties": {
             "threat": 2,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_female"
           },
           "rotation": 0
@@ -1003,7 +1003,7 @@
           "key": "R3_human_female",
           "properties": {
             "threat": 3,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_female"
           },
           "rotation": 0
@@ -1016,7 +1016,7 @@
           "key": "R4_human_female",
           "properties": {
             "threat": 4,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_female"
           },
           "rotation": 0
@@ -1029,7 +1029,7 @@
           "key": "R5_human_female",
           "properties": {
             "threat": 5,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_female"
           },
           "rotation": 0
@@ -1042,7 +1042,7 @@
           "key": "R1_human_male",
           "properties": {
             "threat": 1,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_male"
           },
           "rotation": 0
@@ -1055,7 +1055,7 @@
           "key": "R2_human_male",
           "properties": {
             "threat": 2,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_male"
           },
           "rotation": 0
@@ -1068,7 +1068,7 @@
           "key": "R3_human_male",
           "properties": {
             "threat": 3,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_male"
           },
           "rotation": 0
@@ -1081,7 +1081,7 @@
           "key": "R4_human_male",
           "properties": {
             "threat": 4,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_male"
           },
           "rotation": 0
@@ -1094,7 +1094,7 @@
           "key": "R5_human_male",
           "properties": {
             "threat": 5,
-            "macroCategory": "Humans",
+            "macroCategory": "Rebels",
             "subgroup": "human_male"
           },
           "rotation": 0
@@ -1385,28 +1385,6 @@
         }
       ],
       [
-        "V_4_12",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_14",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "V_3_15",
         {
           "type": "texture",
@@ -1528,128 +1506,7 @@
         }
       ],
       [
-        "V_4_9",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_8",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_4",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_5",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_6",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_7",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "V_3_9",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_13",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_15",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_16",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_17",
         {
           "type": "texture",
           "key": "/data/pngs/wall/awall_bars_low.png",
@@ -1836,183 +1693,7 @@
         }
       ],
       [
-        "V_4_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "V_3_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_15_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_18_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_17_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_16_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_13_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_12_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_10_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_14_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_19_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_21_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_23_11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_24_11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_25_11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_27_11",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_26_11",
         {
           "type": "texture",
           "key": "/data/pngs/wall/awall_bars_low.png",
@@ -2144,28 +1825,6 @@
         }
       ],
       [
-        "V_27_12",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_27_13",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "V_28_16",
         {
           "type": "texture",
@@ -2221,73 +1880,7 @@
         }
       ],
       [
-        "V_27_14",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_27_15",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_27_16",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "H_28_16",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_23_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_26_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_31_18",
         {
           "type": "texture",
           "key": "/data/pngs/wall/awall_bars_low.png",
@@ -2485,83 +2078,6 @@
         }
       ],
       [
-        "H_32_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_30_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_29_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_28_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_27_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_25_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_24_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "H_31_19",
         {
           "type": "texture",
@@ -2629,17 +2145,6 @@
       ],
       [
         "H_18_19",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_20_18",
         {
           "type": "texture",
           "key": "/data/pngs/wall/awall_bars_low.png",
@@ -2914,50 +2419,6 @@
         }
       ],
       [
-        "H_9_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_6_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_7_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_8_18",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
         "H_6_19",
         {
           "type": "texture",
@@ -2981,17 +2442,6 @@
       ],
       [
         "H_29_19",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/awall_bars_low.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_4_10",
         {
           "type": "texture",
           "key": "/data/pngs/wall/awall_bars_low.png",
@@ -3130,6 +2580,558 @@
           "properties": {
             "level2": "/data/pngs/wall/wall2/w2_default.png",
             "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "door": [
+      [
+        "H_6_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_7_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_8_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_9_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_10_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_12_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_13_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_14_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_15_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_16_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_17_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_18_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_19_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_20_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_21_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_23_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_24_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_25_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_26_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_27_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_28_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_29_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_30_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_31_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_32_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_27_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_27_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_27_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_27_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_27_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_27_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_26_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_25_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_24_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "H_23_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_4",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_10",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_11",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_12",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_13",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_14",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_15",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_16",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_17",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
+          }
+        }
+      ],
+      [
+        "V_4_18",
+        {
+          "type": "texture",
+          "key": "/data/pngs/door/adoor_bars_low.png",
+          "properties": {
+            "level2": "",
+            "level3": ""
           }
         }
       ]

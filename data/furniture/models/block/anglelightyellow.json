@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/angle_light_yellow",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/angle_light_yellow_pic",
+    "particle": "chronokillers_star_wars:blocks/angle_light_yellow_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/yellow_empire_light_sideways"
+  }
+}

@@ -1,0 +1,1545 @@
+{
+  "nodes": [
+    {
+      "id": "start_zapper",
+      "name": "Zapper Arm",
+      "description": "Your basic, reliable starting weapon.",
+      "cost": 0,
+      "icon": "",
+      "prerequisites": [],
+      "effects": {
+        "starting_weapon": {
+          "category": "melee",
+          "weapon": "zapper"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_vibrohammer",
+      "name": "Vibro-Hammer",
+      "description": "Start with a Vibro-Hammer.",
+      "cost": 3,
+      "icon": "data/gonkonlyweapons/melee/gmelee_vibrohammer.png",
+      "prerequisites": [
+        "start_zapper"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "melee",
+          "weapon": "gmelee_vibrohammer"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_dt12",
+      "name": "DT-12",
+      "description": "Start with Greedo's DT-12 Blaster Pistol.",
+      "cost": 5,
+      "icon": "data/NPConlyweapons/pistol/pistol_dt12_greedo.png",
+      "prerequisites": [
+        "start_vibrohammer",
+        "carry_pistol"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "pistol",
+          "weapon": "gpistol_dt12_greedo"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 2,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_dl44",
+      "name": "DL-44",
+      "description": "Start with Han's DL-44 Heavy Blaster Pistol.",
+      "cost": 5,
+      "icon": "data/NPConlyweapons/pistol/pistol_dl44_han.png",
+      "prerequisites": [
+        "start_dt12"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "pistol",
+          "weapon": "gpistol_dl44_han"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 3,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_e11",
+      "name": "E-11",
+      "description": "Start with the standard E-11 Blaster Rifle.",
+      "cost": 7,
+      "icon": "data/NPConlyweapons/rifle/rifle_e11.png",
+      "prerequisites": [
+        "start_dl44",
+        "carry_rifle"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "rifle",
+          "weapon": "grifle_e11"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 4,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_fork",
+      "name": "Fork Rifle",
+      "description": "Start with the Fork Rifle.",
+      "cost": 8,
+      "icon": "data/NPConlyweapons/rifle/rifle_fork.png",
+      "prerequisites": [
+        "start_e11"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "rifle",
+          "weapon": "grifle_fork"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 5,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_ee3",
+      "name": "EE-3 Mando",
+      "description": "Start with the Mandalorian EE-3 Carbine.",
+      "cost": 10,
+      "icon": "data/NPConlyweapons/longarm/long_ee3_mando.png",
+      "prerequisites": [
+        "start_fork",
+        "carry_longarm"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "longarm",
+          "weapon": "glong_ee3_mando"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 6,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_z6",
+      "name": "Z6 Custom",
+      "description": "Start with the Z6 Custom Rotary Cannon.",
+      "cost": 12,
+      "icon": "data/NPConlyweapons/longarm/long_z6custom.png",
+      "prerequisites": [
+        "start_ee3"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "longarm",
+          "weapon": "glong_z6custom"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 7,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_eweb",
+      "name": "E-Web",
+      "description": "Start with the E-Web Heavy Blaster.",
+      "cost": 15,
+      "icon": "data/NPConlyweapons/unique/unique_eweb.png",
+      "prerequisites": [
+        "start_z6",
+        "carry_uniques"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "unique",
+          "weapon": "gunique_eweb"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 8,
+        "y": 0
+      }
+    },
+    {
+      "id": "start_forcepike",
+      "name": "Force Pike",
+      "description": "Start with the Force Pike.",
+      "cost": 18,
+      "icon": "data/NPConlyweapons/unique/unique_forcepike.png",
+      "prerequisites": [
+        "start_eweb"
+      ],
+      "effects": {
+        "starting_weapon": {
+          "category": "unique",
+          "weapon": "gunique_forcepike"
+        }
+      },
+      "branch": "Start",
+      "color": "#FFFFFF",
+      "position": {
+        "x": 11,
+        "y": 0
+      }
+    },
+    {
+      "id": "storage_starter",
+      "name": "Storage",
+      "description": "Increase your carrying capacity.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/storage_starter.png",
+      "prerequisites": [],
+      "effects": {
+        "max_modules": 4
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 0,
+        "y": 2
+      }
+    },
+    {
+      "id": "carry_pistol",
+      "name": "Carry: Pistol",
+      "description": "Unlock a dedicated slot for pistols.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/carry_pistol.png",
+      "prerequisites": [
+        "storage_starter"
+      ],
+      "effects": {
+        "unlock_slot": "pistol"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 1,
+        "y": 2
+      }
+    },
+    {
+      "id": "carry_rifle",
+      "name": "Carry: Rifle",
+      "description": "Unlock a dedicated slot for rifles.",
+      "cost": 3,
+      "icon": "data/pngs/NODES/carry_rifle.png",
+      "prerequisites": [
+        "carry_pistol"
+      ],
+      "effects": {
+        "unlock_slot": "rifle"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    {
+      "id": "carry_longarm",
+      "name": "Carry: Longarm",
+      "description": "Unlock a dedicated slot for longarms.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/carry_longarm.png",
+      "prerequisites": [
+        "carry_rifle"
+      ],
+      "effects": {
+        "unlock_slot": "longarm"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 3,
+        "y": 2
+      }
+    },
+    {
+      "id": "carry_uniques",
+      "name": "Carry: Uniques",
+      "description": "Unlock a dedicated slot for unique weapons.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/carry_uniques.png",
+      "prerequisites": [
+        "carry_longarm"
+      ],
+      "effects": {
+        "unlock_slot": "uniques"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 4,
+        "y": 2
+      }
+    },
+    {
+      "id": "extra_pistol",
+      "name": "Extra: Pistol",
+      "description": "Carry a second pistol.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/extra_pistol.png",
+      "prerequisites": [
+        "carry_pistol"
+      ],
+      "effects": {
+        "add_extra_slot": "pistol"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 1,
+        "y": 3
+      }
+    },
+    {
+      "id": "extra_rifle",
+      "name": "Extra: Rifle",
+      "description": "Carry a second rifle.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/extra_rifle.png",
+      "prerequisites": [
+        "carry_rifle"
+      ],
+      "effects": {
+        "add_extra_slot": "rifle"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 2,
+        "y": 3
+      }
+    },
+    {
+      "id": "extra_longarm",
+      "name": "Extra: Longarm",
+      "description": "Carry a second longarm.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/extra_longarm.png",
+      "prerequisites": [
+        "carry_longarm"
+      ],
+      "effects": {
+        "add_extra_slot": "longarm"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 3,
+        "y": 3
+      }
+    },
+    {
+      "id": "extra_uniques",
+      "name": "Extra: Uniques",
+      "description": "Carry a second unique weapon.",
+      "cost": 7,
+      "icon": "data/pngs/NODES/extra_uniques.png",
+      "prerequisites": [
+        "carry_uniques"
+      ],
+      "effects": {
+        "add_extra_slot": "uniques"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 4,
+        "y": 3
+      }
+    },
+    {
+      "id": "extra_saber",
+      "name": "Extra: Saber",
+      "description": "Carry a second saber.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/extra_saber.png",
+      "prerequisites": [
+        "carry_saber"
+      ],
+      "effects": {
+        "add_extra_slot": "saber"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 7,
+        "y": 3
+      }
+    },
+    {
+      "id": "modules_8",
+      "name": "Modules: 8",
+      "description": "Carry up to 8 modules.",
+      "cost": 4,
+      "icon": "",
+      "prerequisites": [
+        "storage_starter"
+      ],
+      "effects": {
+        "max_modules": 8
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 1,
+        "y": 4
+      }
+    },
+    {
+      "id": "copy_machine",
+      "name": "Copy Machine",
+      "description": "Slowly generate pamphlets over time.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/copy_machine.png",
+      "prerequisites": [
+        "modules_8"
+      ],
+      "effects": {
+        "pamphlet_generator": true
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 2,
+        "y": 4
+      }
+    },
+    {
+      "id": "modules_12",
+      "name": "Modules: 12",
+      "description": "Carry up to 12 modules.",
+      "cost": 6,
+      "icon": "",
+      "prerequisites": [
+        "copy_machine"
+      ],
+      "effects": {
+        "max_modules": 12
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 3,
+        "y": 4
+      }
+    },
+    {
+      "id": "mass_storage",
+      "name": "Mass Storage",
+      "description": "Adds a third slot for each weapon type you have an 'Extra' upgrade for.",
+      "cost": 10,
+      "icon": "",
+      "prerequisites": [
+        "modules_12"
+      ],
+      "effects": {
+        "mass_storage": true
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 4,
+        "y": 4
+      }
+    },
+    {
+      "id": "loot_starter",
+      "name": "Loot Hunter",
+      "description": "Improves your chances of finding valuable items.",
+      "cost": 0,
+      "icon": "",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 0,
+        "y": 6
+      }
+    },
+    {
+      "id": "weapon_loot_1",
+      "name": "Weapon Finder +10%",
+      "description": "Increases weapon drop chance by 10%.",
+      "cost": 2,
+      "icon": "",
+      "prerequisites": [
+        "loot_starter"
+      ],
+      "effects": {
+        "weapon_loot_bonus": 0.1
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 1,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "weapon_loot_2",
+      "name": "Weapon Finder +20%",
+      "description": "Increases weapon drop chance by another 20%.",
+      "cost": 4,
+      "icon": "",
+      "prerequisites": [
+        "weapon_loot_1"
+      ],
+      "effects": {
+        "weapon_loot_bonus": 0.2
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 2,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "health_loot_1",
+      "name": "Health Scavenger +10%",
+      "description": "Increases health item drop chance by 10%.",
+      "cost": 2,
+      "icon": "",
+      "prerequisites": [
+        "loot_starter"
+      ],
+      "effects": {
+        "health_loot_bonus": 0.1
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 1,
+        "y": 6.5
+      }
+    },
+    {
+      "id": "health_loot_2",
+      "name": "Health Scavenger +20%",
+      "description": "Increases health item drop chance by another 20%.",
+      "cost": 4,
+      "icon": "",
+      "prerequisites": [
+        "health_loot_1"
+      ],
+      "effects": {
+        "health_loot_bonus": 0.2
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 2,
+        "y": 6.5
+      }
+    },
+    {
+      "id": "wire_loot_1",
+      "name": "Wire Detector +10%",
+      "description": "Increases wire drop chance by 10%.",
+      "cost": 3,
+      "icon": "",
+      "prerequisites": [
+        "loot_starter"
+      ],
+      "effects": {
+        "wire_loot_bonus": 0.1
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 1,
+        "y": 7.5
+      }
+    },
+    {
+      "id": "wire_loot_2",
+      "name": "Wire Detector +20%",
+      "description": "Increases wire drop chance by another 20%.",
+      "cost": 5,
+      "icon": "",
+      "prerequisites": [
+        "wire_loot_1"
+      ],
+      "effects": {
+        "wire_loot_bonus": 0.2
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 2,
+        "y": 7.5
+      }
+    },
+    {
+      "id": "node_loot_1",
+      "name": "Node Seeker +10%",
+      "description": "Increases upgrade node drop chance by 10%.",
+      "cost": 3,
+      "icon": "",
+      "prerequisites": [
+        "loot_starter"
+      ],
+      "effects": {
+        "node_loot_bonus": 0.1
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 3,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "node_loot_2",
+      "name": "Node Seeker +20%",
+      "description": "Increases upgrade node drop chance by another 20%.",
+      "cost": 5,
+      "icon": "",
+      "prerequisites": [
+        "node_loot_1"
+      ],
+      "effects": {
+        "node_loot_bonus": 0.2
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 4,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "rare_loot_1",
+      "name": "Rare Find +5%",
+      "description": "Increases chance of finding rare quality items by 5%.",
+      "cost": 6,
+      "icon": "",
+      "prerequisites": [
+        "weapon_loot_1",
+        "health_loot_1"
+      ],
+      "effects": {
+        "rare_loot_bonus": 0.05
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 3,
+        "y": 6
+      }
+    },
+    {
+      "id": "rare_loot_2",
+      "name": "Rare Find +10%",
+      "description": "Increases chance of finding rare quality items by another 10%.",
+      "cost": 10,
+      "icon": "",
+      "prerequisites": [
+        "rare_loot_1"
+      ],
+      "effects": {
+        "rare_loot_bonus": 0.1
+      },
+      "branch": "Loot",
+      "color": "#17a2b8",
+      "position": {
+        "x": 4,
+        "y": 6
+      }
+    },
+    {
+      "id": "jedi_starter",
+      "name": "Jedi Training",
+      "description": "Unlocks the Jedi upgrade path.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/jedi_starter.png",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 6,
+        "y": 6
+      }
+    },
+    {
+      "id": "force_push_1",
+      "name": "Force Push",
+      "description": "Unlock the Force Push ability.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/force_push.png",
+      "prerequisites": [
+        "jedi_starter"
+      ],
+      "effects": {
+        "force_push": true
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 7,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "mind_trick_1",
+      "name": "Mind Trick",
+      "description": "Chance to turn a non-hostile NPC into a temporary ally.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/mind_trick.png",
+      "prerequisites": [
+        "force_push_1"
+      ],
+      "effects": {
+        "mind_trick_chance": 0.15
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 8,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "force_heal_1",
+      "name": "Force Heal",
+      "description": "Unlock an ability to heal yourself over time.",
+      "cost": 7,
+      "icon": "data/pngs/NODES/force_heal.png",
+      "prerequisites": [
+        "jedi_starter"
+      ],
+      "effects": {
+        "force_heal_ability": true
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 7,
+        "y": 6.5
+      }
+    },
+    {
+      "id": "blaster_deflection_1",
+      "name": "Bolt Deflection",
+      "description": "Holding block with a saber can deflect blaster bolts.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/blaster_deflection.png",
+      "prerequisites": [
+        "saber_block_1",
+        "jedi_starter"
+      ],
+      "effects": {
+        "blaster_deflection": true
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 8,
+        "y": 6.5
+      }
+    },
+    {
+      "id": "force_lightning_1",
+      "name": "Force Lightning",
+      "description": "Unlocks a powerful, short-range energy attack.",
+      "cost": 10,
+      "icon": "data/pngs/NODES/force_lightning.png",
+      "prerequisites": [
+        "mind_trick_1"
+      ],
+      "effects": {
+        "force_lightning_ability": true
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 9,
+        "y": 5.5
+      }
+    },
+    {
+      "id": "saber_throw_1",
+      "name": "Saber Throw",
+      "description": "Unlock the ability to throw your saber.",
+      "cost": 9,
+      "icon": "data/pngs/NODES/saber_throw.png",
+      "prerequisites": [
+        "blaster_deflection_1"
+      ],
+      "effects": {
+        "saber_throw_ability": true
+      },
+      "branch": "Jedi",
+      "color": "#6f42c1",
+      "position": {
+        "x": 9,
+        "y": 6.5
+      }
+    },
+    {
+      "id": "carry_saber",
+      "name": "Carry: Saber",
+      "description": "Unlock a dedicated slot for sabers. Requires Jedi Training.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/carry_saber.png",
+      "prerequisites": [
+        "carry_uniques",
+        "jedi_starter"
+      ],
+      "effects": {
+        "unlock_slot": "saber"
+      },
+      "branch": "Storage",
+      "color": "#adb5bd",
+      "position": {
+        "x": 7,
+        "y": 2
+      }
+    },
+    {
+      "id": "gonk_starter",
+      "name": "Gonk Core",
+      "description": "Unlocks Gonk upgrades.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/gonk_starter.png",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 0,
+        "y": 9
+      }
+    },
+    {
+      "id": "energy_max_1",
+      "name": "Energy Capacity +10",
+      "description": "Increases maximum energy by 10.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/energy_max.png",
+      "prerequisites": [
+        "gonk_starter"
+      ],
+      "effects": {
+        "max_energy": 10
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 1,
+        "y": 8.5
+      }
+    },
+    {
+      "id": "energy_max_2",
+      "name": "Energy Capacity +20",
+      "description": "Increases maximum energy by another 20.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/energy_max.png",
+      "prerequisites": [
+        "energy_max_1"
+      ],
+      "effects": {
+        "max_energy": 20
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 2,
+        "y": 8.5
+      }
+    },
+    {
+      "id": "energy_regen_1",
+      "name": "Energy Regen +5%",
+      "description": "Increases energy regeneration rate by 5%. ",
+      "cost": 3,
+      "icon": "data/pngs/NODES/energy_regen.png",
+      "prerequisites": [
+        "gonk_starter"
+      ],
+      "effects": {
+        "energy_regen_bonus": 0.05
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 1,
+        "y": 9.5
+      }
+    },
+    {
+      "id": "energy_regen_2",
+      "name": "Energy Regen +10%",
+      "description": "Increases energy regeneration rate by another 10%.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/energy_regen.png",
+      "prerequisites": [
+        "energy_regen_1"
+      ],
+      "effects": {
+        "energy_regen_bonus": 0.1
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 2,
+        "y": 9.5
+      }
+    },
+    {
+      "id": "movement_speed_1",
+      "name": "Movement Speed +5%",
+      "description": "Increases movement speed by 5%.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/movement_speed.png",
+      "prerequisites": [
+        "gonk_starter"
+      ],
+      "effects": {
+        "movement_speed_bonus": 0.05
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 1,
+        "y": 10.5
+      }
+    },
+    {
+      "id": "movement_speed_2",
+      "name": "Movement Speed +10%",
+      "description": "Increases movement speed by another 10%.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/movement_speed.png",
+      "prerequisites": [
+        "movement_speed_1"
+      ],
+      "effects": {
+        "movement_speed_bonus": 0.1
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 2,
+        "y": 10.5
+      }
+    },
+    {
+      "id": "toughness_1",
+      "name": "Toughness +1",
+      "description": "Reduces incoming damage.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/toughness.png",
+      "prerequisites": [
+        "gonk_starter"
+      ],
+      "effects": {
+        "toughness": 1
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 3,
+        "y": 8.5
+      }
+    },
+    {
+      "id": "armor_1",
+      "name": "Armor +1",
+      "description": "Adds a layer of damage resistance.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/armor.png",
+      "prerequisites": [
+        "toughness_1"
+      ],
+      "effects": {
+        "armor": 1
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 4,
+        "y": 8.5
+      }
+    },
+    {
+      "id": "weapon_energy_cost_1",
+      "name": "Efficiency -10%",
+      "description": "Reduces energy cost of all weapons by 10%.",
+      "cost": 7,
+      "icon": "data/pngs/NODES/weapon_energy.png",
+      "prerequisites": [
+        "gonk_starter"
+      ],
+      "effects": {
+        "weapon_energy_cost_multiplier": -0.1
+      },
+      "branch": "Gonk",
+      "color": "#007bff",
+      "position": {
+        "x": 3,
+        "y": 9
+      }
+    },
+    {
+      "id": "ranged_starter",
+      "name": "Ranged Training",
+      "description": "Unlocks the Ranged upgrade path.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/ranged_starter.png",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 0,
+        "y": 12
+      }
+    },
+    {
+      "id": "rifle_damage_1",
+      "name": "Rifle Damage +5%",
+      "description": "Increases damage with rifles by 5%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/rifle_damage.png",
+      "prerequisites": [
+        "ranged_starter"
+      ],
+      "effects": {
+        "rifle_damage_bonus": 0.05
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 1,
+        "y": 11.5
+      }
+    },
+    {
+      "id": "rifle_damage_2",
+      "name": "Rifle Damage +10%",
+      "description": "Increases damage with rifles by another 10%.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/rifle_damage.png",
+      "prerequisites": [
+        "rifle_damage_1"
+      ],
+      "effects": {
+        "rifle_damage_bonus": 0.1
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 2,
+        "y": 11.5
+      }
+    },
+    {
+      "id": "shoot_fast_1",
+      "name": "Rifle Fire Rate +5%",
+      "description": "Increases fire rate with rifles by 5%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/shoot_fast.png",
+      "prerequisites": [
+        "ranged_starter"
+      ],
+      "effects": {
+        "rifle_firerate_bonus": 0.05
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 1,
+        "y": 12.5
+      }
+    },
+    {
+      "id": "autofire",
+      "name": "Autofire",
+      "description": "Allows automatic firing when the attack button is held down.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/autofire.png",
+      "prerequisites": [
+        "shoot_fast_1"
+      ],
+      "effects": {
+        "autofire": true
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 2,
+        "y": 12.5
+      }
+    },
+    {
+      "id": "pistol_damage_1",
+      "name": "Pistol Damage +5%",
+      "description": "Increases damage with pistols by 5%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/pistol_damage.png",
+      "prerequisites": [
+        "ranged_starter"
+      ],
+      "effects": {
+        "pistol_damage_bonus": 0.05
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 3,
+        "y": 11.5
+      }
+    },
+    {
+      "id": "longarm_damage_1",
+      "name": "Longarm Damage +5%",
+      "description": "Increases damage with longarms by 5%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/longarm_damage.png",
+      "prerequisites": [
+        "ranged_starter"
+      ],
+      "effects": {
+        "longarm_damage_bonus": 0.05
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 3,
+        "y": 12.5
+      }
+    },
+    {
+      "id": "bolt_speed_1",
+      "name": "Bolt Speed +10%",
+      "description": "Increases projectile speed for ranged weapons.",
+      "cost": 3,
+      "icon": "data/pngs/NODES/bolt_speed.png",
+      "prerequisites": [
+        "ranged_starter"
+      ],
+      "effects": {
+        "bolt_speed_bonus": 0.1
+      },
+      "branch": "Ranged",
+      "color": "#dc3545",
+      "position": {
+        "x": 4,
+        "y": 12
+      }
+    },
+    {
+      "id": "melee_starter",
+      "name": "Melee Training",
+      "description": "Unlocks the Melee & Saber upgrade path.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/melee_starter.png",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 0,
+        "y": 15
+      }
+    },
+    {
+      "id": "melee_damage_1",
+      "name": "Melee Damage +10%",
+      "description": "Increases damage with melee weapons by 10%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/melee_damage.png",
+      "prerequisites": [
+        "melee_starter"
+      ],
+      "effects": {
+        "melee_damage_bonus": 0.1
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 1,
+        "y": 14.5
+      }
+    },
+    {
+      "id": "melee_speed_1",
+      "name": "Melee Speed +10%",
+      "description": "Increases attack speed with melee weapons by 10%.",
+      "cost": 3,
+      "icon": "data/pngs/NODES/melee_speed.png",
+      "prerequisites": [
+        "melee_damage_1"
+      ],
+      "effects": {
+        "melee_speed_bonus": 0.1
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 2,
+        "y": 14.5
+      }
+    },
+    {
+      "id": "saber_damage_1",
+      "name": "Saber Damage +10%",
+      "description": "Increases damage with sabers by 10%.",
+      "cost": 3,
+      "icon": "data/pngs/NODES/saber_damage.png",
+      "prerequisites": [
+        "melee_starter",
+        "carry_saber"
+      ],
+      "effects": {
+        "saber_damage_bonus": 0.1
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 1,
+        "y": 15.5
+      }
+    },
+    {
+      "id": "saber_block_1",
+      "name": "Saber Block +5%",
+      "description": "Increases chance to block attacks with a saber by 5%.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/saber_block.png",
+      "prerequisites": [
+        "saber_damage_1"
+      ],
+      "effects": {
+        "saber_block_chance": 0.05
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 2,
+        "y": 15.5
+      }
+    },
+    {
+      "id": "instant_kill_1",
+      "name": "Executioner +1%",
+      "description": "Grants a 1% chance to instantly kill low-threat enemies.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/instant_kill.png",
+      "prerequisites": [
+        "melee_speed_1"
+      ],
+      "effects": {
+        "instant_kill_chance": 0.01
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 3,
+        "y": 14.5
+      }
+    },
+    {
+      "id": "instant_kill_2",
+      "name": "Executioner +2%",
+      "description": "Increases instant kill chance to 2%.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/instant_kill.png",
+      "prerequisites": [
+        "instant_kill_1"
+      ],
+      "effects": {
+        "instant_kill_chance": 0.01
+      },
+      "branch": "Melee",
+      "color": "#28a745",
+      "position": {
+        "x": 4,
+        "y": 14.5
+      }
+    },
+    {
+      "id": "social_starter",
+      "name": "Social Training",
+      "description": "Unlocks the Social upgrade path.",
+      "cost": 0,
+      "icon": "data/pngs/NODES/social_starter.png",
+      "prerequisites": [],
+      "effects": {},
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 0,
+        "y": 18
+      }
+    },
+    {
+      "id": "pamphlet_effectiveness_1",
+      "name": "Pamphlet Power +10%",
+      "description": "Increases the effectiveness of pamphlets by 10%.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/pamphlet.png",
+      "prerequisites": [
+        "social_starter"
+      ],
+      "effects": {
+        "pamphlet_effectiveness_bonus": 0.1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 1,
+        "y": 17.5
+      }
+    },
+    {
+      "id": "pamphlet_speed_1",
+      "name": "Pamphlet Speed +10%",
+      "description": "Your pamphlets travel 10% faster.",
+      "cost": 2,
+      "icon": "data/pngs/NODES/pamphlet.png",
+      "prerequisites": [
+        "social_starter"
+      ],
+      "effects": {
+        "pamphlet_speed_bonus": 0.1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 1,
+        "y": 18.5
+      }
+    },
+    {
+      "id": "neighborhood_watch",
+      "name": "Neighborhood Watch",
+      "description": "You can now see all ships behind you on the map.",
+      "cost": 4,
+      "icon": "data/pngs/NODES/neighborhood_watch.png",
+      "prerequisites": [
+        "pamphlet_speed_1"
+      ],
+      "effects": {
+        "neighborhood_watch": 1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 2,
+        "y": 18.5
+      }
+    },
+    {
+      "id": "spy_network",
+      "name": "Spy Network",
+      "description": "You can now see up to 8 ships ahead on the map.",
+      "cost": 16,
+      "icon": "data/pngs/NODES/spy_network.png",
+      "prerequisites": [
+        "neighborhood_watch"
+      ],
+      "effects": {
+        "spy_network": 1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 3,
+        "y": 18.5
+      }
+    },
+    {
+      "id": "prophets",
+      "name": "Prophets",
+      "description": "Your allies aid distant ships. Add +2% control per ally when ships shift control.",
+      "cost": 32,
+      "icon": "data/pngs/NODES/prophets.png",
+      "prerequisites": [
+        "spy_network"
+      ],
+      "effects": {
+        "prophets": 1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 4,
+        "y": 18.5
+      }
+    },
+    {
+      "id": "ally_buff_1",
+      "name": "Inspiring Leader",
+      "description": "Allies gain a +5 bonus to their lie_attack stat.",
+      "cost": 5,
+      "icon": "data/pngs/NODES/ally_buff.png",
+      "prerequisites": [
+        "pamphlet_effectiveness_1"
+      ],
+      "effects": {
+        "ally_lie_attack_bonus": 5
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 2,
+        "y": 17.5
+      }
+    },
+    {
+      "id": "bartering_1",
+      "name": "Bartering",
+      "description": "Get better prices from vendors.",
+      "cost": 3,
+      "icon": "data/pngs/NODES/bartering.png",
+      "prerequisites": [
+        "social_starter"
+      ],
+      "effects": {
+        "bartering_bonus": 0.1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 2,
+        "y": 21
+      }
+    },
+    {
+      "id": "intimidate_1",
+      "name": "Intimidation",
+      "description": "Chance to lower enemy morale on hit.",
+      "cost": 6,
+      "icon": "data/pngs/NODES/intimidate.png",
+      "prerequisites": [
+        "ally_buff_1"
+      ],
+      "effects": {
+        "intimidation_chance": 0.1
+      },
+      "branch": "Social",
+      "color": "#ffc107",
+      "position": {
+        "x": 3,
+        "y": 17.5
+      }
+    },
+    {
+      "id": "spare_core_1",
+      "name": "Spare Core",
+      "description": "An extra life. When you would die, consume this to respawn at full health.",
+      "cost": 8,
+      "icon": "data/pngs/NODES/spare_core_1.png",
+      "prerequisites": [],
+      "effects": {
+        "spare_core": 1
+      },
+      "branch": "Spare Core",
+      "color": "#00ff00",
+      "position": {
+        "x": 3,
+        "y": 22
+      }
+    },
+    {
+      "id": "spare_core_2",
+      "name": "Spare Core",
+      "description": "An extra life. When you would die, consume this to respawn at full health.",
+      "cost": 32,
+      "icon": "data/pngs/NODES/spare_core_2.png",
+      "prerequisites": [],
+      "effects": {
+        "spare_core": 1
+      },
+      "branch": "Spare Core",
+      "color": "#00ff00",
+      "position": {
+        "x": 5,
+        "y": 22
+      }
+    },
+    {
+      "id": "spare_core_3",
+      "name": "Spare Core",
+      "description": "An extra life. When you would die, consume this to respawn at full health.",
+      "cost": 128,
+      "icon": "data/pngs/NODES/spare_core_3.png",
+      "prerequisites": [],
+      "effects": {
+        "spare_core": 1
+      },
+      "branch": "Spare Core",
+      "color": "#00ff00",
+      "position": {
+        "x": 7,
+        "y": 22
+      }
+    },
+    {
+      "id": "spare_core_4",
+      "name": "Spare Core",
+      "description": "An extra life. When you would die, consume this to respawn at full health.",
+      "cost": 1024,
+      "icon": "data/pngs/NODES/spare_core_4.png",
+      "prerequisites": [],
+      "effects": {
+        "spare_core": 1
+      },
+      "branch": "Spare Core",
+      "color": "#00ff00",
+      "position": {
+        "x": 10,
+        "y": 22
+      }
+    }
+  ]
+}

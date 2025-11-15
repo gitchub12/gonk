@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/red_wall_ovals",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/redwallovalspic",
+    "particle": "chronokillers_star_wars:blocks/redwallovalspic",
+    "0": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

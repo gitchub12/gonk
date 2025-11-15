@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/flat_light_wall",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/flatlight_pic",
+    "particle": "chronokillers_star_wars:blocks/flatlight_pic",
+    "0": "chronokillers_star_wars:blocks/emerald_block",
+    "1": "chronokillers_star_wars:blocks/white_shulker_box"
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations_h1.json. Contains all 'h1' (happy/friendly) attitude phrases for 'language_basic'.",
+  "phrases": [
+    {
+      "text": "Good to see you, friend.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ]
+    },
+    {
+      "text": "Well met. It's a fine day for a patrol.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "clone",
+        "imperial",
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "official"
+      ]
+    },
+    {
+      "text": "Another believer in freedom! Well met.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "It's good to see someone who respects the Jedi.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "topic": "jedi"
+    },
+    {
+      "text": "I've heard good things about you.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ]
+    },
+    {
+      "text": "And to you! A great day.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ]
+    },
+    {
+      "text": "Just glad to see a friendly face.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ]
+    },
+    {
+      "text": "The Jedi are a light in the dark, aren't they?",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "jedi",
+        "force"
+      ],
+      "topic": "jedi"
+    },
+    {
+      "text": "My droid saved my life last week. I'd trust it with anything.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel",
+        "alien"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "droids"
+      ],
+      "topic": "droids"
+    },
+    {
+      "text": "It's a beautiful ship, isn't it? The pride of the fleet.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "imperial",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "ship"
+      ],
+      "topic": "ship"
+    },
+    {
+      "text": "Those Takers are a menace. Glad we're on the same side against them.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "takers"
+      ],
+      "topic": "takers"
+    },
+    {
+      "text": "May the Force be with you.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "relation_change",
+      "value": 1
+    },
+    {
+      "text": "Stay safe out there, friend.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "For the Republic!",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "They are the hope of the galaxy. It's an honor to stand with you.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "jedi",
+        "force"
+      ],
+      "outcome": "relation_change",
+      "value": 5
+    },
+    {
+      "text": "For the Rebellion! Always.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "independence"
+      ],
+      "outcome": "relation_change",
+      "value": 5
+    },
+    {
+      "text": "This is the Way.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "mandalorian"
+      ],
+      "to_faction": [
+        "mandalorian"
+      ],
+      "on_topic_received": [
+        "mandalore"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Exactly! I knew you were a smart one.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "relation_change",
+      "value": 2
+    },
+    {
+      "text": "Well said, friend. Well said.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "relation_change",
+      "value": 2
+    },
+    {
+      "text": "Ah, I see. I don't quite agree, but I respect your view.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "rebel",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Is that so? We'll have to agree to disagree, then. Be well.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Heh, I'm glad we're not fighting those clankers anymore. Let's find some true enemies.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "h1",
+      "from_faction": [
+        "clone"
+      ],
+      "to_faction": [
+        "rebel",
+        "imperial"
+      ],
+      "on_topic_received": [
+        "droids"
+      ],
+      "style_tags": [
+        "agreement"
+      ],
+      "outcome": "push_faction_topic",
+      "value": {
+        "target_faction": "droids",
+        "change": -2
+      }
+    }
+  ]
+}

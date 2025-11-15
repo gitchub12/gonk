@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/switchone"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/switchone",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/switchone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/switchone",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/switchone",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/switchone",
+      "x": 90
+    }
+  }
+}

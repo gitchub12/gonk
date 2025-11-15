@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_panel_two",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wallpaneltwopic",
+    "particle": "chronokillers_star_wars:blocks/wallpaneltwopic",
+    "0": "chronokillers_star_wars:blocks/powder_grey",
+    "1": "chronokillers_star_wars:blocks/bridge_box",
+    "2": "chronokillers_star_wars:blocks/bridge_box_button",
+    "3": "chronokillers_star_wars:blocks/bridge_box_buttons"
+  }
+}

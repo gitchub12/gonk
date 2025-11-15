@@ -46,10 +46,10 @@
         .horizontal-group > select, .horizontal-group > input { flex-grow: 1; width: auto; }
         .horizontal-group button { flex-grow: 1; }
 
-        .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(77px, 1fr)); gap: 5px; }
-        .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); width: 77px; height: 77px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
+        .palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .palette-item { background: var(--input-bg); border: 1px solid var(--border-color); height: 77px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; position: relative; overflow: hidden; }
         .palette-item:hover, .palette-item.active { border-color: var(--accent-color); background-color: #333842; }
-        .palette-item img { max-width: 58px; max-height: 58px; image-rendering: pixelated; }
+        .palette-item img { max-width: 80%; max-height: 58px; image-rendering: pixelated; }
 
         /* Updated palette item span for better text wrapping */
         .palette-item span {
@@ -118,11 +118,69 @@
         #utility-layers button img { width: 35px; height: 35px; margin-top: 2px; }
         #utility-layers button .layer-label { font-size: 11px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; position: absolute; bottom: 2px; }
 
+        #npc-palette-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 240px; /* 3 items * (70px width + 5px gap) */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            z-index: 20;
+        }
+        #npc-palette-container button {
+            width: 70px;
+            height: 55px;
+            flex-direction: column;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color-light);
+            color: var(--text-color);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        #npc-palette-container button img {
+            width: 35px;
+            height: 35px;
+            margin-top: 2px;
+        }
+        #npc-palette-container button .layer-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            position: absolute;
+            bottom: 2px;
+        }
+        #npc-palette-container button:hover { background-color: #333842; }
+        #npc-palette-container button.active { border-color: var(--accent-color); background-color: #333842;}
 
-        .top-right-ui { position: absolute; top: 10px; right: 10px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-        #level-display { background-color: rgba(33, 37, 43, 0.8); padding: 5px 10px; border-radius: 5px; font-size: 14px; font-weight: bold; margin-top: 50px; /* Adjust margin to avoid overlap with utility layers */ }
 
-        .bottom-right-ui { position: absolute; bottom: 10px; right: 10px; z-index: 20; }
+
+        .bottom-right-ui {
+            position: absolute;
+            bottom: 30px; /* Moved up a bit */
+            right: 10px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        #level-display {
+            background-color: rgba(33, 37, 43, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            order: 2; /* Make it appear after the button */
+        }
+
         #playtest-button {
             padding: 12px 24px;
             font-size: 1.2em;
@@ -209,6 +267,16 @@
             text-align: right;
             margin-right: 5px;
         }
+        .palette-in-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            flex-grow: 1;
+        }
+        .palette-in-group .palette-item {
+            width: auto;
+            height: 50px;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -260,27 +328,25 @@
                 <h4>Default Textures</h4>
                 <div class="horizontal-group">
                     <label for="default-subfloor-select">Subfloor:</label>
-                    <select id="default-subfloor-select"></select>
+                    <div id="default-subfloor-palette" class="palette-in-group"></div>
                     <select class="default-size-select" id="default-subfloor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floor-select">Floor:</label>
-                    <select id="default-floor-select"></select>
+                    <div id="default-floor-palette" class="palette-in-group"></div>
                     <select class="default-size-select" id="default-floor-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-water-select">Water:</label>
-                    <select id="default-water-select"></select>
-                     <select class="default-size-select" id="default-water-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <div id="default-water-palette" class="palette-in-group"></div>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-floater-select">Floater:</label>
-                    <select id="default-floater-select"></select>
-                    <select class="default-size-select" id="default-floater-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <div id="default-floater-palette" class="palette-in-group"></div>
                 </div>
                 <div class="horizontal-group">
                     <label for="default-ceiling-select">Ceiling:</label>
-                    <select id="default-ceiling-select"></select>
+                    <div id="default-ceiling-palette" class="palette-in-group"></div>
                     <select class="default-size-select" id="default-ceiling-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
                 </div>
                  <div class="horizontal-group">
@@ -293,12 +359,11 @@
                 </div>
                 <div class="horizontal-group">
                      <label for="default-sky-select">Sky:</label>
-                    <select id="default-sky-select"></select>
-                    <select class="default-size-select" id="default-sky-size"><option value="1">1x1</option><option value="2">2x2</option><option value="4">4x4</option></select>
+                    <div id="default-sky-palette" class="palette-in-group"></div>
                 </div>
                  <div class="horizontal-group">
                     <label for="default-skybox-select">Skybox:</label>
-                    <select id="default-skybox-select"></select>
+                    <div id="default-skybox-palette" class="palette-in-group"></div>
                 </div>
                 <div class="horizontal-group">
                      <label for="default-ceiling-wall-select">Ceiling Wall:</label>
@@ -311,6 +376,7 @@
         <canvas id="editorCanvas"></canvas>
         <div id="elevation-level-display" class="layer-indicator"></div>
         <div id="ceiling-height-display" class="layer-indicator"></div>
+        <div id="pillar-height-display" class="layer-indicator" style="color: yellow;"></div>
         <div id="wall-height-display" class="layer-indicator"></div>
         <div id="toolbox" class="floating-toolbar">
             <button id="tool-template" title="Template Brush (G)"><img src="/data/pngs/icons for UI/stamp.png" alt="G"></button>
@@ -322,11 +388,11 @@
             <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="T"></button>
         </div>
         <div id="layer-selector" class="floating-toolbar"></div>
-        <div id="utility-layers" class="floating-toolbar"></div> <div class="top-right-ui">
-            <div id="level-display">Level: 1</div>
-        </div>
+        <div id="npc-palette-container"></div>
+        <div id="utility-layers" class="floating-toolbar"></div>
         <div class="bottom-right-ui">
             <button id="playtest-button">PLAY</button>
+            <div id="level-display">Level: 1</div>
         </div>
         <div id="statusBar">
             <span id="coords">X: 0, Y: 0</span>
@@ -358,6 +424,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="../gonk_models.js"></script>
     <script src="editor_ui_and_assets.js"></script>
+    <script src="furniture.js"></script>
     <script src="editor.js"></script>
 </body>
 </html>

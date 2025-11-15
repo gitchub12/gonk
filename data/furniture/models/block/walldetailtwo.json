@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_details_two",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/walldetailstwopic",
+    "particle": "chronokillers_star_wars:blocks/walldetailstwopic",
+    "0": "chronokillers_star_wars:blocks/console"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_details_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/walldetails3_pic",
+    "particle": "chronokillers_star_wars:blocks/walldetails3_pic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/gray_wool",
+    "2": "chronokillers_star_wars:blocks/blue_box",
+    "3": "chronokillers_star_wars:blocks/trunk_lights"
+  }
+}

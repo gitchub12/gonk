@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/vaporator_topper2",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/vap_top",
+    "particle": "chronokillers_star_wars:blocks/vaporator",
+    "0": "chronokillers_star_wars:blocks/vaporator"
+  }
+}

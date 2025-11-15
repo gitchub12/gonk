@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/angle_red_empire_light_upside_down",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/angle_red_light_pic",
+    "particle": "chronokillers_star_wars:blocks/angle_red_light_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/empire_redlight_block_side"
+  }
+}

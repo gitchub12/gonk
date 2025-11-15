@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/lcd_screen_side",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/lcd_screen_side",
+    "particle": "chronokillers_star_wars:blocks/lcd_screen_side",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/blue_screen"
+  }
+}

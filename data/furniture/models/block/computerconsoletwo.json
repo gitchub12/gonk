@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/com_panel_two",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/com_panel_two_pic",
+    "particle": "chronokillers_star_wars:blocks/com_panel_two_pic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/stripped_oak_wood",
+    "2": "chronokillers_star_wars:blocks/pc_paneled",
+    "3": "chronokillers_star_wars:blocks/consolerone"
+  }
+}

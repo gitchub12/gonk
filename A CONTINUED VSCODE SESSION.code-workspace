@@ -1,0 +1,73 @@
+BROWSERFIREFOXHIDE
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        // --- 8 FURNITURE JSON FILES ADDED ---
+        {
+            "path": "E:/gonk/data/furniture/blockstates/holotable.json",
+            "name": "Holo Table - Blockstate"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/block/holotable.json",
+            "name": "Holo Table - Block Model"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/item/holotable.json",
+            "name": "Holo Table - Item Model"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/custom/holo_table.json",
+            "name": "Holo Table - Custom Model"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/custom/crate.json",
+            "name": "Crate - Custom Model"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/item/crate.json",
+            "name": "Crate - Item Model"
+        },
+        {
+            "path": "E:/gonk/data/furniture/blockstates/crate.json",
+            "name": "Crate - Blockstate"
+        },
+        {
+            "path": "E:/gonk/data/furniture/models/block/crate.json",
+            "name": "Crate - Block Model"
+        }
+    ],
+    "settings": {
+        // --- Files Excluded from Explorer (Hides from YOU) ---
+        "files.exclude": {
+            // --- Folders to Hide ---
+            "**/.git": true,
+            "**/.vscode": true,
+            "**/data/furniture": true, // KEY: Excludes the entire furniture folder
+
+            // --- File Types to Hide ---
+            "**/*.png": true,
+            "**/*.jpg": true,
+            "**/*.jpeg": true,
+            "**/*.ico": true,
+            "**/*.wav": true,
+            "**/*.mp3": true,
+
+            // --- Misc File Exclusions ---
+            "**/.DS_Store": true,
+            "**/gonk.code-workspace": true,
+            "**/ai.code-workspace": true
+        },
+        
+        // --- Files Excluded from Search (Blocks GEMINI content analysis) ---
+        "search.exclude": {
+            "**/*.png": true,
+            "**/*.jpg": true,
+            "**/*.jpeg": true,
+            "**/*.ico": true,
+            "**/*.wav": true,
+            "**/*.mp3": true
+        }
+    }
+}

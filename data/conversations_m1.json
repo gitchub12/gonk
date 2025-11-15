@@ -1,0 +1,400 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations_m1.json. Contains all 'm1' (mad/hostile) attitude phrases for 'language_basic'.",
+  "phrases": [
+    {
+      "text": "You're in my way. Move.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "rude"
+      ]
+    },
+    {
+      "text": "I don't like your face. Give me one reason not to blast it.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "sith",
+        "mandalorian",
+        "taker"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "challenge",
+        "rude"
+      ]
+    },
+    {
+      "text": "Another lost 'rebel' fool. Pathetic.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "sith"
+      ],
+      "to_faction": [
+        "rebel"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "Don't try any of your Jedi mind tricks on me.",
+      "type": [
+        "greeting"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "clone",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "style_tags": [
+        "challenge"
+      ],
+      "topic": "force"
+    },
+    {
+      "text": "Back off! I'm not in the mood.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "style_tags": [
+        "rude"
+      ]
+    },
+    {
+      "text": "You'll be the one moving, scrap-heap.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "style_tags": [
+        "challenge"
+      ]
+    },
+    {
+      "text": "The Jedi are dead. And you'll be joining them!",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "sith",
+        "taker"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "jedi"
+      ],
+      "topic": "jedi",
+      "outcome": "combat"
+    },
+    {
+      "text": "Your 'order' is a boot on our necks. We'll break it.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "rebel",
+        "mandalorian"
+      ],
+      "to_faction": [
+        "imperial",
+        "sith"
+      ],
+      "on_topic_received": [
+        "none",
+        "order"
+      ],
+      "topic": "order"
+    },
+    {
+      "text": "A clanker? You're trusting a clanker? You're dumber than I thought.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "clone",
+        "imperial"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "droids"
+      ],
+      "topic": "droids"
+    },
+    {
+      "text": "Your precious 'independence' is just chaos. You'll be crushed.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "sith"
+      ],
+      "to_faction": [
+        "rebel"
+      ],
+      "on_topic_received": [
+        "none",
+        "independence"
+      ],
+      "topic": "independence"
+    },
+    {
+      "text": "Your flesh is weak. You will be remade by the Takers.",
+      "type": [
+        "reply"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "taker"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "takers"
+      ],
+      "topic": "takers"
+    },
+    {
+      "text": "I'm done talking. Draw your weapon.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "style_tags": [
+        "challenge"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Get out of my sight before I change my mind.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Jedi-lover! You're all the same. Die!",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial",
+        "sith",
+        "clone"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "jedi",
+        "force"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "The Force won't save you from this blaster.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "force"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Treasonous dog! For the Empire!",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "imperial"
+      ],
+      "to_faction": [
+        "rebel"
+      ],
+      "on_topic_received": [
+        "independence",
+        "order"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "You will be the first to join us.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "taker"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "takers"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Hah! At least you're not a *total* idiot.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Good. We understand each other then. Now get lost.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "liked",
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "That's what I thought. You're all talk.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Wrong answer, scum.",
+      "type": [
+        "response"
+      ],
+      "language": "language_basic",
+      "attitude": "m1",
+      "from_faction": [
+        "any"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_reaction": "disliked",
+      "outcome": "combat"
+    }
+  ]
+}

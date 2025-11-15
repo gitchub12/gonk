@@ -55,16 +55,23 @@ class FactionManager {
             };
         }
         
-        // Ensure pushForces are symmetrical
+        // Ensure pushForces are symmetrical and handle missing entries
         for (const keyA of factionKeys) {
             for (const keyB of factionKeys) {
                 if (keyA === keyB) continue;
                 const factionA = this.factions[keyA];
                 const factionB = this.factions[keyB];
 
-                if (factionA.pushForces && factionA.pushForces[keyB] && (!factionB.pushForces || !factionB.pushForces[keyA])) {
-                    if (!factionB.pushForces) factionB.pushForces = {};
+                if (!factionA.pushForces) factionA.pushForces = {};
+                if (!factionB.pushForces) factionB.pushForces = {};
+
+                // Ensure B has A's push force if A defines it and B does not
+                if (factionA.pushForces[keyB] && !factionB.pushForces[keyA]) {
                     factionB.pushForces[keyA] = factionA.pushForces[keyB];
+                } 
+                // Ensure A has B's push force if B defines it and A does not
+                else if (factionB.pushForces[keyA] && !factionA.pushForces[keyB]) {
+                    factionA.pushForces[keyB] = factionB.pushForces[keyA];
                 }
             }
         }
@@ -106,7 +113,7 @@ class FactionManager {
 
     registerAlly(npc) {
         if (!npc || !npc.faction) return;
-        this.allyEvents.push({ originalFaction: npc.faction });
+        this.allyEvents.push({ originalFaction: npc.originalFaction });
     }
 
     processFactionDynamics(deltaTime, allies, simulatedAllies) {
@@ -142,7 +149,7 @@ class FactionManager {
         // --- Process Kill Events ---
         for (const event of this.killEvents) {
             const killerFaction = this.factions[event.killer];
-            // Only apply repulsion if the killer is part of the player's group
+            // Apply repulsion impulse to the victim faction's current position
             if (killerFaction && killerFaction.key === 'player_droid') {
                 const victimFaction = this.factions[event.victim];
                 if (victimFaction && !victimFaction.isStatic) {
@@ -170,7 +177,7 @@ class FactionManager {
                 if (factionA.isStatic && factionB.isStatic) continue;
 
                 const pushConfig = factionA.pushForces ? factionA.pushForces[keyB] : null;
-                if (!pushConfig) continue;
+                if (!pushConfig || !pushConfig.strength || !pushConfig.radius) continue;
 
                 const vecAtoB = new THREE.Vector2().subVectors(factionB.currentPosition, factionA.currentPosition);
                 const distance = vecAtoB.length();
@@ -180,6 +187,7 @@ class FactionManager {
                     const pushStrength = pushConfig.strength * Math.pow(1 - normalizedDistance, 2);
                     const pushForce = vecAtoB.normalize().multiplyScalar(pushStrength);
 
+                    // Apply push force to the faction's current position/velocity
                     if (!factionB.isStatic) forces[keyB].add(pushForce);
                     if (!factionA.isStatic) forces[keyA].sub(pushForce);
                 }
@@ -242,7 +250,7 @@ class FactionManager {
             const center = new THREE.Vector2(50, 50);
             const home = new THREE.Vector2(faction.homePosition.x, faction.homePosition.y);
             const vecFromCenter = new THREE.Vector2().subVectors(faction.currentPosition, center);
-            const vecHomeFromCenter = new THREE.Vector2().subVectors(home, center); // This was the line causing the error
+            const vecHomeFromCenter = new THREE.Vector2().subVectors(home, center);
             const maxDist = vecHomeFromCenter.length() + 40; // Increased from +10 to +40
             if (vecFromCenter.length() > maxDist) {
                 vecFromCenter.normalize().multiplyScalar(maxDist);
@@ -270,6 +278,30 @@ class FactionManager {
         return 'stable';
     }
 
+    getRelationshipAttitude(factionA_key, factionB_key) {
+        const relationshipScore = this.getRelationship(factionA_key, factionB_key);
+        const attitudes = window.assetManager.factionAttitudes?.attitudes;
+
+        if (!attitudes) {
+            // Fallback if the data isn't loaded, assuming higher score is more hostile
+            if (relationshipScore >= 75) return 'h1';
+            if (relationshipScore >= 25) return 'm1';
+            return 'i1';
+        }
+
+        // Sort attitudes by threshold descending to check from highest to lowest
+        const sortedAttitudes = [...attitudes].sort((a, b) => b.threshold - a.threshold);
+
+        for (const attitude of sortedAttitudes) {
+            if (relationshipScore >= attitude.threshold) {
+                return attitude.name;
+            }
+        }
+
+        // Default fallback to the attitude with the lowest threshold
+        return sortedAttitudes[sortedAttitudes.length - 1]?.name || 'i1';
+    }
+
     getAllFactionNames() { return this.factions ? Object.keys(this.factions) : []; }
 
     getNpcFaction(npc) {
@@ -288,6 +320,28 @@ class FactionManager {
     }
 
     updateGlobalRelationship(factionA, factionB, amount) {
-        // No-op
+        // This function is deprecated and now a no-op. All relationship changes are physics-based.
+        console.warn("updateGlobalRelationship is deprecated. Use shiftFactionBase or applyFactionPhysics.");
+    }
+
+    shiftFactionBase(target_faction, towards_faction, amount) {
+        const target = this.factions[target_faction];
+        const towards = this.factions[towards_faction];
+        if (target && towards && !target.isStatic) {
+            const direction = new THREE.Vector2().subVectors(towards.homePosition, target.homePosition).normalize();
+            target.homePosition.x += direction.x * amount;
+            target.homePosition.y += direction.y * amount;
+        }
+        // NOTE: The visual shift will occur on the next physics step due to home pull force.
+    }
+
+    applyFactionPhysics(target_faction, towards_faction, force_amount) {
+        const target = this.factions[target_faction];
+        const towards = this.factions[towards_faction];
+        if (target && towards && !target.isStatic) {
+            const direction = new THREE.Vector2().subVectors(towards.currentPosition, target.currentPosition).normalize();
+            const impulse = direction.multiplyScalar(force_amount);
+            target.velocity.add(impulse);
+        }
     }
 }

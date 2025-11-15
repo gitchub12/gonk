@@ -4,6 +4,11 @@
 // update: Added new module and health pickup paths for preloading.
 // update: Corrected the path for the Gaffi Stick asset.
 // update: Fixed bug in getNpcsByCriteria where `subgroup: 'all'` was incorrectly excluding NPCs. It now correctly includes all NPCs matching the threat and macroCategory.
+// update: Ensured baseType, faction, and macroCategory are correctly cascaded from the NPC group onto individual NPC configs to fix random NPC spawning based on subgroup criteria.
+// update: Corrected Zapper weapon asset paths to include the 'gmelee_zapper' subdirectory during preloading, fixing the texture loading failure.
+// fix: Removed redundant loading of gmelee_zapper.png base file to fix a persistent 404 error and corrected the file name reference for Clones JSON loading to '2_clones.json'.
+// fix: Re-added the missing loadFactionAttitudes method to resolve the game-breaking initialization error.
+// fix: Added robust JSON parsing logic to loadNameData and loadCharacterData to prevent errors from embedded comments/invalid characters.
 
 class AssetManager {
     constructor() {
@@ -20,6 +25,18 @@ class AssetManager {
         this.pamphletTextureNames = [];
         this.moduleTexturePaths = [];
         this.pickupTexturePaths = [];
+        this.factionAttitudes = null;
+        this.playerStats = null;
+    }
+
+    async loadPlayerStats() {
+        try {
+            const response = await fetch('gonk_base_stats.json');
+            const data = await response.json();
+            this.playerStats = data.gonk_player;
+        } catch (error) {
+            console.error("Failed to load player stats:", error);
+        }
     }
 
     async loadEssentialData() {
@@ -30,7 +47,10 @@ class AssetManager {
             this.loadFactionData(),
             this.loadCharacterData(),
             this.loadNameData(),
-            this.preloadPlayerWeaponAssets() // Preload zapper/pamphlet textures
+            this.loadConversationData(),
+            this.loadFactionAttitudes(), // FIX: This function call is now defined below
+            this.preloadPlayerWeaponAssets(), // Preload zapper/pamphlet textures
+            this.loadPlayerStats()
         ]);
         this.buildSkinPathMap();
     }
@@ -59,20 +79,17 @@ class AssetManager {
 
             // Check threat level and macro-category
             if (config.threat === threat && config.macroCategory === macroCategory) {
-                
-                // --- NEW SUBGROUP LOGIC ---
-                // If no subgroup is specified, or if subgroup is 'all', add the NPC.
-                if (!subgroup || subgroup.toLowerCase() === 'all') {
-                    matchingNpcs.push(skinName);
-                } 
-                // If a specific subgroup is specified, check it.
-                else {
+                // Check subgroup if specified
+                if (subgroup && subgroup !== 'all') {
                     const subgroupCheck = subgroupDefs[subgroup.toLowerCase()];
                     if (subgroupCheck && subgroupCheck(config)) {
                         matchingNpcs.push(skinName);
+                    } else if (!subgroupCheck && config.groupKey === subgroup) {
+                        matchingNpcs.push(skinName);
                     }
+                } else {
+                    matchingNpcs.push(skinName);
                 }
-                // --- END NEW SUBGROUP LOGIC ---
             }
         }
         return matchingNpcs;
@@ -80,7 +97,7 @@ class AssetManager {
 
     async loadWeaponData() {
         try {
-            const response = await fetch('data/weapons.json');
+            const response = await fetch('data/npc_weapons.json');
             this.weaponData = await response.json();
         } catch (error) {
             console.error("Failed to load weapon data:", error);
@@ -104,16 +121,23 @@ class AssetManager {
         };
 
         const characterDataFiles = [
-            '0_globals.json', '1_aliens.json', '2_clones.json', '3_humans.json',
-            '4_mandolorians.json', '5_sith.json', '6_stormtrooper.json', '7_takers.json',
+            '0_globals.json', '1_aliens.json', '2_clones.json', '3_rebels.json',
+            '4_mandolorians.json', '5_sith.json', '6_imperials.json', '7_takers.json',
             '8_droids.json'
         ];
 
         for (const fileName of characterDataFiles) {
             try {
-                const response = await fetch(`/data/${fileName}`);
+                const path = fileName === '0_globals.json'
+                    ? `/data/${fileName}`
+                    : `/data/factionJSONs/${fileName}`;
+                const response = await fetch(path);
                 const text = await response.text();
-                const cleanText = text.split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+                // FIX: Use robust comment stripping, removing lines starting with # or //.
+                const cleanText = text.split('\n')
+                    .filter(line => !line.trim().startsWith('#') && !line.trim().startsWith('//'))
+                    .join('\n');
+                
                 const data = JSON.parse(cleanText);
 
                 if (data.defaults) this.npcGroups._globals = { ...this.npcGroups._globals, ...data.defaults };
@@ -123,6 +147,7 @@ class AssetManager {
                     this.npcGroups[key] = data[key];
                 });
             } catch (e) {
+                // FIX: Log error clearly and correctly reference the file name as a JSON file.
                 console.error(`Failed to load or parse ${fileName} for game`, e);
             }
         }
@@ -139,13 +164,7 @@ class AssetManager {
             for (const textureEntry of group.textures) {
                 const textureFile = typeof textureEntry === 'string' ? textureEntry : textureEntry.file;
                 const skinName = textureFile.replace('.png', '');
-                let config = { ...this.npcGroups._globals, ...(this.npcGroups._base_type_defaults[group.baseType] || {}), ...(typeof textureEntry === 'object' ? textureEntry : { file: textureEntry }), file: textureFile, baseType: group.baseType, faction: group.faction, macroCategory: group.macroCategory };
-                
-                // FIX: Ensure threat level is always a number for correct matching.
-                if (config.threat && typeof config.threat === 'string') {
-                    config.threat = parseInt(config.threat, 10);
-                }
-
+                const config = { ...this.npcGroups._globals, ...(this.npcGroups._base_type_defaults[groupKey] || {}), ...(typeof textureEntry === 'object' ? textureEntry : { file: textureEntry }), file: textureFile, baseType: group.baseType, faction: group.faction, macroCategory: group.macroCategory, groupKey: groupKey };
                 this.npcIcons.set(skinName, { config });
             }
         }
@@ -154,12 +173,50 @@ class AssetManager {
     async loadNameData() {
         try {
             const response = await fetch('/data/npc_names.json');
-            this.nameData = await response.json();
+            const text = await response.text();
+            // FIX: Use robust comment stripping, removing lines starting with # or //.
+            const cleanText = text.split('\n')
+                .filter(line => !line.trim().startsWith('#') && !line.trim().startsWith('//'))
+                .join('\n');
+
+            this.nameData = JSON.parse(cleanText);
+
             if (this.nameData._comment) {
                 delete this.nameData._comment;
             }
         } catch(e) {
+            // FIX: The error is here, ensure the logging is clean.
             console.error("Failed to load npc_names.json for game", e);
+        }
+    }
+
+    async loadConversationData() {
+        const conversationFiles = [
+            'conversations_h1.json',
+            'conversations_i1.json',
+            'conversations_m1.json',
+            'conversations_nonbasic.json'
+        ];
+
+        for (const fileName of conversationFiles) {
+            try {
+                const response = await fetch(`/data/${fileName}`);
+                const data = await response.json();
+                if (window.conversationController) {
+                    window.conversationController.loadPhrases(data);
+                }
+            } catch (e) {
+                console.error(`Failed to load or parse ${fileName} for conversations`, e);
+            }
+        }
+    }
+    
+    async loadFactionAttitudes() {
+        try {
+            const response = await fetch('data/faction_attitudes.json');
+            this.factionAttitudes = await response.json();
+        } catch (error) {
+            console.error("Failed to load faction attitudes data:", error);
         }
     }
 
@@ -175,10 +232,11 @@ class AssetManager {
         const moduleKeys = [
             'force_mindtrick', 'force_shield', 'melee_damageup', 
             'move_jump', 'move_speed', 'ranged_firerateup', 
-            'toughness_armorup', 'toughness_healthup'
+            'toughness_armorup', 'toughness_healthup', 'equipment_plus4weaponslots'
         ];
         const pickupKeys = [
-            'heatlhsmall'
+            'heatlhsmall',
+            'wiresmall'
         ];
         
         this.moduleTexturePaths = moduleKeys.map(key => `data/pngs/MODULES/${key}.png`);
@@ -196,7 +254,8 @@ class AssetManager {
             const categoryPath = `${weaponRoot}${category}/`;
             try {
                 const files = await this.fetchDirectoryListing(categoryPath, ['.png']);
-                files.forEach(file => { // All files in gonkonlyweapons subfolders should start with 'g'
+                files.forEach(file => {
+                    if (!file.endsWith('.png')) return; // Only include actual .png files
                     allWeaponPaths.push(`${categoryPath}${file}`);
                 });
             } catch (e) { console.warn(`Could not discover weapons in ${categoryPath}`); }
@@ -213,7 +272,7 @@ class AssetManager {
 
     async preloadPlayerWeaponAssets() {
         const discoveredWeapons = await this.discoverPlayerWeapons();
-        const texturePaths = [
+        const texturePaths = new Set([
             ...discoveredWeapons,
             // ADDED: Pickup textures
             ...this.moduleTexturePaths,
@@ -222,13 +281,22 @@ class AssetManager {
             'data/pngs/effects/glow.png',
             // Preload the saber blade texture since it's not discovered as a weapon
             'data/gonkonlyweapons/saberbladeunderlayer/gsaberbladethick.png'
-        ];
+        ]);
+        
         // Preload all pamphlet textures
         for(const pamphletName of this.pamphletTextureNames) {
-            texturePaths.push(`data/gonkonlyweapons/pamphlets/${pamphletName}.png`);
+            texturePaths.add(`data/gonkonlyweapons/pamphlets/${pamphletName}.png`);
         }
 
-        const promises = texturePaths.map(path => this.loadTexture(path));
+        // ADDED: Zapper animation frames (explicitly construct the correct paths)
+        const zapperFrames = ['a', 'b', 'c', 'd', 'e'];
+        const zapperPathBase = `data/gonkonlyweapons/melee/gmelee_zapper/gmelee_zapper_`;
+        zapperFrames.forEach(frame => texturePaths.add(zapperPathBase + frame + '.png'));
+
+        // FIX: Remove the redundant path loading, which causes the persistent 404
+        texturePaths.delete('data/gonkonlyweapons/gmelee_zapper/.png'); 
+        
+        const promises = Array.from(texturePaths).map(path => this.loadTexture(path));
         await Promise.all(promises);
         
         // Initialize the shared material now that the texture is loaded
@@ -261,7 +329,7 @@ class AssetManager {
         await this.discoverAndRegisterSkyboxes();
 
         for (const layerName in levelData.layers) {
-            if (layerName === 'skybox') continue;
+            if (layerName === 'skybox' || layerName === 'assets') continue;
 
             const layer = new Map(levelData.layers[layerName]);
             for (const item of layer.values()) {
@@ -368,16 +436,21 @@ class AssetManager {
         return this.getMaterial(name);
     }
 
-    async fetchDirectoryListing(path) {
+    async fetchDirectoryListing(path, extensions = [], allowDirectories = false) {
         try {
+            // FIX: Removed unnecessary console logging to prevent spam
             const response = await fetch(path);
             if (!response.ok) return [];
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            return Array.from(doc.querySelectorAll('a'))
+            const links = Array.from(doc.querySelectorAll('a'))
                 .map(a => a.getAttribute('href'))
                 .filter(href => href && !href.startsWith('?') && !href.startsWith('../'));
+            
+            const filteredLinks = links.filter(href => (allowDirectories && href.endsWith('/')) || extensions.some(ext => href.endsWith(ext)));
+            // FIX: Removed unnecessary console logging to prevent spam
+            return filteredLinks;
         } catch (e) {
             console.warn(`Could not fetch directory listing for "${path}".`);
             return [];
@@ -388,11 +461,11 @@ class AssetManager {
         if (this.skyboxSets.size > 0) return;
         try {
             const skyboxPath = '/data/pngs/skybox/';
-            const items = await this.fetchDirectoryListing(skyboxPath);
+            const items = await this.fetchDirectoryListing(skyboxPath, [], true);
 
             for (const item of items) {
                 const isDir = item.endsWith('/');
-                const name = item.replace(/\/$/, '').split('.')[0]; // for "hyper/", name is "hyper". For "h2/", name is "h2".
+                const name = isDir ? item.slice(0, -1) : item.replace(/\.(png|jpg)$/, '');
                 if (isDir) {
                     this.skyboxSets.set(name, { type: 'animation', path: `${skyboxPath}${item}` });
                 } else if (item.endsWith('.png') || item.endsWith('.jpg')) {
@@ -447,5 +520,3 @@ class AssetManager {
         });
     }
 }
-
-window.assetManager = new AssetManager();

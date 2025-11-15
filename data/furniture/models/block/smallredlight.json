@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/small_red_light",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/small_red_light_pic",
+    "particle": "chronokillers_star_wars:blocks/small_red_light_pic",
+    "0": "chronokillers_star_wars:blocks/chrome",
+    "1": "chronokillers_star_wars:blocks/white",
+    "2": "chronokillers_star_wars:blocks/red_stained"
+  }
+}

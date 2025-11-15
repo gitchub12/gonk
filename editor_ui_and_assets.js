@@ -51,14 +51,17 @@ class EditorAssetManager {
         };
 
         const characterDataFiles = [
-            '0_globals.json', '1_aliens.json', '2_clones.json', '3_humans.json',
-            '4_mandolorians.json', '5_sith.json', '6_stormtrooper.json', '7_takers.json',
+            '0_globals.json', '1_aliens.json', '2_clones.json', '3_rebels.json',
+            '4_mandolorians.json', '5_sith.json', '6_imperials.json', '7_takers.json',
             '8_droids.json'
         ];
 
         for (const fileName of characterDataFiles) {
             try {
-                const response = await fetch(`/data/${fileName}`);
+                const path = fileName === '0_globals.json'
+                    ? `/data/${fileName}`
+                    : `/data/factionJSONs/${fileName}`;
+                const response = await fetch(path);
                 // Fetch as text first to strip out comments (lines starting with #)
                 let text = await response.text();
 
@@ -100,7 +103,9 @@ class EditorAssetManager {
         // Load NPC weapon data
         try {
             const response = await fetch('/data/npc_weapons.json');
-            this.npcWeaponData = await response.json();
+            const text = await response.text();
+            const cleanText = text.split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+            this.npcWeaponData = JSON.parse(cleanText);
         } catch(e) {
             console.error("Failed to load npc_weapons.json", e);
         }
@@ -142,12 +147,23 @@ class EditorAssetManager {
         this.weaponPaths = allWeaponPaths;
 
         try {
-            const furnitureManifest = await (await fetch('/data/furniture.json')).json();
-            const modelPath = furnitureManifest._config.modelPath;
+            const furnitureManifest = await (await fetch('/furniture_config.json')).json();
+            const modelPath = furnitureManifest._config.modelPath; // e.g., "data/furniture/"
             for (const modelKey in furnitureManifest.models) {
                 const modelDef = furnitureManifest.models[modelKey];
-                this.furnitureJsons.set(modelKey, `/${modelPath}${modelDef.file}`);
-                this.assetIcons.set(modelKey, this.createPlaceholderIcon(modelKey));
+                const modelJsonPath = `/${modelPath}${modelDef.file}`;
+                this.furnitureJsons.set(modelKey, modelJsonPath);
+
+                // Attempt to find a real icon instead of a placeholder
+                const iconPath = `/data/furniture/textures/items/${modelKey}pic.png`;
+                
+                // Use a full GET request as HEAD can be unreliable on dev servers
+                const res = await fetch(iconPath);
+                if (res.ok) {
+                    this.assetIcons.set(modelKey, iconPath);
+                } else {
+                    this.assetIcons.set(modelKey, this.createPlaceholderIcon(modelKey));
+                }
             }
         } catch (e) { console.error("Failed to discover furniture assets:", e); }
 
@@ -273,13 +289,14 @@ class EditorUI {
         this.levelNumberInput = document.getElementById('level-number-input'); this.levelDisplay = document.getElementById('level-display');
         this.elevationDisplay = document.getElementById('elevation-level-display');
         this.ceilingDisplay = document.getElementById('ceiling-height-display');
+        this.pillarDisplay = document.getElementById('pillar-height-display');
         this.propertiesPanel = document.getElementById('properties-panel');
         this.propContent = document.getElementById('prop-content');
         this.currentPropItem = null;
         this.defaultTextureSelects = {}; 
         this.layerButtons = {};
 
-        const defaultLayers = ['subfloor', 'floor', 'water', 'floater', 'ceiling', 'sky'];
+        const defaultLayers = ['water', 'floater', 'sky'];
         defaultLayers.forEach(id => {
             const el = document.getElementById(`default-${id}-select`); 
             if(el) this.defaultTextureSelects[id] = el;
@@ -290,6 +307,7 @@ class EditorUI {
         this.elevationBrushTextures = { wallside: null };
         this.elevationLevel = 1;
         this.ceilingHeight = 1;
+        this.pillarHeight = 3;
 
         this.toolButtons = { 
             template: document.getElementById('tool-template'), paint: document.getElementById('tool-paint'), 
@@ -306,6 +324,7 @@ class EditorUI {
             tab.classList.add('active'); document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
         }));
         this.createLayerSelector();
+        this.createNpcPalette(); // Create the new NPC palette
         document.getElementById('load-level-btn').addEventListener('click', () => this.editor.loadLevel(parseInt(this.levelNumberInput.value) || 1));
         document.getElementById('save-level-btn').addEventListener('click', () => this.editor.saveLevel());
         document.getElementById('save-characters-btn').addEventListener('click', () => this.editor.saveCharacterData());
@@ -361,21 +380,42 @@ class EditorUI {
         }
     }
 
+    createNpcPalette() {
+        const npcPaletteContainer = document.getElementById('npc-palette-container');
+        npcPaletteContainer.innerHTML = '';
+
+        const macroCategories = {
+            'Takers': { icon: '/data/pngs/icons for UI/factions/takersicon.png', layer: 'npcs' },
+            'Imperials': { icon: '/data/pngs/icons for UI/stormiesicon.png', layer: 'npcs' },
+            'Sith': { icon: '/data/pngs/icons for UI/factions/darthsicon.png', layer: 'npcs' },
+            'Clones': { icon: '/data/pngs/factions/clones/i1/clone_1.png', layer: 'npcs' },
+            'spawns': { icon: '/data/pngs/spawn/hologonk_1.png', layer: 'spawns' },
+            'Droids': { icon: '/data/pngs/icons for UI/droidicon.png', layer: 'npcs' },
+            'Mandalorians': { icon: '/data/pngs/factions/mandalorians/i1/mando_1.png', layer: 'npcs' },
+            'Aliens': { icon: '/data/pngs/icons for UI/aliensicon.png', layer: 'npcs' },
+            'Rebels': { icon: '/data/pngs/icons for UI/humanicon.png', layer: 'npcs' }
+        };
+
+        const npcGridOrder = [
+            'Takers', 'Clones', 'Mandalorians',
+            'Imperials', 'spawns', 'Aliens',
+            'Sith', 'Droids', 'Rebels'
+        ];
+
+        npcGridOrder.forEach(catName => {
+            const info = macroCategories[catName];
+            const btn = this.createButton(info.layer, catName, info.icon);
+            btn.dataset.macroCategory = catName;
+            btn.addEventListener('click', () => this.setActiveLayer(info.layer, catName));
+            npcPaletteContainer.appendChild(btn);
+        });
+    }
+
     createLayerSelector() {
         this.layerSelector.innerHTML = '';
-        const macroCategories = {
-            'Aliens': { icon: '/data/pngs/icons for UI/aliensicon.png' },
-            'Takers': { icon: '/data/pngs/icons for UI/factions/takersicon.png' },
-            'Droids': { icon: '/data/pngs/icons for UI/droidicon.png' },
-            'Humans': { icon: '/data/pngs/icons for UI/humanicon.png' },
-            'Mandalorians': { icon: '/data/pngs/factions/mandalorians/i1/mando_1.png'},
-            'Sith': { icon: '/data/pngs/icons for UI/factions/darthsicon.png' },
-            'Imperials': { icon: '/data/pngs/icons for UI/stormiesicon.png' },
-            'Clones': { icon: '/data/pngs/factions/clones/i1/clone_1.png' }
-        };
         const layerGroups = {
             'Ground': ['subfloor', 'floor', 'water'], 'Scenery': ['floater', 'decor', 'dangler', 'pillar'],
-            'Structure': ['wall', 'door', 'dock', 'screen', 'panel'], 'Entities': ['npcs', 'assets', 'spawns'],
+            'Structure': ['wall', 'door', 'dock', 'screen', 'panel'], 'Entities': ['assets'],
             'Sky & Ceiling': ['ceiling', 'sky', 'skybox'], 'Heightmap': ['elevation']
         };
 
@@ -385,18 +425,9 @@ class EditorUI {
             this.layerSelector.appendChild(groupDiv);
 
             layerGroups[groupName].forEach(layerName => {
-                 if(layerName === 'npcs'){
-                    for (const catName in macroCategories) {
-                        const btn = this.createButton(layerName, catName, macroCategories[catName].icon);
-                        btn.dataset.macroCategory = catName;
-                        btn.addEventListener('click', () => this.setActiveLayer(layerName, catName));
-                        groupDiv.appendChild(btn);
-                    }
-                } else {
-                    const btn = this.createButton(layerName, layerName, null);
-                    btn.addEventListener('click', () => this.setActiveLayer(layerName));
-                    groupDiv.appendChild(btn);
-                }
+                const btn = this.createButton(layerName, layerName, null);
+                btn.addEventListener('click', () => this.setActiveLayer(layerName));
+                groupDiv.appendChild(btn);
             });
         }
     }
@@ -437,6 +468,7 @@ class EditorUI {
         this.editor.isTemplateCloned = false; // Reset template tool on layer change
         this.elevationDisplay.style.display = layerName === 'elevation' ? 'block' : 'none';
         this.ceilingDisplay.style.display = layerName === 'ceiling' ? 'block' : 'none';
+        if (this.pillarDisplay) this.pillarDisplay.style.display = layerName === 'pillar' ? 'block' : 'none';
         this.editor.activeLayerName = layerName;
         document.querySelectorAll('#layer-selector button').forEach(btn => btn.classList.remove('active'));
         const buttons = this.layerButtons[layerName];
@@ -494,6 +526,29 @@ class EditorUI {
         }
     }
 
+    updatePillarHeight(newHeight) {
+        this.pillarHeight = Math.max(1, Math.min(30, newHeight));
+        const paletteInput = document.getElementById('pillar-height-input');
+        if (paletteInput) paletteInput.value = this.pillarHeight;
+        if (this.pillarDisplay) this.pillarDisplay.textContent = `Height: ${this.pillarHeight}`;
+
+        const activeItem = document.querySelector('#pillar-base-palette .palette-item.active');
+        if (activeItem) {
+            const width = parseInt(document.getElementById('pillar-width-slider').value, 10);
+            const placement = document.getElementById('pillar-placement-select').value;
+            this.editor.setPillarPlacementMode(placement);
+            this.editor.activeBrush = {
+                type: 'pillar',
+                key: activeItem.dataset.key,
+                properties: {
+                    width: width,
+                    height: this.pillarHeight
+                }
+            };
+            this.editor.render();
+        }
+    }
+
     updatePalette(subGroup = null) {
         const activeTool = this.editor.activeTool;
         this.templateBuilderContainer.style.display = 'none'; // Obsolete, always hide
@@ -514,6 +569,7 @@ class EditorUI {
 
         if (this.editor.activeLayerName === 'npcs') this.populateNpcPalette(subGroup);
         else if (this.editor.activeLayerName === 'assets') this.populateAssetPalette();
+        else if (this.editor.activeLayerName === 'pillar') this.populatePillarPalette();
         else if (this.editor.activeLayerName === 'elevation') this.populateElevationPalette();
         else if (this.editor.activeLayerName === 'ceiling') this.populateCeilingPalette();
         else if (this.editor.lineLayers.includes(this.editor.activeLayerName)) this.populateStackedWallPalette(this.editor.activeLayerName);
@@ -561,7 +617,7 @@ class EditorUI {
             // Default name generation fix
             // FIX: Prioritize macroCategory, as baseType can sometimes be the same string (e.g. "clone")
             // and overwrite the intended category. This is the root cause of the editor naming bug.
-            const nameCategory = (npcConfig.macroCategory || 'other').toLowerCase();
+            const nameCategory = (npcConfig.baseType || npcConfig.macroCategory || 'other').toLowerCase();
             const defaultName = props.name || `${nameCategory}F ${nameCategory}L`;
 
             // Generate inputs for all properties, starting with common ones.
@@ -656,9 +712,46 @@ class EditorUI {
         } else if (layerName === 'spawns') {
             document.getElementById('prop-title').textContent = title;
             propHtml = `<div class="prop-group"><label for="spawn-id">ID:</label><input type="text" id="spawn-id" value="${itemData.id || ''}" placeholder="e.g., FROM LEVEL 01"></div><div class="prop-group"><label for="spawn-rotation">Facing:</label><select id="spawn-rotation"><option value="0" ${itemData.rotation === 0 ? 'selected' : ''}>Up</option><option value="1" ${itemData.rotation === 1 ? 'selected' : ''}>Right</option><option value="2" ${itemData.rotation === 2 ? 'selected' : ''}>Down</option><option value="3" ${itemData.rotation === 3 ? 'selected' : ''}>Left</option></select></div>`;
+        } else if (layerName === 'pillar') {
+            document.getElementById('prop-title').textContent = title;
+            propHtml = `<div class="prop-group"><label for="pillar-width">Width:</label><input type="number" id="pillar-width" value="${itemData.properties?.width || 11}" min="1" max="100" step="1"></div><div class="prop-group"><label for="pillar-height">Height:</label><input type="number" id="pillar-height" value="${itemData.properties?.height || 3}" min="1" max="10" step="1"></div><div class="prop-group"><label for="pillar-placement">Placement:</label><select id="pillar-placement"><option value="center" ${!itemData.properties?.placement || itemData.properties?.placement === 'center' ? 'selected' : ''}>Center</option><option value="topLeft" ${itemData.properties?.placement === 'topLeft' ? 'selected' : ''}>Top-Left</option><option value="topRight" ${itemData.properties?.placement === 'topRight' ? 'selected' : ''}>Top-Right</option><option value="bottomLeft" ${itemData.properties?.placement === 'bottomLeft' ? 'selected' : ''}>Bottom-Left</option><option value="bottomRight" ${itemData.properties?.placement === 'bottomRight' ? 'selected' : ''}>Bottom-Right</option></select></div>`;
         }
         // If not an NPC, hide the weapon group
         if (layerName !== 'npcs') document.getElementById('npc-weapon-group').style.display = 'none';
+
+        // Handle dock properties
+        if (layerName === 'dock') {
+            document.getElementById('prop-title').textContent = 'Dock Properties';
+            const targetValue = itemData.properties?.target || '';
+            propHtml = `
+                <div class="prop-group">
+                    <label for="dock-target">Target Level:</label>
+                    <input type="text" id="dock-target" value="${targetValue}" placeholder="e.g., TO LEVEL 02A">
+                </div>
+            `;
+            this.propContent.innerHTML = propHtml;
+        }
+
+        // Handle spawn point properties
+        if (layerName === 'spawns') {
+            document.getElementById('prop-title').textContent = 'Spawn Point Properties';
+            const spawnId = itemData.id || '';
+            const spawnRotation = itemData.rotation || 0;
+            propHtml = `
+                <div class="prop-group">
+                    <label for="spawn-id">Spawn ID:</label>
+                    <input type="text" id="spawn-id" value="${spawnId}" placeholder="e.g., FROM LEVEL 01">
+                </div>
+                <div class="prop-group">
+                    <label for="spawn-rotation">Rotation (0-3):</label>
+                    <input type="number" id="spawn-rotation" value="${spawnRotation}" min="0" max="3" step="1">
+                </div>
+                <div class="prop-group" style="grid-column: 1 / -1;">
+                    <p style="font-size: 0.9em; color: #aaa;">Rotation: 0=Down, 1=Left, 2=Up, 3=Right</p>
+                </div>
+            `;
+            this.propContent.innerHTML = propHtml;
+        }
 
         const buttons = this.propertiesPanel.querySelector('.prop-buttons');
         buttons.innerHTML = `
@@ -708,6 +801,11 @@ class EditorUI {
                 }
             } else if (layer === 'dock') { itemToModify.properties.target = document.getElementById('dock-target').value; } 
             else if (layer === 'spawns') { itemToModify.id = document.getElementById('spawn-id').value; itemToModify.rotation = parseInt(document.getElementById('spawn-rotation').value, 10); }
+            else if (layer === 'pillar') { 
+                itemToModify.properties.width = parseInt(document.getElementById('pillar-width').value, 10);
+                itemToModify.properties.height = parseInt(document.getElementById('pillar-height').value, 10);
+                itemToModify.properties.placement = document.getElementById('pillar-placement').value;
+            }
         });
         this.hidePropertiesPanel();
     }
@@ -757,52 +855,12 @@ class EditorUI {
         this.paletteContainer.innerHTML = '';
         this.paletteContainer.style.display = 'grid';
         if (!macroCategory) return;
-        
+
         const factionColors = {
-            Aliens: '#008000', Takers: '#C0C0C0', Droids: '#0066cc', Humans: '#b05c00',
+            Aliens: '#008000', Takers: '#C0C0C0', Droids: '#0066cc', Rebels: '#b05c00',
             Mandalorians: '#FFC72C', Sith: '#990000', Imperials: '#444444', Clones: '#ff8c00'
         };
         const factionColor = factionColors[macroCategory] || '#555';
-
-        // --- Create R1-R5 buttons for the entire macro-category ---
-        const macroHeader = document.createElement('div');
-        macroHeader.className = 'palette-header';
-        macroHeader.textContent = `${macroCategory} - Random by Threat`;
-        this.paletteContainer.appendChild(macroHeader);
-
-        const macroRandomContainer = document.createElement('div');
-        macroRandomContainer.className = 'random-npc-container';
-        this.paletteContainer.appendChild(macroRandomContainer);
-
-        for (let i = 1; i <= 5; i++) {
-            const r_item = document.createElement('div');
-            r_item.className = 'palette-item random-npc-item';
-            r_item.style.backgroundColor = factionColor;
-            r_item.dataset.key = `R${i}_${macroCategory}`;
-            const r_label = document.createElement('span');
-            r_label.textContent = `R${i}`;
-            r_item.appendChild(r_label);
-
-            r_item.addEventListener('click', () => {
-                this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
-                r_item.classList.add('active');
-                const brushProps = {
-                    type: 'random_npc',
-                    key: `R${i}_${macroCategory}`,
-                    properties: {
-                        threat: i,
-                        macroCategory: macroCategory,
-                        // Droid Exception: only select from humanoid droids
-                        subgroup: macroCategory === 'Droids' ? 'droid_humanoid' : 'all'
-                    }
-                };
-                this.editor.activeBrush = brushProps;
-                this.editor.render();
-            });
-            macroRandomContainer.appendChild(r_item);
-        }
-        // --- End Macro R1-R5 buttons ---
-
 
         const controlsContainer = document.createElement('div');
         controlsContainer.id = 'npc-extras';
@@ -819,7 +877,6 @@ class EditorUI {
         this.paletteContainer.appendChild(controlsContainer);
         controlsContainer.style.display = 'block';
 
-        // Add event listener for the new slider
         const opacitySlider = document.getElementById('npc-opacity-slider');
         if (opacitySlider) {
             opacitySlider.addEventListener('input', (e) => {
@@ -831,59 +888,40 @@ class EditorUI {
             const groupData = this.assetManager.npcGroups[groupKey];
             if (groupData.macroCategory !== macroCategory) continue;
 
-            // --- Subgroup Logic ---
-            const subgroupDefs = {
-                'gamorrean': (cfg) => cfg.baseType === 'gamorrean',
-                'gungan': (cfg) => cfg.baseType === 'gungan',
-                'wookiee': (cfg) => cfg.baseType === 'wookiee',
-                'ewok': (cfg) => cfg.baseType === 'halfpint', // Assuming ewoks are halfpint
-                'jawa': (cfg) => cfg.baseType === 'quarterpint', // Assuming jawas are quarterpint
-                'rebel_male': (cfg) => cfg.faction === 'rebels' && cfg.soundSet !== 'female',
-                'rebel_female': (cfg) => cfg.faction === 'rebels' && cfg.soundSet === 'female',
-                'human_male': (cfg) => cfg.baseType === 'human_male',
-                'human_female': (cfg) => cfg.baseType === 'human_female'
-            };
+            const subGroupHeader = document.createElement('div');
+            subGroupHeader.className = 'palette-header';
+            subGroupHeader.textContent = groupData.name;
+            this.paletteContainer.appendChild(subGroupHeader);
 
-            const subgroupKey = Object.keys(subgroupDefs).find(key => groupKey.toLowerCase().includes(key.split('_')[0]));
+            const subGroupRandomContainer = document.createElement('div');
+            subGroupRandomContainer.className = 'random-npc-container';
+            this.paletteContainer.appendChild(subGroupRandomContainer);
 
-            const header = document.createElement('div');
-            header.className = 'palette-header';
-            header.dataset.groupKey = groupKey;
-            header.textContent = groupData.name;
-            this.paletteContainer.appendChild(header);
+            for (let i = 1; i <= 5; i++) {
+                const r_item = document.createElement('div');
+                r_item.className = 'palette-item random-npc-item';
+                r_item.style.backgroundColor = factionColor;
+                r_item.dataset.key = `R${i}_${groupKey}`;
+                const r_label = document.createElement('span');
+                r_label.textContent = `R${i}`;
+                r_item.appendChild(r_label);
 
-            // --- Create R1-R5 buttons for subgroups ---
-            if (subgroupKey) {
-                const subRandomContainer = document.createElement('div');
-                subRandomContainer.className = 'random-npc-container';
-                this.paletteContainer.appendChild(subRandomContainer);
-
-                for (let i = 1; i <= 5; i++) {
-                    const r_item = document.createElement('div');
-                    r_item.className = 'palette-item random-npc-item';
-                    r_item.style.backgroundColor = factionColor;
-                    r_item.style.filter = 'brightness(0.8)';
-                    r_item.dataset.key = `R${i}_${groupKey}`;
-                    const r_label = document.createElement('span');
-                    r_label.textContent = `R${i}`;
-                    r_item.appendChild(r_label);
-
-                    r_item.addEventListener('click', () => {
-                        this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
-                        r_item.classList.add('active');
-                        this.editor.activeBrush = {
-                            type: 'random_npc',
-                            key: `R${i}_${groupKey}`,
-                            properties: {
-                                threat: i,
-                                macroCategory: macroCategory,
-                                subgroup: groupKey // Use the group key as the subgroup filter
-                            }
-                        };
-                        this.editor.render();
-                    });
-                    subRandomContainer.appendChild(r_item);
-                }
+                r_item.addEventListener('click', () => {
+                    this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
+                    r_item.classList.add('active');
+                    const brushProps = {
+                        type: 'random_npc',
+                        key: `R${i}_${groupKey}`,
+                        properties: {
+                            threat: i,
+                            macroCategory: macroCategory,
+                            subgroup: groupKey
+                        }
+                    };
+                    this.editor.activeBrush = brushProps;
+                    this.editor.render();
+                });
+                subGroupRandomContainer.appendChild(r_item);
             }
 
             groupData.textures.forEach(textureEntry => {
@@ -904,7 +942,7 @@ class EditorUI {
                 item.addEventListener('click', () => {
                     this.paletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
                     item.classList.add('active');
-                    this.editor.activeBrush = { type: 'npc', key: skinName, properties: { baseType: iconInfo.baseType } };
+                    this.editor.activeBrush = { type: 'npc', key: skinName, properties: { baseType: iconInfo.config.baseType } };
                     this.editor.render();
                 });
                 this.paletteContainer.appendChild(item);
@@ -912,21 +950,100 @@ class EditorUI {
         }
     }
 
+    populateDefaultPalette(layerName, textures) {
+        const container = document.getElementById(`default-${layerName}-palette`);
+        if (!container) return;
+
+        container.innerHTML = ''; // Clear previous items
+
+        const createItem = (key, isNone = false) => {
+            const item = document.createElement('div');
+            item.className = 'palette-item';
+            if(key) item.dataset.key = key;
+
+            if (isNone) {
+                item.innerHTML = '<span>None</span>';
+            } else {
+                const img = new Image();
+                img.src = key;
+                item.appendChild(img);
+            }
+            
+            item.addEventListener('click', () => {
+                // Remove active class from all items in this palette
+                container.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
+                item.classList.add('active');
+
+                // Update the editor's default texture object
+                this.editor.defaultTextures[layerName] = this.editor.defaultTextures[layerName] || {};
+                this.editor.defaultTextures[layerName].key = isNone ? null : key;
+                
+                // Trigger a state change and re-render
+                this.editor.modifyState(()=>{});
+                this.editor.render();
+            });
+            return item;
+        };
+
+        // Add a "None" option
+        container.appendChild(createItem(null, true));
+
+        // Add items for each texture
+        textures.forEach(path => {
+            if(path) container.appendChild(createItem(path));
+        });
+
+        // Set the initial active item
+        const currentDefault = this.editor.defaultTextures[layerName]?.key;
+        const activeItem = currentDefault ? container.querySelector(`[data-key="${currentDefault}"]`) : container.firstChild;
+        if (activeItem) {
+            activeItem.classList.add('active');
+        }
+    }
+
     populateDefaultTextureSettings() {
-        for(const [layer, select] of Object.entries(this.defaultTextureSelects)) {
+        // Keep dropdowns for layers that still use them
+        const dropdownLayers = [];
+        for(const layer of dropdownLayers) {
+            const select = this.defaultTextureSelects[layer];
+            if (!select) continue;
             select.innerHTML = ''; 
-            if (layer !== 'ceilingHeight') { 
-                select.add(new Option('None', '')); 
-                (this.assetManager.layerTextures[layer] || []).forEach(p => { 
-                    if(p) select.add(new Option(p.split('/').pop(), p)); 
-                }); 
-                if (this.editor.defaultTextures[layer]) {
-                    select.value = this.editor.defaultTextures[layer].key; 
-                }
+            select.add(new Option('None', '')); 
+            (this.assetManager.layerTextures[layer] || []).forEach(p => { 
+                if(p) select.add(new Option(p.split('/').pop(), p)); 
+            }); 
+            if (this.editor.defaultTextures[layer]) {
+                select.value = this.editor.defaultTextures[layer].key; 
             }
         }
-        const ceilingWallSelect = document.getElementById('default-ceiling-wall-select');
-        if (ceilingWallSelect) { (this.assetManager.layerTextures['ceilingsides'] || []).forEach(p => { if(p) ceilingWallSelect.add(new Option(p.split('/').pop(), p)); }); const dv = this.editor.defaultTextures.ceiling?.wallside; if (dv) ceilingWallSelect.value = dv; ceilingWallSelect.addEventListener('change', (e) => { this.editor.defaultTextures.ceiling = this.editor.defaultTextures.ceiling || {}; this.editor.defaultTextures.ceiling.wallside = e.target.value; this.editor.modifyState(() => {}); }); }
+
+        // Use new palette UI for other defaults
+        this.populateDefaultPalette('subfloor', this.assetManager.layerTextures['subfloor'] || []);
+        this.populateDefaultPalette('floor', this.assetManager.layerTextures['floor'] || []);
+        this.populateDefaultPalette('ceiling', this.assetManager.layerTextures['ceiling'] || []);
+        this.populateDefaultPalette('water', this.assetManager.layerTextures['water'] || []);
+        this.populateDefaultPalette('floater', this.assetManager.layerTextures['floater'] || []);
+        this.populateDefaultPalette('sky', this.assetManager.layerTextures['sky'] || []);
+        
+        // Special handling for skybox which has static and animated types
+        const skyboxTextures = [
+            ...this.assetManager.skyboxStaticFiles,
+            ...this.assetManager.skyboxAnimationFolders
+        ];
+        this.populateDefaultPalette('skybox', skyboxTextures);
+
+
+        const ceilingWallSelect = document.getElementById('default-ceiling-wall-select'); 
+        if (ceilingWallSelect) { 
+            (this.assetManager.layerTextures['ceilingsides'] || []).forEach(p => { if(p) ceilingWallSelect.add(new Option(p.split('/').pop(), p)); }); 
+            const dv = this.editor.defaultTextures.ceiling?.wallside; 
+            if (dv) ceilingWallSelect.value = dv; 
+            ceilingWallSelect.addEventListener('change', (e) => { 
+                this.editor.defaultTextures.ceiling = this.editor.defaultTextures.ceiling || {}; 
+                this.editor.defaultTextures.ceiling.wallside = e.target.value; 
+                this.editor.modifyState(() => {}); 
+            }); 
+        }
     }
 
     updateSettingsUI() {
@@ -1109,5 +1226,99 @@ class EditorUI {
         selectEl.innerHTML = ''; if (allowNone) selectEl.add(new Option('None', ''));
         textures.forEach(path => { if(path) selectEl.add(new Option(path.split('/').pop(), path)); });
         if(defaultPath) selectEl.value = defaultPath;
+    }
+
+    populatePillarPalette() {
+        this.paletteContainer.innerHTML = '';
+        this.paletteContainer.style.display = 'block';
+
+        const controlsContainer = document.createElement('div');
+        controlsContainer.id = 'pillar-extras';
+        controlsContainer.innerHTML = `
+            <div class="content-group">
+                <h4>Pillar Properties</h4>
+                <div class="horizontal-group">
+                    <label for="pillar-width-slider">Width: <span id="pillar-width-val">11</span>%</label>
+                    <input type="range" id="pillar-width-slider" min="1" max="100" value="11" step="1">
+                </div>
+                <div class="horizontal-group">
+                    <label for="pillar-height-input">Height:</label>
+                    <input type="number" id="pillar-height-input" value="${this.pillarHeight}" min="1" max="30" step="1">
+                </div>
+                <div class="horizontal-group">
+                    <label for="pillar-placement-select">Placement:</label>
+                    <select id="pillar-placement-select">
+                        <option value="center">Center</option>
+                        <option value="topLeft">Top-Left</option>
+                        <option value="topRight">Top-Right</option>
+                        <option value="bottomLeft">Bottom-Left</option>
+                        <option value="bottomRight">Bottom-Right</option>
+                    </select>
+                </div>
+            </div>
+            <div id="pillar-base-palette" class="palette"></div>
+        `;
+        this.paletteContainer.appendChild(controlsContainer);
+
+        const widthSlider = document.getElementById('pillar-width-slider');
+        const widthVal = document.getElementById('pillar-width-val');
+        const heightInput = document.getElementById('pillar-height-input');
+        const placementSelect = document.getElementById('pillar-placement-select');
+        const basePaletteContainer = document.getElementById('pillar-base-palette');
+
+        const updateBrush = () => {
+            const activeBaseItem = basePaletteContainer.querySelector('.palette-item.active');
+            if (!activeBaseItem) return;
+
+            const width = parseInt(widthSlider.value, 10);
+            const height = parseInt(heightInput.value, 10);
+            const placement = placementSelect.value;
+
+            widthVal.textContent = width;
+            this.pillarHeight = height;
+            if (this.pillarDisplay) this.pillarDisplay.textContent = `Height: ${this.pillarHeight}`;
+
+            this.editor.setPillarPlacementMode(placement);
+
+            this.editor.activeBrush = {
+                type: 'pillar',
+                key: activeBaseItem.dataset.key,
+                properties: {
+                    width: width,
+                    height: height
+                }
+            };
+            this.editor.render();
+        };
+
+        widthSlider.addEventListener('input', updateBrush);
+        heightInput.addEventListener('change', updateBrush);
+        placementSelect.addEventListener('change', updateBrush);
+
+        const textures = this.assetManager.layerTextures['pillar'] || [];
+        const groups = {};
+        textures.forEach(path => { if(!path) return; const dir = path.split('/')[path.split('/').length - 2]; if (!groups[dir]) groups[dir] = []; groups[dir].push(path); });
+        
+        for (const dir in groups) {
+            const header = document.createElement('div'); header.className = 'palette-header'; header.textContent = dir.charAt(0).toUpperCase() + dir.slice(1); basePaletteContainer.appendChild(header);
+            for (const path of groups[dir]) {
+                const item = document.createElement('div'); item.className = 'palette-item'; item.dataset.key = path;
+                const img = new Image(); img.src = path; item.appendChild(img);
+                const label = document.createElement('span'); label.textContent = path.split('/').pop().replace('.png', '').replace(/_/g, ' '); item.appendChild(label);
+                item.addEventListener('click', () => {
+                    basePaletteContainer.querySelectorAll('.palette-item').forEach(p => p.classList.remove('active'));
+                    item.classList.add('active');
+                    updateBrush();
+                });
+                basePaletteContainer.appendChild(item);
+            }
+        }
+
+        const firstItem = basePaletteContainer.querySelector('.palette-item');
+        if (firstItem) {
+            firstItem.click();
+        } else {
+            this.editor.activeBrush = null;
+        }
     }
 }

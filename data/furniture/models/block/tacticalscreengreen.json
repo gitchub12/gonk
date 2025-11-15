@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/tactical_screen",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/tactical_screen_green_pic",
+    "particle": "chronokillers_star_wars:blocks/tactical_screen_green_pic",
+    "0": "chronokillers_star_wars:blocks/composter_side",
+    "1": "chronokillers_star_wars:blocks/crafting_table_front",
+    "2": "chronokillers_star_wars:blocks/chrome",
+    "3": "chronokillers_star_wars:blocks/screen_green_blue",
+    "-1": "chronokillers_star_wars:blocks/screen_green_blue"
+  }
+}

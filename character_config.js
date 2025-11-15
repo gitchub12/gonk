@@ -1,7 +1,7 @@
 // BROWSERFIREFOXHIDE character_config.js
 // update: Added a 'perceptionRadius' stat to all NPC types to control their maximum vision range. Stormtroopers have been given a shorter radius as an example.
 
-const CHARACTER_CONFIG = {
+window.CHARACTER_CONFIG = {
   // --- ALIENS ---
   humanoid: {
     name: "Default Humanoid",

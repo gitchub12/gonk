@@ -1,0 +1,11 @@
+{
+  "parent": "chronokillers_star_wars:custom/curved_screen",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/curvedscreenpic",
+    "particle": "chronokillers_star_wars:blocks/curvedscreenpic",
+    "0": "chronokillers_star_wars:blocks/tri_paneleds",
+    "1": "chronokillers_star_wars:blocks/cyan_wool",
+    "2": "chronokillers_star_wars:blocks/tri_panel",
+    "3": "chronokillers_star_wars:blocks/tri_panels"
+  }
+}

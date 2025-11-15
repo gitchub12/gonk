@@ -22,15 +22,21 @@ const GAME_GLOBAL_CONSTANTS = {
     BLASTER_BOLT_OPACITY: 0.85,
     BLASTER_BOLT_RADIUS: 0.03,
     PAMPHLET_LIFESPAN: 480,
-    PAMPHLET_MAX_AMMO: 100,
-    PAMPHLET_START_AMMO: 100,
     PAMPHLET_SIZE_MULTIPLIER: 0.7,
     BLASTER_GLOW_SIZE: 2.3,
     BLASTER_GLOW_OPACITY: 0.15,
     // ADDED: Player bolt origin offsets
     BOLT_ORIGIN_X: 0.154,
     BOLT_ORIGIN_Y: -0.13,
-    BOLT_ORIGIN_Z: 0.578
+    BOLT_ORIGIN_Z: 0.578,
+    DROPPED_WEAPON_SCALE_FACTOR: 0.7, // 30% reduction in size
+    DEFAULT_DROPPED_OFFSETS: { // Default offsets for dropped weapons if not specified in weapon config
+      planes: {
+        dist: 0.0001, // Very small distance to make them appear almost as one
+        yaw: 0,
+        pitch: 0
+      }
+    }
   },
   WEAPON_RANGES: {
     pistol: 12,
@@ -58,13 +64,15 @@ const GAME_GLOBAL_CONSTANTS = {
       BASE_HEIGHT: 0.033
   },
   FACTIONS: {
-      PHYSICS_SPEED: 1,
-      ALLIANCE_PULL: 0.13,
-      KILL_PUSH: 5,
-      DAMPING_FACTOR: 0.95,
-      MIN_FORCE_THRESHOLD: 0.1,
-      FRIENDLY_THRESHOLD: 30,
-      HOSTILE_THRESHOLD: 82
+    PHYSICS_SPEED: 3,
+    ALLIANCE_PULL: 0.13,
+    KILL_PUSH: 5,
+    DAMPING_FACTOR: 0.95,
+    MIN_FORCE_THRESHOLD: 0.008,
+    FRIENDLY_THRESHOLD: 20,
+    HOSTILE_THRESHOLD: 80,
+    HOME_PULL_STRENGTH: 0.05,
+    ALLIANCE_PULL_MULTIPLIER: 1
   },
   FACTION_HUD: {
       SCALE: 1.0,
@@ -75,19 +83,6 @@ const GAME_GLOBAL_CONSTANTS = {
 };
 
 const CHARACTER_CONFIG = {}; // This is now obsolete and loaded from JSON files. Kept as an empty object to prevent errors in any lingering references.
-
-// FIX: The FACTIONS object was outside the GAME_GLOBAL_CONSTANTS definition, causing a syntax error.
-GAME_GLOBAL_CONSTANTS.FACTIONS = {
-    "PHYSICS_SPEED": 3,
-    "ALLIANCE_PULL": 0.13,
-    "KILL_PUSH": 5,
-    "DAMPING_FACTOR": 0.95,
-    "MIN_FORCE_THRESHOLD": 0.008,
-    "FRIENDLY_THRESHOLD": 20,
-    "HOSTILE_THRESHOLD": 80,
-    "HOME_PULL_STRENGTH": 0.05,
-    "ALLIANCE_PULL_MULTIPLIER": 1
-};
 
 GAME_GLOBAL_CONSTANTS.FACTION_COLORS = {
     rebels: '#d94242',

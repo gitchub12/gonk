@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/small_pipe_corner_up",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/small_pipe_corner_up_pic",
+    "particle": "chronokillers_star_wars:blocks/small_pipe_corner_up_pic",
+    "0": "chronokillers_star_wars:blocks/powder_grey"
+  }
+}

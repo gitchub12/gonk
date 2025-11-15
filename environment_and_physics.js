@@ -53,6 +53,47 @@ class LevelRenderer {
         this.gridSize = GAME_GLOBAL_CONSTANTS.GRID.SIZE;
         this.wallHeight = GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.elevationStep = GAME_GLOBAL_CONSTANTS.ELEVATION.STEP_HEIGHT;
+        this.waterMaterials = [];
+    }
+
+    createDefaultLayer(settings, layerName, y, rotationX) {
+        const defaults = settings.defaults || {};
+        const defaultInfo = defaults[layerName];
+        if (!defaultInfo || !defaultInfo.key) return;
+
+        const materialName = defaultInfo.key.split('/').pop().replace(/\.[^/.]+$/, "");
+        let material = assetManager.getMaterial(materialName);
+        if (!material) return;
+
+        // Clone the material to avoid modifying the original in the asset manager
+        material = material.clone();
+        material.map = material.map.clone();
+        material.map.needsUpdate = true;
+
+        const size = defaultInfo.size || 1;
+        
+        // Ensure texture repeats instead of stretching
+        material.map.wrapS = THREE.RepeatWrapping;
+        material.map.wrapT = THREE.RepeatWrapping;
+        material.map.repeat.set(settings.width / size, settings.height / size);
+        
+        const planeGeo = new THREE.PlaneGeometry(settings.width * this.gridSize, settings.height * this.gridSize);
+        
+        // Apply small offsets to prevent Z-fighting
+        let yOffset = 0;
+        if (layerName === 'subfloor') yOffset = -0.02;
+        if (layerName === 'floor') yOffset = -0.01;
+        if (layerName === 'ceiling') yOffset = 0.01;
+        if (layerName === 'sky') yOffset = 0.02;
+        if (layerName === 'water') material.opacity = 0.7;
+
+        const mesh = new THREE.Mesh(planeGeo, material);
+        mesh.userData.isLevelAsset = true;
+        mesh.position.set((settings.width * this.gridSize) / 2, y + yOffset, (settings.height * this.gridSize) / 2);
+        mesh.rotation.x = rotationX;
+        mesh.receiveShadow = (layerName === 'floor' || layerName === 'subfloor');
+        
+        window.game.scene.add(mesh);
     }
 
     async buildLevelFromData(levelData) {
@@ -61,6 +102,7 @@ class LevelRenderer {
         const layers = levelData.layers || {};
         const settings = levelData.settings || { width: 64, height: 64, defaults: {} };
         window.physics.initHeightmap(settings.width, settings.height, layers.elevation);
+        
         const processTileLayer = (layerName, y, rotationX, isSpecial) => {
             const layerItems = layers[layerName] ? new Map(layers[layerName]) : new Map();
             for (const [pos, item] of layerItems.entries()) {
@@ -81,6 +123,17 @@ class LevelRenderer {
             this.createSkybox(skyboxItem); 
         }
 
+        // Create base layers from defaults
+        this.createDefaultLayer(settings, 'subfloor', 0, -Math.PI / 2);
+        this.createDefaultLayer(settings, 'floor', 0, -Math.PI / 2);
+        this.createDefaultLayer(settings, 'water', 0.1, -Math.PI / 2);
+        
+        const defaultCeilingHeight = (settings.defaults?.ceiling?.heightMultiplier || 1) * this.wallHeight;
+        this.createDefaultLayer(settings, 'ceiling', defaultCeilingHeight, Math.PI / 2);
+        this.createDefaultLayer(settings, 'sky', defaultCeilingHeight, Math.PI / 2);
+
+
+        // Process sparse tile data on top of defaults
         processTileLayer('subfloor', -0.1, -Math.PI / 2, false);
         processTileLayer('floor', 0, -Math.PI / 2, false);
         const waterItems = layers.water ? new Map(layers.water) : new Map();
@@ -164,6 +217,12 @@ class LevelRenderer {
             if (!spawnPoint) {
                 spawnPoint = window.game.lastSpawnPointPerLevel[levelManager.currentLevel] || layers.spawns[0];
                 window.game.lastSpawnPointPerLevel[levelManager.currentLevel] = spawnPoint;
+            }
+
+            // Set home spawn point if this is level 1 (or current home level)
+            if (levelManager.currentLevel === window.game.homeSpawnLevel && !window.game.homeSpawnPoint) {
+                window.game.homeSpawnPoint = spawnPoint;
+                console.log(`Home spawn point set for level ${window.game.homeSpawnLevel}`);
             }
         }
         if (spawnPoint) {
@@ -267,8 +326,10 @@ class LevelRenderer {
         sideMesh.material.map.wrapS = THREE.RepeatWrapping;
         sideMesh.material.map.wrapT = THREE.RepeatWrapping;
         sideMesh.material.map.repeat.set(1, height / this.gridSize);
-        sideMesh.material.map.offset.set(0, neighborHeight / this.gridSize);
-        let posX, posZ, rotY;
+        sideMesh.material.map.offset.set(0, groundY / this.gridSize);
+
+        let rotation = 0;
+        let positionOffset = this.gridSize / 2;
         if (direction === 'up') { posX = x * this.gridSize + this.gridSize / 2; posZ = z * this.gridSize; rotY = 0; } 
         else if (direction === 'down') { posX = x * this.gridSize + this.gridSize / 2; posZ = (z + 1) * this.gridSize; rotY = Math.PI; } 
         else if (direction === 'left') { posX = x * this.gridSize; posZ = z * this.gridSize + this.gridSize / 2; rotY = Math.PI / 2; } 
@@ -438,9 +499,30 @@ class LevelRenderer {
             const material = assetManager.getMaterialFromPath(item.key);
             if (!material) continue;
 
-            const radius = (this.gridSize * 0.11) / 2;
-            const groundHeight = window.physics.getGroundHeight(x * this.gridSize, z * this.gridSize);
-            const pillarHeight = this.wallHeight;
+            const width = item.properties?.width || 11;
+            const height = item.properties?.height || 3;
+            const placement = item.properties?.placement || 'center';
+
+            const radius = (this.gridSize * (width / 100)) / 2;
+            let posX = (x + 0.5) * this.gridSize;
+            let posZ = (z + 0.5) * this.gridSize;
+
+            if (placement === 'topLeft') {
+                posX = x * this.gridSize;
+                posZ = z * this.gridSize;
+            } else if (placement === 'topRight') {
+                posX = (x + 1) * this.gridSize;
+                posZ = z * this.gridSize;
+            } else if (placement === 'bottomLeft') {
+                posX = x * this.gridSize;
+                posZ = (z + 1) * this.gridSize;
+            } else if (placement === 'bottomRight') {
+                posX = (x + 1) * this.gridSize;
+                posZ = (z + 1) * this.gridSize;
+            }
+
+            const groundHeight = window.physics.getGroundHeight(posX, posZ);
+            const pillarHeight = this.wallHeight * height;
 
             const geometry = new THREE.CylinderGeometry(radius, radius, pillarHeight, 16);
             const pillarMesh = new THREE.Mesh(geometry, material);
@@ -448,14 +530,70 @@ class LevelRenderer {
             pillarMesh.castShadow = true;
             pillarMesh.receiveShadow = true;
 
-            const posX = x * this.gridSize + this.gridSize / 2;
-            const posZ = z * this.gridSize + this.gridSize / 2;
             pillarMesh.position.set(posX, groundHeight + pillarHeight / 2, posZ);
 
             window.game.scene.add(pillarMesh);
             window.physics.addWall(pillarMesh, false); // Add as an AABB collider
         }
     }
+
+    async buildFurniture(items) {
+        if (!items || !window.furnitureLoader) return;
+
+        const layerItems = new Map(items);
+        for (const [pos, item] of layerItems.entries()) {
+            const [x, z] = pos.split(',').map(Number);
+            
+            const modelName = item.key;
+            
+            const model = await window.furnitureLoader.getModel(modelName);
+
+            if (model) {
+                const groundHeight = window.physics.getGroundHeight(x * this.gridSize, z * this.gridSize);
+                
+                model.position.set(
+                    x * this.gridSize + this.gridSize / 2,
+                    groundHeight,
+                    z * this.gridSize + this.gridSize / 2
+                );
+
+                model.rotation.y = (item.rotation || 0) * -Math.PI / 2;
+
+                // Add visible model to the scene
+                window.game.scene.add(model);
+
+                // Create a simplified physics object for each element
+                const modelData = await window.furnitureLoader.getModelData(modelName);
+                if (modelData && modelData.elements) {
+                    modelData.elements.forEach(element => {
+                        const from = element.from;
+                        const to = element.to;
+                        const size = [to[0] - from[0], to[1] - from[1], to[2] - from[2]];
+                        const scale = 0.0625;
+
+                        const physicsGeo = new THREE.BoxGeometry(size[0] * scale, size[1] * scale, size[2] * scale);
+                        const physicsMat = new THREE.MeshBasicMaterial({ visible: false });
+                        const physicsMesh = new THREE.Mesh(physicsGeo, physicsMat);
+
+                        const position = [
+                            (from[0] + size[0] / 2) * scale - 0.5,
+                            (from[1] + size[1] / 2) * scale - 0.5,
+                            (from[2] + size[2] / 2) * scale - 0.5
+                        ];
+
+                        physicsMesh.position.set(
+                            model.position.x + position[0],
+                            model.position.y + position[1],
+                            model.position.z + position[2]
+                        );
+                        
+                        window.physics.addWall(physicsMesh, false);
+                    });
+                }
+            }
+        }
+    }
+
 
     async createSkybox(item) {
         if (window.game.skyboxAnimator) { 
@@ -469,7 +607,7 @@ class LevelRenderer {
             return;
         }
 
-        const skyboxKey = item.key.split('.')[0]; // Remove extension for lookup
+        const skyboxKey = item.key.replace(/\.(png|jpg)$/, ''); // Remove extension for lookup
         const skyboxInfo = assetManager.skyboxSets.get(skyboxKey);
         if (!skyboxInfo) {
             console.warn(`Skybox key '${skyboxKey}' not found.`);
@@ -642,7 +780,7 @@ class PhysicsSystem {
         return wallCollider; 
     }
     addDynamicEntity(entity) { if (entity && entity.movementCollider) this.dynamicEntities.push(entity); else if (entity && entity.collider) this.dynamicEntities.push(entity); }
-    jump() { if (this.playerCollider.onGround) { this.playerCollider.velocity.y = GAME_GLOBAL_CONSTANTS.PLAYER.JUMP_STRENGTH; this.playerCollider.onGround = false; } }
+    jump() { if (this.playerCollider.onGround) { this.playerCollider.velocity.y = window.game.state.playerStats.jump_strength; this.playerCollider.onGround = false; } }
     
     hasLineOfSight(start, end) {
         if (!this.wallMeshes.length) return true;
@@ -669,6 +807,7 @@ class PhysicsSystem {
     }
 
     update(deltaTime, inputHandler, camera) {
+        this.noclipEnabled = window.game.state.noClipping;
         if (this.noclipEnabled) { this.updatePlayerVelocity(inputHandler); this.playerCollider.position.add(this.playerCollider.velocity);
         } else {
             this.updatePlayerPosition(inputHandler); // Player has special ledge logic
@@ -707,11 +846,18 @@ class PhysicsSystem {
         this.playerCollider.position.x += this.playerCollider.velocity.x; this.playerCollider.position.z += this.playerCollider.velocity.z;
     }
     updatePlayerVelocity(inputHandler) {
-        const acceleration = new THREE.Vector3(); const yaw = inputHandler.yaw; const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)).negate(); const right = new THREE.Vector3(forward.z, 0, -forward.x); if (inputHandler.keys['KeyW']) acceleration.add(forward); if (inputHandler.keys['KeyS']) acceleration.sub(forward); if (inputHandler.keys['KeyA']) acceleration.add(right); if (inputHandler.keys['KeyD']) acceleration.sub(right); const speed = inputHandler.keys['ShiftLeft'] ? GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED * GAME_GLOBAL_CONSTANTS.MOVEMENT.SPRINT_MULTIPLIER : GAME_GLOBAL_CONSTANTS.MOVEMENT.SPEED; if (acceleration.length() > 0) acceleration.normalize().multiplyScalar(speed); this.playerCollider.velocity.x = acceleration.x; this.playerCollider.velocity.z = acceleration.z;
+        const acceleration = new THREE.Vector3(); const yaw = inputHandler.yaw; const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)).negate(); const right = new THREE.Vector3(forward.z, 0, -forward.x); if (inputHandler.keys['KeyW']) acceleration.add(forward); if (inputHandler.keys['KeyS']) acceleration.sub(forward); if (inputHandler.keys['KeyA']) acceleration.add(right); if (inputHandler.keys['KeyD']) acceleration.sub(right); 
+        let speed = inputHandler.keys['ShiftLeft'] ? window.game.state.playerStats.speed * GAME_GLOBAL_CONSTANTS.MOVEMENT.SPRINT_MULTIPLIER : window.game.state.playerStats.speed;
+        if (game.state.playerStats.movement_speed_bonus) {
+            speed *= (1 + game.state.playerStats.movement_speed_bonus);
+        }
+        if (acceleration.length() > 0) acceleration.normalize().multiplyScalar(speed); this.playerCollider.velocity.x = acceleration.x; this.playerCollider.velocity.z = acceleration.z;
     }
     handleFallDamage(distance) { if (distance / GAME_GLOBAL_CONSTANTS.ELEVATION.STEP_HEIGHT >= 4) { window.game.takePlayerDamage(10); if (window.audioSystem) audioSystem.playSoundFromList('bonk'); } }
-    applyGravityAndGroundDetection() {
+    applyGravityAndGroundDetection(skipPlayer = false) {
         for (const entity of this.dynamicEntities) {
+            if (skipPlayer && entity.isPlayer) continue;
+
             const collider = entity.movementCollider || entity.collider; 
             if (collider.parent && collider.parent.isDead) continue; 
 
@@ -857,18 +1003,74 @@ class PhysicsSystem {
     }
 
     resolveWallCollision(collider, wall) {
-        wall.mesh.updateWorldMatrix(true, false); const sphere = new THREE.Sphere(collider.position, collider.radius); let intersects, resolutionBox;
-        if (wall.isOBB) { resolutionBox = new THREE.OBB().fromBox3(new THREE.Box3().setFromObject(wall.mesh)); intersects = resolutionBox.intersectsSphere(sphere);
-        } else { resolutionBox = new THREE.Box3().setFromObject(wall.mesh); intersects = sphere.intersectsBox(resolutionBox); }
+        wall.mesh.updateWorldMatrix(true, false);
+        const sphere = new THREE.Sphere(collider.position, collider.radius);
+        let intersects, resolutionBox;
+
+        if (wall.isOBB) {
+            resolutionBox = wall.obb;
+            if (!resolutionBox) {
+                const box = new THREE.Box3().setFromObject(wall.mesh, true);
+                resolutionBox = new THREE.OBB().fromBox3(box);
+                resolutionBox.applyMatrix4(wall.mesh.matrixWorld);
+                wall.obb = resolutionBox;
+            }
+            intersects = resolutionBox.intersectsSphere(sphere);
+        } else {
+            resolutionBox = wall.aabb;
+            if (!resolutionBox) {
+                resolutionBox = new THREE.Box3().setFromObject(wall.mesh);
+                wall.aabb = resolutionBox;
+            }
+            intersects = sphere.intersectsBox(resolutionBox);
+        }
+
         if (intersects) {
-            const closestPoint = new THREE.Vector3(); resolutionBox.clampPoint(sphere.center, closestPoint); const penetrationVector = new THREE.Vector3().subVectors(sphere.center, closestPoint); const penetrationDepth = sphere.radius - penetrationVector.length();
+            const closestPoint = new THREE.Vector3();
+            resolutionBox.clampPoint(sphere.center, closestPoint);
+            const penetrationVector = new THREE.Vector3().subVectors(sphere.center, closestPoint);
+            const penetrationDepth = sphere.radius - penetrationVector.length();
+
             if (penetrationDepth > 0) {
-                if (penetrationVector.length() === 0) {
-                    const aabb = (resolutionBox instanceof THREE.OBB) ? resolutionBox.getAABB(new THREE.Box3()) : resolutionBox; const dx = Math.min(Math.abs(sphere.center.x - aabb.min.x), Math.abs(sphere.center.x - aabb.max.x)); const dz = Math.min(Math.abs(sphere.center.z - aabb.min.z), Math.abs(sphere.center.z - aabb.max.z));
-                    if (dx < dz) penetrationVector.set(sphere.center.x < (aabb.min.x + aabb.max.x) / 2 ? -1 : 1, 0, 0);
-                    else penetrationVector.set(0, 0, sphere.center.z < (aabb.min.z + aabb.max.z) / 2 ? -1 : 1);
+                let resolutionNormal;
+                if (penetrationVector.lengthSq() > 1e-9) {
+                    resolutionNormal = penetrationVector.normalize();
+                } else {
+                    // Player is completely inside the box, find the smallest escape route.
+                    const aabb = (resolutionBox instanceof THREE.OBB) ? resolutionBox.getAABB(new THREE.Box3()) : resolutionBox;
+                    const center = sphere.center;
+                    
+                    const dx_min = center.x - aabb.min.x;
+                    const dx_max = aabb.max.x - center.x;
+                    const dy_min = center.y - aabb.min.y;
+                    const dy_max = aabb.max.y - center.y;
+                    const dz_min = center.z - aabb.min.z;
+                    const dz_max = aabb.max.z - center.z;
+
+                    let min_dist = dx_min;
+                    resolutionNormal = new THREE.Vector3(-1, 0, 0);
+
+                    if (dx_max < min_dist) { min_dist = dx_max; resolutionNormal.set(1, 0, 0); }
+                    if (dy_min < min_dist) { min_dist = dy_min; resolutionNormal.set(0, -1, 0); }
+                    if (dy_max < min_dist) { min_dist = dy_max; resolutionNormal.set(0, 1, 0); }
+                    if (dz_min < min_dist) { min_dist = dz_min; resolutionNormal.set(0, 0, -1); }
+                    if (dz_max < min_dist) { min_dist = dz_max; resolutionNormal.set(0, 0, 1); }
                 }
-                collider.position.add(penetrationVector.normalize().multiplyScalar(penetrationDepth));
+
+                collider.position.add(resolutionNormal.clone().multiplyScalar(penetrationDepth));
+
+                // If we are pushing the entity UP, it's a ground collision.
+                if (resolutionNormal.y > 0.7) { // Normal points mostly up
+                    if (collider.velocity.y < 0) {
+                        collider.velocity.y = 0;
+                    }
+                    if (collider.isPlayer) {
+                        if (!this.wasPlayerOnGroundLastFrame) {
+                            this.handleFallDamage(this.playerFallStart_Y - collider.position.y);
+                        }
+                        collider.onGround = true;
+                    }
+                }
             }
         }
     }

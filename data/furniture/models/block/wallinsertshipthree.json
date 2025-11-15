@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_insert_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wall_insert_three_pic",
+    "particle": "chronokillers_star_wars:blocks/wall_insert_three_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool",
+    "1": "chronokillers_star_wars:blocks/wall_black_two_insert",
+    "-1": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

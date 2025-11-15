@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/walldetail"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/walldetail",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/walldetail",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/walldetail",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/walldetail",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/walldetail",
+      "x": 90
+    }
+  }
+}

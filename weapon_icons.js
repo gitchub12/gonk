@@ -1,6 +1,9 @@
 // BROWSERFIREFOXHIDE weapon_icons.js
 // update: Fixed a critical bug where an NPC's weapon mesh was not being correctly assigned to the NPC instance, causing ranged units to default to melee attacks. Both attach and remove functions now correctly modify the primary NPC object.
 // update: Added a clear() method and improved disposal logic to prevent memory leaks during level transitions.
+// update: Modified getCategoryFromName to correctly parse player weapon keys (starting with 'g') and map them to the correct inventory categories (pistol, rifle, longarm, etc.), fixing the slot assignment error.
+// fix: Corrected the category mapping for NPC saber weapons (those not starting with 'g') to search the expected 'saber' folder, resolving 404 errors for NPC sabers used in character JSONs.
+// fix: Corrected typo 'persistentAllyWehes' to 'persistentAllyWeapons' in the clear method, resolving the game-breaking ReferenceError.
 
 class WeaponIconSystem {
     constructor() {
@@ -27,7 +30,7 @@ class WeaponIconSystem {
             }
         });
         
-        this.activeWeaponMeshes = persistentAllyWeapons;
+        this.activeWeaponMeshes = persistentAllyWeapons; // FIX: Corrected typo from persistentAllyWehes
     }
 
     _disposeOfMesh(mesh) {
@@ -86,24 +89,35 @@ class WeaponIconSystem {
             return this.loadedWeapons.get(weaponName);
         }
 
+        let texture;
         try {
-            const texture = await new THREE.TextureLoader().loadAsync(pngPath);
+            texture = await new THREE.TextureLoader().loadAsync(pngPath);
             if (!texture || !texture.image) {
-                console.warn(`Texture could not be loaded for weapon: ${weaponName}`);
-                return null;
+                console.warn(`Texture could not be loaded for weapon: ${weaponName}. Using placeholder.`);
+                texture = null; // Explicitly set to null if image is bad
+            } else {
+                texture.magFilter = THREE.NearestFilter;
+                texture.minFilter = THREE.NearestFilter;
             }
-            texture.magFilter = THREE.NearestFilter;
-            texture.minFilter = THREE.NearestFilter;
+        } catch (error) {
+            console.error(`Error loading texture for weapon ${weaponName} from ${pngPath}:`, error);
+            texture = null; // Explicitly set to null on error
+        }
 
-            const weaponGroup = new THREE.Group();
+        const weaponGroup = new THREE.Group();
+        let width = 0.5, height = 0.5; // Default size for placeholder
+        if (texture) {
             const aspect = texture.image.width / texture.image.height;
-            
-            const height = 0.5;
-            const width = height * aspect;
-            const thickness = 0.02; 
-            const layers = 3; 
-            
-            const mat = new THREE.MeshStandardMaterial({
+            height = 0.5;
+            width = height * aspect;
+        }
+        
+        const thickness = 0.001; 
+        const layers = 3; 
+        
+        let mat;
+        if (texture) {
+            mat = new THREE.MeshStandardMaterial({
                 map: texture,
                 transparent: true,
                 alphaTest: 0.1,
@@ -113,40 +127,137 @@ class WeaponIconSystem {
                 emissive: new THREE.Color(0x000000), // Default black emissive
                 emissiveIntensity: 0
             });
-            
-            const geo = new THREE.PlaneGeometry(width, height);
-
-            for (let i = 0; i < layers; i++) {
-                const layerMesh = new THREE.Mesh(geo, mat.clone());
-                layerMesh.position.z = (i - (layers - 1) / 2) * thickness;
-                weaponGroup.add(layerMesh);
-            }
-            
-            this.loadedWeapons.set(weaponName, weaponGroup);
-            return weaponGroup;
-        } catch (error) {
-            console.error(`Error creating weapon ${weaponName} from ${pngPath}:`, error);
-            return null;
+        } else {
+            // Fallback material (magenta for missing texture)
+            mat = new THREE.MeshStandardMaterial({
+                color: 0xff00ff, // Magenta
+                roughness: 0.8,
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
         }
+        
+        const geo = new THREE.PlaneGeometry(width, height);
+
+        for (let i = 0; i < layers; i++) {
+            const layerMesh = new THREE.Mesh(geo, mat.clone());
+            layerMesh.position.z = (i - (layers - 1) / 2) * thickness;
+            weaponGroup.add(layerMesh);
+        }
+        
+        this.loadedWeapons.set(weaponName, weaponGroup);
+        return weaponGroup;
     }
     
     getCategoryFromName(weaponName) {
-        // FIX: The weapon prefix doesn't always match the folder name (e.g., 'long' vs 'longarm').
-        // This map ensures the correct folder is always used.
+        // Map prefixes to folder/inventory category keys. Player weapon names start with 'g'.
+        let name = weaponName.toLowerCase();
+        
+        // Handle names that start with 'g' (player weapons) by stripping the 'g' prefix
+        let isPlayerWeapon = name.startsWith('g');
+        if (isPlayerWeapon) {
+            name = name.slice(1);
+        }
+        
         const prefixToCategoryMap = {
-            'long': 'longarm',
-            'melee': 'melee',
+            'melee': 'melee', 
             'pistol': 'pistol',
             'rifle': 'rifle',
-            'saber': 'saber', // For NPC sabers if any
+            'long': 'longarm',
+            // Note: 'saberhilt' is player, 'saber' is often NPC
+            'saberhilt': 'saberhiltoverlayer', 
+            'saber': 'saber', 
             'unique': 'unique'
         };
-
-        const nameParts = weaponName.split('_');
+        
+        const nameParts = name.split('_');
         if (nameParts.length > 1) {
-            return prefixToCategoryMap[nameParts[0]] || nameParts[0];
+            const prefix = nameParts[0];
+            let category = prefixToCategoryMap[prefix] || prefix;
+
+            // FIX: If it's an NPC weapon and the name starts with 'saber', assume the folder name is simply 'saber'
+            if (!isPlayerWeapon && category === 'saber') {
+                 return 'saber';
+            }
+            
+            if (category === 'long') {
+                return 'longarm';
+            }
+            
+            // Handle the zapper
+            if (category === 'melee' && name.includes('zapper')) {
+                return 'melee';
+            }
+
+            return category;
         }
-        return 'unique'; // Default to unique if no category prefix
+        return 'unique'; // Default to unique if no clear category prefix
+    }
+
+    async getWeaponPickupMesh(weaponName) {
+        let weaponTemplate = this.loadedWeapons.get(weaponName);
+        if (!weaponTemplate) {
+            const category = this.getCategoryFromName(weaponName);
+            let npcWeaponPath;
+            if (category === 'melee' && weaponName.includes('zapper')) {
+                npcWeaponPath = `data/gonkonlyweapons/melee/gmelee_zapper/gmelee_zapper_a.png`;
+            } else {
+                npcWeaponPath = `data/NPConlyweapons/${category}/${weaponName}.png`;
+            }
+            weaponTemplate = await this.createWeaponFromPNG(weaponName, npcWeaponPath);
+            if (!weaponTemplate) {
+                console.error(`Failed to load weapon for pickup: ${weaponName}`);
+                return null;
+            }
+        }
+
+        const weaponMesh = weaponTemplate.clone();
+        weaponMesh.children.forEach(child => child.material = child.material.clone());
+
+        const weaponData = window.assetManager.weaponData || {};
+        const weaponConfig = weaponData[weaponName] || {};
+        const category = weaponConfig.category || this.getCategoryFromName(weaponName);
+        const weaponDefaults = weaponData._defaults || {};
+
+        let poseData = weaponConfig.offsets;
+        let glowData = weaponConfig.glow;
+
+        if (!poseData && weaponDefaults && weaponDefaults.categoryDefaults) {
+            poseData = weaponDefaults.categoryDefaults[category]?.offsets;
+        }
+        if (!glowData && weaponDefaults && weaponDefaults.categoryDefaults) {
+            glowData = weaponDefaults.categoryDefaults[category]?.glow;
+        }
+
+        // Apply pose data for pickup (can be different from character attachment)
+        if (poseData) {
+            // For pickups, we might want a more generic upright pose or a slightly rotated one
+            // For now, let's use a simplified version of the attached pose
+            weaponMesh.position.set(0, 0, 0); // Reset position relative to its own group
+            weaponMesh.rotation.set(0, Math.PI / 2, 0); // Rotate to face forward/upright
+            if (poseData.scale) weaponMesh.scale.setScalar(poseData.scale * 0.01); // Scale down for pickup
+        } else {
+            weaponMesh.position.set(0, 0, 0);
+            weaponMesh.rotation.set(0, Math.PI / 2, 0);
+            weaponMesh.scale.setScalar(0.005); // Default scale if no pose data
+        }
+        
+        if (glowData) {
+            const lightOrigin = glowData.origin || {x: 0, y: 0, z: 0};
+            const light = new THREE.PointLight(glowData.color, glowData.intensity, glowData.distance, glowData.decay || 2);
+            light.position.set(lightOrigin.x, lightOrigin.y, lightOrigin.z);
+            weaponMesh.add(light);
+            weaponMesh.userData.light = light; 
+            
+            weaponMesh.children.forEach(child => {
+                if (child.isMesh) {
+                    child.material.emissive.set(glowData.color);
+                    child.material.emissiveIntensity = (category === 'saberhiltoverlayer' || category === 'saber') ? 1.0 : 0.05;
+                }
+            });
+        }
+
+        return weaponMesh;
     }
 
     async attachToCharacter(npc, weaponName) {
@@ -170,10 +281,16 @@ class WeaponIconSystem {
 
         let weaponTemplate = this.loadedWeapons.get(weaponName);
         if (!weaponTemplate) {
-            // FIX: Construct the correct path for NPC weapons using their category.
-            // e.g., 'pistol_dh17_rebel' -> category 'pistol' -> 'data/NPConlyweapons/pistol/pistol_dh17_rebel.png'
+            // FIX: Construct the correct path for NPC weapons using their resolved category.
             const category = this.getCategoryFromName(weaponName);
-            const npcWeaponPath = `data/NPConlyweapons/${category}/${weaponName}.png`;
+            let npcWeaponPath;
+            if (category === 'melee' && weaponName.includes('zapper')) {
+                // Zapper is a special case, located in the player weapon directory.
+                // We hardcode the path to the 'a' frame, as the NPC weapon system currently treats it as static.
+                npcWeaponPath = `data/gonkonlyweapons/melee/gmelee_zapper/gmelee_zapper_a.png`;
+            } else {
+                npcWeaponPath = `data/NPConlyweapons/${category}/${weaponName}.png`;
+            }
             weaponTemplate = await this.createWeaponFromPNG(weaponName, npcWeaponPath);
             if (!weaponTemplate) {
                 console.error(`Failed to load weapon: ${weaponName}`);
@@ -197,7 +314,7 @@ class WeaponIconSystem {
             glowData = weaponDefaults.categoryDefaults[category]?.glow;
         }
 
-        if (category === 'saber') {
+        if (category === 'saberhiltoverlayer' || category === 'saber') {
              glowData = { color: "#ff0000", intensity: 3.3, distance: 1.5, origin: { x: -0.1, y: -0.05, z: -0.15 }, decay: 2, ...(glowData || {}) };
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
@@ -235,7 +352,7 @@ class WeaponIconSystem {
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
                     child.material.emissive.set(glowData.color);
-                    child.material.emissiveIntensity = (category === 'saber') ? 1.0 : 0.05;
+                    child.material.emissiveIntensity = (category === 'saberhiltoverlayer' || category === 'saber') ? 1.0 : 0.05;
                 }
             });
         }

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/ibeam"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/ibeam",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/ibeam",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/ibeam",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/ibeam",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/ibeam",
+      "x": 90
+    }
+  }
+}

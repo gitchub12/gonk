@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/grayboxtwo"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/grayboxtwo",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/grayboxtwo",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/grayboxtwo",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/grayboxtwo",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/grayboxtwo",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "_comment": "Defines the numerical thresholds for relationship attitudes. The system checks from HIGHEST threshold to LOWEST. The first threshold a score is GREATER THAN OR EQUAL TO is the attitude it gets. Score is 0 (friendly) to 100 (hostile).",
+  "attitudes": [
+    {
+      "name": "m1",
+      "threshold": 75
+    },
+    {
+      "name": "i1",
+      "threshold": 25
+    },
+    {
+      "name": "h1",
+      "threshold": 0
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/lcdbig"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/lcdbig",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/lcdbig",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/lcdbig",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/lcdbig",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/lcdbig",
+      "x": 90
+    }
+  }
+}

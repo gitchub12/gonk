@@ -1,0 +1,13 @@
+{
+  "parent": "chronokillers_star_wars:custom/wall_display_six",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/wall_display_six_pic",
+    "particle": "chronokillers_star_wars:blocks/wall_display_six_pic",
+    "0": "chronokillers_star_wars:blocks/console",
+    "1": "chronokillers_star_wars:blocks/red_stained",
+    "2": "chronokillers_star_wars:blocks/light_gray",
+    "3": "chronokillers_star_wars:blocks/card_reader",
+    "4": "chronokillers_star_wars:blocks/hopper_outside",
+    "5": "chronokillers_star_wars:blocks/gray_cube"
+  }
+}

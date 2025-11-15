@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/groovedside"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/groovedside",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/groovedside",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/groovedside",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/groovedside",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/groovedside",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/computerconsoleone"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/computerconsoleone",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/computerconsoleone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/computerconsoleone",
+      "y": 270
+    }
+  }
+}

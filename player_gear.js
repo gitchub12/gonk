@@ -4,13 +4,17 @@
 // update: Changed BlasterBolt material from MeshBasicMaterial to MeshStandardMaterial to allow it to receive lighting and emissive properties, making it glow correctly.
 // rewrite: Refactored PlayerWeaponSystem to manage an array of weapons and allow cycling. MeleeWeapon class is now generic for all player melee weapons.
 // update: Corrected the path for the Gaffi Stick asset to fix 404 error.
+// rewrite: Implemented sprite-based frame animation for the Zapper, extended weapon slots, and added logic for starting gear including the 4-slot module.
+// fix: Corrected Zapper path construction in _generateWeaponConfigs to eliminate duplication and ensure the correct key is used, solving the persistent 404 error.
+// fix: Ensured only the Zapper loads multiple frames; all other weapons load only their base image for the 'idle' state, fixing massive 404 floods.
+// fix: Implemented robust hit detection in PlayerWeaponSystem.performMeleeHitDetection for melee/saber weapons.
 
 class BlasterBolt {
     constructor(startPos, direction, config) {
         this.owner = config.owner;
         this.ownerType = config.ownerType || 'enemy'; // 'player', 'ally', 'enemy'
         this.damage = config.damage || 5;
-        this.speed = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_SPEED * (config.speedMultiplier || 1.0);
+        this.speed = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_SPEED;
         this.lifetime = config.lifetime || 120; // frames
 
         const radius = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_RADIUS * (this.ownerType === 'player' ? 0.5 : 1.0);
@@ -31,7 +35,7 @@ class BlasterBolt {
             this.glowSprite = new THREE.Sprite(window.sharedGlowMaterial.clone());
             this.glowSprite.material.color.set(0xff0000);
             const glowScale = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_GLOW_SIZE; // Adjust for desired glow size
-            this.glowSprite.material.opacity = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_GLOW_OPACITY;
+            this.glowSprite.material.opacity = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_OPACITY;
             this.glowSprite.scale.set(glowScale, glowScale, glowScale);
             this.mesh.add(this.glowSprite);
         }
@@ -135,6 +139,7 @@ class MeleeWeapon {
         this.state = 'idle'; // 'idle', 'attacking'
         this.animTimer = 0;
         this.animFrame = 0;
+        this.animDuration = 0.25;
         this.lightFadeTimer = 0; // Timer to control light fade
         this.name = config.name;
         this.isReady = false;
@@ -160,7 +165,6 @@ class MeleeWeapon {
         this.mesh.renderOrder = 999;
         this.mesh.add(this.light);
 
-        // FIX: Use a basePosition vector that can be modified by the UI
         this.basePosition = new THREE.Vector3(-0.815, -0.624, -1.5);
         this.mesh.position.copy(this.basePosition);
         this.mesh.rotation.z = -0.1;
@@ -169,6 +173,13 @@ class MeleeWeapon {
         
         // Hide until loaded and active
         this.mesh.visible = false;
+        
+        // Zapper specific animation properties
+        this.isZapper = this.config.key.includes('gmelee_zapper');
+        if (this.isZapper) {
+            this.zapperSequence = ['a', 'b', 'c', 'd', 'e', 'a']; // d is full extension, e is quick return
+            this.zapperFrameTime = this.animDuration / (this.zapperSequence.length - 1); // Time per frame
+        }
     }
 
     async loadTextures() {
@@ -178,9 +189,13 @@ class MeleeWeapon {
         const loader = new THREE.TextureLoader();
         const promises = [];
         
-        for (const key in this.config.frames) {
-            // FIX: Use the correct base path for player-specific weapons.
-            const texturePath = `/data/gonkonlyweapons/${this.config.frames[key]}.png`;
+        // Determine which frames to load: all defined frames if Zapper, only 'idle' otherwise
+        const framesToLoad = this.isZapper ? Object.keys(this.config.frames) : ['idle'];
+        
+        for (const key of framesToLoad) {
+            // frames[key] contains the path relative to /data/gonkonlyweapons/, e.g., 'melee/gmelee_zapper/gmelee_zapper_a'
+            const pathSegment = this.config.frames[key];
+            const texturePath = `/data/gonkonlyweapons/${pathSegment}.png`;
             promises.push(new Promise(resolve => {
                 loader.load(texturePath, (texture) => {
                     texture.magFilter = THREE.NearestFilter;
@@ -188,7 +203,7 @@ class MeleeWeapon {
                     this.textures[key] = texture;
                     resolve();
                 }, undefined, () => {
-                    console.warn(`Failed to load hilt texture for ${this.config.name}: ${texturePath}`);
+                    console.warn(`Failed to load texture for ${this.config.name}: ${texturePath}`);
                     resolve();
                 });
             }));
@@ -210,26 +225,25 @@ class MeleeWeapon {
                 this.bladeMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), bladeMaterial);
                 this.bladeMesh.renderOrder = 998; // Render blade behind hilt (999)
                 this.mesh.add(this.bladeMesh); // Attach blade to hilt
+                this.bladeMesh.visible = false; // Start invisible
             } else {
                 console.error("Failed to load saber blade texture 'gsaberbladethick'.");
             }
         }
 
-        if (this.textures.idle) {
-            this.mesh.material.map = this.textures.idle;
+        if (this.textures.idle || this.textures.a) { // Default frame is 'a' or 'idle'
+            this.mesh.material.map = this.textures.idle || this.textures.a;
             this.mesh.material.needsUpdate = true;
             this.isReady = true;
         } else {
-            // Fallback material setup if all fails
-            this.mesh.material.map = null;
-            this.mesh.material.color.set(0xff00ff);
+            console.error(`Weapon ${this.config.name} missing base texture 'a' or 'idle'.`);
         }
     }
 
     setAsActive() {
         if (!this.isReady) return;
-        // FIX: Apply the specific transform values when the weapon is made active.
-        this.mesh.position.copy(this.basePosition);
+        // Apply the specific transform values when the weapon is made active.
+        this.mesh.position.set(this.config.basePosition.x, this.config.basePosition.y, this.config.basePosition.z);
         this.mesh.rotation.set(this.config.rotation.x, this.config.rotation.y, this.config.rotation.z);
         this.mesh.scale.setScalar(this.config.scale);
         this.mesh.visible = true;
@@ -242,9 +256,8 @@ class MeleeWeapon {
             audioSystem.playSoundFromList('saberon');
         }
 
-        if (this.textures.idle) {
-             this.mesh.material.map = this.textures.idle;
-             this.mesh.material.needsUpdate = true;
+        if (this.bladeMesh) {
+            this.bladeMesh.visible = true;
         }
     }
 
@@ -257,6 +270,10 @@ class MeleeWeapon {
         if (this.config.category === 'saberhiltoverlayer') {
             audioSystem.playSoundFromList('saberoff');
         }
+
+        if (this.bladeMesh) {
+            this.bladeMesh.visible = false;
+        }
     }
 
     attack() {
@@ -264,10 +281,19 @@ class MeleeWeapon {
         this.state = 'attacking';
         this.animTimer = 0;
         this.animFrame = 0;
+        
+        if (this.isZapper && this.textures.a) {
+             this.mesh.material.map = this.textures.a;
+             this.mesh.material.needsUpdate = true;
+        }
+        
         if (this.config.category === 'saberhiltoverlayer') {
             audioSystem.playSoundFromList('saberswing');
+        } else if (this.isZapper) {
+            audioSystem.playSoundFromList('zappershot');
         } else {
-            audioSystem.playSoundFromList('zapper');
+            // General ranged/pistol fire sound placeholder
+            audioSystem.playSoundFromList(`${this.config.category}shot`);
         }
 
         // Light pops immediately
@@ -284,6 +310,7 @@ class MeleeWeapon {
 
         this.mesh.position.y = this.basePosition.y + Math.sin(totalTime * bobSpeed) * bobAmount * bobIntensity;
         this.mesh.position.x = this.basePosition.x + Math.cos(totalTime * bobSpeed / 2) * bobAmount * bobIntensity;
+        this.mesh.position.z = this.basePosition.z; // FIX: Apply Z-position from basePosition
 
         // Handle light fading independent of attack state
         if (this.lightFadeTimer > 0) {
@@ -296,13 +323,32 @@ class MeleeWeapon {
 
         // Update blade emissive color from UI controls
         if (this.bladeMesh) {
-            const glowColor = document.getElementById('fx_glow_color')?.value || '#00ffff';
-            this.bladeMesh.material.emissive.set(glowColor);
+            // Placeholder: Assume this color is controlled by UI or logic
+            const bladeColor = this.config.glow.color;
+            this.bladeMesh.material.emissive.set(bladeColor);
             this.bladeMesh.material.needsUpdate = true;
         }
 
-        if (this.state === 'idle') {
-            // Do nothing
+        // --- Zapper Animation Logic (Attack/Extension/Retraction) ---
+        if (this.state === 'attacking' && this.isZapper) {
+            this.animTimer += deltaTime;
+            const sequenceIndex = Math.min(Math.floor(this.animTimer / this.zapperFrameTime), this.zapperSequence.length - 1);
+            
+            if (sequenceIndex !== this.animFrame) {
+                this.animFrame = sequenceIndex;
+                const frameKey = this.zapperSequence[this.animFrame];
+                if (this.textures[frameKey]) {
+                    this.mesh.material.map = this.textures[frameKey];
+                    this.mesh.material.needsUpdate = true;
+                }
+            }
+
+            if (this.animTimer >= this.animDuration) {
+                this.state = 'idle';
+                this.animFrame = 0;
+                this.mesh.material.map = this.textures.a;
+                this.mesh.material.needsUpdate = true;
+            }
         }
     }
 }
@@ -314,18 +360,29 @@ class RangedWeapon extends MeleeWeapon {
         this.maxAmmo = 101;
         this.attackCooldown = 0.2; // Faster firing rate for ranged
         this.lastAttackTime = 0;
+        // Overwrite base position with ranged default
+        this.basePosition = new THREE.Vector3(-0.957, -0.624, -1.5);
     }
 
     attack() {
         const now = performance.now();
-        if (now - this.lastAttackTime < this.attackCooldown * 1000) return;
-        if (this.ammo <= 0) {
+        let fireRateBonus = 0;
+        if (this.config.category === 'rifle' && game.state.playerStats.rifle_firerate_bonus) {
+            fireRateBonus = game.state.playerStats.rifle_firerate_bonus;
+        }
+        if (now - this.lastAttackTime < (this.attackCooldown * 1000) / (1 + fireRateBonus)) return;
+        
+        // Check for energy instead of ammo
+        if (window.game.state.energy < this.config.energyCost) {
             // play empty sound
+            audioSystem.playSoundFromList('empty');
             return;
         }
 
+        // Consume energy
+        window.game.state.energy -= this.config.energyCost;
+
         this.lastAttackTime = now;
-        this.ammo--;
         this.state = 'attacking';
         this.animTimer = 0;
         this.animFrame = 0;
@@ -343,7 +400,6 @@ class RangedWeapon extends MeleeWeapon {
         const cam = this.camera;
         cam.updateWorldMatrix(true, true);
 
-        // FIX: Start the bolt from the camera's perspective for perfect center-screen aiming.
         const startPosition = new THREE.Vector3();
         cam.getWorldPosition(startPosition);
 
@@ -351,11 +407,9 @@ class RangedWeapon extends MeleeWeapon {
         cam.getWorldDirection(direction);
 
         // Offset the bolt to appear to come from the weapon, not the player's face.
-        // We move it forward, slightly to the right, and down.
         const right = new THREE.Vector3();
         right.crossVectors(cam.up, direction).normalize();
 
-        // NEW: Use configurable offsets for the bolt origin
         const originOffsetX = GAME_GLOBAL_CONSTANTS.WEAPONS.BOLT_ORIGIN_X;
         const originOffsetY = GAME_GLOBAL_CONSTANTS.WEAPONS.BOLT_ORIGIN_Y;
         const originOffsetZ = GAME_GLOBAL_CONSTANTS.WEAPONS.BOLT_ORIGIN_Z;
@@ -364,23 +418,32 @@ class RangedWeapon extends MeleeWeapon {
         startPosition.add(right.clone().multiplyScalar(originOffsetX));
         startPosition.y += originOffsetY;
 
+        let damage = this.config.damage || 10;
+        if (this.config.category === 'rifle' && game.state.playerStats.rifle_damage_bonus) {
+            damage *= (1 + game.state.playerStats.rifle_damage_bonus);
+        }
+        if (this.config.category === 'pistol' && game.state.playerStats.pistol_damage_bonus) {
+            damage *= (1 + game.state.playerStats.pistol_damage_bonus);
+        }
+        if (this.config.category === 'longarm' && game.state.playerStats.longarm_damage_bonus) {
+            damage *= (1 + game.state.playerStats.longarm_damage_bonus);
+        }
+
         const bolt = new BlasterBolt(startPosition, direction, {
             owner: window.physics.playerEntity,
             ownerType: 'player',
-            damage: this.config.damage || 10
+            damage: damage
         });
         window.game.entities.projectiles.push(bolt);
 
-        // FIX: The function name was incorrect. It should be playWeaponFireSound for NPCs and a non-positional sound for the player.
         audioSystem.playSoundFromList(`${this.config.category}shot`, 0.5);
     }
 
-    // Ranged weapons have their own simple recoil animation, separate from melee.
+    // Ranged weapons have their own simple recoil animation.
     update(deltaTime, totalTime) {
         // Call parent update for bobbing and light fading
         super.update(deltaTime, totalTime);
 
-        // FIX: Implement a simple, subtle recoil animation.
         if (this.state === 'attacking') {
             this.animTimer += deltaTime;
             const recoilDuration = 0.15; // Total duration of the recoil
@@ -404,8 +467,8 @@ class SaberWeapon extends MeleeWeapon {
         // Attack animation properties
         this.attackStartPosition = new THREE.Vector3();
         this.attackStartQuaternion = new THREE.Quaternion();
-        this.attackTargetPosition = new THREE.Vector3(0.0377, -0.6415, -1.5);
-        this.attackTargetQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(-1.1711, 0, -0.1326, 'YXZ'));
+        this.attackTargetPosition = new THREE.Vector3(-0.335, -0.635, -1.638);
+        this.attackTargetQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(-1.405, 0.782, 0.546, 'YXZ'));
     }
 
     setAsActive() {
@@ -415,19 +478,25 @@ class SaberWeapon extends MeleeWeapon {
         this.attackStartQuaternion.copy(this.mesh.quaternion);
     }
 
+    setAsInactive() {
+        super.setAsInactive();
+    }
+
     attack() {
-        super.attack();
+        if (this.state !== 'idle') return; // Only allow attack from idle state
         // Store the current position and rotation to animate from
         this.attackStartPosition.copy(this.mesh.position);
         this.attackStartQuaternion.copy(this.mesh.quaternion);
+        
+        super.attack(); // Call parent attack to set state, play sound, and start light fade
     }
 
     update(deltaTime, totalTime) {
-        super.update(deltaTime, totalTime);
+        super.update(deltaTime, totalTime); // Handles bobbing and light fade
 
         if (this.state === 'attacking') {
             this.animTimer += deltaTime;
-            const totalAttackDuration = 4 / 24; // 4 frames at 24fps (much faster)
+            const totalAttackDuration = 4 / 24; // Total time for the swing animation
             const attackInDuration = 1.5 / 24;
             const attackOutDuration = 2.5 / 24;
 
@@ -442,7 +511,7 @@ class SaberWeapon extends MeleeWeapon {
             } else {
                 this.state = 'idle';
                 this.mesh.position.copy(this.attackStartPosition);
-                this.mesh.quaternion.copy(this.attackStartQuaternion);
+                this.mesh.quaternion.copy(this.mesh.quaternion);
             }
         }
     }
@@ -452,9 +521,18 @@ class PlayerWeaponSystem {
     constructor(){
       this.camera = null;
       this.weaponHolder = null;
-      this.weapons = []; // Array of all owned weapon objects
+      this.weapons = []; 
+      
+      this.categories = ['melee', 'pistol', 'rifle', 'longarm', 'unique', 'saberhiltoverlayer', 'special'];
+      // Each category slot is now an array to hold multiple weapons
+      this.slots = this.categories.map(() => []); 
+      // Defines how many weapons can be in each slot
+      this.slotCapacity = this.categories.map(() => 0); 
+      
+      this.unlockedSlots = 0; // Start with 0, will be unlocked by nodes
       this.activeWeaponIndex = 0;
       this.activeWeapon = null;
+      this.isAttacking = false;
     }
     
     get primaryWeapon() { return this.activeWeapon; }
@@ -463,189 +541,377 @@ class PlayerWeaponSystem {
         this.camera = camera;
         this.weaponHolder = weaponHolder;
         
-        const weaponConfigs = [];
         const weaponPaths = await assetManager.discoverPlayerWeapons();
-
-        for (const path of weaponPaths) {
-            // e.g., path = '/data/gonkonlyweapons/saber/gsaber_red.png'
-            const parts = path.split('/'); // ['', 'data', 'gonkonlyweapons', 'saber', 'gsaber_red.png']
-            const filenameWithExt = parts.pop(); // 'gsaber_red.png'
-            const category = parts.pop(); // 'saber' (the folder name is the category)
-            const filename = filenameWithExt.replace('.png', ''); // 'gsaber_red'
-            
-            // FIX: Correctly parse weapon name. 'glong_ee3_mando' -> 'ee3'
-            let name = filename.split('_')[1] || filename;
-            // Handle special naming convention: glong_ee3_mando -> Ee3
-            if (category === 'longarm' && name.includes('_')) {
-                name = name.split('_')[0]; // Take 'ee3' from 'ee3_mando'
-            }
-
-            // A generic config for all discovered weapons. We can specialize this later.
-            const weaponConfig = {
-                key: filename, // e.g., 'gsaberhiltluke'
-                name: name.charAt(0).toUpperCase() + name.slice(1),
-                category: category,
-                damage: 10,
-                range: 2.0,
-                cone: 0.8,
-                frames: { idle: `${category}/${filename}` },
-                sequence: ['idle'], // Default to a non-attacking sequence
-                frameDuration: 0.1,
-                glow: { color: "#0088ff", intensity: 1.5, distance: 3, decay: 2 },
-                fadeTime: 0.15,
-                // Set default transforms, to be overridden if needed
-                basePosition: { x: -0.815, y: -0.624, z: -1.5 },
-                rotation: { x: 0, y: 0, z: -0.1 },
-                scale: 1.4872
-            };
-
-            // Apply specific overrides for the saber hilt
-            if (category === 'saberhiltoverlayer') {
-                weaponConfig.basePosition = { x: -0.9724, y: -0.6241, z: -1.5 };
-                weaponConfig.rotation = { 
-                    x: -0.1868, 
-                    y: 0.3875, 
-                    z: 1.1257 
-                };
-                weaponConfig.scale = 1.3801;
-                // Set default blade color to green for Luke's saber
-                weaponConfig.glow.color = "#00ff00";
-            }
-
-            // Apply new defaults for all 'longarm' weapons
-            if (category === 'longarm') {
-                weaponConfig.basePosition = { x: -0.6764, y: -0.624, z: -1.5 };
-                weaponConfig.rotation = { 
-                    x: 0, 
-                    y: 0, 
-                    z: -0.0227 
-                };
-                weaponConfig.scale = 2.6388;
-            }
-            // Apply new defaults for all 'rifle' weapons
-            if (category === 'rifle') {
-                weaponConfig.basePosition = { x: -0.7809, y: -0.624, z: -1.5 };
-                weaponConfig.rotation = {
-                    x: 0,
-                    y: 0,
-                    z: -0.0995
-                };
-                weaponConfig.scale = 2.5748;
-            }
-            weaponConfigs.push(weaponConfig);
-        }
+        const weaponConfigs = this._generateWeaponConfigs(weaponPaths);
+        await this._loadAndInstantiateWeapons(weaponConfigs);
         
-        // Create weapon instances and load textures
-        const loadPromises = [];
-        weaponConfigs.forEach(config => {
-            let weapon;
-            // Treat saber hilts as melee for now
-            if (config.category === 'saberhiltoverlayer') {
-                weapon = new SaberWeapon(config);
-            } else if (['pistol', 'rifle', 'longarm', 'unique'].includes(config.category)) {
-                weapon = new RangedWeapon(config);
-            } else { // generic melee
-                weapon = new MeleeWeapon(config);
-            }
-            weapon.camera = this.camera; // Pass camera reference
-            this.weapons.push(weapon);
-            // Apply saber-specific transform overrides from the config
-            weapon.basePosition.set(config.basePosition.x, config.basePosition.y, config.basePosition.z);
-            // We store rotation and scale in the config to be applied when the weapon is activated.
-            this.weaponHolder.add(weapon.mesh);
-            loadPromises.push(weapon.loadTextures());
-        });
+        await this._addStartingGear();
         
-        await Promise.all(loadPromises);
-
-        // Set the first weapon as active
-        if (this.weapons.length > 0) {
-            this.activeWeapon = this.weapons[0];
-            this.activeWeapon.setAsActive();
+        // Set initial active weapon if available
+        if (this.slots[0] && this.slots[0][0]) {
+            this.activeWeaponIndex = 0;
+            this.setActiveWeapon(0);
         }
     }
 
+    // _generateWeaponConfigs and _loadAndInstantiateWeapons remain the same...
+    _generateWeaponConfigs(paths) {
+        const weaponConfigs = [];
+        const processedWeapons = new Set();
+
+        for (const path of paths) {
+            const pathPrefix = '/data/gonkonlyweapons/';
+            if (!path.startsWith(pathPrefix)) continue;
+            const relativePath = path.substring(pathPrefix.length);
+            const parts = relativePath.split('/');
+            if (parts.length < 2) continue;
+            
+            const category = parts[0];
+            const filenameWithExt = parts[parts.length - 1];
+            const filename = filenameWithExt.replace('.png', '');
+            if (!filename) continue;
+
+            let baseKey = filename;
+            if (filename.includes('gmelee_zapper_')) {
+                baseKey = 'gmelee_zapper';
+            }
+            
+            if (processedWeapons.has(baseKey)) continue;
+
+            let name = filename;
+            if (name.startsWith('g')) name = name.slice(1);
+            
+            if (filename.includes('gmelee_zapper')) {
+                 name = 'Zapper';
+            } else {
+                 const nameParts = name.split('_');
+                 name = nameParts.length > 1 ? nameParts[1] : name;
+                 name = name.charAt(0).toUpperCase() + name.slice(1);
+            }
+
+            const isZapper = baseKey === 'gmelee_zapper';
+            const isSaber = category === 'saberhiltoverlayer';
+
+            const frames = {};
+            if (isZapper) {
+                 const zapperPath = 'melee/gmelee_zapper/gmelee_zapper';
+                 frames.a = `${zapperPath}_a`;
+                 frames.b = `${zapperPath}_b`;
+                 frames.c = `${zapperPath}_c`;
+                 frames.d = `${zapperPath}_d`;
+                 frames.e = `${zapperPath}_e`;
+                 processedWeapons.add(baseKey);
+            } else if (isSaber) {
+                frames.idle = `saberhiltoverlayer/${filename}`;
+                processedWeapons.add(filename);
+            } else {
+                frames.idle = `${category}/${filename}`;
+                processedWeapons.add(filename);
+            }
+
+            const baseConfig = {
+                key: filename,
+                name: name.replace(/_/g, ' '),
+                category: category,
+                frames: frames,
+                glow: { color: "#0088ff", intensity: 1.5, distance: 3, decay: 2 },
+                fadeTime: 0.15,
+                basePosition: { x: -0.815, y: -0.624, z: -1.5 },
+                rotation: { x: 0, y: 0, z: -0.1 },
+                scale: 1.4872,
+                damage: 10,
+                range: category === 'melee' || isSaber ? 1.5 : 15.0,
+                cone: 0.8,
+                energyCost: 30
+            };
+            
+            if (isSaber) {
+                baseConfig.basePosition = { x: -0.9898, y: -0.4164, z: -1.500 };
+                baseConfig.rotation = { x: -0.187, y: 0.388, z: 1.126 };
+                baseConfig.scale = 1.572;
+                baseConfig.glow.color = "#00ff00";
+            } else if (category === 'longarm') {
+                baseConfig.basePosition = { x: -0.6764, y: -0.624, z: -1.5 };
+                baseConfig.rotation = { x: 0, y: 0, z: -0.0227 };
+                baseConfig.scale = 2.6388;
+            } else if (category === 'rifle') {
+                baseConfig.basePosition = { x: -0.7809, y: -0.624, z: -1.5 };
+                baseConfig.rotation = { x: 0, y: 0, z: -0.0995 };
+                baseConfig.scale = 2.5748;
+            } else if (category === 'pistol') {
+                baseConfig.basePosition = { x: -0.957, y: -0.624, z: -1.5 };
+            } else if (category === 'unique') {
+                baseConfig.basePosition = { x: -0.7809, y: -0.624, z: -1.5 };
+            }
+            
+            weaponConfigs.push(baseConfig);
+        }
+        return weaponConfigs;
+    }
+    
+    async _loadAndInstantiateWeapons(configs) {
+        const loadPromises = [];
+        configs.forEach(config => {
+            let weapon;
+            if (config.category === 'saberhiltoverlayer') {
+                weapon = new SaberWeapon(config);
+            } else if (['pistol', 'rifle', 'longarm', 'unique'].includes(config.category) || config.category === 'longarm') {
+                weapon = new RangedWeapon(config);
+            } else {
+                weapon = new MeleeWeapon(config);
+            }
+            weapon.camera = this.camera;
+            this.weapons.push(weapon);
+            this.weaponHolder.add(weapon.mesh);
+            loadPromises.push(weapon.loadTextures());
+        });
+        await Promise.all(loadPromises);
+    }
+    
+    async _addStartingGear() {
+        // Unlock and equip starting gear with your default weapons
+        this.unlockedSlots = 7; // Unlock all 7 slots by default (melee, pistol, rifle, longarm, unique, saber, special)
+        // Set capacity for each slot
+        for (let i = 0; i < 7; i++) {
+            this.slotCapacity[i] = 1; // Each slot can hold 1 weapon initially
+        }
+
+        // Add zapper to melee slot (index 0)
+        const zapper = this.weapons.find(w => w.config.key.includes('gmelee_zapper'));
+        if (zapper) {
+            this.slots[0].push(zapper);
+            this.setActiveWeapon(0);
+        }
+
+        // Add Relby pistol to pistol slot (index 1)
+        const relby = this.weapons.find(w => w.config.key.includes('gpistol_relby'));
+        if (relby) {
+            this.slots[1].push(relby);
+        }
+
+        // Add EE-3 Boba rifle to rifle slot (index 2)
+        const ee3Boba = this.weapons.find(w => w.config.key.includes('grifle_ee3_boba'));
+        if (ee3Boba) {
+            this.slots[2].push(ee3Boba);
+        }
+
+        // Add F-11D Phasma longarm to longarm slot (index 3)
+        const f11dPhasma = this.weapons.find(w => w.config.key.includes('glong_f11d_phasma'));
+        if (f11dPhasma) {
+            this.slots[3].push(f11dPhasma);
+        }
+
+        // Add E-Web to unique slot (index 4)
+        const eweb = this.weapons.find(w => w.config.key.includes('gunique_eweb'));
+        if (eweb) {
+            this.slots[4].push(eweb);
+        }
+
+        // Add Luke's saber to saber slot (index 5)
+        const lukeSaber = this.weapons.find(w => w.config.key === 'gsaberhiltluke');
+        if (lukeSaber) {
+            this.slots[5].push(lukeSaber);
+            console.log(`Added Luke saber with key: ${lukeSaber.config.key}`);
+        } else {
+            console.warn('Could not find Luke saber weapon! Available sabers:',
+                this.weapons.filter(w => w.config.category === 'saberhiltoverlayer').map(w => w.config.key));
+        }
+
+        this.updateUI();
+    }
+
+    setStartingWeapon(category, weaponKey) {
+        const slotIndex = this.categories.indexOf(category);
+        if (slotIndex === -1 || slotIndex >= this.unlockedSlots) return;
+
+        const weaponInstance = this.weapons.find(w => w.config.key === weaponKey);
+        if (!weaponInstance) {
+            console.warn(`Cannot set starting weapon. Key not found: ${weaponKey}`);
+            return;
+        }
+
+        // Clear the slot and add the new starting weapon at the front.
+        const slot = this.slots[slotIndex];
+        slot.forEach(w => w.setAsInactive()); // Make sure old weapons are hidden
+        
+        // For simplicity, we replace the entire slot content with the new starting weapon
+        this.slots[slotIndex] = [weaponInstance];
+
+        // If this is the active slot, update the active weapon
+        if (this.activeWeaponIndex === slotIndex) {
+            this.setActiveWeapon(slotIndex);
+        }
+        this.updateUI();
+    }
+
+    async addWeapon(weaponKey) {
+        const newWeapon = this.weapons.find(w => w.config.key === weaponKey);
+        if (!newWeapon) {
+            console.warn(`Failed to add weapon: ${weaponKey}. Not found in pre-loaded weapons.`);
+            return;
+        }
+
+        const category = newWeapon.config.category;
+        const slotIndex = this.categories.indexOf(category);
+
+        if (slotIndex === -1 || slotIndex >= this.unlockedSlots) {
+            console.warn(`Cannot add weapon "${weaponKey}": Slot for category "${category}" is locked.`);
+            return;
+        }
+
+        const slot = this.slots[slotIndex];
+        const capacity = this.slotCapacity[slotIndex];
+
+        if (slot.length >= capacity) {
+            // Drop the oldest weapon (the one at the front of the array)
+            const droppedWeapon = slot.shift(); 
+            const dropPosition = window.physics.playerCollider.position.clone();
+            const droppedWeaponPickup = new WeaponPickup(droppedWeapon.config.key, dropPosition);
+            window.game.entities.droppedWeapons.push(droppedWeaponPickup);
+            console.log(`Slot full. Player dropped ${droppedWeapon.config.name}.`);
+        }
+
+        // Add the new weapon to the end of the array for this slot
+        slot.push(newWeapon);
+
+        // If the new weapon is for the currently active slot, make it active
+        if (this.activeWeaponIndex === slotIndex) {
+            this.setActiveWeapon(slotIndex);
+        } else {
+            newWeapon.setAsInactive();
+        }
+        
+        this.updateUI();
+        audioSystem.playSound('pickup');
+    }
+
     update(deltaTime, totalTime) {
+        if (this.isAttacking && game.state.playerStats.autofire) {
+            this.handlePrimaryAttack();
+        }
         if (this.activeWeapon) {
             this.activeWeapon.update(deltaTime, totalTime);
         }
     }
     
-    // ADDED: Weapon cycling logic
-    nextWeapon() {
-        if (this.weapons.length <= 1) return;
-        this.activeWeapon.setAsInactive();
-        this.activeWeaponIndex = (this.activeWeaponIndex + 1) % this.weapons.length;
-        this.activeWeapon = this.weapons[this.activeWeaponIndex];
-        this.activeWeapon.setAsActive();
+    _getFilledUnlockedSlots() {
+        // A slot is considered "filled" if it has at least one weapon in its array.
+        return this.slots.map((w, i) => (w.length > 0 && i < this.unlockedSlots) ? i : -1).filter(i => i !== -1);
     }
     
-    // ADDED: Weapon cycling logic
+    nextWeapon() {
+        const filledSlots = this._getFilledUnlockedSlots();
+        if (filledSlots.length <= 1) return;
+
+        const currentIndexInFilled = filledSlots.indexOf(this.activeWeaponIndex);
+        const nextIndexInFilled = (currentIndexInFilled + 1) % filledSlots.length;
+        const newSlotIndex = filledSlots[nextIndexInFilled];
+        
+        this.setActiveWeapon(newSlotIndex);
+    }
+    
     prevWeapon() {
-        if (this.weapons.length <= 1) return;
-        this.activeWeapon.setAsInactive();
-        this.activeWeaponIndex = (this.activeWeaponIndex - 1 + this.weapons.length) % this.weapons.length;
-        this.activeWeapon = this.weapons[this.activeWeaponIndex];
-        this.activeWeapon.setAsActive();
+        const filledSlots = this._getFilledUnlockedSlots();
+        if (filledSlots.length <= 1) return;
+
+        const currentIndexInFilled = filledSlots.indexOf(this.activeWeaponIndex);
+        const prevIndexInFilled = (currentIndexInFilled - 1 + filledSlots.length) % filledSlots.length;
+        const newSlotIndex = filledSlots[prevIndexInFilled];
+
+        this.setActiveWeapon(newSlotIndex);
     }
 
+    updateUI() {
+        const weaponContainer = document.querySelector('.weapon-display');
+        const ammoDisplay = document.getElementById('gameHudAmmo');
+
+        if (weaponContainer && this.activeWeapon) {
+            const weapon = this.activeWeapon;
+            let category = weapon.config.category || 'weapon';
+            if (category === 'saberhiltoverlayer') { category = 'saber'; }
+            let categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+            if (category === 'longarm') categoryName = 'Longarm';
+            
+            const weaponName = weapon.config.name;
+            weaponContainer.innerHTML = `<div class="ammo-label">${categoryName}</div><div id="gameHudWeapon" style="text-transform: capitalize;">${weaponName}</div>`;
+            if (ammoDisplay) { 
+                ammoDisplay.textContent = `${window.game.state.ammo}`; 
+            }
+        }
+    }
+
+    setActiveWeapon(index) {
+        if (index < 0 || index >= this.unlockedSlots) return;
+
+        const slot = this.slots[index];
+        if (!slot || slot.length === 0) return; // Nothing in this slot
+
+        if (this.activeWeapon) {
+            this.activeWeapon.setAsInactive();
+        }
+
+        this.activeWeaponIndex = index;
+        // The active weapon is the last one in the slot's array (most recently picked up)
+        this.activeWeapon = slot[slot.length - 1]; 
+        this.activeWeapon.setAsActive();
+        this.updateUI();
+    }
+    
+    // performMeleeHitDetection, handlePrimaryAttack, handleSecondaryAttack, handleForcePush remain the same...
     performMeleeHitDetection() {
-        // Ensure it's a melee weapon and is currently attacking
         if (!this.activeWeapon || !(this.activeWeapon instanceof MeleeWeapon) || this.activeWeapon.state !== 'attacking') return;
-
-        this.camera.updateWorldMatrix(true, true); // Ensure camera transform is up-to-date
-
-        const attackConfig = this.activeWeapon.config;
+        this.camera.updateWorldMatrix(true, true);
+        let attackConfig = { ...this.activeWeapon.config };
+        if (this.activeWeapon.config.category === 'melee' && game.state.playerStats.melee_damage_bonus) {
+            attackConfig.damage *= (1 + game.state.playerStats.melee_damage_bonus);
+        }
+        if (this.activeWeapon.config.category === 'saberhiltoverlayer' && game.state.playerStats.saber_damage_bonus) {
+            attackConfig.damage *= (1 + game.state.playerStats.saber_damage_bonus);
+        }
         const playerPos = new THREE.Vector3();
         this.camera.getWorldPosition(playerPos);
-
         const forward = new THREE.Vector3();
         this.camera.getWorldDirection(forward);
-
         let closestTarget = null;
         let minDistance = attackConfig.range;
-
         for (const npc of game.entities.npcs) {
             if (npc.isDead || npc.isAlly) continue;
-
-            const distance = playerPos.distanceTo(npc.mesh.group.position);
-
-            if (distance < minDistance) {
-                const toNpc = npc.mesh.group.position.clone().sub(playerPos).normalize();
+            const npcPos = npc.movementCollider.position;
+            const distance = playerPos.distanceTo(npcPos);
+            if (distance <= minDistance) {
+                const toNpc = npcPos.clone().sub(playerPos).normalize();
                 const dot = forward.dot(toNpc);
-
                 if (dot > attackConfig.cone) {
-                    closestTarget = npc;
-                    minDistance = distance;
+                    if (!closestTarget || distance < playerPos.distanceTo(closestTarget.movementCollider.position)) {
+                        closestTarget = npc;
+                    }
                 }
             }
         }
-
         if (closestTarget) {
             closestTarget.takeDamage(attackConfig.damage, window.physics.playerEntity);
-            // If the weapon is a saber, play a strike sound on hit
             if (this.activeWeapon.config.category === 'saberhiltoverlayer') {
                 audioSystem.playPositionalSoundFromList('saberstrike', closestTarget.mesh.group.position, 0.8);
             }
         }
     }
-
-    handlePrimaryAttack() { // LEFT CLICK
+    handlePrimaryAttack() {
         if (this.activeWeapon) {
             this.activeWeapon.attack();
-            // Melee hit detection is now called from within MeleeWeapon.attack()
             this.performMeleeHitDetection();
         }
     }
+    handleSecondaryAttack() { // RIGHT CLICK - Throw pamphlet
+        if (window.game.state.ammo <= 0) {
+            audioSystem.playSoundFromList('empty');
+            return;
+        }
 
-    handleSecondaryAttack() { // RIGHT CLICK
-        if (game.state.ammo <= 0) return; 
-
-        game.state.ammo--;
+        window.game.state.ammo--;
         audioSystem.playSoundFromList('pamphlet');
 
         const cam = this.camera;
-        cam.updateWorldMatrix(true, true); // Ensure camera transform is up-to-date, including parents
+        cam.updateWorldMatrix(true, true);
 
         const position = new THREE.Vector3();
         cam.getWorldPosition(position);
@@ -662,10 +928,32 @@ class PlayerWeaponSystem {
         );
         window.game.entities.projectiles.push(pamphlet);
     }
-}
-
-
-// === INSTANTIATION ===
-if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-    window.playerWeaponSystem = new PlayerWeaponSystem();
+    handleForcePush() {
+        if (!game.state.playerStats.force_push) return;
+        const energyCost = 50;
+        if (window.game.state.energy < energyCost) {
+            audioSystem.playSoundFromList('empty');
+            return;
+        }
+        window.game.state.energy -= energyCost;
+        const playerPos = new THREE.Vector3();
+        this.camera.getWorldPosition(playerPos);
+        const forward = new THREE.Vector3();
+        this.camera.getWorldDirection(forward);
+        const pushRadius = 5;
+        const pushForce = 15;
+        for (const npc of game.entities.npcs) {
+            if (npc.isDead) continue;
+            const npcPos = npc.movementCollider.position;
+            const distance = playerPos.distanceTo(npcPos);
+            if (distance <= pushRadius) {
+                const toNpc = npcPos.clone().sub(playerPos).normalize();
+                const dot = forward.dot(toNpc);
+                if (dot > 0.5) {
+                    const force = toNpc.multiplyScalar(pushForce / (1 + distance));
+                    npc.movementCollider.velocity.add(force);
+                }
+            }
+        }
+    }
 }

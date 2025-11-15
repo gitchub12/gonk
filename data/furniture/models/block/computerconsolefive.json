@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/computerconsolefive",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/computerconsolefivepic",
+    "particle": "chronokillers_star_wars:blocks/computerconsolefivepic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/gray_wool",
+    "2": "chronokillers_star_wars:blocks/anvil",
+    "3": "chronokillers_star_wars:blocks/gold_ore",
+    "5": "chronokillers_star_wars:blocks/elevatorpanel"
+  }
+}

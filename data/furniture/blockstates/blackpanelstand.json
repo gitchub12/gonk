@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "chronokillers_star_wars:block/blackpanelstand"
+    },
+    "facing=east": {
+      "model": "chronokillers_star_wars:block/blackpanelstand",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronokillers_star_wars:block/blackpanelstand",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "chronokillers_star_wars:block/blackpanelstand",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "chronokillers_star_wars:block/blackpanelstand",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "chronokillers_star_wars:block/blackpanelstand",
+      "x": 90
+    }
+  }
+}

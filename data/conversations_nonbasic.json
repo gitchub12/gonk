@@ -1,0 +1,414 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations_nonbasic.json. Contains all phrases for non-Basic languages (Wookiee, Jawa, Droid, etc.) across all attitudes.",
+  "phrases": [
+    {
+      "text": "Rrrgwhr.",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_wookiee",
+      "attitude": "i1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "wookiee"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Wraarr. (Friendly)",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_wookiee",
+      "attitude": "h1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "wookiee"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "RRRAAARGH!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_wookiee",
+      "attitude": "m1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "wookiee"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "style_tags": [
+        "challenge"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Utinni?",
+      "type": [
+        "greeting",
+        "reply"
+      ],
+      "language": "language_jawa",
+      "attitude": "i1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "jawa"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ]
+    },
+    {
+      "text": "Ho ho ho! M'um m'aloo!",
+      "type": [
+        "greeting",
+        "reply"
+      ],
+      "language": "language_jawa",
+      "attitude": "h1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "jawa"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ]
+    },
+    {
+      "text": "SOOGA! SOOGA!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_jawa",
+      "attitude": "m1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "jawa"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "[Neutral beep-boop]",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_droid",
+      "attitude": "i1",
+      "from_faction": [
+        "droids"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "[Excited whistle-trill]",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_droid",
+      "attitude": "h1",
+      "from_faction": [
+        "droids"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "[Angry, discordant bleep]!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_droid",
+      "attitude": "m1",
+      "from_faction": [
+        "droids"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Yub nub?",
+      "type": [
+        "greeting",
+        "reply"
+      ],
+      "language": "language_ewok",
+      "attitude": "i1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "ewok"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ]
+    },
+    {
+      "text": "Eechu-ta! Eechu-ta!",
+      "type": [
+        "greeting",
+        "reply"
+      ],
+      "language": "language_ewok",
+      "attitude": "h1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "ewok"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ]
+    },
+    {
+      "text": "Glek! Glek!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_ewok",
+      "attitude": "m1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "ewok"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Mesa just lookin'.",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_gungan",
+      "attitude": "i1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gungan"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Hey-o, oke-day!",
+      "type": [
+        "greeting",
+        "reply"
+      ],
+      "language": "language_gungan",
+      "attitude": "h1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gungan"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ]
+    },
+    {
+      "text": "Yousa in big doo-doo dis time!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_gungan",
+      "attitude": "m1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gungan"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "style_tags": [
+        "challenge"
+      ],
+      "outcome": "combat"
+    },
+    {
+      "text": "Urh? Grunt.",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_gamorrean",
+      "attitude": "i1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gamorrean"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "Oink. Harr harr.",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_gamorrean",
+      "attitude": "h1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gamorrean"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "outcome": "end_dialogue"
+    },
+    {
+      "text": "GRAK! OORRRT!",
+      "type": [
+        "reply",
+        "response"
+      ],
+      "language": "language_gamorrean",
+      "attitude": "m1",
+      "from_faction": [
+        "aliens"
+      ],
+      "from_subgroup": [
+        "gamorrean"
+      ],
+      "to_faction": [
+        "any"
+      ],
+      "on_topic_received": [
+        "none",
+        "any"
+      ],
+      "style_tags": [
+        "challenge"
+      ],
+      "outcome": "combat"
+    }
+  ]
+}

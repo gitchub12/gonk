@@ -1,0 +1,12 @@
+{
+  "parent": "chronokillers_star_wars:custom/card_entry_gray",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/cardreadergraypic",
+    "particle": "chronokillers_star_wars:blocks/cardreadergraypic",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/slide_red",
+    "2": "chronokillers_star_wars:blocks/turtle_egg_very_cracked",
+    "3": "chronokillers_star_wars:blocks/turtle_egg",
+    "4": "chronokillers_star_wars:blocks/beehive_end"
+  }
+}

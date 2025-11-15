@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/strip_panel_three",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/strip_panel_three_recipe_pic",
+    "particle": "chronokillers_star_wars:blocks/strip_panel_three_recipe_pic",
+    "0": "chronokillers_star_wars:blocks/strip_panel_three",
+    "1": "chronokillers_star_wars:blocks/card_reader"
+  }
+}

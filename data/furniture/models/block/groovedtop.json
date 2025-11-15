@@ -1,0 +1,8 @@
+{
+  "parent": "chronokillers_star_wars:custom/grooved_east_west",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/grooved_top_pic",
+    "particle": "chronokillers_star_wars:blocks/grooved_top_pic",
+    "0": "chronokillers_star_wars:blocks/pink_wool"
+  }
+}

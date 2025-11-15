@@ -1,0 +1,9 @@
+{
+  "parent": "chronokillers_star_wars:custom/computer_console_twelve",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/computerconsoltwelve_pic",
+    "particle": "chronokillers_star_wars:blocks/computerconsoltwelve_pic",
+    "0": "chronokillers_star_wars:blocks/cyan_wool",
+    "1": "chronokillers_star_wars:blocks/pc_panelone"
+  }
+}

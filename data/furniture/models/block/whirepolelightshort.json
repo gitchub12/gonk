@@ -1,0 +1,10 @@
+{
+  "parent": "chronokillers_star_wars:custom/white_pole_light_short",
+  "textures": {
+    "all": "chronokillers_star_wars:blocks/white_pole_light_short",
+    "particle": "chronokillers_star_wars:blocks/white_pole_light_short",
+    "0": "chronokillers_star_wars:blocks/card_reader",
+    "1": "chronokillers_star_wars:blocks/white",
+    "-1": "chronokillers_star_wars:blocks/card_reader"
+  }
+}
