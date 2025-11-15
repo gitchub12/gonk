@@ -18,9 +18,7 @@ class MapScreen {
         this.destroyedShips = new Set(); // Ships destroyed this run
 
         this.factionIcons = {};
-        this.shipImages = {}; // Map of ship labels to Image objects
         this.loadFactionIcons();
-        this.loadShipImages();
 
         // Bind methods
         this.onWheel = this.onWheel.bind(this);
@@ -99,48 +97,6 @@ class MapScreen {
         }
     }
 
-    async loadShipImages() {
-        // Load random ship images for each faction
-        const factionFolders = {
-            'rebels': 'rebels',
-            'imperials': 'imperials',
-            'clones': 'clones',
-            'mandolorians': 'mandalorians',
-            'sith': 'sith',
-            'aliens': 'aliens',
-            'droids': 'droids',
-            'takers': 'takers'
-        };
-
-        for (const [faction, folder] of Object.entries(factionFolders)) {
-            // For each ship with this dominant faction, load a random ship image
-            // We'll do this on-demand in drawShip to get random selection
-            this.shipImages[faction] = [];
-
-            // Pre-load a few images per faction (we'll pick randomly)
-            const imageCount = 5; // Load 5 random ship images per faction
-            for (let i = 1; i <= imageCount; i++) {
-                const img = new Image();
-                img.src = `data/pngs/HUD/MapShips/${folder}/${this.getRandomShipImageName(faction, i)}`;
-                this.shipImages[faction].push(img);
-            }
-        }
-    }
-
-    getRandomShipImageName(faction, index) {
-        // Generate ship image filename based on faction naming patterns
-        const patterns = {
-            'clones': `clone_${10 + index}.png`,
-            'droids': `droidship_0${index}.png`,
-            'rebels': `rebel_0${index}.png`,
-            'imperials': `imperial_0${index}.png`,
-            'mandalorians': `mando_0${index}.png`,
-            'sith': `sith_0${index}.png`,
-            'aliens': `alien_0${index}.png`,
-            'takers': `taker_0${index}.png`
-        };
-        return patterns[faction] || `ship_${index}.png`;
-    }
 
     toggle() {
         this.isVisible = !this.isVisible;
@@ -363,20 +319,9 @@ class MapScreen {
         const showDetails = this.shouldShowDetails(ship.label, currentLevel);
         const isDestroyed = this.destroyedShips.has(ship.label);
 
-        // Draw ship image (greyscale PNG)
-        const factionImages = this.shipImages[ship.dominantFaction];
-        if (factionImages && factionImages.length > 0) {
-            // Pick a deterministic image based on ship label (so same ship always looks the same)
-            const imageIndex = parseInt(ship.label.replace(/[LR]/g, '')) % factionImages.length;
-            const shipImg = factionImages[imageIndex];
-
-            if (shipImg.complete) {
-                // Draw ship image with slight transparency
-                ctx.globalAlpha = 0.7;
-                ctx.drawImage(shipImg, x, y, this.shipWidth, this.shipHeight);
-                ctx.globalAlpha = 1.0;
-            }
-        }
+        // Draw base ship rectangle (dark gray background)
+        ctx.fillStyle = 'rgba(80, 80, 80, 0.6)';
+        ctx.fillRect(x, y, this.shipWidth, this.shipHeight);
 
         // Draw faction control overlays (split by control_percentage)
         const controlPercent = ship.control_percentage || 50;
