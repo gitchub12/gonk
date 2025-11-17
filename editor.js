@@ -37,6 +37,12 @@ class LevelEditor {
         this.overlayLayers = ['screen', 'panel'];
         this.activeLayerName = 'floor';
 
+        // Room tool state
+        this.roomSelectionStart = null;
+        this.roomSelectionEnd = null;
+        this.isSelectingRoom = false;
+        this.pendingRoomBounds = null;
+
         this.levelData = {}; this.layerOrder.forEach(layer => this.levelData[layer] = new Map());
         this.defaultTextures = {
             floor: { key: '/data/pngs/floor/floor_2.png', size: 1 },
@@ -651,7 +657,7 @@ class LevelEditor {
     }
 
     onMouseDown(e) {
-        if (e.target.closest('#leftPanel, .floating-toolbar, .top-right-ui, #properties-panel, #utility-layers')) return; // Added #utility-layers
+        if (e.target.closest('#leftPanel, .floating-toolbar, .top-right-ui, #properties-panel, #utility-layers, #room-panel')) return;
 
         if (this.activeLayerName === 'pillar' && e.button === 0) {
             const { x: worldX, y: worldY } = this.getMouseWorldCoords(e);
@@ -689,12 +695,33 @@ class LevelEditor {
                 this.ui.updatePalette();
                 return;
             }
+            if (this.activeTool === 'room' && this.isSelectingRoom) {
+                this.isSelectingRoom = false;
+                this.roomSelectionStart = null;
+                this.roomSelectionEnd = null;
+                this.statusMsg.textContent = 'Room selection cancelled.';
+                this.render();
+                return;
+            }
             const item = this.findHoveredItem(e);
             if (item) this.ui.showPropertiesPanel(item.key, item.data, item.layer);
             return;
         }
 
         if (e.button === 0) {
+            // Handle room tool specially
+            if (this.activeTool === 'room') {
+                const { x: gridX, y: gridY } = this.getGridCoordsFromEvent(e);
+                if (!this.isSelectingRoom) {
+                    this.isSelectingRoom = true;
+                    this.roomSelectionStart = { x: gridX, y: gridY };
+                    this.roomSelectionEnd = { x: gridX, y: gridY };
+                    this.statusMsg.textContent = 'Drag to select room bounds...';
+                }
+                this.render();
+                return;
+            }
+
             this.isPainting = true;
             if(this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'grid' && this.hoveredDrawableLine) {
                 this.dragPaintAxis = this.hoveredDrawableLine.type;
@@ -723,6 +750,32 @@ class LevelEditor {
     onMouseUp(e) {
         if (e.button === 1) this.isPanning = false;
         if (e.button === 0) {
+            // Handle room tool selection completion
+            if (this.activeTool === 'room' && this.isSelectingRoom && this.roomSelectionStart) {
+                const { x: gridX, y: gridY } = this.getGridCoordsFromEvent(e);
+                this.roomSelectionEnd = { x: gridX, y: gridY };
+
+                const x1 = Math.min(this.roomSelectionStart.x, this.roomSelectionEnd.x);
+                const y1 = Math.min(this.roomSelectionStart.y, this.roomSelectionEnd.y);
+                const x2 = Math.max(this.roomSelectionStart.x, this.roomSelectionEnd.x);
+                const y2 = Math.max(this.roomSelectionStart.y, this.roomSelectionEnd.y);
+
+                const width = x2 - x1 + 1;
+                const height = y2 - y1 + 1;
+
+                if (width >= 2 && height >= 1) {
+                    this.pendingRoomBounds = { x1, y1, x2, y2, width, height };
+                    this.ui.showRoomPanel(this.pendingRoomBounds);
+                    this.statusMsg.textContent = `Room selected: ${width}x${height}. Configure room settings.`;
+                } else {
+                    this.statusMsg.textContent = 'Room too small. Minimum 2x1.';
+                }
+
+                this.isSelectingRoom = false;
+                this.render();
+                return;
+            }
+
             this.isPainting = false;
             this.lastPlacedGrid = { x: null, y: null };
             this.dragPaintAxis = null;
@@ -740,6 +793,12 @@ class LevelEditor {
         document.getElementById('coords').textContent = `X: ${gridX}, Y: ${gridY}`;
 
         let needsRender = false;
+
+        // Handle room tool selection dragging
+        if (this.activeTool === 'room' && this.isSelectingRoom && this.roomSelectionStart) {
+            this.roomSelectionEnd = { x: gridX, y: gridY };
+            needsRender = true;
+        }
 
         const oldHoveredItem = this.hoveredItem;
         this.hoveredItem = this.findHoveredItem(e);
@@ -868,6 +927,56 @@ class LevelEditor {
             this.drawPillarPlacementPreview();
         }
 
+        // Draw room selection rectangle
+        if (this.activeTool === 'room' && this.roomSelectionStart && this.roomSelectionEnd) {
+            this.drawRoomSelectionPreview();
+        }
+
+        // Draw pending room bounds if panel is open
+        if (this.pendingRoomBounds && document.getElementById('room-panel').style.display !== 'none') {
+            this.drawPendingRoomBounds();
+        }
+
+        this.ctx.restore();
+    }
+
+    drawRoomSelectionPreview() {
+        const gs = this.gridSize;
+        const x1 = Math.min(this.roomSelectionStart.x, this.roomSelectionEnd.x);
+        const y1 = Math.min(this.roomSelectionStart.y, this.roomSelectionEnd.y);
+        const x2 = Math.max(this.roomSelectionStart.x, this.roomSelectionEnd.x);
+        const y2 = Math.max(this.roomSelectionStart.y, this.roomSelectionEnd.y);
+        const width = x2 - x1 + 1;
+        const height = y2 - y1 + 1;
+
+        this.ctx.save();
+        this.ctx.strokeStyle = '#ff8c00';
+        this.ctx.lineWidth = 4 / this.zoom;
+        this.ctx.setLineDash([10 / this.zoom, 10 / this.zoom]);
+        this.ctx.strokeRect(x1 * gs, y1 * gs, width * gs, height * gs);
+        this.ctx.fillStyle = 'rgba(255, 140, 0, 0.2)';
+        this.ctx.fillRect(x1 * gs, y1 * gs, width * gs, height * gs);
+
+        // Draw size label
+        this.ctx.setLineDash([]);
+        this.ctx.fillStyle = '#ff8c00';
+        this.ctx.font = `bold ${16 / this.zoom}px Arial`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(`${width}x${height}`, (x1 + width / 2) * gs, (y1 + height / 2) * gs);
+        this.ctx.restore();
+    }
+
+    drawPendingRoomBounds() {
+        const gs = this.gridSize;
+        const { x1, y1, width, height } = this.pendingRoomBounds;
+
+        this.ctx.save();
+        this.ctx.strokeStyle = '#00ff00';
+        this.ctx.lineWidth = 4 / this.zoom;
+        this.ctx.strokeRect(x1 * gs, y1 * gs, width * gs, height * gs);
+        this.ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+        this.ctx.fillRect(x1 * gs, y1 * gs, width * gs, height * gs);
         this.ctx.restore();
     }
 
@@ -1493,6 +1602,320 @@ class LevelEditor {
                 this.levelData[layerName] = new Map(loadedLayers[layerName]);
             }
         }
+    }
+
+    generateRoom(bounds, config) {
+        const { x1, y1, x2, y2, width, height } = bounds;
+        const { style, theme, wall2Key, wall3Key, ceilingHeight, elevation, hasWater, furnitureCount, npcConfig, randomPerGame } = config;
+
+        // Helper to get random texture from themed folder
+        const getThemedTextures = (layerType) => {
+            const basePath = `/data/pngs/${layerType}/${style}/${theme}/`;
+            const allTextures = this.assetManager.layerTextures[layerType] || [];
+            return allTextures.filter(p => p.startsWith(basePath));
+        };
+
+        const getRandomFrom = (arr) => {
+            if (!arr || arr.length === 0) return null;
+            return arr[Math.floor(Math.random() * arr.length)];
+        };
+
+        // Get textures for this style/theme
+        const wallTextures = getThemedTextures('wall');
+        const floorTextures = getThemedTextures('floor');
+        const ceilingTextures = getThemedTextures('ceiling');
+        const doorTextures = getThemedTextures('door');
+
+        // Fallback to any available textures if themed ones don't exist
+        const getAnyTexture = (layerType) => {
+            const textures = this.assetManager.layerTextures[layerType] || [];
+            return getRandomFrom(textures);
+        };
+
+        this.modifyState(() => {
+            // 1. Place floors
+            for (let y = y1; y <= y2; y++) {
+                for (let x = x1; x <= x2; x++) {
+                    const floorKey = getRandomFrom(floorTextures) || getAnyTexture('floor');
+                    if (floorKey) {
+                        const floorItem = {
+                            type: 'texture',
+                            key: floorKey,
+                            rotation: Math.floor(Math.random() * 4),
+                            properties: randomPerGame ? { randomize: true, style, theme, layerType: 'floor' } : {}
+                        };
+                        this.levelData.floor.set(`${x},${y}`, floorItem);
+                    }
+
+                    // Handle elevation if specified
+                    if (elevation > 0) {
+                        const elevationItem = {
+                            type: 'texture',
+                            key: `/data/pngs/elevation/${elevation}.png`,
+                            rotation: 0,
+                            properties: { elevation: elevation, wallsideTexture: `/data/pngs/elevationsides/${style}/${theme}/eside_default.png` }
+                        };
+                        this.levelData.elevation.set(`${x},${y}`, elevationItem);
+                    }
+
+                    // Handle water if specified
+                    if (hasWater) {
+                        const waterTextures = this.assetManager.layerTextures.water || [];
+                        const waterKey = getRandomFrom(waterTextures);
+                        if (waterKey) {
+                            this.levelData.water.set(`${x},${y}`, {
+                                type: 'texture',
+                                key: waterKey,
+                                rotation: 0,
+                                properties: {}
+                            });
+                        }
+                    }
+
+                    // Place ceilings
+                    const ceilingKey = getRandomFrom(ceilingTextures) || getAnyTexture('ceiling');
+                    if (ceilingKey) {
+                        const ceilingItem = {
+                            type: 'texture',
+                            key: ceilingKey,
+                            rotation: Math.floor(Math.random() * 4),
+                            properties: {
+                                heightMultiplier: ceilingHeight,
+                                wallsideTexture: `/data/pngs/ceilingsides/${style}/${theme}/cside_default.png`
+                            }
+                        };
+                        if (randomPerGame) ceilingItem.properties.randomize = true;
+                        this.levelData.ceiling.set(`${x},${y}`, ceilingItem);
+                    }
+                }
+            }
+
+            // 2. Place walls around the room perimeter
+            // Top wall (horizontal, along y1-1)
+            for (let x = x1; x <= x2; x++) {
+                const wallKey = getRandomFrom(wallTextures) || getAnyTexture('wall');
+                if (wallKey) {
+                    const wallData = {
+                        type: 'texture',
+                        key: wallKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    if (randomPerGame) wallData.properties.randomize = true;
+                    this.levelData.wall.set(`H_${x}_${y1 - 1}`, wallData);
+                }
+            }
+            // Bottom wall (horizontal, along y2)
+            for (let x = x1; x <= x2; x++) {
+                const wallKey = getRandomFrom(wallTextures) || getAnyTexture('wall');
+                if (wallKey) {
+                    const wallData = {
+                        type: 'texture',
+                        key: wallKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    if (randomPerGame) wallData.properties.randomize = true;
+                    this.levelData.wall.set(`H_${x}_${y2}`, wallData);
+                }
+            }
+            // Left wall (vertical, along x1-1)
+            for (let y = y1; y <= y2; y++) {
+                const wallKey = getRandomFrom(wallTextures) || getAnyTexture('wall');
+                if (wallKey) {
+                    const wallData = {
+                        type: 'texture',
+                        key: wallKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    if (randomPerGame) wallData.properties.randomize = true;
+                    this.levelData.wall.set(`V_${x1 - 1}_${y}`, wallData);
+                }
+            }
+            // Right wall (vertical, along x2)
+            for (let y = y1; y <= y2; y++) {
+                const wallKey = getRandomFrom(wallTextures) || getAnyTexture('wall');
+                if (wallKey) {
+                    const wallData = {
+                        type: 'texture',
+                        key: wallKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    if (randomPerGame) wallData.properties.randomize = true;
+                    this.levelData.wall.set(`V_${x2}_${y}`, wallData);
+                }
+            }
+
+            // 3. Place doors (10 squares from left edge, if room is wide enough)
+            if (width >= 10) {
+                const doorX = x1 + 9; // 10th square from left (0-indexed: 9)
+                const doorKey = getRandomFrom(doorTextures) || getAnyTexture('door') || getRandomFrom(wallTextures);
+
+                // Top door
+                if (doorKey) {
+                    // Remove wall where door goes
+                    this.levelData.wall.delete(`H_${doorX}_${y1 - 1}`);
+                    const doorData = {
+                        type: 'texture',
+                        key: doorKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    this.levelData.door.set(`H_${doorX}_${y1 - 1}`, doorData);
+                }
+
+                // Bottom door
+                if (doorKey) {
+                    this.levelData.wall.delete(`H_${doorX}_${y2}`);
+                    const doorData = {
+                        type: 'texture',
+                        key: doorKey,
+                        properties: { level2: wall2Key, level3: wall3Key }
+                    };
+                    this.levelData.door.set(`H_${doorX}_${y2}`, doorData);
+                }
+            }
+
+            // 4. Place furniture in inner area (not outer ring)
+            if (furnitureCount > 0 && width > 2 && height > 2) {
+                const innerX1 = x1 + 1;
+                const innerY1 = y1 + 1;
+                const innerX2 = x2 - 1;
+                const innerY2 = y2 - 1;
+                const innerWidth = innerX2 - innerX1 + 1;
+                const innerHeight = innerY2 - innerY1 + 1;
+
+                if (innerWidth > 0 && innerHeight > 0) {
+                    const furnitureKeys = Array.from(this.assetManager.assetIcons.keys());
+                    const placedFurniture = new Set();
+
+                    for (let i = 0; i < furnitureCount; i++) {
+                        let attempts = 0;
+                        while (attempts < 50) {
+                            const fx = innerX1 + Math.floor(Math.random() * innerWidth);
+                            const fy = innerY1 + Math.floor(Math.random() * innerHeight);
+                            const coordKey = `${fx},${fy}`;
+
+                            if (!placedFurniture.has(coordKey) && !this.levelData.assets.has(coordKey)) {
+                                const furnitureKey = getRandomFrom(furnitureKeys);
+                                if (furnitureKey) {
+                                    this.levelData.assets.set(coordKey, {
+                                        type: 'asset',
+                                        key: furnitureKey,
+                                        rotation: Math.floor(Math.random() * 4),
+                                        properties: {}
+                                    });
+                                    placedFurniture.add(coordKey);
+                                }
+                                break;
+                            }
+                            attempts++;
+                        }
+                    }
+                }
+            }
+
+            // 5. Spawn NPCs based on threat
+            if (npcConfig.faction !== 'none' && npcConfig.totalThreat > 0) {
+                const innerX1 = x1 + 1;
+                const innerY1 = y1 + 1;
+                const innerX2 = x2 - 1;
+                const innerY2 = y2 - 1;
+                const innerWidth = innerX2 - innerX1 + 1;
+                const innerHeight = innerY2 - innerY1 + 1;
+
+                if (innerWidth > 0 && innerHeight > 0) {
+                    let remainingThreat = npcConfig.totalThreat;
+                    const placedNPCs = new Set();
+                    const usedTypes = new Set();
+
+                    while (remainingThreat > 0 && placedNPCs.size < innerWidth * innerHeight) {
+                        // Determine threat level for this NPC
+                        const maxThreat = Math.min(npcConfig.maxIndividualThreat, remainingThreat);
+                        const threat = Math.ceil(Math.random() * maxThreat);
+
+                        // Find a free spot
+                        let fx, fy, coordKey;
+                        let attempts = 0;
+                        do {
+                            fx = innerX1 + Math.floor(Math.random() * innerWidth);
+                            fy = innerY1 + Math.floor(Math.random() * innerHeight);
+                            coordKey = `${fx},${fy}`;
+                            attempts++;
+                        } while ((placedNPCs.has(coordKey) || this.levelData.npcs.has(coordKey)) && attempts < 100);
+
+                        if (attempts >= 100) break;
+
+                        // Create random NPC placeholder
+                        const subgroup = npcConfig.subgroup || 'all';
+                        const npcKey = `R${threat}_${npcConfig.faction}_${subgroup}`;
+
+                        // Check no-repeats constraint
+                        if (npcConfig.noRepeats && usedTypes.has(npcKey)) {
+                            remainingThreat -= threat;
+                            continue;
+                        }
+
+                        this.levelData.npcs.set(coordKey, {
+                            type: 'random_npc',
+                            key: npcKey,
+                            rotation: 0,
+                            properties: {
+                                threat: threat,
+                                macroCategory: npcConfig.faction,
+                                subgroup: subgroup
+                            }
+                        });
+
+                        placedNPCs.add(coordKey);
+                        usedTypes.add(npcKey);
+                        remainingThreat -= threat;
+                    }
+                }
+            }
+        });
+
+        this.statusMsg.textContent = `Room generated: ${width}x${height} with ${config.style}/${config.theme} theme.`;
+        this.pendingRoomBounds = null;
+        this.roomSelectionStart = null;
+        this.roomSelectionEnd = null;
+        this.render();
+    }
+
+    shuffleRoomTextures(bounds) {
+        // Re-randomize all textures within the room bounds
+        const { x1, y1, x2, y2 } = bounds;
+
+        this.modifyState(() => {
+            // Shuffle floors
+            for (let y = y1; y <= y2; y++) {
+                for (let x = x1; x <= x2; x++) {
+                    const floorItem = this.levelData.floor.get(`${x},${y}`);
+                    if (floorItem && floorItem.properties?.randomize) {
+                        const { style, theme, layerType } = floorItem.properties;
+                        const textures = this.assetManager.layerTextures[layerType]?.filter(p => p.includes(`/${style}/${theme}/`)) || [];
+                        if (textures.length > 0) {
+                            floorItem.key = textures[Math.floor(Math.random() * textures.length)];
+                            floorItem.rotation = Math.floor(Math.random() * 4);
+                        }
+                    }
+                }
+            }
+
+            // Shuffle walls
+            const wallLayers = ['wall', 'door'];
+            wallLayers.forEach(layer => {
+                for (const [key, item] of this.levelData[layer].entries()) {
+                    if (item.properties?.randomize) {
+                        // Reroll the texture
+                        const textures = this.assetManager.layerTextures[layer] || [];
+                        if (textures.length > 0) {
+                            item.key = textures[Math.floor(Math.random() * textures.length)];
+                        }
+                    }
+                }
+            });
+        });
+
+        this.statusMsg.textContent = 'Room textures shuffled.';
+        this.render();
     }
 }
 
