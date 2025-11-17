@@ -198,4 +198,229 @@ Not only not fixed, but the crate does not appear either.
 - Ship control percentage visualization
 - Dynamic faction color mixing during conflicts
 
+---
+
+## COMPREHENSIVE TASK ASSESSMENT (Based on Game Concept Document)
+
+### CURRENT PRIORITY: Skybox System (In Progress)
+- [ ] Fix broken skybox system (no skybox files currently exist in /data/pngs/skybox/)
+  - Current issue: Levels reference "hyper" skybox but files don't exist
+  - Need to either create/add skybox image files or handle missing files gracefully
+- [ ] Implement random selection from subfolder for static skyboxes
+  - Example: Select a random static skybox from "rebelinterior" subfolder
+  - Requires subfolder structure like: /data/pngs/skybox/rebelinterior/sky1.png, sky2.png, etc.
+  - Level editor needs UI to select "random from folder" option
+- [ ] Ensure animated skyboxes work correctly
+  - System exists (SkyboxAnimator class) but needs testing with actual animation frames
+  - Animated skyboxes are folders with numbered frames (e.g., /data/pngs/skybox/hyperspace/frame_0001.png, frame_0002.png, etc.)
+
+### CURRENT PRIORITY: Faction Dynamics Across Ship
+- [ ] Integrate faction system with multi-ship level structure
+  - How do faction relationships evolve across 50+ ships?
+  - Should each ship have its own faction state or shared state?
+  - How does player progress through ships affect faction dynamics?
+- [ ] Implement faction control percentage per ship
+  - Each ship segment can be controlled by different factions
+  - Visual representation on map screen
+- [ ] Create faction war/conflict visualization
+  - Moving lines showing dominance shifts
+  - Dynamic color mixing during conflicts
+- [ ] Periodic reports from up-ship about faction status
+  - Alert player to important faction changes
+  - Warnings about incoming threats
+
+### Core Gameplay Systems (Not Yet Implemented)
+
+#### Tutorial & Early Game
+- [ ] Quick tutorial sequence
+  - Hallway with locked doors
+  - First boss encounter (AT-ST) - intentional death
+  - Meet L4MP character
+  - Unlock pamphlets and gray doors
+- [ ] Mouse droid body
+  - Fast and unarmed but has pamphlets
+  - First alternative body type
+- [ ] Xerox droid encounter
+  - Get copy machine ability
+  - Copy system integration
+
+#### Boss Battle System
+- [ ] Boss encounter framework
+  - AT-ST boss (first encounter)
+  - Multiple boss types
+  - Boss-specific mechanics
+- [ ] Boss defeat rewards
+  - Spawn point unlocking
+  - Ability unlocks
+  - Story progression
+
+#### Ally & NPC Systems
+- [ ] NPC traits system (Sim-like)
+  - Courage, hunger, morale, etc.
+  - Traits affect behavior and effectiveness
+  - Click ally portrait to view traits
+  - Mystery mechanic (derivative traits vs true traits)
+- [ ] Advanced ally management
+  - Assign allies to ship segments (not just follow player)
+  - Task assignment system:
+    - Join Assault Squad
+    - Start Assault
+    - Defend
+    - Build Fortifications
+    - Parley (Gift, Alliance, Truce, Surrender, Bribe, Marriage, etc.)
+    - Sabotage
+    - Spy
+- [ ] MAD skills system
+  - Some NPCs have exceptional abilities (better than player)
+  - Can conquer ships alone
+  - Report system when ally in danger
+- [ ] Ally in danger alerts
+  - Notification when assigned allies need help
+  - Rescue missions
+
+#### Level & Ship Systems
+- [ ] Procedural level generation
+  - 25 procedural levels (in addition to 25 premade)
+  - Guaranteed path through even if procedural fails
+- [ ] Ship segment system
+  - UL, UR, LL, LR segments per ship
+  - Secret passages between segments
+- [ ] Ship variants
+  - Trap ships
+  - Garbage chute
+  - Arboretum
+  - Dining car
+  - Ejectable ships
+- [ ] Destroyable walls (Minecraft-inspired)
+  - Hull breach mechanics
+  - Enemies sucked into space
+  - Create bottlenecks
+  - Makes permanent enemies of ship inhabitants
+- [ ] Level linking improvements
+  - Two paths forward at any time (like Hades)
+  - Boons and punishments per path
+  - Choice consequences
+
+#### Player Progression
+- [ ] Stamp system (lost at death)
+  - Little ink stamps on body
+  - Stacking bonuses
+  - Alternative to weapon upgrades
+- [ ] Body type progression
+  - GNK model upgrades (texture swaps)
+  - Other droid types (faster fire rate, etc.)
+  - Extra gripper for lightsaber wielding
+- [ ] 2D sprite vs 3D model decision for populations
+  - Performance vs quality trade-off
+
+#### Enemy Systems
+- [ ] Darth Gonk enemy
+  - Opposite side of ship
+  - Recruiting characters to his cause
+  - Counter-player progression
+- [ ] Nemesis system (Shadow of Mordor inspired)
+  - Named enemies that remember encounters
+  - Procedural rivalries
+- [ ] Director AI (L4D inspired)
+  - Hits player hard when bored
+  - Dynamic difficulty
+  - Never winning, always on edge
+
+#### Gameplay Style Support
+- [ ] Shooter style: Wookiee squad beeline for Darth Gonk
+- [ ] Pacifist style: Empathy, no weapons, persuasion
+- [ ] Swarm style: Breeding/recruiting large groups
+- [ ] Strategist style: Traps, misinformation, sabotage, ambushes
+- [ ] Rancor handler: Befriend mobs and swarm
+- [ ] O2 Run: Vent everything to space, rule droid survivors
+- [ ] JEDI: Mind trick and force lightning
+- [ ] SITH: Join dark side, play from opposite end of ship
+
+#### Story & World
+- [ ] Gonk Pope lore
+  - Program, not person
+  - Transplanted to new body upon death
+  - Multiple playthrough body variety
+- [ ] Stormtrooper/Sith conversion
+  - Difficult persuasion checks
+  - High-value recruits
+- [ ] 10-15 alien groups (some done)
+- [ ] 10-15 droid groups (some done)
+- [ ] 10-15 stormtrooper groups (some done)
+- [ ] 10-15 unique scripted characters
+
+### RESOLVED/COMPLETED SYSTEMS
+- [x] Faction relationship physics system
+- [x] Conversation system
+- [x] Combat and weapons
+- [x] NPC AI and behavior
+- [x] Character upgrade tree
+- [x] Spare cores (extra lives)
+- [x] Death and respawn system
+- [x] Map screen (M key)
+- [x] Level editor
+- [x] Basic ally recruitment
+- [x] Team size limit (4 allies + player)
+
+### OUTSTANDING BUGS/ISSUES
+- [ ] Furniture system broken (holotable, crate collision)
+- [ ] Skybox system non-functional (no skybox files exist)
+- [ ] Overlay/hat layer not working for all humanoid models (only base layer renders)
+- [ ] External model types (Iron Golem, Snow Golem, Pig, Creeper, Slime) don't support overlay layers yet
+
+## Minecraft Model System (Session 4 - 2025-11-15)
+
+### Completed Tasks
+- [x] Created modular external model system in `/data/models/`
+- [x] Implemented Iron Golem model with proper UV mapping (128×128 texture)
+  - Parts: head, body, waist, rightArm, leftArm, rightLeg, leftLeg
+  - Custom slower walk animation for heavy character
+- [x] Implemented Snow Golem model (64×64 texture)
+  - Parts: head (pumpkin), upperBody, body, stick arms
+  - Waddle/slide animation
+- [x] Implemented Pig model (64×32 texture)
+  - Parts: head, snout, horizontal body, 4 legs
+  - Quadruped walk animation
+- [x] Implemented Creeper model (64×32 texture)
+  - Parts: head, thin vertical body, 4 legs
+  - Scuttle walk and puff-up attack animation
+- [x] Implemented Slime model (64×32 texture)
+  - Parts: transparent outer, opaque inner core, eyes, mouth
+  - Jump/squash/stretch animation
+- [x] Updated gonk_models.js with external model registration system
+  - `registerExternalModel()` method
+  - `initializeExternalModels()` to auto-register all available models
+  - Support for custom UV maps via `getUVMap()` function
+  - Support for custom animations via `applyAnimation()` function
+  - Support for custom ground offsets via `getGroundOffset()` function
+- [x] Updated index.html to load all external model scripts
+- [x] Added `minecraftModel` property to faction JSONs
+  - irongolem, xerox: use "irongolem" model
+  - bb8, gonk, mousedroid: use "slime" model
+- [x] Created comprehensive MODEL_SYSTEM_README.md documentation
+- [x] System uses `npcConfig.minecraftModel` to select 3D model type
+
+### Key Files Modified
+- `/home/user/gonk/gonk_models.js` - Core system with external model support
+- `/home/user/gonk/index.html` - Script loading for model definitions
+- `/home/user/gonk/data/factionJSONs/8_droids.json` - Added minecraftModel properties
+- `/home/user/gonk/data/models/irongolem/irongolem.js` - Iron Golem definition
+- `/home/user/gonk/data/models/snowgolem/snowgolem.js` - Snow Golem definition
+- `/home/user/gonk/data/models/pig/pig.js` - Pig definition
+- `/home/user/gonk/data/models/creeper/creeper.js` - Creeper definition
+- `/home/user/gonk/data/models/slime/slime.js` - Slime definition
+- `/home/user/gonk/data/models/MODEL_SYSTEM_README.md` - Full documentation
+
+### How to Use New Models
+1. Place Minecraft-format PNG skin in appropriate folder (e.g., `data/skins/droids/irongolem/`)
+2. Add entry to faction JSON with `"minecraftModel": "irongolem"` (or snowgolem/pig/creeper/slime)
+3. NPCs automatically use the correct 3D model with proper UV mapping
+
+### Future Model System Tasks
+- [ ] Add corner rounding system for heads and hand/feet illusions
+- [ ] Add overlay/hat layer support for external models
+- [ ] Add more Minecraft models (Zombie, Skeleton, Enderman, Villager)
+- [ ] LOD system for distant characters
+- [ ] Model preview in level editor
+
 ```

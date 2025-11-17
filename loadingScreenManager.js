@@ -145,20 +145,9 @@ class LoadingScreenManager {
         this.isActive = true;
         this.lastTime = performance.now();
 
-        // Play a random, non-lyrical song
-        if (window.audioSystem && audioSystem.musicCategories.length > 0) {
-            // Stop any currently playing music first
-            if (audioSystem.musicAudio && audioSystem.musicAudio.isPlaying) {
-                audioSystem.musicAudio.stop();
-                audioSystem.isMusicPlaying = false;
-            }
-
-            const nonLyricalCategories = audioSystem.musicCategories.filter(c => c.toLowerCase() !== 'lyrics');
-            if (nonLyricalCategories.length > 0) {
-                const randomCategory = nonLyricalCategories[Math.floor(Math.random() * nonLyricalCategories.length)];
-                audioSystem.playRandomTrackFromCategory(randomCategory);
-            }
-        }
+        // Defer music playback to allow level data to load first
+        // Music will be started when pendingMusicSettings is available
+        this.musicStarted = false;
         requestAnimationFrame(this.update);
     }
 
@@ -167,6 +156,31 @@ class LoadingScreenManager {
         const now = performance.now();
         const deltaTime = (now - this.lastTime) / 1000;
         this.lastTime = now;
+
+        // Start music once level data is loaded (levelDataParsed flag is set)
+        if (!this.musicStarted && window.audioSystem && audioSystem.musicCategories.length > 0 && window.levelManager?.levelDataParsed) {
+            // Stop any currently playing music first
+            if (audioSystem.musicAudio && audioSystem.musicAudio.isPlaying) {
+                audioSystem.musicAudio.stop();
+                audioSystem.isMusicPlaying = false;
+            }
+
+            // Check if level has specific music settings
+            const levelMusicSettings = window.levelManager?.pendingMusicSettings;
+            if (levelMusicSettings) {
+                console.log('[Music] Playing level-specific music:', levelMusicSettings);
+                audioSystem.playLevelMusic(levelMusicSettings);
+            } else {
+                // Level is loaded but no music settings defined - play random
+                console.log('[Music] No level music settings, playing random');
+                const nonLyricalCategories = audioSystem.musicCategories.filter(c => c.toLowerCase() !== 'lyrics');
+                if (nonLyricalCategories.length > 0) {
+                    const randomCategory = nonLyricalCategories[Math.floor(Math.random() * nonLyricalCategories.length)];
+                    audioSystem.playRandomTrackFromCategory(randomCategory);
+                }
+            }
+            this.musicStarted = true;
+        }
 
         if (!this.isAnswered && this.currentCorrectAnswer) {
             let newHighlight = null;

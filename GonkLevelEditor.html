@@ -370,6 +370,25 @@
                     <select id="default-ceiling-wall-select"></select>
                 </div>
             </div>
+            <div class="content-group">
+                <h4>Level Music</h4>
+                <div class="horizontal-group">
+                    <label for="music-type-select">Type:</label>
+                    <select id="music-type-select">
+                        <option value="random">Random (default)</option>
+                        <option value="category">Category</option>
+                        <option value="track">Specific Track</option>
+                    </select>
+                </div>
+                <div class="horizontal-group" id="music-category-container" style="display: none;">
+                    <label for="music-category-select">Category:</label>
+                    <select id="music-category-select"></select>
+                </div>
+                <div class="horizontal-group" id="music-track-container" style="display: none;">
+                    <label for="music-track-select">Track:</label>
+                    <select id="music-track-select"></select>
+                </div>
+            </div>
         </div>
     </div>
     <div id="canvasContainer">

@@ -31,7 +31,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "taker1.png"
+        "file": "taker1.png",
+        "scale_y": 0.8,
+        "scale_x": 1.3,
+        "scale_z": 1.3
       },
       {
         "threat": 3,
@@ -57,7 +60,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "flameskele.png"
+        "file": "flameskele.png",
+        "scale_y": 1.0,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 3,
@@ -83,7 +89,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "flamingSkull.png"
+        "file": "flamingSkull.png",
+        "scale_y": 1.0,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 5,
@@ -109,7 +118,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "NomAnor.png"
+        "file": "NomAnor.png",
+        "scale_y": 1.4,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 3,
@@ -135,7 +147,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeleduke.png"
+        "file": "skeleduke.png",
+        "scale_y": 1.0,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 5,
@@ -161,7 +176,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skeleking.png"
+        "file": "skeleking.png",
+        "scale_y": 1.4,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 4,
@@ -187,7 +205,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelemaster1.png"
+        "file": "skelemaster1.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 4,
@@ -213,7 +234,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelemaster2.png"
+        "file": "skelemaster2.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 4,
@@ -239,7 +263,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelemaster3.png"
+        "file": "skelemaster3.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 4,
@@ -265,7 +292,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelemaster4.png"
+        "file": "skelemaster4.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 2,
@@ -291,7 +321,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skelesuit.png"
+        "file": "skelesuit.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 2,
@@ -317,7 +350,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletoncool.png"
+        "file": "skeletoncool.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 1,
@@ -343,7 +379,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletongeneric.png"
+        "file": "skeletongeneric.png",
+        "scale_y": 0.8,
+        "scale_x": 1.3,
+        "scale_z": 1.3
       },
       {
         "threat": 2,
@@ -369,7 +408,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletonglowinrobe.png"
+        "file": "skeletonglowinrobe.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 1,
@@ -395,7 +437,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletoninsuit.png"
+        "file": "skeletoninsuit.png",
+        "scale_y": 0.8,
+        "scale_x": 1.3,
+        "scale_z": 1.3
       },
       {
         "threat": 5,
@@ -421,7 +466,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skeletonlord.png"
+        "file": "skeletonlord.png",
+        "scale_y": 1.4,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 2,
@@ -447,7 +495,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletonmask.png"
+        "file": "skeletonmask.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 2,
@@ -473,7 +524,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletonmobB1-battle-droid-on-planetminecraft-com.png"
+        "file": "skeletonmobB1-battle-droid-on-planetminecraft-com.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 3,
@@ -499,7 +553,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skeletonrobes.png"
+        "file": "skeletonrobes.png",
+        "scale_y": 1.0,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 1,
@@ -525,7 +582,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skelewar1.png"
+        "file": "skelewar1.png",
+        "scale_y": 0.8,
+        "scale_x": 1.3,
+        "scale_z": 1.3
       },
       {
         "threat": 2,
@@ -551,7 +611,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skelewar2.png"
+        "file": "skelewar2.png",
+        "scale_y": 0.9,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 3,
@@ -577,7 +640,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_vong.png",
-        "file": "skelewar3.png"
+        "file": "skelewar3.png",
+        "scale_y": 1.0,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 4,
@@ -603,7 +669,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelewar4.png"
+        "file": "skelewar4.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 5,
@@ -629,7 +698,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skelewar5.png"
+        "file": "skelewar5.png",
+        "scale_y": 1.4,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       },
       {
         "threat": 4,
@@ -655,7 +727,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skullknight.png"
+        "file": "skullknight.png",
+        "scale_y": 1.2,
+        "scale_x": 1.1,
+        "scale_z": 1.1
       },
       {
         "threat": 5,
@@ -681,7 +756,10 @@
         "charm_defense": 60,
         "armType": "steve",
         "default_weapon": "melee_amphistaff_yuuzhanvong.png",
-        "file": "skulllord.png"
+        "file": "skulllord.png",
+        "scale_y": 1.4,
+        "scale_x": 1.2,
+        "scale_z": 1.2
       }
     ]
   }

@@ -4483,7 +4483,7 @@
             "scale_z": 1,
             "flyspeed": 0,
             "threat": 3,
-            "melee_damage": 25,
+            "melee_damage": 30,
             "attack_cooldown": 1.17,
             "attack_range": 3,
             "accuracy": 142.5,
@@ -4723,71 +4723,6 @@
             "name": "XF XL"
           },
           "rotation": 0
-        }
-      ],
-      [
-        "10,35",
-        {
-          "type": "npc",
-          "key": "501st Legion/Standard Sharpshooter",
-          "rotation": 0,
-          "properties": {
-            "baseType": "clone",
-            "alphaTexture": true,
-            "name": "cloneF cloneL"
-          }
-        }
-      ],
-      [
-        "33,51",
-        {
-          "type": "npc",
-          "key": "IG-88",
-          "rotation": 0,
-          "properties": {
-            "baseType": "droid_humanoid",
-            "alphaTexture": true,
-            "name": "droidF droidL"
-          }
-        }
-      ],
-      [
-        "33,52",
-        {
-          "type": "npc",
-          "key": "Boushh Princess Leia",
-          "rotation": 0,
-          "properties": {
-            "baseType": "human_female",
-            "alphaTexture": true,
-            "name": "femaleF femaleL"
-          }
-        }
-      ],
-      [
-        "33,53",
-        {
-          "type": "npc",
-          "key": "skeleking",
-          "rotation": 0,
-          "properties": {
-            "baseType": "taker",
-            "alphaTexture": true,
-            "name": "takerF takerL"
-          }
-        }
-      ],
-      [
-        "33,54",
-        {
-          "type": "npc",
-          "key": "Darth Gungan",
-          "rotation": 0,
-          "properties": {
-            "baseType": "darth",
-            "alphaTexture": true,
-            "name": "darthF darthL"
-          }
         }
       ]
     ],
@@ -7107,61 +7042,6 @@
             "level3": "/data/pngs/wall/wall3/wall3_default.png"
           }
         }
-      ],
-      [
-        "H_33_50",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/wall_6.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_33_51",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/wall_6.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_33_52",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/wall_6.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_33_53",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/wall_6.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "H_33_54",
-        {
-          "type": "texture",
-          "key": "/data/pngs/wall/wall_6.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
       ]
     ],
     "door": [
@@ -7324,50 +7204,6 @@
         {
           "type": "texture",
           "key": "/data/pngs/door/door_1.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_32_51",
-        {
-          "type": "texture",
-          "key": "/data/pngs/door/grate_3.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_32_52",
-        {
-          "type": "texture",
-          "key": "/data/pngs/door/grate_3.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_32_53",
-        {
-          "type": "texture",
-          "key": "/data/pngs/door/grate_3.png",
-          "properties": {
-            "level2": "/data/pngs/wall/wall2/w2_default.png",
-            "level3": "/data/pngs/wall/wall3/wall3_default.png"
-          }
-        }
-      ],
-      [
-        "V_32_54",
-        {
-          "type": "texture",
-          "key": "/data/pngs/door/grate_3.png",
           "properties": {
             "level2": "/data/pngs/wall/wall2/w2_default.png",
             "level3": "/data/pngs/wall/wall3/wall3_default.png"

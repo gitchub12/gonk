@@ -7,6 +7,8 @@ class LevelManager {
     async loadLevel(levelId) {
         if(window.loadingScreenManager) window.loadingScreenManager.show();
         const playtestDataString = localStorage.getItem('gonk_level_to_play');
+        this.pendingMusicSettings = null; // Will be set after level data loads
+        this.levelDataParsed = false; // Reset flag for new level load
         try {
             // Shift ship control for the level we're leaving (not level 1, the home base)
             if (this.currentLevel && this.currentLevel !== 1 && window.mapScreen) {
@@ -42,6 +44,15 @@ class LevelManager {
             }
             const cleanText = rawText.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('#')).join('\n');
             levelData = JSON.parse(cleanText);
+
+            // Store level music settings for audio system to use
+            if (levelData.settings && levelData.settings.defaults && levelData.settings.defaults.music) {
+                this.pendingMusicSettings = levelData.settings.defaults.music;
+                console.log('[LevelManager] Found music settings:', this.pendingMusicSettings);
+            } else {
+                console.log('[LevelManager] No music settings in level data');
+            }
+            this.levelDataParsed = true; // Signal that level data has been parsed
 
             if (!this.nameData) {
                 const nameDataResponse = await fetch('data/npc_names.json');

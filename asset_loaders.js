@@ -164,7 +164,17 @@ class AssetManager {
             for (const textureEntry of group.textures) {
                 const textureFile = typeof textureEntry === 'string' ? textureEntry : textureEntry.file;
                 const skinName = textureFile.replace('.png', '');
-                const config = { ...this.npcGroups._globals, ...(this.npcGroups._base_type_defaults[groupKey] || {}), ...(typeof textureEntry === 'object' ? textureEntry : { file: textureEntry }), file: textureFile, baseType: group.baseType, faction: group.faction, macroCategory: group.macroCategory, groupKey: groupKey };
+                const config = {
+                    ...this.npcGroups._globals,
+                    ...(this.npcGroups._base_type_defaults[groupKey] || {}),
+                    ...(typeof textureEntry === 'object' ? textureEntry : { file: textureEntry }),
+                    file: textureFile,
+                    baseType: group.baseType,
+                    faction: group.faction,
+                    macroCategory: group.macroCategory,
+                    groupKey: groupKey,
+                    minecraftModel: group.minecraftModel || null // Include the 3D model type from group definition
+                };
                 this.npcIcons.set(skinName, { config });
             }
         }
@@ -359,6 +369,7 @@ class AssetManager {
                         if (skyboxInfo && skyboxInfo.type === 'static') {
                             texturePaths.add(skyboxInfo.path);
                         }
+                        // Note: random_static and animation types load dynamically, not here
                     }
                 } else { // Handle other defaults normally
                     if (defaults[key] && defaults[key].key) texturePaths.add(defaults[key].key);
@@ -370,10 +381,12 @@ class AssetManager {
         const currentSkyboxItem = levelData.layers.skybox ? new Map(levelData.layers.skybox).get('0,0') : (levelData.settings?.defaults.skybox || null);
         if (currentSkyboxItem && currentSkyboxItem.key) {
             const skyboxKey = currentSkyboxItem.key.split('.')[0];
+            const skyboxType = currentSkyboxItem.properties?.type || 'static';
             const skyboxInfo = this.skyboxSets.get(skyboxKey);
-            if (skyboxInfo && skyboxInfo.type === 'static') {
+            if (skyboxInfo && skyboxType === 'static' && skyboxInfo.type === 'static') {
                 texturePaths.add(skyboxInfo.path);
             }
+            // Note: random_static and animation types load dynamically in createSkybox, not here
         }
 
         const texturePromises = Array.from(texturePaths).map(path => this.loadTexture(path));
@@ -467,19 +480,42 @@ class AssetManager {
                 const isDir = item.endsWith('/');
                 const name = isDir ? item.slice(0, -1) : item.replace(/\.(png|jpg)$/, '');
                 if (isDir) {
-                    this.skyboxSets.set(name, { type: 'animation', path: `${skyboxPath}${item}` });
+                    // Folders can be used for either animation or random_static
+                    // Store both types with the same path - the usage context determines behavior
+                    this.skyboxSets.set(name, { type: 'folder', path: `${skyboxPath}${item}` });
                 } else if (item.endsWith('.png') || item.endsWith('.jpg')) {
                     this.skyboxSets.set(name, { type: 'static', path: `${skyboxPath}${item}` });
                 }
             }
         } catch (error) {
-            console.warn("Could not discover skyboxes.", error);
+            console.warn("Could not discover skyboxes via directory listing.", error);
+        }
+
+        // Fallback: manually register known skybox files if discovery failed
+        if (this.skyboxSets.size === 0) {
+            console.log("Using fallback skybox registration...");
+            const skyboxPath = 'data/pngs/skybox/';
+            const knownSkyboxes = [
+                'fishdark3.png', 'fishdark.png', 'fish.png',
+                'blue_twilight_redclouds.png', 'bluenight_clouds.png', 'purpleaurora.png',
+                'qwantani_night.png', 'rostock_laage_airport.png',
+                'hangar.png', 'hangarihi.png', 'rebelhangarup.png',
+                '0002.png', 'Gemini_Generated_Image_k4f4kkk4f4kkk4f4.png',
+                'M3_Cinematic_Realism_equirectangular-jpg_interior_of_a_large_1593670413_455229.png',
+                'M3_Photoreal_equirectangular-jpg_wide_open_plaza_in_847306475_455207.png',
+                'M3_Sky_Dome_equirectangular-jpg_clear_blue_sky_bright_1478788763_455173.png'
+            ];
+            for (const file of knownSkyboxes) {
+                const name = file.replace(/\.(png|jpg)$/, '');
+                this.skyboxSets.set(name, { type: 'static', path: `${skyboxPath}${file}` });
+            }
+            console.log(`Registered ${this.skyboxSets.size} fallback skyboxes`);
         }
     }
 
     async loadAnimatedSkybox(key) {
         const skyboxInfo = this.skyboxSets.get(key);
-        if (!skyboxInfo || skyboxInfo.type !== 'animation') return null;
+        if (!skyboxInfo || skyboxInfo.type !== 'folder') return null;
 
         try {
             const loader = new THREE.TextureLoader();
@@ -500,6 +536,31 @@ class AssetManager {
             return textures.length > 0 ? textures : null;
         } catch (error) {
             console.error(`Failed to load animated skybox ${key}:`, error);
+            return null;
+        }
+    }
+
+    async loadRandomStaticSkybox(key) {
+        const skyboxInfo = this.skyboxSets.get(key);
+        if (!skyboxInfo || skyboxInfo.type !== 'folder') return null;
+
+        try {
+            const files = await this.fetchDirectoryListing(skyboxInfo.path);
+            const imageFiles = files.filter(f => f.endsWith('.png') || f.endsWith('.jpg'));
+
+            if (imageFiles.length === 0) {
+                console.warn(`No images found in skybox folder ${key}`);
+                return null;
+            }
+
+            // Pick a random image from the folder
+            const randomFile = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+            const fullPath = `${skyboxInfo.path}${randomFile}`;
+
+            console.log(`Selected random skybox: ${randomFile} from ${key}`);
+            return fullPath;
+        } catch (error) {
+            console.error(`Failed to load random static skybox ${key}:`, error);
             return null;
         }
     }

@@ -549,7 +549,9 @@ class ConversationController {
         }
         const fullSoundPath = `${path}${soundName}${extension}`;
         console.log(`[AudioDebug] Attempting to play: ${fullSoundPath}`);
-        window.audioSystem.playPositionalSound(fullSoundPath, speaker.mesh.group.position);
+        // Use voice volume for conversation audio
+        const voiceVolume = window.audioSystem.voiceVolume || 1.0;
+        window.audioSystem.playPositionalSound(fullSoundPath, speaker.mesh.group.position, voiceVolume);
     }
 
     getSpeakerSoundPath(speaker) {

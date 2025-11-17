@@ -680,6 +680,12 @@
                     { path: 'furniture.js?v=5', name: 'Furniture' },
                     { path: 'game_and_character_config.js', name: 'Game Config' },
                     { path: 'gonk_models.js', name: 'Gonk Models' },
+                    // External model definitions (loaded after core gonk_models.js)
+                    { path: 'data/models/irongolem/irongolem.js', name: 'Iron Golem Model' },
+                    { path: 'data/models/snowgolem/snowgolem.js', name: 'Snow Golem Model' },
+                    { path: 'data/models/pig/pig.js', name: 'Pig Model' },
+                    { path: 'data/models/creeper/creeper.js', name: 'Creeper Model' },
+                    { path: 'data/models/slime/slime.js', name: 'Slime Model' },
                     { path: 'faction_manager.js', name: 'Faction Manager' },
                     { path: 'weapon_pickup_manager.js', name: 'Weapon Pickup Manager' },
                     { path: 'animated_gauges.js', name: 'Animated Gauges' },
@@ -744,9 +750,14 @@
             window.playerWeaponSystem = new PlayerWeaponSystem();
             window.inputHandler = new InputHandler();
 
+            // Initialize external model definitions (Iron Golem, Snow Golem, Pig, Creeper, Slime)
+            if (window.gonkModels && window.gonkModels.initializeExternalModels) {
+                window.gonkModels.initializeExternalModels();
+            }
+
             // Instantiation of LNM must be inside initGame because its class definition depends on previous scripts.
             window.loadingScreenManager = new LoadingScreenManager();
-            
+
             // assetManager is guaranteed to exist here due to script load order change.
             await loadingScreenManager.loadTriviaData();
             await assetManager.loadEssentialData();

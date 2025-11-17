@@ -18,7 +18,8 @@ class AudioSystem {
         this.currentCategoryIndex = 0;
         this.currentTrackIndex = 0;
         this.isMusicPlaying = false;
-        this.musicVolume = 0.72; // Separate volume for music, increased by another 20% from 0.6
+        this.musicVolume = 0.432; // Decreased by 40% from 0.72 (0.72 * 0.6 = 0.432)
+        this.voiceVolume = 1.1; // Increased by 10% from default 1.0
         this.songTitleElement = null;
         this.songCategoryElement = null;
         this.musicVolumeElement = null;
@@ -185,6 +186,42 @@ class AudioSystem {
         this.currentCategoryIndex = this.musicCategories.indexOf(categoryName);
         this.currentTrackIndex = Math.floor(Math.random() * this.musicLibrary[categoryName].length);
         this.playCurrentMusicTrack();
+    }
+
+    playSpecificTrack(trackPath) {
+        // Find the category and track index for the given path
+        for (let catIndex = 0; catIndex < this.musicCategories.length; catIndex++) {
+            const category = this.musicCategories[catIndex];
+            const tracks = this.musicLibrary[category];
+            const trackIndex = tracks.indexOf(trackPath);
+            if (trackIndex !== -1) {
+                this.currentCategoryIndex = catIndex;
+                this.currentTrackIndex = trackIndex;
+                this.playCurrentMusicTrack();
+                return;
+            }
+        }
+        // If not found in library, play it directly
+        console.log(`Playing specific track: ${trackPath}`);
+        this.playMusic(trackPath, () => this.nextMusicTrack(true));
+        this.isMusicPlaying = true;
+    }
+
+    playLevelMusic(musicSettings) {
+        // Play music based on level settings
+        // musicSettings: { type: 'random' | 'category' | 'track', value?: string }
+        if (!musicSettings || musicSettings.type === 'random') {
+            // Default behavior: play random non-lyrical category
+            const nonLyricalCategories = this.musicCategories.filter(c => c.toLowerCase() !== 'lyrics');
+            if (nonLyricalCategories.length > 0) {
+                const randomCategory = nonLyricalCategories[Math.floor(Math.random() * nonLyricalCategories.length)];
+                this.playRandomTrackFromCategory(randomCategory);
+            }
+        } else if (musicSettings.type === 'category') {
+            this.playRandomTrackFromCategory(musicSettings.value);
+        } else if (musicSettings.type === 'track') {
+            this.playSpecificTrack(musicSettings.value);
+        }
     }
 
     togglePlayPauseMusic() {

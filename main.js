@@ -134,8 +134,30 @@ class InputHandler {
     if (e.code === 'Space') {
         e.preventDefault();
         if (window.physics) {
-            const didInteract = physics.interact();
-            if (!didInteract) { physics.jump(); }
+            physics.jump();
+            // Play random gonk sound on jump
+            const gonkSounds = [
+                'data/sounds/gonk/gonk_1.mp3',
+                'data/sounds/gonk/gonk_2.mp3',
+                'data/sounds/gonk/gonk_3.mp3',
+                'data/sounds/gonk/gonk_4.mp3',
+                'data/sounds/gonk/gonk_5.mp3',
+                'data/sounds/gonk/gonk_6.mp3',
+                'data/sounds/gonk/gonk_7.mp3',
+                'data/sounds/gonk/gonk_8.mp3',
+                'data/sounds/gonk/gonk_9.mp3',
+                'data/sounds/gonk/gonk_10.mp3',
+                'data/sounds/gonk/gonk_12.mp3',
+                'data/sounds/gonk/gonk_13.mp3',
+                'data/sounds/gonk/gonk_14.mp3',
+                'data/sounds/gonk/gonk_15.mp3',
+                'data/sounds/gonk/gonk_16.mp3',
+                'data/sounds/gonk/gonk_17.mp3'
+            ];
+            const randomSound = gonkSounds[Math.floor(Math.random() * gonkSounds.length)];
+            const audio = new Audio(randomSound);
+            audio.volume = 0.5;
+            audio.play().catch(err => console.log('Gonk sound failed:', err));
         }
     }
     if (e.code === 'KeyH') {

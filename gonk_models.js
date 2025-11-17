@@ -3,10 +3,12 @@
 // 1. Replaced per-face material creation with a single shared material per skin, massively reducing draw calls.
 // 2. Implemented direct UV mapping on geometries instead of texture cloning and offsetting, reducing memory and improving performance.
 // 3. Cached materials to prevent re-creation.
+// update: Added support for external model definitions (Iron Golem, Snow Golem, Pig, Creeper, Slime).
 
 class GonkModelSystem {
   constructor() {
     this.models = this.defineModels();
+    this.externalModels = new Map(); // Stores loaded external model definitions
     this.materialCache = new Map();
     if (typeof window.Logger === 'undefined') {
         window.Logger = {
@@ -14,6 +16,64 @@ class GonkModelSystem {
         };
     }
     Logger.debug('Gonk Model System initialized.');
+  }
+
+  // Register an external model definition
+  registerExternalModel(modelDef) {
+    if (!modelDef || !modelDef.name) {
+        Logger.warn('Cannot register model: missing name');
+        return;
+    }
+    this.externalModels.set(modelDef.name, modelDef);
+
+    // Also add to the models registry for compatibility
+    this.models[modelDef.name] = {
+        parts: modelDef.parts,
+        scale: modelDef.scale || 0.0625,
+        animationSpeed: modelDef.animationSpeed || 2.0,
+        textureWidth: modelDef.textureWidth,
+        textureHeight: modelDef.textureHeight
+    };
+
+    Logger.debug(`Registered external model: ${modelDef.name}`);
+  }
+
+  // Initialize and register all available external models
+  initializeExternalModels() {
+    // Check for each external model and register if available
+    console.log('[GonkModels] Initializing external models...');
+    if (window.IronGolemModel) {
+        this.registerExternalModel(window.IronGolemModel);
+        console.log('[GonkModels] Registered IronGolemModel');
+    } else {
+        console.warn('[GonkModels] IronGolemModel not found on window');
+    }
+    if (window.SnowGolemModel) {
+        this.registerExternalModel(window.SnowGolemModel);
+        console.log('[GonkModels] Registered SnowGolemModel');
+    } else {
+        console.warn('[GonkModels] SnowGolemModel not found on window');
+    }
+    if (window.PigModel) {
+        this.registerExternalModel(window.PigModel);
+        console.log('[GonkModels] Registered PigModel');
+    } else {
+        console.warn('[GonkModels] PigModel not found on window');
+    }
+    if (window.CreeperModel) {
+        this.registerExternalModel(window.CreeperModel);
+        console.log('[GonkModels] Registered CreeperModel');
+    } else {
+        console.warn('[GonkModels] CreeperModel not found on window');
+    }
+    if (window.SlimeModel) {
+        this.registerExternalModel(window.SlimeModel);
+        console.log('[GonkModels] Registered SlimeModel');
+    } else {
+        console.warn('[GonkModels] SlimeModel not found on window');
+    }
+    console.log(`[GonkModels] Total external models registered: ${this.externalModels.size}`);
+    console.log(`[GonkModels] Available model types: ${Array.from(this.externalModels.keys()).join(', ')}`);
   }
 
   defineModels() {
@@ -41,26 +101,8 @@ class GonkModelSystem {
         },
         scale: 0.0625,
         animationSpeed: 4.0
-      },
-      slime: {
-        parts: {
-          slimeBody: { size: [16, 16, 16], position: [0, 8, 0], pivot: [0, 0, 0], parent: null }
-        },
-        scale: 0.0625,
-        animationSpeed: 1.5
-      },
-       irongolem: {
-        parts: {
-            head: { size: [8, 10, 8], position: [0, 15, -1], pivot: [0, 0, 0], parent: 'body' },
-            body: { size: [14, 21, 10], position: [0, 2.5, 0], pivot: [0, 0, 0], parent: null },
-            rightArm: { size: [5, 30, 6], position: [9.5, 12, 0], pivot: [0, 0, 0], parent: 'body' },
-            leftArm: { size: [5, 30, 6], position: [-9.5, 12, 0], pivot: [0, 0, 0], parent: 'body' },
-            rightLeg: { size: [6, 31, 6], position: [4, -8, 0], pivot: [0, 0, 0], parent: 'body' },
-            leftLeg: { size: [6, 31, 6], position: [-4, -8, 0], pivot: [0, 0, 0], parent: 'body' }
-        },
-        scale: 0.0625,
-        animationSpeed: 2.0
-      },
+      }
+      // External models (irongolem, snowgolem, pig, creeper, slime) are registered dynamically
     };
   }
 
@@ -172,16 +214,38 @@ class GonkModelSystem {
     }
 
     let modelDef;
+    let externalModelDef = null;
     const armType = config.armType || 'steve';
-    if (modelType === 'humanoid') {
+
+    console.log(`[GonkModels] Creating mesh: modelType=${modelType}, characterType=${characterType}`);
+    console.log(`[GonkModels] External models available: ${Array.from(this.externalModels.keys()).join(', ')}`);
+
+    // Check if this is an external model type
+    if (this.externalModels.has(modelType)) {
+        externalModelDef = this.externalModels.get(modelType);
+        modelDef = this.models[modelType];
+        console.log(`[GonkModels] Using external model: ${modelType}, parts: ${Object.keys(modelDef.parts).join(', ')}`);
+    } else if (modelType === 'humanoid') {
         modelDef = (armType === 'alex') ? this.models.humanoid_alex : this.models.humanoid;
+        console.log(`[GonkModels] Using humanoid model (${armType})`);
     } else {
         modelDef = this.models[modelType];
+        console.log(`[GonkModels] Using internal model: ${modelType}`);
     }
 
     if (!modelDef) {
         Logger.error(`Failed to find model definition for type: ${modelType}`);
         return null;
+    }
+
+    // Use external model's texture size if available, otherwise detect from skin
+    let textureWidth, textureHeight;
+    if (externalModelDef) {
+        textureWidth = externalModelDef.textureWidth || skinTexture.image.width;
+        textureHeight = externalModelDef.textureHeight || skinTexture.image.height;
+    } else {
+        textureWidth = skinTexture.image.width;
+        textureHeight = skinTexture.image.height;
     }
 
     const skinFormat = this.detectSkinFormat(skinTexture);
@@ -197,15 +261,20 @@ class GonkModelSystem {
       editorRArmRot: null,
       editorLArmRot: null,
       onMeleeHitFrame: null,
-      meleeHitFrameFired: false
+      meleeHitFrameFired: false,
+      externalModelDef: externalModelDef // Store reference for custom animations
     };
-    
+
     const baseMaterial = this.getOrCreateMaterial(config.skinTexture, false, config);
-    const overlayMaterial = skinFormat.hasOverlay ? this.getOrCreateMaterial(config.skinTexture, true, config) : null;
+    // External models typically don't have overlay layers (only humanoids do)
+    const overlayMaterial = (!externalModelDef && skinFormat.hasOverlay) ? this.getOrCreateMaterial(config.skinTexture, true, config) : null;
 
-    const buildOrder = ['body', 'head', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg', 'slimeBody'];
+    // Build all parts defined in the model
+    const partNames = Object.keys(modelDef.parts);
+    // Sort to ensure parents are built before children
+    const sortedParts = this.sortPartsByDependency(partNames, modelDef.parts);
 
-    for (const partName of buildOrder) {
+    for (const partName of sortedParts) {
       if (!modelDef.parts[partName]) continue;
 
       const partDef = modelDef.parts[partName];
@@ -213,20 +282,52 @@ class GonkModelSystem {
       const partGroup = new THREE.Group();
 
       const createLayer = (isOverlay) => {
-          const uvMap = this.getUVMapForFormat(partName, skinFormat, isOverlay, armType);
+          let uvMap;
+
+          // Use external model's UV map if available
+          if (externalModelDef && externalModelDef.getUVMap) {
+              uvMap = externalModelDef.getUVMap(partName, isOverlay);
+          } else {
+              uvMap = this.getUVMapForFormat(partName, skinFormat, isOverlay, armType);
+          }
+
           if (!uvMap) return;
 
           const size = isOverlay ? [ scaledSize[0] + 0.5, scaledSize[1] + 0.5, scaledSize[2] + 0.5 ] : scaledSize;
-          const geometry = this.createBoxGeometryWithUVs(size, uvMap, skinTexture.image.width, skinTexture.image.height);
-          
-          const material = isOverlay ? overlayMaterial : baseMaterial;
-          const mesh = new THREE.Mesh(geometry, material);
-          mesh.castShadow = !isOverlay;
+          const geometry = this.createBoxGeometryWithUVs(size, uvMap, textureWidth, textureHeight);
 
-          if (partName.includes('Arm') || partName.includes('Leg')) {
+          // Check if part should be transparent (e.g., slime outer layer)
+          let material = baseMaterial;
+          if (isOverlay) {
+              material = overlayMaterial;
+          } else if (partDef.transparent) {
+              // Create transparent material for this specific part
+              material = this.getOrCreateMaterial(config.skinTexture, false, { ...config, transparent: true });
+          }
+
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.castShadow = !isOverlay && !partDef.transparent;
+
+          // Position mesh within its group based on pivot point
+          if (externalModelDef && partDef.pivot) {
+              // External models define explicit pivot points - offset mesh so pivot is at group origin
+              const pivotOffset = [
+                  -partDef.pivot[0] * scaleX,
+                  -partDef.pivot[1] * scaleY,
+                  -partDef.pivot[2] * scaleZ
+              ];
+              mesh.position.set(pivotOffset[0], pivotOffset[1], pivotOffset[2]);
+          } else if (partName.includes('Arm') || partName.includes('Leg')) {
+              // Humanoid models: pivot at top for limbs
               mesh.position.set(0, -scaledSize[1] / 2, 0);
           } else if (partName === 'head') {
+              // Humanoid models: pivot at bottom for head
               mesh.position.set(0, scaledSize[1] / 2, 0);
+          }
+
+          // Apply any initial rotation defined in the part
+          if (partDef.rotation) {
+              mesh.rotation.set(partDef.rotation[0] || 0, partDef.rotation[1] || 0, partDef.rotation[2] || 0);
           }
 
           partGroup.add(mesh);
@@ -252,18 +353,45 @@ class GonkModelSystem {
 
     character.group.scale.setScalar(modelDef.scale * scale * universalScaleModifier);
 
+    // Calculate ground offset
     let groundOffset = 0;
-    if (modelType === 'humanoid') {
+    if (externalModelDef && externalModelDef.getGroundOffset) {
+        groundOffset = externalModelDef.getGroundOffset(scaleY, modelDef.scale * scale, universalScaleModifier);
+    } else if (modelType === 'humanoid') {
         groundOffset = 18 * scaleY * modelDef.scale * scale * universalScaleModifier;
-    } else if (modelType === 'irongolem') {
-        groundOffset = 21 * scaleY * modelDef.scale * scale * universalScaleModifier;
     } else if (modelType === 'slime') {
-        groundOffset = (modelDef.parts.slimeBody.size[1] / 2) * scaleY * modelDef.scale * scale * universalScaleModifier;
+        const slimePart = modelDef.parts.slimeBody || modelDef.parts.slimeOuter;
+        if (slimePart) {
+            groundOffset = (slimePart.size[1] / 2) * scaleY * modelDef.scale * scale * universalScaleModifier;
+        }
     }
     character.groundOffset = groundOffset;
     character.group.position.copy(position).y += groundOffset;
 
     return character;
+  }
+
+  // Sort parts so parents are built before children
+  sortPartsByDependency(partNames, partsDefinition) {
+    const sorted = [];
+    const visited = new Set();
+
+    const visit = (partName) => {
+        if (visited.has(partName)) return;
+        visited.add(partName);
+
+        const partDef = partsDefinition[partName];
+        if (partDef && partDef.parent && partNames.includes(partDef.parent)) {
+            visit(partDef.parent);
+        }
+        sorted.push(partName);
+    };
+
+    for (const partName of partNames) {
+        visit(partName);
+    }
+
+    return sorted;
   }
 
   createBoxGeometryWithUVs(size, uvMap, textureWidth, textureHeight) {
@@ -319,10 +447,18 @@ class GonkModelSystem {
         Object.values(parts).forEach(part => part.rotation.set(0,0,0));
     }
 
+    // Check if external model has custom animation handler
+    if (character.externalModelDef && character.externalModelDef.applyAnimation) {
+        if (!isPaused) {
+            character.externalModelDef.applyAnimation(character, character.animState, time, options);
+        }
+        return;
+    }
+
     if (parts.slimeBody) {
         const jumpPhase = time % 2.0;
         let scaleY = 1.0;
-        if (jumpPhase < 0.2) { scaleY = 1.0 - (jumpPhase / 0.2) * 0.5; } 
+        if (jumpPhase < 0.2) { scaleY = 1.0 - (jumpPhase / 0.2) * 0.5; }
         else if (jumpPhase >= 1.0 && jumpPhase < 1.2) { const landPhase = (jumpPhase - 1.0) / 0.2; scaleY = 0.5 + (1.0 - landPhase) * 0.5; }
         parts.slimeBody.scale.y = scaleY;
         return;

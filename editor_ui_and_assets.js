@@ -21,6 +21,8 @@ class EditorAssetManager {
         this.textureLayers.forEach(type => this.layerTextures[type] = []);
         this.skyboxStaticFiles = [];
         this.skyboxAnimationFolders = [];
+        this.musicLibrary = {}; // { category: [trackPath, ...], ... }
+        this.musicCategories = [];
     }
 
     async fetchDirectoryListing(path, extensions = ['.png'], allowDirectories = false) {
@@ -156,7 +158,7 @@ class EditorAssetManager {
 
                 // Attempt to find a real icon instead of a placeholder
                 const iconPath = `/data/furniture/textures/items/${modelKey}pic.png`;
-                
+
                 // Use a full GET request as HEAD can be unreliable on dev servers
                 const res = await fetch(iconPath);
                 if (res.ok) {
@@ -167,7 +169,62 @@ class EditorAssetManager {
             }
         } catch (e) { console.error("Failed to discover furniture assets:", e); }
 
+        // Discover music categories and tracks
+        await this.discoverMusic();
+
         return true;
+    }
+
+    async discoverMusic() {
+        const musicRoot = '/data/sounds/MUSIC/';
+        try {
+            const response = await fetch(musicRoot);
+            if (!response.ok) {
+                console.warn(`Music directory not found: ${musicRoot}`);
+                return;
+            }
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const links = Array.from(doc.querySelectorAll('a')).map(a => a.getAttribute('href'));
+
+            for (const href of links) {
+                if (href.endsWith('/') && !href.startsWith('..') && !href.startsWith('?')) {
+                    const categoryName = href.slice(0, -1);
+                    await this.discoverTracksInCategory(categoryName, musicRoot);
+                }
+            }
+            this.musicCategories = Object.keys(this.musicLibrary);
+            console.log(`Discovered ${this.musicCategories.length} music categories.`);
+        } catch (e) {
+            console.warn(`Could not scan music root directory: ${musicRoot}`, e);
+        }
+    }
+
+    async discoverTracksInCategory(category, musicRoot) {
+        const categoryPath = `${musicRoot}${category}/`;
+        try {
+            const response = await fetch(categoryPath);
+            if (!response.ok) return;
+
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const links = Array.from(doc.querySelectorAll('a')).map(a => a.getAttribute('href'));
+
+            const tracks = [];
+            for (const href of links) {
+                if (href.endsWith('.mp3') || href.endsWith('.ogg') || href.endsWith('.wav')) {
+                    tracks.push(`${categoryPath}${href}`);
+                }
+            }
+
+            if (tracks.length > 0) {
+                this.musicLibrary[category] = tracks;
+            }
+        } catch (e) {
+            console.warn(`Could not scan music category: ${categoryPath}`, e);
+        }
     }
 
     createPlaceholderIcon(name) {
@@ -1033,17 +1090,108 @@ class EditorUI {
         this.populateDefaultPalette('skybox', skyboxTextures);
 
 
-        const ceilingWallSelect = document.getElementById('default-ceiling-wall-select'); 
-        if (ceilingWallSelect) { 
-            (this.assetManager.layerTextures['ceilingsides'] || []).forEach(p => { if(p) ceilingWallSelect.add(new Option(p.split('/').pop(), p)); }); 
-            const dv = this.editor.defaultTextures.ceiling?.wallside; 
-            if (dv) ceilingWallSelect.value = dv; 
-            ceilingWallSelect.addEventListener('change', (e) => { 
-                this.editor.defaultTextures.ceiling = this.editor.defaultTextures.ceiling || {}; 
-                this.editor.defaultTextures.ceiling.wallside = e.target.value; 
-                this.editor.modifyState(() => {}); 
-            }); 
+        const ceilingWallSelect = document.getElementById('default-ceiling-wall-select');
+        if (ceilingWallSelect) {
+            (this.assetManager.layerTextures['ceilingsides'] || []).forEach(p => { if(p) ceilingWallSelect.add(new Option(p.split('/').pop(), p)); });
+            const dv = this.editor.defaultTextures.ceiling?.wallside;
+            if (dv) ceilingWallSelect.value = dv;
+            ceilingWallSelect.addEventListener('change', (e) => {
+                this.editor.defaultTextures.ceiling = this.editor.defaultTextures.ceiling || {};
+                this.editor.defaultTextures.ceiling.wallside = e.target.value;
+                this.editor.modifyState(() => {});
+            });
         }
+
+        // Populate music settings
+        this.populateMusicSettings();
+    }
+
+    populateMusicSettings() {
+        const musicTypeSelect = document.getElementById('music-type-select');
+        const musicCategoryContainer = document.getElementById('music-category-container');
+        const musicTrackContainer = document.getElementById('music-track-container');
+        const musicCategorySelect = document.getElementById('music-category-select');
+        const musicTrackSelect = document.getElementById('music-track-select');
+
+        if (!musicTypeSelect || !musicCategorySelect || !musicTrackSelect) return;
+
+        // Populate category dropdown
+        musicCategorySelect.innerHTML = '';
+        this.assetManager.musicCategories.forEach(cat => {
+            musicCategorySelect.add(new Option(cat, cat));
+        });
+
+        // Populate track dropdown (all tracks from all categories)
+        const populateTrackSelect = () => {
+            musicTrackSelect.innerHTML = '';
+            for (const category of this.assetManager.musicCategories) {
+                const tracks = this.assetManager.musicLibrary[category] || [];
+                tracks.forEach(trackPath => {
+                    let trackName = decodeURIComponent(trackPath.split('/').pop());
+                    trackName = trackName.replace(/\.mp3|\.ogg|\.wav/gi, '');
+                    musicTrackSelect.add(new Option(`${category}/${trackName}`, trackPath));
+                });
+            }
+        };
+        populateTrackSelect();
+
+        // Handle type switching
+        const updateMusicContainers = () => {
+            const type = musicTypeSelect.value;
+            musicCategoryContainer.style.display = type === 'category' ? 'flex' : 'none';
+            musicTrackContainer.style.display = type === 'track' ? 'flex' : 'none';
+        };
+
+        musicTypeSelect.addEventListener('change', () => {
+            updateMusicContainers();
+            this.updateMusicSetting();
+        });
+
+        musicCategorySelect.addEventListener('change', () => this.updateMusicSetting());
+        musicTrackSelect.addEventListener('change', () => this.updateMusicSetting());
+
+        // Initialize display
+        updateMusicContainers();
+
+        // Load existing music settings if present
+        const musicSettings = this.editor.defaultTextures.music;
+        if (musicSettings) {
+            if (musicSettings.type === 'category') {
+                musicTypeSelect.value = 'category';
+                musicCategorySelect.value = musicSettings.value || '';
+            } else if (musicSettings.type === 'track') {
+                musicTypeSelect.value = 'track';
+                musicTrackSelect.value = musicSettings.value || '';
+            } else {
+                musicTypeSelect.value = 'random';
+            }
+            updateMusicContainers();
+        }
+    }
+
+    updateMusicSetting() {
+        const musicTypeSelect = document.getElementById('music-type-select');
+        const musicCategorySelect = document.getElementById('music-category-select');
+        const musicTrackSelect = document.getElementById('music-track-select');
+
+        const type = musicTypeSelect.value;
+
+        if (type === 'random') {
+            // Remove music setting (use default random behavior)
+            delete this.editor.defaultTextures.music;
+        } else if (type === 'category') {
+            this.editor.defaultTextures.music = {
+                type: 'category',
+                value: musicCategorySelect.value
+            };
+        } else if (type === 'track') {
+            this.editor.defaultTextures.music = {
+                type: 'track',
+                value: musicTrackSelect.value
+            };
+        }
+
+        this.editor.modifyState(() => {});
     }
 
     updateSettingsUI() {
@@ -1054,6 +1202,38 @@ class EditorUI {
         }
         const cws = document.getElementById('default-ceiling-wall-select'); if (cws && this.editor.defaultTextures.ceiling) cws.value = this.editor.defaultTextures.ceiling.wallside || '';
         const chs = this.defaultTextureSelects['ceilingHeight']; if(chs && this.editor.defaultTextures.ceiling) chs.value = this.editor.defaultTextures.ceiling.heightMultiplier || '1';
+
+        // Update music settings UI
+        const musicTypeSelect = document.getElementById('music-type-select');
+        const musicCategorySelect = document.getElementById('music-category-select');
+        const musicTrackSelect = document.getElementById('music-track-select');
+        const musicCategoryContainer = document.getElementById('music-category-container');
+        const musicTrackContainer = document.getElementById('music-track-container');
+
+        if (musicTypeSelect) {
+            const musicSettings = this.editor.defaultTextures.music;
+            if (musicSettings) {
+                if (musicSettings.type === 'category') {
+                    musicTypeSelect.value = 'category';
+                    if (musicCategorySelect) musicCategorySelect.value = musicSettings.value || '';
+                    if (musicCategoryContainer) musicCategoryContainer.style.display = 'flex';
+                    if (musicTrackContainer) musicTrackContainer.style.display = 'none';
+                } else if (musicSettings.type === 'track') {
+                    musicTypeSelect.value = 'track';
+                    if (musicTrackSelect) musicTrackSelect.value = musicSettings.value || '';
+                    if (musicCategoryContainer) musicCategoryContainer.style.display = 'none';
+                    if (musicTrackContainer) musicTrackContainer.style.display = 'flex';
+                } else {
+                    musicTypeSelect.value = 'random';
+                    if (musicCategoryContainer) musicCategoryContainer.style.display = 'none';
+                    if (musicTrackContainer) musicTrackContainer.style.display = 'none';
+                }
+            } else {
+                musicTypeSelect.value = 'random';
+                if (musicCategoryContainer) musicCategoryContainer.style.display = 'none';
+                if (musicTrackContainer) musicTrackContainer.style.display = 'none';
+            }
+        }
     }
 
     populateElevationPalette() {
@@ -1160,14 +1340,19 @@ class EditorUI {
         controlsContainer.innerHTML = `
             <div class="content-group">
                 <h4>Skybox Selection</h4>
-                <div class="horizontal-group" style="justify-content: space-around; padding: 10px 0;">
+                <div class="horizontal-group" style="justify-content: space-around; padding: 10px 0; flex-wrap: wrap;">
                     <label><input type="radio" name="skybox-type" value="none" ${currentType === 'none' ? 'checked' : ''}> None</label>
                     <label><input type="radio" name="skybox-type" value="static" ${currentType === 'static' ? 'checked' : ''}> Static</label>
+                    <label><input type="radio" name="skybox-type" value="random_static" ${currentType === 'random_static' ? 'checked' : ''}> Random Static</label>
                     <label><input type="radio" name="skybox-type" value="animation" ${currentType === 'animation' ? 'checked' : ''}> Animated</label>
                 </div>
                 <div id="skybox-static-container" class="horizontal-group" style="display: none;">
                     <label for="skybox-static-select">Image:</label>
                     <select id="skybox-static-select"></select>
+                </div>
+                <div id="skybox-random-container" class="horizontal-group" style="display: none;">
+                    <label for="skybox-random-select">Folder:</label>
+                    <select id="skybox-random-select"></select>
                 </div>
                 <div id="skybox-animated-container" class="horizontal-group" style="display: none;">
                     <label for="skybox-animated-select">Animation:</label>
@@ -1177,14 +1362,17 @@ class EditorUI {
         this.paletteContainer.appendChild(controlsContainer);
 
         const staticContainer = document.getElementById('skybox-static-container');
+        const randomContainer = document.getElementById('skybox-random-container');
         const animatedContainer = document.getElementById('skybox-animated-container');
         const staticSelect = document.getElementById('skybox-static-select');
+        const randomSelect = document.getElementById('skybox-random-select');
         const animatedSelect = document.getElementById('skybox-animated-select');
         const radios = controlsContainer.querySelectorAll('input[name="skybox-type"]');
 
         this.populateSelect(staticSelect, this.assetManager.skyboxStaticFiles.map(f => f), '', true);
+        this.populateSelect(randomSelect, this.assetManager.skyboxAnimationFolders, '', true);
         this.populateSelect(animatedSelect, this.assetManager.skyboxAnimationFolders, '', true);
-        
+
         const updateSkybox = (type, key) => {
             this.editor.modifyState(() => {
                 this.editor.levelData.skybox.clear();
@@ -1202,20 +1390,25 @@ class EditorUI {
         const onTypeChange = () => {
             const selectedType = controlsContainer.querySelector('input[name="skybox-type"]:checked').value;
             staticContainer.style.display = selectedType === 'static' ? 'flex' : 'none';
+            randomContainer.style.display = selectedType === 'random_static' ? 'flex' : 'none';
             animatedContainer.style.display = selectedType === 'animation' ? 'flex' : 'none';
             let key = '';
             if (selectedType === 'static') key = staticSelect.value;
+            else if (selectedType === 'random_static') key = randomSelect.value;
             else if (selectedType === 'animation') key = animatedSelect.value;
             updateSkybox(selectedType, key);
         };
 
         radios.forEach(radio => radio.addEventListener('change', onTypeChange));
         staticSelect.addEventListener('change', () => updateSkybox('static', staticSelect.value));
+        randomSelect.addEventListener('change', () => updateSkybox('random_static', randomSelect.value));
         animatedSelect.addEventListener('change', () => updateSkybox('animation', animatedSelect.value));
 
         // Set initial state
         if (currentType === 'static') {
             staticSelect.value = currentKey;
+        } else if (currentType === 'random_static') {
+            randomSelect.value = currentKey;
         } else if (currentType === 'animation') {
             animatedSelect.value = currentKey;
         }

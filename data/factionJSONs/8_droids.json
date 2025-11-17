@@ -1722,6 +1722,7 @@
   "irongolem": {
     "name": "Large Droids",
     "baseType": "irongolem",
+    "minecraftModel": "irongolem",
     "faction": "droids",
     "macroCategory": "Droids",
     "path": "droids/irongolem/irongolem/",
@@ -1800,6 +1801,7 @@
   "xerox": {
     "name": "Xerox Droids",
     "baseType": "irongolem",
+    "minecraftModel": "irongolem",
     "faction": "droids",
     "macroCategory": "Droids",
     "path": "droids/irongolem/xerox/",
@@ -1817,6 +1819,7 @@
   "bb8": {
     "name": "BB Units",
     "baseType": "bb8",
+    "minecraftModel": "slime",
     "faction": "droids",
     "macroCategory": "Droids",
     "path": "droids/slime/bb8/",
@@ -1850,15 +1853,53 @@
       },
       {
         "file": "bb89.png"
+      }
+    ]
+  },
+  "snowgolem": {
+    "name": "Snow Golem Droids",
+    "baseType": "snowgolem",
+    "minecraftModel": "snowgolem",
+    "faction": "droids",
+    "macroCategory": "Droids",
+    "path": "droids/snowgolem/",
+    "textures": [
+      {
+        "file": "bb8snowgolem.png",
+        "threat": 2,
+        "health": 80,
+        "melee_damage": 6,
+        "attack_cooldown": 2.0,
+        "attack_range": 20,
+        "accuracy": 85,
+        "perception_radius": 35,
+        "aggro": 0.4,
+        "scale_x": 1.0,
+        "scale_z": 1.0,
+        "speed": 0.04,
+        "collision_radius": 0.6
       },
       {
-        "file": "snowgolem1.png"
+        "file": "meddroidsnowgolem.png",
+        "threat": 1,
+        "health": 60,
+        "melee_damage": 3,
+        "attack_cooldown": 3.0,
+        "attack_range": 12,
+        "accuracy": 80,
+        "perception_radius": 30,
+        "aggro": 0.3,
+        "scale_x": 0.9,
+        "scale_z": 0.9,
+        "speed": 0.035,
+        "collision_radius": 0.5
       }
     ]
   },
   "gonk": {
     "name": "Gonk Droids",
     "baseType": "gonk",
+    "minecraftModel": "slime",
     "faction": "droids",
     "macroCategory": "Droids",
     "path": "droids/slime/gonk/",
@@ -1875,6 +1916,7 @@
   "mousedroid": {
     "name": "Mouse Droids",
     "baseType": "mousedroid",
+    "minecraftModel": "slime",
     "faction": "droids",
     "macroCategory": "Droids",
     "path": "droids/slime/mousedroid/",

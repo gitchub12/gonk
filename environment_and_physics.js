@@ -596,11 +596,11 @@ class LevelRenderer {
 
 
     async createSkybox(item) {
-        if (window.game.skyboxAnimator) { 
-            window.game.skyboxAnimator.dispose(); 
-            window.game.skyboxAnimator = null; 
+        if (window.game.skyboxAnimator) {
+            window.game.skyboxAnimator.dispose();
+            window.game.skyboxAnimator = null;
         }
-        
+
         // Explicitly handle "None" selection
         if (!item || item.key === null || item.key === '') {
             window.game.scene.background = null;
@@ -608,26 +608,56 @@ class LevelRenderer {
         }
 
         const skyboxKey = item.key.replace(/\.(png|jpg)$/, ''); // Remove extension for lookup
+        const skyboxType = item.properties?.type || 'static';
         const skyboxInfo = assetManager.skyboxSets.get(skyboxKey);
+
         if (!skyboxInfo) {
-            console.warn(`Skybox key '${skyboxKey}' not found.`);
+            console.warn(`Skybox key '${skyboxKey}' not found. Using fallback color.`);
+            // Fallback to a space-like dark blue color instead of null
+            window.game.scene.background = new THREE.Color(0x000011);
             return;
         }
 
-        if (skyboxInfo.type === 'animation') {
+        if (skyboxType === 'animation') {
             const textures = await assetManager.loadAnimatedSkybox(skyboxKey);
             if (textures && textures.length > 0) {
                 window.game.skyboxAnimator = new SkyboxAnimator(textures);
                 if (window.game.renderer) {
                     await window.game.skyboxAnimator.initialize(window.game.renderer);
                 }
+            } else {
+                console.warn(`Failed to load animated skybox '${skyboxKey}'. Using fallback color.`);
+                window.game.scene.background = new THREE.Color(0x000011);
+            }
+        } else if (skyboxType === 'random_static') {
+            const randomPath = await assetManager.loadRandomStaticSkybox(skyboxKey);
+            if (randomPath) {
+                await assetManager.loadTexture(randomPath);
+                const texture = assetManager.getTexture(randomPath);
+                if (texture) {
+                    const pmremGenerator = new THREE.PMREMGenerator(window.game.renderer);
+                    pmremGenerator.compileEquirectangularShader();
+                    texture.mapping = THREE.EquirectangularReflectionMapping;
+                    texture.encoding = THREE.sRGBEncoding;
+                    const envMap = pmremGenerator.fromEquirectangular(texture);
+                    window.game.scene.background = envMap.texture;
+                    pmremGenerator.dispose();
+                } else {
+                    console.warn(`Failed to load random static skybox texture. Using fallback color.`);
+                    window.game.scene.background = new THREE.Color(0x000011);
+                }
+            } else {
+                console.warn(`Failed to select random static skybox from '${skyboxKey}'. Using fallback color.`);
+                window.game.scene.background = new THREE.Color(0x000011);
             }
         } else {
+            // Static skybox
             const pmremGenerator = new THREE.PMREMGenerator(window.game.renderer);
             pmremGenerator.compileEquirectangularShader();
             const texture = assetManager.getTexture(skyboxKey);
             if (!texture) {
-                console.warn(`Skybox texture for key '${skyboxKey}' not loaded.`);
+                console.warn(`Skybox texture for key '${skyboxKey}' not loaded. Using fallback color.`);
+                window.game.scene.background = new THREE.Color(0x000011);
                 pmremGenerator.dispose();
                 return;
             }

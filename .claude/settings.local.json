@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(mkdir -p:*)",
+      "WebSearch",
+      "WebFetch(domain:mcreator.net)",
+      "allow all"
     ],
     "deny": [],
     "ask": []
