@@ -423,4 +423,147 @@ Not only not fixed, but the crate does not appear either.
 - [ ] LOD system for distant characters
 - [ ] Model preview in level editor
 
+## Slicing System Implementation (Session 5 - 2025-11-17)
+
+### Completed Tasks
+- [x] Added `slicing_skill` stat to player base stats (gonk_base_stats.json)
+- [x] Created Slicing skill branch in upgrade tree with 8 nodes:
+  - slicing_starter: Unlocks basic slicing (Skill Level 1)
+  - slicing_2: Improved Slicing (Skill Level 2)
+  - slicing_3: Advanced Slicing (Skill Level 3)
+  - slicing_4: Expert Slicing (Skill Level 4)
+  - slicing_5: Master Slicing (Skill Level 5)
+  - slicing_speed_1: Quick Slice (20% faster slicing)
+  - slicing_silent: Silent Slice (failed attempts don't alert enemies)
+- [x] Implemented SlicingTerminal class with:
+  - Visual 3D representation (orange console with cyan screen)
+  - Difficulty rating (1-5)
+  - Linked spawn point conversion
+  - Linked door unlocking
+  - Success state visual feedback (green when sliced)
+- [x] Implemented SlicingSystem class with:
+  - Terminal management (add, remove, check nearby)
+  - Sliceable spawn point tracking
+  - Hold-to-slice mechanic with progress bar UI
+  - Skill level requirements (difficulty must match player skill)
+  - Speed bonuses from skill tree
+  - Cancel on release or move out of range
+- [x] Created UI elements:
+  - Terminal detection prompt (shows difficulty and requirements)
+  - Progress bar during slicing
+  - Success message on completion
+- [x] Integrated with existing game systems:
+  - Added to script loader in index.html
+  - Hooked into main game update loop
+  - Extended physics.interact() to check for terminals
+  - Added level loader support for terminals in JSON
+- [x] Added effect handlers in character_upgrades.js:
+  - slicing_skill: Increases slicing ability level
+  - slicing_speed_bonus: Increases slicing speed
+  - slicing_silent: Enables silent slicing
+- [x] Auto-unlocked slicing_starter for testing
+- [x] Added debug command `window.spawnTestTerminal(difficulty)` for testing
+
+### Key Files Modified
+- `/home/user/gonk/gonk_base_stats.json` - Added slicing_skill stat
+- `/home/user/gonk/data/upgrade_nodes.json` - Added 8 slicing skill nodes
+- `/home/user/gonk/character_upgrades.js` - Added effect handlers and auto-unlock
+- `/home/user/gonk/slicing_system.js` - NEW FILE: Core slicing system
+- `/home/user/gonk/main.js` - Added slicing system update call
+- `/home/user/gonk/environment_and_physics.js` - Extended interact() for terminals
+- `/home/user/gonk/levelManager.js` - Added terminal loading from level data
+- `/home/user/gonk/index.html` - Added slicing_system.js to script loader
+
+### How to Use Slicing
+
+**Testing in Console:**
+```javascript
+// Spawn a test terminal near player (difficulty 1-5)
+spawnTestTerminal(1);  // Easy terminal
+spawnTestTerminal(3);  // Medium difficulty
+spawnTestTerminal(5);  // High security
+
+// Check player's slicing skill
+game.state.playerStats.slicing_skill;  // Should be 1 after auto-unlock
+```
+
+**Adding Terminals to Level JSON:**
+```json
+{
+  "settings": { ... },
+  "layers": { ... },
+  "terminals": [
+    {
+      "x": 10,
+      "y": 0,
+      "z": 15,
+      "difficulty": 2,
+      "properties": {
+        "type": "spawn_control",
+        "linkedSpawnPointId": "hostile_spawn_1"
+      }
+    },
+    {
+      "x": 20,
+      "y": 0,
+      "z": 25,
+      "difficulty": 3,
+      "properties": {
+        "type": "door_unlock",
+        "linkedDoorId": "cell_door_1"
+      }
+    }
+  ]
+}
+```
+
+**Adding Sliceable Spawn Points:**
+In the level JSON's npcs layer, add `sliceable` and `sliceableId` properties:
+```json
+{
+  "layers": {
+    "npcs": [
+      {
+        "x": 5,
+        "y": 0,
+        "z": 10,
+        "type": "npc",
+        "npcType": "stormtrooper",
+        "sliceable": true,
+        "sliceableId": "hostile_spawn_1"
+      }
+    ]
+  }
+}
+```
+
+**Gameplay Flow:**
+1. Player acquires slicing skills from upgrade tree (Press C to open)
+2. Player approaches terminal (within 2 units)
+3. UI prompt shows terminal difficulty and player skill level
+4. If skill >= difficulty, hold E to slice
+5. Progress bar fills based on time (modified by skill bonuses)
+6. On success, linked spawn points convert to player control or doors unlock
+
+### Slicing Skill Costs (2^column formula)
+- slicing_starter (column 9): 512 wire
+- slicing_2 (column 10): 1024 wire
+- slicing_3 (column 11): 2048 wire
+- slicing_4 (column 10): 1024 wire
+- slicing_5 (column 11): 2048 wire
+- slicing_speed_1 (column 9): 512 wire
+- slicing_silent (column 9): 512 wire
+
+### Future Slicing System Enhancements
+- [ ] Add sound effects for slicing (start, progress, success, fail)
+- [ ] Add visual effects (sparks, holographic displays)
+- [ ] Implement failed slice consequences (alert enemies if not silent)
+- [ ] Add slicing minigame (optional puzzle for bonus rewards)
+- [ ] Create slicing terminal furniture asset for level editor
+- [ ] Add terminal icons to skill tree nodes
+- [ ] Implement door slicing (cell doors, security doors)
+- [ ] Add data terminal type (extract intel, reveal map sections)
+- [ ] Create enemy turret control terminals
+- [ ] Add ship systems terminals (disable shields, control airlocks)
+
 ```

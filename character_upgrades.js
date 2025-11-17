@@ -46,6 +46,14 @@ class CharacterUpgrades {
                     this.applyNodeEffects(pamphletSpeedNode);
                     console.log('Auto-unlocked Pamphlet Speed');
                 }
+
+                // Auto-unlock slicing starter for testing
+                const slicingStarterNode = this.nodes.find(n => n.id === 'slicing_starter');
+                if (slicingStarterNode) {
+                    this.purchasedNodes.add('slicing_starter');
+                    this.applyNodeEffects(slicingStarterNode);
+                    console.log('Auto-unlocked Slicing Training');
+                }
             }
         }, 100);
     }
@@ -295,6 +303,20 @@ class CharacterUpgrades {
                     // Enable ally-based ship control bonus
                     game.state.playerStats.prophets = value;
                     break;
+                case 'slicing_skill':
+                    // Increase slicing ability
+                    if (!game.state.playerStats.slicing_skill) game.state.playerStats.slicing_skill = 0;
+                    game.state.playerStats.slicing_skill += value;
+                    break;
+                case 'slicing_speed_bonus':
+                    // Increase slicing speed
+                    if (!game.state.playerStats.slicing_speed_bonus) game.state.playerStats.slicing_speed_bonus = 0;
+                    game.state.playerStats.slicing_speed_bonus += value;
+                    break;
+                case 'slicing_silent':
+                    // Enable silent slicing
+                    game.state.playerStats.slicing_silent = value;
+                    break;
 
                 // GONK
                 case 'max_energy':
@@ -373,6 +395,19 @@ class CharacterUpgrades {
                     break;
                 case 'prophets':
                     game.state.playerStats.prophets = 0;
+                    break;
+                case 'slicing_skill':
+                    if (game.state.playerStats.slicing_skill) {
+                        game.state.playerStats.slicing_skill -= value;
+                    }
+                    break;
+                case 'slicing_speed_bonus':
+                    if (game.state.playerStats.slicing_speed_bonus) {
+                        game.state.playerStats.slicing_speed_bonus -= value;
+                    }
+                    break;
+                case 'slicing_silent':
+                    game.state.playerStats.slicing_silent = false;
                     break;
 
                 // GONK

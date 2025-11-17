@@ -1113,6 +1113,19 @@ class PhysicsSystem {
     }
     interact() {
         const playerPos = this.playerCollider.position;
+
+        // Check for slicing terminals first
+        if (window.game && window.game.slicingSystem) {
+            const terminal = window.game.slicingSystem.checkNearbyTerminal();
+            if (terminal) {
+                const playerSkill = window.game.state.playerStats.slicing_skill || 0;
+                if (terminal.canSlice(playerSkill)) {
+                    window.game.slicingSystem.startSlicing();
+                    return true;
+                }
+            }
+        }
+
         let nearestDoor = null;
         let nearestDist = Infinity;
         for (const door of window.game.entities.doors) {

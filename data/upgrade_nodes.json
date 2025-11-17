@@ -1540,6 +1540,137 @@
         "x": 10,
         "y": 22
       }
+    },
+    {
+      "id": "slicing_starter",
+      "name": "Slicing Training",
+      "description": "Learn the basics of slicing terminals and systems. Unlocks basic slicing ability.",
+      "cost": 0,
+      "icon": "",
+      "prerequisites": [],
+      "effects": {
+        "slicing_skill": 1
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 9,
+        "y": 9
+      }
+    },
+    {
+      "id": "slicing_2",
+      "name": "Improved Slicing",
+      "description": "Increases your slicing skill. Can now slice difficulty 2 terminals.",
+      "cost": 4,
+      "icon": "",
+      "prerequisites": [
+        "slicing_starter"
+      ],
+      "effects": {
+        "slicing_skill": 1
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 10,
+        "y": 9
+      }
+    },
+    {
+      "id": "slicing_3",
+      "name": "Advanced Slicing",
+      "description": "Increases your slicing skill. Can now slice difficulty 3 terminals.",
+      "cost": 8,
+      "icon": "",
+      "prerequisites": [
+        "slicing_2"
+      ],
+      "effects": {
+        "slicing_skill": 1
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 11,
+        "y": 9
+      }
+    },
+    {
+      "id": "slicing_4",
+      "name": "Expert Slicing",
+      "description": "Increases your slicing skill. Can now slice difficulty 4 terminals and doors.",
+      "cost": 16,
+      "icon": "",
+      "prerequisites": [
+        "slicing_3"
+      ],
+      "effects": {
+        "slicing_skill": 1
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 10,
+        "y": 10
+      }
+    },
+    {
+      "id": "slicing_5",
+      "name": "Master Slicing",
+      "description": "Increases your slicing skill. Can now slice difficulty 5 high-security systems.",
+      "cost": 32,
+      "icon": "",
+      "prerequisites": [
+        "slicing_4"
+      ],
+      "effects": {
+        "slicing_skill": 1
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 11,
+        "y": 10
+      }
+    },
+    {
+      "id": "slicing_speed_1",
+      "name": "Quick Slice",
+      "description": "Slice terminals 20% faster.",
+      "cost": 8,
+      "icon": "",
+      "prerequisites": [
+        "slicing_starter"
+      ],
+      "effects": {
+        "slicing_speed_bonus": 0.2
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 9,
+        "y": 10
+      }
+    },
+    {
+      "id": "slicing_silent",
+      "name": "Silent Slice",
+      "description": "Failed slicing attempts no longer alert nearby enemies.",
+      "cost": 16,
+      "icon": "",
+      "prerequisites": [
+        "slicing_speed_1"
+      ],
+      "effects": {
+        "slicing_silent": true
+      },
+      "branch": "Slicing",
+      "color": "#00ffcc",
+      "position": {
+        "x": 9,
+        "y": 11
+      }
     }
   ]
 }

@@ -709,6 +709,11 @@ class Game {
           }
           // Only check for new conversations when the game is not paused.
           this.checkForNpcConversations();
+
+          // Update slicing system
+          if (this.slicingSystem) {
+              this.slicingSystem.update(deltaTime);
+          }
       } else {
           if (window.playerWeaponSystem) { playerWeaponSystem.update(this.deltaTime, totalTime); }
           if (window.tabControls && window.tabControls.isVisible) { window.tabControls.updateMuzzleHelpersFromUI(); }

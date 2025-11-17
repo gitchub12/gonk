@@ -21,6 +21,7 @@
         "lie_defense": 200,
         "charm_attack": 200,
         "charm_defense": 200,
+        "slicing_skill": 0,
         "base_energy": 150,
         "max_energy": 150,
         "pamphlet_start_ammo": 100,

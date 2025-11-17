@@ -127,6 +127,11 @@ class LevelManager {
                 await levelRenderer.createNPCs(levelData.layers.npcs);
             }
 
+            // Load slicing terminals from level data
+            if (window.game && window.game.slicingSystem && levelData.terminals) {
+                window.game.slicingSystem.loadFromLevelData(levelData);
+            }
+
             if (window.game) {
                 game.respawnAllies();
             }
