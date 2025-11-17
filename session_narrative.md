@@ -566,4 +566,89 @@ In the level JSON's npcs layer, add `sliceable` and `sliceableId` properties:
 - [ ] Create enemy turret control terminals
 - [ ] Add ship systems terminals (disable shields, control airlocks)
 
+## Room-Based Level Editor System (Session 5 - 2025-11-17)
+
+### Completed Tasks
+- [x] Created comprehensive style/theme folder structure
+  - Styles: Imperial, Neutral, Rebel
+  - Themes per style: Normal, Overgrown, Slimy, Damaged
+  - Folders for: wall, floor, ceiling, ceilingsides, elevationsides, door
+  - Each combination (e.g., `data/pngs/wall/imperialstyle/damaged/`) holds themed textures
+- [x] Added Room Creator tool button to level editor toolbox (hotkey: O)
+- [x] Implemented drag-select mechanism for room bounds
+  - Click and drag on canvas to define rectangular room area
+  - Orange dashed rectangle preview during selection
+  - Minimum room size: 2x1
+  - Right-click to cancel selection
+- [x] Built comprehensive Room Properties Panel with:
+  - **Style Selection**: Imperial/Neutral/Rebel
+  - **Theme Selection**: Normal/Overgrown/Slimy/Damaged
+  - **Wall Level 2/3**: Auto-select based on style or manual override
+  - **Ceiling Height**: 1-10 multiplier
+  - **Elevation**: 0-30 height levels
+  - **Water Layer**: Optional checkbox
+  - **Furniture Count**: Random furniture placement in inner area
+  - **NPC Population**: Faction, Subgroup, Total Threat, Max Individual Threat, No Repeats
+  - **Random Per Game**: Flag to randomize textures each playthrough
+  - **Shuffle Button**: Re-randomize room textures
+- [x] Implemented automatic room generation:
+  - **Floors**: Random textures from style/theme, auto-rotation
+  - **Walls**: Perimeter walls with proper H/V edge placement, wall2/3 levels
+  - **Ceilings**: Themed ceilings with height multiplier and wallside textures
+  - **Doors**: Auto-placed at top/bottom, 10 squares from left edge (if room width >= 10)
+  - **Furniture**: Random placement in inner area (not outer ring), avoids conflicts
+  - **NPCs**: Threat-based spawning with random placement, respects no-repeats constraint
+- [x] Added fallback texture system
+  - If themed textures don't exist, falls back to any available textures
+  - Graceful degradation for incomplete asset libraries
+- [x] Implemented room selection visualization
+  - Orange dashed rectangle during drag selection with size label
+  - Green solid rectangle showing pending room bounds when panel is open
+- [x] Added keyboard shortcut (O) for room tool activation
+- [x] Cursor changes to crosshair in room tool mode
+
+### Key Files Modified
+- `/home/user/gonk/GonkLevelEditor.html` - Added room tool button and Room Properties Panel HTML
+- `/home/user/gonk/editor.js` - Added room tool state, drag selection, generateRoom() method, shuffleRoomTextures() method
+- `/home/user/gonk/editor_ui_and_assets.js` - Added showRoomPanel(), hideRoomPanel(), generateRoomFromPanel(), initRoomPanel() methods
+
+### How to Use Room Creator
+1. Click Room Creator tool (crate icon) in toolbox or press 'O'
+2. Click and drag on canvas to select room bounds
+3. Configure room settings in the panel that appears:
+   - Choose style and theme
+   - Set wall levels, ceiling height, elevation
+   - Add water if desired
+   - Set furniture count for random placement
+   - Configure NPC spawning with threat budget
+   - Enable "Random Per Game" for runtime texture variation
+4. Click "Generate Room" to create the room
+5. Use "Shuffle Room Textures" to re-randomize if needed
+6. Room automatically includes:
+   - Themed floors, walls, ceilings
+   - Doors at top/bottom if room is 10+ squares wide
+   - Random furniture placement in center area
+   - NPCs distributed based on threat budget
+
+### Streamlined JSON Benefits
+- **Before**: Each tile required individual texture path specification
+  - 20 stormtroopers = 20 explicit texture paths
+  - 50 floor tiles = 50 explicit floor paths
+- **After**: Room-based generation
+  - Select style/theme once
+  - System auto-randomizes from appropriate texture pool
+  - NPCs spawned by threat level, not individual placement
+  - Single "Generate Room" action replaces hundreds of manual placements
+  - Optional "Random Per Game" flag stores intent, not specific texture
+
+### Future Room System Enhancements
+- [ ] Add actual themed textures to style/theme folders
+- [ ] Room templates/presets (save room configurations for reuse)
+- [ ] Multiple room selection for batch operations
+- [ ] Room connectivity visualization
+- [ ] Undo/redo support for room operations (currently uses standard editor history)
+- [ ] Room rotation/mirroring tools
+- [ ] Import room from other level files
+- [ ] Runtime texture randomization in game (for "Random Per Game" flag)
+
 ```

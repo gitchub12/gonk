@@ -366,13 +366,15 @@ class EditorUI {
         this.ceilingHeight = 1;
         this.pillarHeight = 3;
 
-        this.toolButtons = { 
-            template: document.getElementById('tool-template'), paint: document.getElementById('tool-paint'), 
-            erase: document.getElementById('tool-erase'), rotate: document.getElementById('tool-rotate'), 
-            spawn: document.getElementById('tool-spawn'), fill: document.getElementById('tool-fill') 
+        this.toolButtons = {
+            template: document.getElementById('tool-template'), paint: document.getElementById('tool-paint'),
+            erase: document.getElementById('tool-erase'), rotate: document.getElementById('tool-rotate'),
+            spawn: document.getElementById('tool-spawn'), fill: document.getElementById('tool-fill'),
+            room: document.getElementById('tool-room')
         };
         // This is a global reference for the asset manager to call
         window.editorUI = this;
+        this.roomPanel = document.getElementById('room-panel');
     }
 
     init() {
@@ -540,9 +542,15 @@ class EditorUI {
     setActiveTool(toolName) {
         this.editor.activeTool = toolName;
         this.editor.isTemplateCloned = false; // Reset template tool on any tool change
+        // Reset room selection state when switching tools
+        if (toolName !== 'room') {
+            this.editor.isSelectingRoom = false;
+            this.editor.roomSelectionStart = null;
+            this.editor.roomSelectionEnd = null;
+        }
         Object.values(this.toolButtons).forEach(btn => { if(btn) btn.classList.remove('active'); });
         if (this.toolButtons[toolName]) this.toolButtons[toolName].classList.add('active');
-        const cursors = { paint: 'default', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer', fill: 'copy', template: 'copy' };
+        const cursors = { paint: 'default', erase: 'not-allowed', rotate: 'grab', spawn: 'pointer', fill: 'copy', template: 'copy', room: 'crosshair' };
         this.editor.canvas.style.cursor = cursors[toolName] || 'default';
         this.updatePalette(document.querySelector('#layer-selector button.active')?.dataset.macroCategory);
     }
@@ -609,7 +617,7 @@ class EditorUI {
     updatePalette(subGroup = null) {
         const activeTool = this.editor.activeTool;
         this.templateBuilderContainer.style.display = 'none'; // Obsolete, always hide
-        const showPalette = ['paint', 'fill', 'template'].includes(activeTool);
+        const showPalette = ['paint', 'fill', 'template', 'room'].includes(activeTool);
         document.querySelector('.content-group h4').style.display = showPalette ? 'block' : 'none';
         this.paletteContainer.style.display = 'block';
         document.getElementById('palette-controls').style.display = ['paint', 'fill'].includes(activeTool) ? 'flex' : 'none';
@@ -617,6 +625,27 @@ class EditorUI {
         if (activeTool === 'template') {
             document.querySelector('.content-group h4').textContent = 'Clone/Stamp Tool';
             this.paletteContainer.innerHTML = `<p style="padding: 10px; text-align: center;">Click on a map tile to clone its contents. Right-click to clear selection.</p>`;
+            return;
+        }
+
+        if (activeTool === 'room') {
+            document.querySelector('.content-group h4').textContent = 'Room Creator Tool';
+            this.paletteContainer.innerHTML = `
+                <div style="padding: 10px; text-align: center;">
+                    <p><strong>Room Creator</strong></p>
+                    <p style="margin-top: 10px;">Click and drag on the canvas to select room bounds.</p>
+                    <p style="margin-top: 5px; color: #ff8c00;">After selection, a configuration panel will open where you can set:</p>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Style (Imperial/Neutral/Rebel)</li>
+                        <li>Theme (Normal/Overgrown/Slimy/Damaged)</li>
+                        <li>Wall levels and ceiling height</li>
+                        <li>Water and elevation</li>
+                        <li>Furniture placement</li>
+                        <li>NPC spawning by threat level</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #61afef;">Right-click to cancel selection.</p>
+                </div>
+            `;
             return;
         }
         document.querySelector('.content-group h4').textContent = 'Asset Palette';
@@ -1419,6 +1448,153 @@ class EditorUI {
         selectEl.innerHTML = ''; if (allowNone) selectEl.add(new Option('None', ''));
         textures.forEach(path => { if(path) selectEl.add(new Option(path.split('/').pop(), path)); });
         if(defaultPath) selectEl.value = defaultPath;
+    }
+
+    initRoomPanel() {
+        if (!this.roomPanel) return;
+
+        // Populate wall2 and wall3 dropdowns
+        const wall2Select = document.getElementById('room-wall2');
+        const wall3Select = document.getElementById('room-wall3');
+
+        if (wall2Select) {
+            wall2Select.innerHTML = '<option value="auto">Auto (Style Default)</option>';
+            const wall2Textures = this.assetManager.layerTextures['wall']?.filter(p => p.includes('/wall2/')) || [];
+            wall2Textures.forEach(path => {
+                wall2Select.add(new Option(path.split('/').pop(), path));
+            });
+        }
+
+        if (wall3Select) {
+            wall3Select.innerHTML = '<option value="auto">Auto (Style Default)</option>';
+            const wall3Textures = this.assetManager.layerTextures['wall']?.filter(p => p.includes('/wall3/')) || [];
+            wall3Textures.forEach(path => {
+                wall3Select.add(new Option(path.split('/').pop(), path));
+            });
+        }
+
+        // Handle faction change to populate subgroups
+        const factionSelect = document.getElementById('room-npc-faction');
+        const subgroupSelect = document.getElementById('room-npc-subgroup');
+
+        if (factionSelect && subgroupSelect) {
+            factionSelect.addEventListener('change', () => {
+                const faction = factionSelect.value;
+                subgroupSelect.innerHTML = '<option value="all">Any</option>';
+
+                if (faction !== 'none') {
+                    // Find all subgroups for this faction
+                    for (const groupKey in this.assetManager.npcGroups) {
+                        const groupData = this.assetManager.npcGroups[groupKey];
+                        if (groupData.macroCategory === faction) {
+                            subgroupSelect.add(new Option(groupData.name || groupKey, groupKey));
+                        }
+                    }
+                }
+            });
+        }
+
+        // Handle generate button
+        const generateBtn = document.getElementById('generate-room-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                this.generateRoomFromPanel();
+            });
+        }
+
+        // Handle cancel button
+        const cancelBtn = document.getElementById('cancel-room-btn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                this.hideRoomPanel();
+            });
+        }
+
+        // Handle shuffle button
+        const shuffleBtn = document.getElementById('room-shuffle-btn');
+        if (shuffleBtn) {
+            shuffleBtn.addEventListener('click', () => {
+                if (this.editor.pendingRoomBounds) {
+                    this.generateRoomFromPanel(); // Regenerate with new random values
+                }
+            });
+        }
+    }
+
+    showRoomPanel(bounds) {
+        if (!this.roomPanel) return;
+
+        // Initialize panel if first time
+        if (!this._roomPanelInitialized) {
+            this.initRoomPanel();
+            this._roomPanelInitialized = true;
+        }
+
+        this.roomPanel.style.display = 'block';
+        this.editor.render();
+    }
+
+    hideRoomPanel() {
+        if (this.roomPanel) {
+            this.roomPanel.style.display = 'none';
+        }
+        this.editor.pendingRoomBounds = null;
+        this.editor.roomSelectionStart = null;
+        this.editor.roomSelectionEnd = null;
+        this.editor.render();
+    }
+
+    generateRoomFromPanel() {
+        if (!this.editor.pendingRoomBounds) return;
+
+        const style = document.getElementById('room-style').value;
+        const theme = document.getElementById('room-theme').value;
+        const wall2Val = document.getElementById('room-wall2').value;
+        const wall3Val = document.getElementById('room-wall3').value;
+
+        // Auto-select wall2/wall3 based on style if set to auto
+        let wall2Key = wall2Val;
+        let wall3Key = wall3Val;
+
+        if (wall2Val === 'auto') {
+            const styleMap = {
+                'imperialstyle': '/data/pngs/wall/wall2/imperialwall2.png',
+                'neutralstyle': '/data/pngs/wall/wall2/neutralwall2.png',
+                'rebelstyle': '/data/pngs/wall/wall2/rebelwall2.png'
+            };
+            wall2Key = styleMap[style] || undefined;
+        }
+
+        if (wall3Val === 'auto') {
+            const styleMap = {
+                'imperialstyle': '/data/pngs/wall/wall3/imperialwall3.png',
+                'neutralstyle': '/data/pngs/wall/wall3/neutralwall3.png',
+                'rebelstyle': '/data/pngs/wall/wall3/rebelwall3.png'
+            };
+            wall3Key = styleMap[style] || undefined;
+        }
+
+        const config = {
+            style: style,
+            theme: theme,
+            wall2Key: wall2Key,
+            wall3Key: wall3Key,
+            ceilingHeight: parseInt(document.getElementById('room-ceiling-height').value) || 1,
+            elevation: parseInt(document.getElementById('room-elevation').value) || 0,
+            hasWater: document.getElementById('room-water').checked,
+            furnitureCount: parseInt(document.getElementById('room-furniture-count').value) || 0,
+            npcConfig: {
+                faction: document.getElementById('room-npc-faction').value,
+                subgroup: document.getElementById('room-npc-subgroup').value,
+                totalThreat: parseInt(document.getElementById('room-total-threat').value) || 0,
+                maxIndividualThreat: parseInt(document.getElementById('room-max-individual-threat').value) || 5,
+                noRepeats: document.getElementById('room-no-repeats').checked
+            },
+            randomPerGame: document.getElementById('room-random-per-game').checked
+        };
+
+        this.editor.generateRoom(this.editor.pendingRoomBounds, config);
+        this.hideRoomPanel();
     }
 
     populatePillarPalette() {

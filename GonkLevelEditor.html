@@ -403,6 +403,7 @@
             <button id="tool-fill" title="Fill (F)"><img src="/data/pngs/icons for UI/bucket.png" alt="F"></button>
             <button id="tool-rotate" title="Rotate (R)"><img src="/data/pngs/icons for UI/rotate.png" alt="R"></button>
             <button id="tool-erase" title="Erase (E)"><img src="/data/pngs/icons for UI/eraser.png" alt="E"></button>
+            <button id="tool-room" title="Room Creator (O)"><img src="/data/pngs/icons for UI/crate.png" alt="O"></button>
             <button id="tool-wall-mode" title="Switch Wall Mode (M)"><img src="/data/pngs/icons for UI/gridicon.png" alt="M"></button>
             <button id="tool-tile-size" title="Cycle Tile Size (T)"><img src="/data/pngs/icons for UI/tilesize.png" alt="T"></button>
         </div>
@@ -437,6 +438,111 @@
              <button id="save-prop-btn">Save</button>
              <button id="delete-prop-btn">Delete</button>
              <button id="cancel-prop-btn">Cancel</button>
+        </div>
+    </div>
+
+    <div id="room-panel" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: var(--panel-bg); border: 1px solid var(--accent-color); border-radius: 8px; padding: 20px; z-index: 101; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); width: 700px; max-height: 85vh; overflow-y: auto;">
+        <h3 style="margin-top: 0; color: var(--accent-color);">Room Creator</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="prop-group">
+                <label for="room-style">Style:</label>
+                <select id="room-style">
+                    <option value="imperialstyle">Imperial</option>
+                    <option value="neutralstyle">Neutral</option>
+                    <option value="rebelstyle">Rebel</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-theme">Theme:</label>
+                <select id="room-theme">
+                    <option value="normal">Normal</option>
+                    <option value="overgrown">Overgrown</option>
+                    <option value="slimy">Slimy</option>
+                    <option value="damaged">Damaged</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-wall2">Wall Level 2:</label>
+                <select id="room-wall2">
+                    <option value="auto">Auto (Style Default)</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-wall3">Wall Level 3:</label>
+                <select id="room-wall3">
+                    <option value="auto">Auto (Style Default)</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-ceiling-height">Ceiling Height:</label>
+                <input type="number" id="room-ceiling-height" value="1" min="1" max="10" step="1">
+            </div>
+            <div class="prop-group">
+                <label for="room-elevation">Elevation:</label>
+                <input type="number" id="room-elevation" value="0" min="0" max="30" step="1">
+            </div>
+            <div class="prop-group">
+                <label for="room-water">
+                    <input type="checkbox" id="room-water"> Add Water Layer
+                </label>
+            </div>
+            <div class="prop-group">
+                <label for="room-furniture-count">Furniture Count:</label>
+                <input type="number" id="room-furniture-count" value="0" min="0" max="50" step="1">
+            </div>
+        </div>
+        <hr style="border-color: var(--border-color); margin: 15px 0;">
+        <h4 style="color: var(--accent-color); margin-bottom: 10px;">NPC Population</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="prop-group">
+                <label for="room-npc-faction">Faction:</label>
+                <select id="room-npc-faction">
+                    <option value="none">None</option>
+                    <option value="Aliens">Aliens</option>
+                    <option value="Clones">Clones</option>
+                    <option value="Droids">Droids</option>
+                    <option value="Imperials">Imperials</option>
+                    <option value="Mandalorians">Mandalorians</option>
+                    <option value="Rebels">Rebels</option>
+                    <option value="Sith">Sith</option>
+                    <option value="Takers">Takers</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-npc-subgroup">Subgroup (Optional):</label>
+                <select id="room-npc-subgroup">
+                    <option value="all">Any</option>
+                </select>
+            </div>
+            <div class="prop-group">
+                <label for="room-total-threat">Total Threat:</label>
+                <input type="number" id="room-total-threat" value="0" min="0" max="500" step="1">
+            </div>
+            <div class="prop-group">
+                <label for="room-max-individual-threat">Max Individual Threat:</label>
+                <input type="number" id="room-max-individual-threat" value="5" min="1" max="5" step="1">
+            </div>
+            <div class="prop-group" style="grid-column: 1 / -1;">
+                <label for="room-no-repeats">
+                    <input type="checkbox" id="room-no-repeats"> No Repeat NPCs
+                </label>
+            </div>
+        </div>
+        <hr style="border-color: var(--border-color); margin: 15px 0;">
+        <h4 style="color: var(--accent-color); margin-bottom: 10px;">Randomization</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="prop-group">
+                <label for="room-random-per-game">
+                    <input type="checkbox" id="room-random-per-game"> Random Per Game (textures change each playthrough)
+                </label>
+            </div>
+            <div class="prop-group">
+                <button id="room-shuffle-btn" style="background-color: #ff8c00; padding: 10px; cursor: pointer; border-radius: 4px; border: none; color: white; font-weight: bold;">Shuffle Room Textures</button>
+            </div>
+        </div>
+        <div class="prop-buttons" style="margin-top: 20px;">
+            <button id="generate-room-btn" style="background-color: var(--play-btn-bg);">Generate Room</button>
+            <button id="cancel-room-btn" style="background-color: #6c757d;">Cancel</button>
         </div>
     </div>
 
